@@ -135,20 +135,21 @@ export default function SignUp(props) {
       }
   }, [isLoginPage])
 
-  console.log({gender})
   return (
-      <Layout title="Sign Up">
+      <Layout
+          title="Sign Up"
+      >
         <div className="mx-auto bg-white">
           <div className="grid grid-cols-2 flex h-screen">
             <div
-                className={`bg-[url('/images/bg-blue.png')] bg-[length:100%_100%] bg-no-repeat`}
+                className={`bg-[url('/images/bg-blue.png')] bg-[length:100%_100%] bg-no-repeat hidden sm:block`}
             >
               <div className="h-screen relative">
                 <div className="flex flex-col w-full mx-[8rem]">
-                  <p className="text-white mt-[10rem] text-[5rem] italic font-black w-[60rem] leading-[5.5rem]">
-                    {`explore Eredivisie fantasy league`.toUpperCase()}
+                  <p className="text-white mt-[10rem] text-[3rem] md:text[4rem] lg:text-[4rem] xl:text-[5rem] italic font-black w-[60rem] leading-[5.5rem] uppercase">
+                    explore Eredivisie <br/>fantasy league
                   </p>
-                  <p className="mt-[2rem] text-white text-[1.8rem] opacity-70 w-[50rem] normal">
+                  <p className="mt-[2rem] text-white text-[1.3rem] lg:text-[1.5rem] xl:text-[1.8rem] opacity-70 w-[50rem] normal">
                     Be in the role of a Fantasy manager and lead dream team!{" "}
                     <br />
                     Absolutely free, absolutely immersive experience.

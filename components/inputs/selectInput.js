@@ -33,7 +33,7 @@ export default function Input ({
                     {
                         options.map((option, index) => {
                             return <div>
-                                 <p className="text-[1.8rem] font-[600] text-black_rock p-[2rem]" onClick={() => setOptionValue(option)}>{option.name}</p>
+                                 <p className="text-[1.8rem] font-[600] text-black_rock p-[2rem] hover:bg-mandy" onClick={() => setOptionValue(option)}>{option.name}</p>
                                 {options.length - 1 !== index && <hr className="border-[1.5px] border-solid border-[link_water]"/> }
                             </div>
 

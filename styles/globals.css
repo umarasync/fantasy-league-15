@@ -42,6 +42,10 @@
     .signup-heading {
         @apply mb-[3.2rem] text-regent_grey text-[1.8rem]
     }
+
+}
+.select-options:hover{
+    background-color: red;
 }
 
 .primary-button {
