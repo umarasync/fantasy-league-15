@@ -9,16 +9,15 @@ export default function Input ({
     type='text',
     icon,
     onIconClick = () => false,
-    style
+    style,
+    value
 }) {
     const [focused, setFocused] = useState(false)
-    const [value, setValue] = useState('')
     const onFocus = () => setFocused(true)
     const onBlur = () => setFocused(false)
 
     const handleOnChange = (e) => {
         const valueI = e.target.value
-        setValue(valueI)
         onChange(valueI)
     }
 
