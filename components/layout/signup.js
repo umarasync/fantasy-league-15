@@ -10,7 +10,8 @@ import {useRouter} from "next/router";
 import Input from "components/inputs/input";
 import SelectInput from "components/inputs/selectInput";
 import ResetPasswordModal from "components/modals/resetPasswordModal";
-import useResize from "../../hooks/useResize";
+import useResize from "hooks/useResize";
+import getResponsiveValue from "utils/getResponsiveValue";
 
 const defaultBGImage = 'bg-blue.png'
 
@@ -128,10 +129,6 @@ export default function SignUp(props) {
     }
   }
 
-  const getResponsiveValue = (containerWidth, value) => {
-      return containerWidth / value
-  }
-
   useEffect(() => {
     validate()
   }, [fullName, email, gender.value, dateOfBirth, password, loginEmail, loginPassword])
@@ -151,10 +148,10 @@ export default function SignUp(props) {
           <div className="grid grid-cols-2 flex h-screen">
 
             <div
-                className={`bg-[url('/images/bg-blue.png')] bg-[length:100%_100%] bg-no-repeat hidden sm:block relative`}
+                className={`bg-[url('/images/bg-blue.png')] bg-[length:100%_100%] bg-no-repeat sm:block relative`}
             >
               <div className="h-screen relative">
-                <div className="flex flex-col w-full sm:pl-[3rem] md:px-[4rem] xl:px-[8rem]" ref={headingBoxRef}>
+                <div className="flex flex-col sm:pl-[3rem] md:px-[4rem] xl:px-[8rem]" ref={headingBoxRef}>
                   <p
                       className={`text-white mt-[10rem] italic font-black uppercase`}
                       style={{
@@ -251,7 +248,7 @@ export default function SignUp(props) {
                 )}
 
               </div>
-              <div className="flex flex-col w-[41rem]">
+              <div className="flex flex-col md:w-[41rem]">
                 {
                   isLoginPage && (
                       <div>
