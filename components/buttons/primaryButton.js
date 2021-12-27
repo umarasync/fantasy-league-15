@@ -4,7 +4,8 @@ export default function PrimaryButton({
     style,
     disabled,
     parentStyle,
+    buttonClasses,
                                           textStyle
 }){
-    return <div className={`w-full ${parentStyle}`}><button disabled={disabled} onClick={onClick} className={`primary-button w-full ${disabled && 'opacity-50'}`} style={style}><span className={`font-[900] leading-[2rem] text-[1.6rem] italic text-white uppercase ${textStyle}`}>{title}</span></button></div>
+    return <div className={`w-full ${parentStyle}`}><button disabled={disabled} onClick={onClick} className={`primary-button w-full ${buttonClasses} ${disabled && 'opacity-50'}`} style={style}><span className={`font-[900] leading-[2rem] text-[1.6rem] italic text-white uppercase ${textStyle}`}>{title}</span></button></div>
 }

@@ -307,7 +307,7 @@ export default function SignUp(props) {
                     title='Next'
                     onClick={handleOnClick}
                     disabled={isLoginPage ? loginDisabled : disabled}
-                    style="mb-[4rem]"
+                    buttonClasses="mb-[4rem]"
                 />
                 <p className="text-regent_grey text-[1.6rem] font-[400] leading-[2rem] text-center">
                   {isLoginPage ? 'Don’t have an account?' : 'Already have an account?'}
