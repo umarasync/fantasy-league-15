@@ -6,8 +6,8 @@
 
 @layer base {
     html {
-        /*font-size: 10px !important;*/
-        font-size: 62.5% !important;
+        font-size: 10px !important;
+        /*font-size: 62.5% !important;*/
     }
     select {
         -webkit-appearance: none;
@@ -66,3 +66,7 @@
     background-size: cover;
 }
 
+.bg-blue-gradient {
+    background: linear-gradient(90deg, rgba(27, 24, 83, 0) 0%, #1B1853 100%);
+    /*transform: matrix(-1, 0, 0, 1, 0, 0);*/
+}

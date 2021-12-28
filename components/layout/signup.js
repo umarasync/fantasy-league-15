@@ -61,7 +61,7 @@ export default function SignUp(props) {
 
   const fadeInOutAnimation = {
     initial: {
-      opacity: initialOpacity, // Starting point we initial it in state, so that on initial render it is one, but after the subsequent click we want it to be 0, to have fade in effect
+      opacity: initialOpacity, // Starting point we set initial opacity in state, so that on initial render it is one, but after the subsequent click we want it to be 0, to have fade in effect
     },
     animate: {
       opacity: 1,

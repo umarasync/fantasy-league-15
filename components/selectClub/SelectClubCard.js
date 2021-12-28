@@ -9,23 +9,51 @@ export default  function SelectClubCard({
     bgImage,
     itemsCenter,
     boxPaddingTop,
-     controls
+    controls = false
 }) {
 
-    return <div className={`flex ${ itemsCenter && 'items-center'} relative ${containerStyle}`}>
+
+    const duration = 3
+
+    const fadeInOutAnimation = {
+        initial: {
+            opacity: 0,
+        },
+        animate: {
+            opacity: 1,
+            transition: {
+                duration: duration,
+            },
+        },
+        exit: {
+            opacity: 0,
+            transition: {
+                duration: duration,
+            },
+        },
+    };
+
+
+    return (
+        <div
+            className={`flex ${ itemsCenter && 'items-center'} relative ${containerStyle}`}
+        >
         <div
             className={`flex absolute w-full flex-col items-center`}
             style={{
                 paddingTop: boxPaddingTop ? R(boxPaddingTop) : 0
             }}
         >
-            <img
-                src={`/images/${image.name}`}
-                alt=""
-                className="text-center"
-                width={`${R(image.width)}`}
-                height={`${R(image.height)}`}
-            />
+            <div style={{
+                width: R(image.width),
+                height: R(image.height)
+            }}>
+                <img
+                    src={`/images/${image.name}`}
+                    alt=""
+                    className="text-center w-full h-full"
+                />
+            </div>
             <p className={`uppercase italic text-white text-[2rem] font-[800] ${heading.color}`}
                style={{
                    fontSize: R(heading.text),
@@ -43,37 +71,10 @@ export default  function SelectClubCard({
             >{subHeading.title}</p>
 
         </div>
-        {
-            controls && (
-                <div className="flex absolute px-[5rem] justify-center w-[100%] flex-col items-center"
-                     style={{
-                         bottom: R(controls.bottom)
-                     }}
-                >
-                    <PrimaryButton
-                        title={'select'}
-                        style={{
-                        marginBottom: R(controls.mb),
-                        height: R(controls.buttonHeight),
-                        }}
-                        textStyle={{
-                            fontSize: R(controls.buttonText.fontSize)
-                        }}
-                    />
-                    <div className="flex justify-center">
-                        <img src="/images/left_arrow_select_club.png" alt="" className="mr-[1rem]"
-                             width={R(controls.icon.width)} height={R(controls.icon.height)}/>
-                        <img src="/images/right_arrow_select_club.png" alt=""
-                             className="ml-[1rem]"
-                             width={R(controls.icon.width)} height={R(controls.icon.height)}/>
-                    </div>
-                </div>
-            )
-        }
         <img
             src={`/images/${bgImage}`}
             alt=""
             className="w-[100%]"
         />
     </div>
-}
+    )}
