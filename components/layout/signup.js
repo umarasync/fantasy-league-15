@@ -10,8 +10,9 @@ import {useRouter} from "next/router";
 import Input from "components/inputs/input";
 import SelectInput from "components/inputs/selectInput";
 import ResetPasswordModal from "components/modals/resetPasswordModal";
-import useResize from "hooks/useResize";
-import getResponsiveValue from "utils/getResponsiveValue";
+
+// Utils
+import R from "utils/getResponsiveValue";
 
 const defaultBGImage = 'bg-blue.png'
 
@@ -33,8 +34,6 @@ const testPassword = testEmail
 
 export default function SignUp(props) {
   const router = useRouter()
-  const headingBoxRef = useRef()
-  const { width: headingBoxWidth } = useResize(headingBoxRef)
 
   const [isLoginPage, setIsLoginPage] = useState(props.isLoginPage)
   const [initialOpacity, setInitialOpacity] = useState(1)
@@ -151,19 +150,22 @@ export default function SignUp(props) {
                 className={`bg-[url('/images/bg-blue.png')] bg-[length:100%_100%] bg-no-repeat sm:block relative`}
             >
               <div className="h-screen relative">
-                <div className="flex flex-col sm:pl-[3rem] md:px-[4rem] xl:px-[8rem]" ref={headingBoxRef}>
+                <div className="flex flex-col px-[8rem]">
                   <p
                       className={`text-white mt-[10rem] italic font-black uppercase`}
                       style={{
-                        fontSize: getResponsiveValue(headingBoxWidth, 14.4),
-                        lineHeight: `${getResponsiveValue(headingBoxWidth, 14)}px`
+                        fontSize: R(50),
+                        lineHeight: `${R(54, 'px')}`
                       }}
                   >
                    explore Eredivisie <br/>fantasy league
                   </p>
                   <p
                       className="mt-[2rem] text-white text-[1.3rem] opacity-70 normal"
-                      style={{fontSize: getResponsiveValue(headingBoxWidth, 40)}}
+                      style={{
+                        fontSize: R(18),
+                        lineHeight: `${R(26, 'px')}`
+                      }}
                   >
                     Be in the role of a Fantasy manager and lead dream team!{" "}
                     <br />

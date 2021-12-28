@@ -56,3 +56,13 @@
     height: 7rem;
 }
 
+.bg-full {
+    /*background-image: url('../public/images/green_grunge_border_with_halftone_background_2.png');*/
+    min-height: 100%;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+}
+

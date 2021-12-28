@@ -1,10 +1,18 @@
-const getResponsiveValue = (containerWidth, value, measurement = '') => {
+// Packages
+import React from "react";
+import useWindowSize from "hooks/useWindowSize";
+
+const containerWidth = 1440;
+
+const getResponsiveValue = (value, measurement = '') => {
+
+    const [ width ] = useWindowSize();
+
+    let responsiveValue = width / (containerWidth / value)
     if(measurement){
-        return `${containerWidth / value}${measurement}`
+        return `${responsiveValue}${measurement}`
     }
-    return containerWidth / value
+    return responsiveValue
 }
-
-
 
 export default getResponsiveValue
