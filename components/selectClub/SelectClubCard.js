@@ -1,5 +1,11 @@
+// Components
+import CardTitle from "components/selectClub/CardTitle";
+import CardSubTitle from "components/selectClub/CardSubTitle";
+import CardImage from "components/selectClub/CardImage";
+
+// Utils
 import R from "utils/getResponsiveValue";
-import PrimaryButton from "components/buttons/primaryButton";
+import {useEffect, useState} from "react";
 
 export default  function SelectClubCard({
     image,
@@ -9,15 +15,16 @@ export default  function SelectClubCard({
     bgImage,
     itemsCenter,
     boxPaddingTop,
-    controls = false
+    changeCard
 }) {
 
+    const [initialOpacity, setInitialOpacity] = useState(1)
 
-    const duration = 3
+    const duration = 0.5
 
     const fadeInOutAnimation = {
         initial: {
-            opacity: 0,
+            opacity: initialOpacity,
         },
         animate: {
             opacity: 1,
@@ -34,6 +41,12 @@ export default  function SelectClubCard({
     };
 
 
+    useEffect(() => {
+        if(initialOpacity) {
+            setInitialOpacity(0)
+        }
+    }, [changeCard])
+
     return (
         <div
             className={`flex ${ itemsCenter && 'items-center'} relative ${containerStyle}`}
@@ -44,31 +57,13 @@ export default  function SelectClubCard({
                 paddingTop: boxPaddingTop ? R(boxPaddingTop) : 0
             }}
         >
-            <div style={{
+            <CardImage changeCard={changeCard} fadeInOutAnimation={fadeInOutAnimation} image={image} containerStyle={{
                 width: R(image.width),
-                height: R(image.height)
-            }}>
-                <img
-                    src={`/images/${image.name}`}
-                    alt=""
-                    className="text-center w-full h-full"
-                />
-            </div>
-            <p className={`uppercase italic text-white text-[2rem] font-[800] ${heading.color}`}
-               style={{
-                   fontSize: R(heading.text),
-                   paddingTop: R(heading.pt),
-                   lineHeight: R(heading.leading, 'px')
-               }}
-            >{heading.title}</p>
-            <p
-                className={`${subHeading.color} text-[1.4rem] normal`}
-                style={{
-                    fontSize: R(subHeading.text),
-                    marginTop: subHeading.mt < 0 ? subHeading.mt : R(subHeading.mt),
-                    lineHeight: R(subHeading.leading, 'px')
-                }}
-            >{subHeading.title}</p>
+                height: R(image.height),
+                marginTop: R(image.mt)
+            }} />
+            <CardTitle changeCard={changeCard} fadeInOutAnimation={fadeInOutAnimation} heading={heading} />
+            <CardSubTitle changeCard={changeCard} fadeInOutAnimation={fadeInOutAnimation} subHeading={subHeading} />
 
         </div>
         <img

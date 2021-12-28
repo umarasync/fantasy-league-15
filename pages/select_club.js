@@ -1,7 +1,5 @@
 // Packages
 import {arrayMoveImmutable} from 'array-move';
-import { motion } from "framer-motion";
-import { AnimatePresence } from 'framer-motion'
 
 // Components
 import Layout from "components/layout";
@@ -17,50 +15,35 @@ import cardsDataI from "constants/data/cardsData";
 
 export default function SelectClub() {
 
-    const duration = 5
-
-    const fadeInOutAnimation = {
-        initial: {
-            opacity: 0.6,
-        },
-        animate: {
-            opacity: 1,
-            transition: {
-                duration: duration,
-            },
-        },
-        exit: {
-            opacity: 0,
-            transition: {
-                duration: duration,
-            },
-        },
-    };
-
-    const PREVIOUS = 'PREVIOUS'
-    const NEXT = 'NEXT'
-    const MAIN = 'MAIN'
-
     const [cardsData, setCardsData] = useState(cardsDataI);
-    const [cardSection, setCardSection] = useState(MAIN);
+    const [cardsNextData, setCardsNextData] = useState(cardsDataI);
+    const [changeCard, setChangeCard] = useState(true)
 
     const onControlsClick = (isLeftPressed = false) => {
         let dataI = []
         if(isLeftPressed){
-            setCardSection(PREVIOUS)
             dataI = arrayMoveImmutable(cardsData, -1, 0);
         }else {
-            setCardSection(NEXT)
             dataI = arrayMoveImmutable(cardsData, 0, -1);
         }
 
-        // setCardsData(dataI)
+        setCardsNextData(dataI)
+        setChangeCard(!changeCard)
+        setCardsData(dataI)
     }
+
+
     const firstCard = cardsData[0]
     const secondCard = cardsData[1]
     const thirdCard = cardsData[2]
     const fourthCard = cardsData[3]
     const fifthCard = cardsData[4]
+
+    const nextFirstCard = cardsNextData[0]
+    const nextSecondCard = cardsNextData[1]
+    const nextThirdCard = cardsNextData[2]
+    const nextFourthCard = cardsNextData[3]
+    const nextFifthCard = cardsNextData[4]
 
     return (
         <Layout title="Select Club">
@@ -86,102 +69,28 @@ export default function SelectClub() {
                     </p>
                 </div>
 
-                    <div
-                        className="relative"
-                        style={{
-                        height: R(359)
-                    }}>
+                <div>
+                    <div className="flex justify-between items-center mt-[6rem] w-full" >
+                        <CardSection
+                            firstCard={firstCard}
+                            secondCard={secondCard}
+                            thirdCard={thirdCard}
+                            fourthCard={fourthCard}
+                            fifthCard={fifthCard}
 
-                        {/*main*/}
+                            nextFirstCard={nextFirstCard}
+                            nextSecondCard={nextSecondCard}
+                            nextThirdCard={nextThirdCard}
+                            nextFourthCard={nextFourthCard}
+                            nextFifthCard={nextFifthCard}
 
-                        {
-                            cardSection === MAIN && (
-                                <AnimatePresence>
-                                    <motion.div
-                                        className="absolute w-full"
-                                        variants={fadeInOutAnimation}
-                                        initial="initial"
-                                        animate="animate"
-                                        exit="exit"
-                                        key={1}
-                                    >
-                                        <div className="flex justify-between items-center mt-[6rem] w-full" >
-                                            <CardSection
-                                                firstCard={firstCard}
-                                                secondCard={secondCard}
-                                                thirdCard={thirdCard}
-                                                fourthCard={fourthCard}
-                                                fifthCard={fifthCard}
-                                            />
-                                        </div>
-                                        {/*Controls*/}
-                                        <ClubControls onControlsClick={onControlsClick} />
-                                    </motion.div>
-                                </AnimatePresence>
-                            )
-                        }
-
-
-                        {/* previous */}
-
-                        {
-                           cardSection === PREVIOUS && (
-                               <AnimatePresence>
-                                   <motion.div
-                                       className="absolute w-full"
-                                       variants={fadeInOutAnimation}
-                                       initial="initial"
-                                       animate="animate"
-                                       exit="exit"
-                                       key={2}
-                                   >
-                                       <div className="flex justify-between items-center mt-[6rem] w-full" >
-                                           <CardSection
-                                               firstCard={fifthCard}
-                                               secondCard={firstCard}
-                                               thirdCard={secondCard}
-                                               fourthCard={thirdCard}
-                                               fifthCard={fourthCard}
-                                           />
-                                       </div>
-                                       {/*Controls*/}
-                                       <ClubControls onControlsClick={onControlsClick} />
-                                   </motion.div>
-                               </AnimatePresence>
-                           )
-                        }
-
-
-                        {/*next*/}
-
-                        {
-                            cardSection === NEXT && (
-                                <AnimatePresence>
-                                    <motion.div
-                                        className="absolute w-full"
-                                        variants={fadeInOutAnimation}
-                                        initial="initial"
-                                        animate="animate"
-                                        exit="exit"
-                                        key={3}
-                                    >
-                                        <div className="flex justify-between items-center mt-[6rem] w-full" >
-                                            <CardSection
-                                                firstCard={secondCard}
-                                                secondCard={thirdCard}
-                                                thirdCard={fourthCard}
-                                                fourthCard={fifthCard}
-                                                fifthCard={firstCard}
-                                            />
-                                        </div>
-                                        {/*Controls*/}
-                                        <ClubControls onControlsClick={onControlsClick} />
-                                    </motion.div>
-                                </AnimatePresence>
-                            )
-                        }
-
+                            changeCard={changeCard}
+                        />
                     </div>
+                    {/*Controls*/}
+                    <ClubControls onControlsClick={onControlsClick} />
+                </div>
+
 
                 {/*left gradient*/}
                 <div

@@ -3,7 +3,8 @@ const cardsData = [
         image: {
             name: 'gronigen.png',
             width: 59,
-            height: 59
+            height: 59,
+            mt: -30
         },
         heading: {
             title: 'FEYENOORD',
@@ -17,7 +18,7 @@ const cardsData = [
             color: 'text-lavender_grey',
             text: 12,
             leading: 16,
-            mt: 4
+            mt: 30
         },
         containerStyle: "w-[11.11%]",
         bgImage : "card_blue_small_left.png",
@@ -28,7 +29,8 @@ const cardsData = [
         image: {
             name: 'fortuna.png',
             width: 81,
-            height: 81
+            height: 81,
+            mt: -70
         },
         heading: {
             title: 'FORTUNA SITTARD',
@@ -42,7 +44,7 @@ const cardsData = [
             color: 'text-lavender_grey',
             text: 14,
             leading: 22,
-            mt: 4
+            mt: 50
         },
         containerStyle: 'w-[20.76%]',
         bgImage: 'card_blue.png',
@@ -53,7 +55,8 @@ const cardsData = [
         image: {
             name: 'fortuna.png',
             width: 150,
-            height: 150
+            height: 150,
+            mt: 10
         },
         heading: {
             title: 'ajax',
@@ -67,7 +70,7 @@ const cardsData = [
             color: 'text-regent_grey',
             text: 18,
             leading: 26,
-            mt: 4
+            mt: 70
         },
         containerStyle: 'w-[28.33%] items-start',
         bgImage: 'card_white.png',
@@ -78,7 +81,8 @@ const cardsData = [
         image: {
             name: 'sparta.png',
             width: 81,
-            height: 81
+            height: 81,
+            mt: -70
         },
         heading: {
             title: 'SPARTA ROTTERDAM',
@@ -92,7 +96,7 @@ const cardsData = [
             color: 'text-lavender_grey',
             text: 14,
             leading: 22,
-            mt: 4
+            mt: 50
         },
         containerStyle: 'w-[20.76%]',
         bgImage: 'card_blue.png',
@@ -103,7 +107,8 @@ const cardsData = [
         image: {
             name: 'gronigen.png',
             width: 59,
-            height: 59
+            height: 59,
+            mt: -30
         },
         heading: {
             title: 'Groningen',
@@ -117,7 +122,7 @@ const cardsData = [
             color: 'text-lavender_grey',
             text: 12,
             leading: 16,
-            mt: 4
+            mt: 30
         },
         containerStyle: 'w-[11.11%]',
         bgImage: 'card_blue_small_right.png',
