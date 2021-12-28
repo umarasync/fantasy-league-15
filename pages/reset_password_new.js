@@ -44,6 +44,7 @@ export default function ResetPassword() {
                         placeholder="Create new password" icon={isPasswordType? 'eye.png': 'hide.png'}
                         onChange={ v => setPassword(v)}
                         onIconClick={() => setIsPasswordType(!isPasswordType)}
+                        value={password}
                     />
 
                     <Input
@@ -53,6 +54,7 @@ export default function ResetPassword() {
                         placeholder="Confirm new password" icon={isCPasswordType? 'eye.png': 'hide.png'}
                         onChange={ v => setCPassword(v)}
                         onIconClick={() => setIsCPasswordType(!isCPasswordType)}
+                        value={cPassword}
                         style='mb-[6rem]'
                     />
                     <PrimaryButton title={'Next'} disabled={disabled} onClick={() => !disabled && router.push('/reset_password_new_success')}/>

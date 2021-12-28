@@ -36,7 +36,7 @@ export default function ResetPasswordModal({
                         <img src="/images/close.png" alt="" onClick={onClose}/>
                     </div>
                     <p className="text-regent_grey text-[1.8rem] leading-[2.6rem] mt-[2.4rem] mb-[3.2rem]">Enter your email address and we’ll send you instructions on how to reset your password.</p>
-                    <Input name="email" id="email" placeholder="Email address" onChange={ v => setEmail(v)}/>
+                    <Input value={email} name="email" id="email" placeholder="Email address" onChange={ v => setEmail(v)}/>
                     <PrimaryButton title={'Next'} disabled={disabled} onClick={() => !disabled && router.push('/reset_password_new')}/>
                 </div>
             </div>

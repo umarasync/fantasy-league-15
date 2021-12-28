@@ -23,7 +23,7 @@ export default function Input ({
         { opened && <p className="input-focused text-black_rock">{placeholder}</p> }
         { defaultValue !== initialValue  && !opened && <p className="input-focused text-regent_grey">{placeholder}</p> }
 
-        <img src={opened ? '/images/arrow-up.png' : '/images/arrow-down.png'} alt="" className="absolute top-[3rem] right-[3rem]" onClick={handleClick}/>
+        <img src={opened ? '/images/arrow-up.png' : '/images/arrow-down.png'} alt="" className="absolute top-[3rem] right-[3rem] cursor-pointer" onClick={handleClick}/>
 
         <p className="text-[1.8rem] absolute top-[2.3rem] left-[3rem] text-regent_grey">{defaultValue}</p>
         <div className={`mb-[0.7rem] rounded-[1.2rem] pl-[2.4rem] border-solid border-[0.15rem] h-[7rem] text-[1.8rem] ${opened ? 'border-[#000000]': 'border-[#DCE3EC] ' } ${classes}`} />
@@ -33,7 +33,7 @@ export default function Input ({
                     {
                         options.map((option, index) => {
                             return <div>
-                                 <p className="text-[1.8rem] font-[600] text-black_rock p-[2rem]" onClick={() => setOptionValue(option)}>{option.name}</p>
+                                 <p className="cursor-pointer text-[1.8rem] font-[600] text-black_rock p-[2rem] hover:bg-mandy hover:text-white rounded-t-[1.2rem]" onClick={() => setOptionValue(option)}>{option.name}</p>
                                 {options.length - 1 !== index && <hr className="border-[1.5px] border-solid border-[link_water]"/> }
                             </div>
 

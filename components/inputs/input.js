@@ -9,16 +9,15 @@ export default function Input ({
     type='text',
     icon,
     onIconClick = () => false,
-    style
+    style,
+    value
 }) {
     const [focused, setFocused] = useState(false)
-    const [value, setValue] = useState('')
     const onFocus = () => setFocused(true)
     const onBlur = () => setFocused(false)
 
     const handleOnChange = (e) => {
         const valueI = e.target.value
-        setValue(valueI)
         onChange(valueI)
     }
 
@@ -28,7 +27,7 @@ export default function Input ({
 
         { focused && <p className="input-focused text-black_rock">{placeholder}</p> }
         { value && !focused && <p className="input-focused text-regent_grey">{placeholder}</p> }
-        { icon && <img src={`/images/${icon}`} onClick={handleOnIconClick} alt="" className="absolute top-[3rem] right-[3rem]"/> }
+        { icon && <img src={`/images/${icon}`} onClick={handleOnIconClick} alt="" className="cursor-pointer absolute top-[3rem] right-[3rem]"/> }
 
         <input
             placeholder={placeholder}

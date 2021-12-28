@@ -6,7 +6,8 @@
 
 @layer base {
     html {
-        font-size: 10px !important;
+        /*font-size: 10px !important;*/
+        font-size: 62.5% !important;
     }
     select {
         -webkit-appearance: none;
@@ -27,13 +28,25 @@
 }
 
 @layer utilities {
-
     .input-focused {
         @apply leading-[1.6rem] absolute bg-white left-[2.5rem] top-[-0.7rem] px-[0.5rem] text-[1.2rem]
     }
     input::placeholder {
         @apply font-[300]
     }
+    .title{
+        @apply mb-[2rem] italic text-[3.2rem] leading-[4rem] font-[800] text-black_rock uppercase
+    }
+    .in-up {
+        @apply w-[8rem] text-left box-border right-[-8.6rem] absolute title
+    }
+    .signup-heading {
+        @apply mb-[3.2rem] text-regent_grey text-[1.8rem]
+    }
+
+}
+.select-options:hover{
+    background-color: red;
 }
 
 .primary-button {
@@ -41,5 +54,15 @@
     box-shadow: 0px 4px 0px #CB3156;
     border-radius: 12px;
     height: 7rem;
+}
+
+.bg-full {
+    /*background-image: url('../public/images/green_grunge_border_with_halftone_background_2.png');*/
+    min-height: 100%;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
 }
 
