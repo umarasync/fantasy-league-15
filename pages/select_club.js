@@ -50,7 +50,7 @@ export default function SelectClub() {
             <div className="bg-[url('/images/green_grunge_border_with_halftone_background_2.png')]
             bg-[length:100%_100%] h-full bg-no-repeat pt-[3.4rem] bg-cover w-full bg-center relative"
                  style={{
-                     height: R(900, '', true)
+                     height: R(930, '', true)
                  }}
             >
                 <div className="absolute"

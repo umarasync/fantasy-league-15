@@ -12,9 +12,9 @@ const getResponsiveValue = (value, measurement = '', fromHeight = false) => {
 
     if(fromHeight) {
         if(height < 900) {
-            responsiveValue = height + (900 - height)
+            responsiveValue = height + (value - height)
         } else {
-            responsiveValue = height
+            responsiveValue = height + 20
         }
     } else {
         responsiveValue = width / (containerWidth / value)
