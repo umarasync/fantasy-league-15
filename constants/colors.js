@@ -10,7 +10,10 @@ const colors = {
     "brick_red": "#C32B42",
     "bean_red": "#EE5D60",
     "lavender_grey": "#C2C1D3",
-    "backdrop": 'rgba(0, 0, 0, 0.6)'
+    "backdrop": 'rgba(0, 0, 0, 0.6)',
+    "rhino": '#343162',
+    "rhino_shine": '#3F3D6B',
+    "brink_pink": '#EE6384'
 }
 
 module.exports = colors

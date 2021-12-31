@@ -4,18 +4,14 @@ import useWindowSize from "hooks/useWindowSize";
 
 const containerWidth = 1440;
 
-const getResponsiveValue = (value, measurement = '', fromHeight = false) => {
+const getResponsiveValue = (value= '', measurement = '') => {
 
     const [ width, height ] = useWindowSize();
 
     let responsiveValue = ''
 
-    if(fromHeight) {
-        if(height < 900) {
-            responsiveValue = height + (value - height)
-        } else {
-            responsiveValue = height + 20
-        }
+    if(!value) {
+        responsiveValue = height
     } else {
         responsiveValue = width / (containerWidth / value)
     }

@@ -1,9 +1,11 @@
 // Packages
 import {arrayMoveImmutable} from 'array-move';
+import {useRouter} from "next/router";
+import {useState} from "react";
+
 
 // Components
 import Layout from "components/layout";
-import {useState} from "react";
 import CardSection from "components/selectClub/CardSection";
 import ClubControls from "components/selectClub/ClubControls";
 
@@ -15,6 +17,7 @@ import cardsDataI from "constants/data/cardsData";
 
 export default function SelectClub() {
 
+    const router = useRouter()
     const [cardsData, setCardsData] = useState(cardsDataI);
     const [cardsNextData, setCardsNextData] = useState(cardsDataI);
     const [changeCard, setChangeCard] = useState(true)
@@ -32,6 +35,9 @@ export default function SelectClub() {
         setCardsData(dataI)
     }
 
+    const onNextClick = () => {
+        router.push('/build_team_all_players')
+    }
 
     const firstCard = cardsData[0]
     const secondCard = cardsData[1]
@@ -47,10 +53,11 @@ export default function SelectClub() {
 
     return (
         <Layout title="Select Club">
-            <div className="bg-[url('/images/green_grunge_border_with_halftone_background_2.png')]
-            bg-[length:100%_100%] h-full bg-no-repeat pt-[3.4rem] bg-cover w-full bg-center relative"
+            <div
+                className="bg-[url('/images/green_grunge_border_with_halftone_background_2.png')]
+                bg-[length:100%_100%] bg-no-repeat pt-[3.4rem] w-full relative"
                  style={{
-                     height: R(930, '', true)
+                     minHeight: R()
                  }}
             >
                 <div className="absolute"
@@ -88,7 +95,7 @@ export default function SelectClub() {
                         />
                     </div>
                     {/*Controls*/}
-                    <ClubControls onControlsClick={onControlsClick} />
+                    <ClubControls onControlsClick={onControlsClick} onNextClick={onNextClick}  />
                 </div>
 
 

@@ -52,7 +52,7 @@ const cardsStyle = [
             mt: 10
         },
         heading: {
-            color: 'text-black',
+            color: 'text-black_rock',
             text: 32,
             pt: 20,
             leading: 44

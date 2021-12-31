@@ -4,7 +4,7 @@ import {useState, useEffect} from "react";
 // Components
 import Layout from "components/layout";
 import Input from "components/inputs/input";
-import PrimaryButton from "../components/buttons/primaryButton";
+import PrimaryButton from "../components/buttons/PrimaryButton";
 import {useRouter} from "next/router";
 
 export default function ResetPassword() {

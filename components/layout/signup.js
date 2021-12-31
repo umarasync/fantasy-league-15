@@ -5,16 +5,14 @@ import { AnimatePresence } from 'framer-motion'
 
 // Components
 import Layout from "components/layout";
-import PrimaryButton from "components/buttons/primaryButton";
+import PrimaryButton from "components/buttons/PrimaryButton";
 import {useRouter} from "next/router";
 import Input from "components/inputs/input";
-import SelectInput from "components/inputs/selectInput";
-import ResetPasswordModal from "components/modals/resetPasswordModal";
+import SelectInput from "components/inputs/SelectInput";
+import ResetPasswordModal from "components/modals/ResetPasswordModal";
 
 // Utils
 import R from "utils/getResponsiveValue";
-
-const defaultBGImage = 'bg-blue.png'
 
 const initialValue = 'Select'
 
@@ -140,31 +138,38 @@ export default function SignUp(props) {
 
 
   return (
-      <Layout
-          title="Sign Up"
-      >
+      <Layout title="Sign Up">
         <div className="mx-auto bg-white">
           <div className="grid grid-cols-2 flex h-screen">
-
-            <div
-                className={`bg-[url('/images/bg-blue.png')] bg-[length:100%_100%] bg-no-repeat sm:block relative`}
+            <div className={`bg-[url('/images/bg-blue.png')] bg-[length:100%_100%] bg-no-repeat sm:block relative`}
+            style={{
+              minHeight: R()
+            }}
             >
               <div className="h-screen relative">
-                <div className="flex flex-col px-[8rem]">
+                <div className="flex flex-col"
+                  style={{
+                    paddingLeft: R(80),
+                    paddingRight: R(80),
+                  }}
+                >
                   <p
-                      className={`text-white mt-[10rem] italic font-black uppercase`}
+                      className={`text-white italic font-black uppercase`}
                       style={{
                         fontSize: R(50),
-                        lineHeight: `${R(54, 'px')}`
+                        lineHeight: `${R(54, 'px')}`,
+                        marginTop: R(90)
                       }}
                   >
                    explore Eredivisie <br/>fantasy league
                   </p>
                   <p
-                      className="mt-[2rem] text-white text-[1.3rem] opacity-70 normal"
+                      className="text-white opacity-70 normal"
                       style={{
                         fontSize: R(18),
-                        lineHeight: `${R(26, 'px')}`
+                        lineHeight: `${R(26, 'px')}`,
+                        marginTop: R(20),
+                        paddingBottom: R(50)
                       }}
                   >
                     Be in the role of a Fantasy manager and lead dream team!{" "}
@@ -268,7 +273,9 @@ export default function SignUp(props) {
                             placeholder="Enter your password" icon={isLoginPasswordType? 'eye.png': 'hide.png'}
                             onChange={ v => setLoginPassword(v)}
                             onIconClick={() => setIsLoginPasswordType(!isLoginPasswordType)}
-                            style={'mb-[1.2rem]'}
+                            style={{
+                              marginBottom: R(12)
+                            }}
                             value={loginPassword}
                         />
                         <div className={`${error ? 'mb-[3.2rem]' : 'mb-[10.5rem]'}`}>
@@ -290,7 +297,6 @@ export default function SignUp(props) {
                             id="fullName"
                             placeholder="Full name"
                             onChange={ v => {
-                              console.log("setting full name", v)
                               setFullName(v)
                             }}
                             value={fullName}

@@ -1,8 +1,9 @@
 import R from "../../utils/getResponsiveValue";
-import PrimaryButton from "../buttons/primaryButton";
+import PrimaryButton from "../buttons/PrimaryButton";
 
 export default function clubControls({
-     onControlsClick
+     onControlsClick,
+     onNextClick
  }){
     return (
         <div className="flex items-center justify-center">
@@ -16,13 +17,10 @@ export default function clubControls({
             >
                 <PrimaryButton
                     title={'select'}
-                    style={{
+                    buttonStyle={{
                         marginBottom: R(40),
-                        height: R(70),
                     }}
-                    textStyle={{
-                        fontSize: R(16)
-                    }}
+                    onClick={onNextClick}
                 />
                 <div className="flex justify-center">
                     <img
