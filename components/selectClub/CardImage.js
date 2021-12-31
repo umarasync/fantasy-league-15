@@ -5,11 +5,11 @@ import {AnimatePresence, motion} from "framer-motion";
 import R from "utils/getResponsiveValue";
 
 export default function CardImage ({
-                                       changeCard,
-                                       fadeInOutAnimation,
-                                        image,
-                                       containerStyle
-                                   }){
+    changeCard,
+    fadeInOutAnimation,
+    image,
+    containerStyle
+}){
     return (
         <div className="relative w-full flex justify-center" style={containerStyle}>
             {

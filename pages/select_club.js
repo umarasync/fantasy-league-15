@@ -3,7 +3,6 @@ import {arrayMoveImmutable} from 'array-move';
 import {useRouter} from "next/router";
 import {useState} from "react";
 
-
 // Components
 import Layout from "components/layout";
 import CardSection from "components/selectClub/CardSection";
@@ -15,7 +14,19 @@ import R from "utils/getResponsiveValue";
 // Constants
 import cardsDataI from "constants/data/cardsData";
 
+// Styles
+const getStyles = (R) => {
+    return {
+        gradient: {
+            width: R(299),
+            height: '100%'
+        }
+    }
+}
+
 export default function SelectClub() {
+
+    const STYLES =  { ... getStyles(R) }
 
     const router = useRouter()
     const [cardsData, setCardsData] = useState(cardsDataI);
@@ -98,22 +109,15 @@ export default function SelectClub() {
                     <ClubControls onControlsClick={onControlsClick} onNextClick={onNextClick}  />
                 </div>
 
-
                 {/*left gradient*/}
                 <div
                     className="bg-[url('/images/gradient_blue_left.png')] absolute bg-[length:100%_100%] bg-no-repeat  top-[0] left-[0] "
-                    style={{
-                        width: R(299),
-                        height: '100%'
-                    }}
+                    style={STYLES.gradient}
                 />
                 {/*right gradient*/}
                 <div
                     className="bg-[url('/images/gradient_blue_right.png')] absolute bg-[length:100%_100%] bg-no-repeat  top-[0] right-[0] "
-                    style={{
-                        width: R(299),
-                        height: '100%'
-                    }}
+                    style={STYLES.gradient}
                 />
             </div>
         </Layout>

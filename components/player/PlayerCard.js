@@ -8,6 +8,7 @@ import R from "utils/getResponsiveValue";
 // Constants
 import colors from "constants/colors";
 
+// Styles
 const getStyles = (R) => {
     return {
         container: {

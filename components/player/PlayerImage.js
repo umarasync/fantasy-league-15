@@ -1,6 +1,7 @@
 // Utils
 import R from "utils/getResponsiveValue";
 
+// Styles
 const getStyles = (R) => {
     return {
         playerImage: {

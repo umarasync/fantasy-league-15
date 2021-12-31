@@ -4,6 +4,7 @@ import colors from "constants/colors";
 // Utils
 import R from "utils/getResponsiveValue";
 
+// Styles
 const getStyles = (R) => {
     return {
         username: {

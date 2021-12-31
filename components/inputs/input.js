@@ -7,6 +7,20 @@ import R from "utils/getResponsiveValue";
 // Constants
 import colors from 'constants/colors'
 
+// Styles
+const getStyles = (R) => {
+    return {
+        input: {
+            marginBottom: R(32),
+            borderRadius: R(12),
+            paddingLeft: R(24),
+            border: '1px solid',
+            borderColor: colors.link_water,
+            height: R(70),
+            fontSize: R(18),
+        }
+    }
+}
 export default function Input ({
     name,
     id,
@@ -19,6 +33,9 @@ export default function Input ({
     classes,
     value
 }) {
+
+    const STYLES =  { ... getStyles(R) }
+
     const [focused, setFocused] = useState(false)
     const onFocus = () => setFocused(true)
     const onBlur = () => setFocused(false)
@@ -45,16 +62,7 @@ export default function Input ({
             onBlur={onBlur}
             onChange={handleOnChange}
             value={value}
-            style={{
-                marginBottom: R(32),
-                borderRadius: R(12),
-                paddingLeft: R(24),
-                border: '1px solid',
-                borderColor: colors.link_water,
-                height: R(70),
-                fontSize: R(18),
-                ...style
-            }}
+            style={{ ...STYLES.input, ...style }}
             className={`w-[100%] font-[600] ${classes}`}
         />
     </div>

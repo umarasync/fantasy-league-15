@@ -1,4 +1,3 @@
-
 // Utils
 import R from "utils/getResponsiveValue";
 

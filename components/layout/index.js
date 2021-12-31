@@ -23,17 +23,9 @@ const Layout = ({ children, title }) => {
     };
 
     return (
-        <motion.div
-            variants={fadeInOutAnimation}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-
-        >
+        <motion.div variants={fadeInOutAnimation} initial="initial" animate="animate" exit="exit">
             <Head><title>{`Fantasy League ${title}`}</title></Head>
-            <main>
-                {children}
-            </main>
+            <main> {children} </main>
         </motion.div>
     )
 }

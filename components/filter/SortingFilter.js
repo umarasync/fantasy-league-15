@@ -1,7 +1,6 @@
 // Components
 import FilterDropDown from "components/dropdowns/FilterDropDown";
 
-
 export default function SortingFilter ({
     options,
     setValue

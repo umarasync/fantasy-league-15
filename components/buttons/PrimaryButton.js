@@ -1,10 +1,19 @@
 // Utils
 import R from "utils/getResponsiveValue";
 
-
+// Styles
 const getStyles = (R) => {
-
+    return {
+        textStyle: {
+            boxShadow: '0px 4px 0px #CB3156',
+            borderRadius: R(12),
+            fontSize: R(16),
+            height: R(70),
+            // paddingTop: R(3),
+        }
+    }
 }
+
 export default function PrimaryButton({
     title,
     onClick,
@@ -17,26 +26,20 @@ export default function PrimaryButton({
 }){
 
     const STYLES =  { ... getStyles(R) }
-    
+
     return (
         <button
             disabled={disabled}
             onClick={onClick}
-            className={
-                `w-full ${buttonClasses}`
-            }
+            className={`w-full ${buttonClasses}`}
             style={{
                 opacity: disabled ? disabledOpacity : 1,
                 ...buttonStyle}}
-            >
+        >
                 <p
                     className={`primary-button-color w-full flex items-center bg-white justify-center font-[900] italic text-white uppercase cursor-pointer ${textClasses}`}
                     style={{
-                        boxShadow: '0px 4px 0px #CB3156',
-                        borderRadius: R(12),
-                        fontSize: R(16),
-                        height: R(70),
-                        // paddingTop: R(3),
+                        ...STYLES.textStyle,
                         ...style
                     }}
                 >{title}
