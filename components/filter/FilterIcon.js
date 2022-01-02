@@ -15,18 +15,21 @@ const getStyles = (R) => {
             paddingTop: R(15),
             paddingBottom: R(15),
             border: `1px solid ${colors.link_water}`,
-            borderRadius: R(12)
+            borderRadius: R(12),
         }
     }
 }
 
-export default function FilterIcon () {
+export default function FilterIcon ({
+    showAllFilters,
+    onClick
+}) {
 
     const STYLES =  { ... getStyles(R) }
 
     return (
-        <div className={'flex items-center justify-center cursor-pointer'} style={STYLES.icon}>
-            <img src="/images/filter.png" alt="" width={'100%'} height={'100%'}/>
+        <div className={'flex items-center justify-center cursor-pointer'} onClick={onClick} style={STYLES.icon}>
+            <img src={`/images/${showAllFilters ? 'filter_icon_red.png': 'filter_icon_black.png'}`} alt="" width={'100%'} height={'100%'}/>
         </div>
     )
 }

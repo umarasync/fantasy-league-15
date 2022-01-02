@@ -13,8 +13,12 @@ const getStyles = (R) => {
     return {
         container: {
             height: R(94),
-            border: '1px solid white',
-            borderRadius: R(12)
+            border: '0.1px solid whitesmoke',
+            borderRadius: R(15),
+            marginBottom: R(8),
+            backgroundColor: colors.white,
+            // boxShadow: 'rgba(99, 99, 99, 0.2) 4px 4px 40px -10px'
+            boxShadow: '4px 4px 10px -5px rgba(0, 0, 0, 0.05)'
         },
         infoImage: {
             width: R(20),
@@ -51,23 +55,24 @@ const getStyles = (R) => {
 }
 
 export default function PlayerCard ({
+    player,
     playerType = 'MID'
 }){
     const STYLES =  { ... getStyles(R) }
 
     return (
-        <div className={'box-shadow-1 flex items-center justify-between'} style={STYLES.container}>
+        <div className={'flex items-center justify-between'} style={STYLES.container}>
             {/*left side*/}
             <div className={'flex items-center'}>
                 <div style={STYLES.infoImage}><img src="/images/info.png" alt=""/></div>
                 <Border/>
-                <PlayerImage playerImage={'player1.png'} clubImage={'club_fc.png'} imageStyle={STYLES.playerImage} />
+                <PlayerImage playerImage={player.image} clubImage={player.clubImage} imageStyle={STYLES.playerImage} />
                 <div>
                     <p className={'font-[600]'} style={STYLES.playerName}>
                         R. Nelson
                         <p style={{paddingTop: R(3)}}>
-                            <span>GRO</span>
-                            <span className={'font-[200]'}>{` vs BEN`}</span>
+                            <span>{player.nextMatch.club}</span>
+                            <span className={'font-[200]'}>{` vs ${player.nextMatch.vs}`}</span>
                         </p>
                     </p>
                 </div>
@@ -76,12 +81,12 @@ export default function PlayerCard ({
             <div className={'flex items-center'}>
                 <div style={{marginRight: R(16)}}>
                     <p style={STYLES.price}>
-                        €6.4m
-                        <p style={STYLES.type}><span>{playerType}</span></p>
+                        {`€${player.price}m`}
+                        <p style={STYLES.type}><span>{player.position}</span></p>
                     </p>
                 </div>
                 <Border/>
-                <p style={STYLES.totalPoints}>54</p>
+                <p style={STYLES.totalPoints}>{player.points}</p>
             </div>
         </div>
     )

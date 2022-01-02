@@ -48,6 +48,10 @@
 .select-options:hover{
     background-color: red;
 }
+input.disable-input-outline[type="text"]:focus{
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
 
 .primary-button-color {
     background: linear-gradient(180deg, #EE6384 0%, #D9335B 100%);
@@ -55,10 +59,6 @@
 
 .bg-blue-gradient {
     background: linear-gradient(90deg, rgba(27, 24, 83, 0) 0%, #1B1853 100%);
-}
-
-.box-shadow-1 {
-    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
 }
 
 .grey-faded-1 {

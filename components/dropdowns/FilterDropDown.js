@@ -26,7 +26,7 @@ const getStyles = (R) => {
 
 export default function FilterDropDown ({
    options,
-   setValue,
+   onOptionChange,
    classes,
    initialValue,
 }) {
@@ -35,25 +35,27 @@ export default function FilterDropDown ({
 
     const [opened, setOpened] = useState(false)
     const [defaultValue, setDefaultValue] = useState(initialValue)
+
     const handleClick = () => {
         setOpened(!opened)
     }
+
     const setOptionValue = (option) => {
         setOpened(false)
         setDefaultValue(option.name)
-        setValue(option)
+        onOptionChange(option)
     }
 
     return <div className="relative">
 
-        <div className={'flex'}>
+        <div className={'flex cursor-pointer'}  onClick={handleClick}>
             <div className={'flex'}>
                 <p style={STYLES.filterText}>Sort:</p>
                 <p className="font-[600] text-black_rock" style={{fontSize: R(20)}} >
                     {defaultValue}
                 </p>
             </div>
-            <div className={'cursor-pointer'} style={STYLES.arrowImage} onClick={handleClick}>
+            <div className={''} style={STYLES.arrowImage}>
                 <img src={opened ? '/images/arrow-up.png' : '/images/arrow-down.png'} alt="" width={'100%'} height={'100%'}/>
             </div>
         </div>

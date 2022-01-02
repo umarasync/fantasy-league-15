@@ -157,7 +157,7 @@ export default function SignUp(props) {
                       className={`text-white italic font-black uppercase`}
                       style={{
                         fontSize: R(50),
-                        lineHeight: `${R(54, 'px')}`,
+                        lineHeight: R(54, 'px'),
                         marginTop: R(90)
                       }}
                   >
@@ -167,7 +167,7 @@ export default function SignUp(props) {
                       className="text-white opacity-70 normal"
                       style={{
                         fontSize: R(18),
-                        lineHeight: `${R(26, 'px')}`,
+                        lineHeight: R(26, 'px'),
                         marginTop: R(20),
                         paddingBottom: R(50)
                       }}
@@ -273,9 +273,6 @@ export default function SignUp(props) {
                             placeholder="Enter your password" icon={isLoginPasswordType? 'eye.png': 'hide.png'}
                             onChange={ v => setLoginPassword(v)}
                             onIconClick={() => setIsLoginPasswordType(!isLoginPasswordType)}
-                            style={{
-                              marginBottom: R(12)
-                            }}
                             value={loginPassword}
                         />
                         <div className={`${error ? 'mb-[3.2rem]' : 'mb-[10.5rem]'}`}>

@@ -6,11 +6,12 @@ import R from "utils/getResponsiveValue";
 
 // Constants
 import colors from "constants/colors";
+import { PLAYERS_POSITIONS } from "constants/data/team"
 
 // Styles
 const getStyles = (R) => {
     return {
-        button: {
+        position: {
             borderRadius: R(12),
             fontSize: R(16),
             paddingTop: R(8),
@@ -22,49 +23,29 @@ const getStyles = (R) => {
     }
 }
 
-const buttons = [
-    {
-        title: 'All'
-    },
-    {
-        title: 'GK'
-    },
-    {
-        title: 'DEF'
-    },
-    {
-        title: 'MID'
-    },
-    {
-        title: 'FWD'
-    },
-]
-
 export default function FilterButtons({
-   activeButton,
+   activePosition,
     onClick
 }) {
     const STYLES =  { ... getStyles(R) }
 
-    const getBgColor = (name) => {
-        return activeButton === name ? {} : {
-                background: colors.lavender_grey
-            }
+    const getBgColor = (positionTitle) => {
+        return activePosition === positionTitle ? {} : {background: colors.lavender_grey}
     }
 
     return (
         <div>
             {
-                buttons.map((button) => {
+                PLAYERS_POSITIONS.map((position) => {
                     return (
                         <PrimaryButtonSmall
-                            title={button.title}
+                            title={position.title}
                             style={{
-                                ...STYLES.button,
-                                ...getBgColor(button.title)
+                                ...STYLES.position,
+                                ...getBgColor(position.title)
                             }}
-                            onClick={() => onClick(button.title)}
-                            key={button.title}
+                            onClick={() => onClick(position.title)}
+                            key={position.title}
                         />
                     )
                 })
