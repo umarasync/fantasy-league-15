@@ -69,7 +69,7 @@ export default function Input ({
                 <div className="absolute z-10 border-[1px] rounded-[1.2rem] shadow-[4px 4px 40px rgba(0, 0, 0, 0.03)] bg-white w-full">
                     {
                         options.map((option, index) => {
-                            return <div>
+                            return <div key={index}>
                                  <p className="cursor-pointer text-[1.8rem] font-[600] text-black_rock p-[2rem] hover:bg-mandy hover:text-white rounded-t-[1.2rem]" onClick={() => setOptionValue(option)}>{option.name}</p>
                                 {options.length - 1 !== index && <hr className="border-[1.5px] border-solid border-[link_water]"/> }
                             </div>

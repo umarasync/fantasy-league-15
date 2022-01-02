@@ -12,7 +12,7 @@ export default function ConfirmAccount() {
                     <p className="text-[1.8rem] leading-[2.6rem] normal text-center text-regent_grey mt-[2.4rem]">Thanks for signing up!
                         <br/>
                         Visit your email (<span className="text-white">martine.bakker@gmail.com</span>) and use a link
-                        <br/>we've sent you to activate your account
+                        <br/>{`we've sent you to activate your account`}
                     </p>
                 </div>
             </div>

@@ -127,6 +127,7 @@ export default function SelectSearchInput ({
                         options.map((option, index) => {
                             return (
                                 <div
+                                    key={index}
                                     className={'cursor-pointer flex items-center justify-between'}
                                     style={STYLES.dropDownBox}
                                     onClick={() => setOptionValue(option)}
