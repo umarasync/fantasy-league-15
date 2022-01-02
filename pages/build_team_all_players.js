@@ -50,23 +50,22 @@ export default function BuildTeamAllPlayer () {
     const [sortingOption, setSortingOption] = useState(filterOptions[0])
     const [activePosition, setActivePosition] = useState(POSITION_ALL)
 
-    const [clubs, setClubs] = useState(CLUBS)
+    const [clubs, setClubs] = useState([...CLUBS])
     const [selectedClubsNames, setSelectedClubsNames] = useState([ALL_TEAMS])
 
 
     const onSearch = () => false
 
     const resetClubsState = () => {
+
+        console.log("1 ========", CLUBS)
         setClubs([...CLUBS])
         setSelectedClubsNames([ALL_TEAMS])
     }
 
     const handleClubSelection = (option) => {
 
-        console.log("option ============", {
-            option
-        })
-        if(option.value === ALL_TEAMS) {
+        if(option.clubName === ALL_TEAMS) {
             return resetClubsState()
         }
 
@@ -75,9 +74,7 @@ export default function BuildTeamAllPlayer () {
         // Uncheck all teams option
         let allTeamsOption = clubsI[0]
 
-        console.log("allTeamsOption ============", {
-            allTeamsOption
-        })
+
 
         if(allTeamsOption.checked) {allTeamsOption.checked = false}
 
@@ -85,10 +82,9 @@ export default function BuildTeamAllPlayer () {
         clubsI[objIndex].checked =  !clubsI[objIndex].checked
 
         const selectedClubsNamesI = clubsI.map((team) => {
-            if(team.checked){
-                return team.value
-            }
+            if(team.checked){return team.clubName}
         }).filter(notUndefined => notUndefined !== undefined)
+
 
         setSelectedClubsNames([...selectedClubsNamesI])
         setClubs([...clubsI])
@@ -97,14 +93,6 @@ export default function BuildTeamAllPlayer () {
     const handleFilter = () => {
 
         let playersDataI = [ ...PLAYERS_DATA ]
-
-        /*********
-         * If active position is 'all'
-         * ***********/
-
-        // if(activePosition === POSITION_ALL && selectedClubsNames[0] === ALL_TEAMS) {
-        //
-        // } else
 
         if(activePosition !== POSITION_ALL && selectedClubsNames[0] === ALL_TEAMS) {
             playersDataI = playersDataI.filter(player => player.position === activePosition)
@@ -115,7 +103,6 @@ export default function BuildTeamAllPlayer () {
                 if((player.position === activePosition) && selectedClubsNames.includes(player.clubName)){return player}
             })
         }
-
 
         if(sortingOption.value === PRICE_FROM_HIGH_TO_LOW){
             playersDataI = playersDataI.sort((a, b) => a.price < b.price ? 1 : -1)
@@ -131,6 +118,7 @@ export default function BuildTeamAllPlayer () {
     }
 
     useEffect(() => {
+        // console.log("2 ========", CLUBS)
             handleFilter()
     }, [selectedClubsNames, activePosition, sortingOption])
 
@@ -167,17 +155,18 @@ export default function BuildTeamAllPlayer () {
                             </div>
 
                             {/*all filters*/}
-                            {
-                                showAllFilters && (
-                                    <div style={STYLES.allFiltersBox}>
-                                        <BuildYourTeamFilters
-                                            selectedClubsNames={selectedClubsNames}
-                                            clubs={clubs}
-                                            onClubSelected={handleClubSelection}
-                                        />
-                                    </div>
-                                )
-                            }
+
+                            {/*{*/}
+                            {/*    showAllFilters && (*/}
+                            {/*        <div style={STYLES.allFiltersBox}>*/}
+                            {/*            <BuildYourTeamFilters*/}
+                            {/*                selectedClubsNames={selectedClubsNames}*/}
+                            {/*                clubs={clubs}*/}
+                            {/*                onClubSelected={handleClubSelection}*/}
+                            {/*            />*/}
+                            {/*        </div>*/}
+                            {/*    )*/}
+                            {/*}*/}
 
                             {/*sorting filter*/}
                             <div style={{marginBottom: R(16)}}>

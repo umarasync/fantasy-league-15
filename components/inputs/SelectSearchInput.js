@@ -110,7 +110,7 @@ export default function SelectSearchInput ({
             onClick={handleClick}
         >
             <dv className={'flex w-full items-center'} style={{...STYLES.tagsContainer, ...textStyle}}>
-                {tags.map((tag, index) => <span key={index} style={STYLES.tag}>{tag}</span>)}
+                {tags.map((tag, index) => <span key={index} className={'whitespace-nowrap'} style={STYLES.tag}>{tag}</span>)}
                 <input
                     className={'disable-input-outline'}
                     type="text" style={STYLES.input}

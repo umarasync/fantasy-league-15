@@ -1,11 +1,11 @@
-export const ALL_TEAMS = 'all_teams'
-const CLUB_AJAX = 'ajax'
-const CLUB_AZ = 'az'
-const CLUB_FC = 'fc'
-const CLUB_FR = 'fr'
-const CLUB_HEE = 'hee'
-const CLUB_SC = 'sc'
-const CLUB_ZWO = 'zwo'
+export const ALL_TEAMS = 'All Teams'
+const CLUB_AJAX = 'Ajax'
+const CLUB_AZ = 'AZ'
+const CLUB_FC = 'FC GRONINGEN'
+const CLUB_FR = 'FEYENOORD'
+const CLUB_HEE = 'SC HEERENVEEN'
+const CLUB_SC = 'SC CAMBUUR'
+const CLUB_ZWO = 'PEC ZWOLLE'
 
 export const POSITION_ALL = 'All'
 const POSITION_GK = 'GK'
@@ -16,50 +16,42 @@ const POSITION_FWD = 'FWD'
 export const CLUBS = [
     {
         id: 1,
-        clubName: 'All Teams',
-        value: ALL_TEAMS,
+        clubName: ALL_TEAMS,
         checked: true
     },
     {
         id: 2,
-        clubName: 'Ajax',
-        value: CLUB_AJAX,
+        clubName: CLUB_AJAX,
         checked: false
     },
     {
         id: 3,
-        clubName: 'AZ',
-        value: CLUB_AZ,
+        clubName: CLUB_AZ,
         checked: false
     },
     {
         id: 4,
-        clubName: 'FC GRONINGEN',
-        value: CLUB_FC,
+        clubName: CLUB_FC,
         checked: false
     },
     {
         id: 5,
-        clubName: 'FEYENOORD',
-        value: CLUB_FR,
+        clubName: CLUB_FR,
         checked: false
     },
     {
         id: 6,
-        clubName: 'SC HEERENVEEN',
-        value: CLUB_HEE,
+        clubName: CLUB_HEE,
         checked: false
     },
     {
         id: 7,
-        clubName: 'SC CAMBUUR',
-        value: CLUB_SC,
+        clubName: CLUB_SC,
         checked: false
     },
     {
         id: 8,
-        clubName: 'PEC ZWOLLE',
-        value: CLUB_ZWO,
+        clubName: CLUB_ZWO,
         checked: false
     }
 ]

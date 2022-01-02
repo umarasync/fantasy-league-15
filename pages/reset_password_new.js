@@ -7,6 +7,9 @@ import Input from "components/inputs/input";
 import PrimaryButton from "../components/buttons/PrimaryButton";
 import {useRouter} from "next/router";
 
+// Utils
+import R from "utils/getResponsiveValue";
+
 export default function ResetPassword() {
 
     const router = useRouter()
@@ -55,7 +58,7 @@ export default function ResetPassword() {
                         onChange={ v => setCPassword(v)}
                         onIconClick={() => setIsCPasswordType(!isCPasswordType)}
                         value={cPassword}
-                        style='mb-[6rem]'
+                        style={{ marginBottom: R(60)}}
                     />
                     <PrimaryButton title={'Next'} disabled={disabled} onClick={() => !disabled && router.push('/reset_password_new_success')}/>
                 </div>
