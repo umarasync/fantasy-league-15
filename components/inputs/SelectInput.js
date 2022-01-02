@@ -1,13 +1,42 @@
 // Packages
-import {useRef, useState} from "react";
+import {useState} from "react";
 
+// Utils
+import R from "utils/getResponsiveValue";
+
+// Constants
+import colors from 'constants/colors'
+
+// Styles
+const getStyles = (R) => {
+    return {
+        container: {
+            height: R(70),
+            fontSize: R(18),
+            marginBottom: R(7),
+            borderRadius: R(12),
+            paddingLeft: R(24),
+            paddingRight: R(32)
+        },
+        text: {
+            fontSize: R(18),
+            color: colors.regent_grey
+        }
+    }
+}
 export default function Input ({
        placeholder,
        options,
        setValue,
        classes,
        initialValue,
-   }) {
+       style,
+       textStyle,
+       parentContainerStyle
+}) {
+
+    const STYLES =  { ... getStyles(R) }
+
     const [opened, setOpened] = useState(false)
     const [defaultValue, setDefaultValue] = useState(initialValue)
     const handleClick = () => {
@@ -19,14 +48,22 @@ export default function Input ({
         setValue(option)
     }
 
-    return <div className="relative">
+    return <div className="relative w-full" style={{...parentContainerStyle}}>
         { opened && <p className="input-focused text-black_rock">{placeholder}</p> }
         { defaultValue !== initialValue  && !opened && <p className="input-focused text-regent_grey">{placeholder}</p> }
 
-        <img src={opened ? '/images/arrow-up.png' : '/images/arrow-down.png'} alt="" className="absolute top-[3rem] right-[3rem] cursor-pointer" onClick={handleClick}/>
+        <div
+            className={
+                `cursor-pointer flex items-center justify-between border-solid border-[0.15rem] 
+                ${opened ? 'border-[#000000]': 'border-[#DCE3EC] ' } ${classes}`
+            }
+            style={{...STYLES.container, ...style}}
+            onClick={handleClick}
+        >
+            <p style={{...STYLES.text, ...textStyle}}>{defaultValue}</p>
+            <img src={opened ? '/images/arrow-up.png' : '/images/arrow-down.png'} alt=""/>
+        </div>
 
-        <p className="text-[1.8rem] absolute top-[2.3rem] left-[3rem] text-regent_grey">{defaultValue}</p>
-        <div className={`mb-[0.7rem] rounded-[1.2rem] pl-[2.4rem] border-solid border-[0.15rem] h-[7rem] text-[1.8rem] ${opened ? 'border-[#000000]': 'border-[#DCE3EC] ' } ${classes}`} />
         {
             opened && (
                 <div className="absolute z-10 border-[1px] rounded-[1.2rem] shadow-[4px 4px 40px rgba(0, 0, 0, 0.03)] bg-white w-full">

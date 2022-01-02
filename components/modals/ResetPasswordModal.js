@@ -5,7 +5,7 @@ import {useRouter} from "next/router";
 // Components
 import Modal from "components/modals";
 import Input from "components/inputs/input";
-import PrimaryButton from "components/buttons/primaryButton";
+import PrimaryButton from "components/buttons/PrimaryButton";
 
 export default function ResetPasswordModal({
     show,

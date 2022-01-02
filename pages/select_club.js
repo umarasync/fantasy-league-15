@@ -1,135 +1,124 @@
+// Packages
+import {arrayMoveImmutable} from 'array-move';
+import {useRouter} from "next/router";
+import {useState} from "react";
+
 // Components
 import Layout from "components/layout";
-import SelectClubCard from "components/selectClub/SelectClubCard";
+import CardSection from "components/selectClub/CardSection";
+import ClubControls from "components/selectClub/ClubControls";
+
+// Utils
+import R from "utils/getResponsiveValue";
+
+// Constants
+import cardsDataI from "constants/data/cardsData";
+
+// Styles
+const getStyles = (R) => {
+    return {
+        gradient: {
+            width: R(299),
+            height: '100%'
+        }
+    }
+}
 
 export default function SelectClub() {
 
+    const STYLES =  { ... getStyles(R) }
+
+    const router = useRouter()
+    const [cardsData, setCardsData] = useState(cardsDataI);
+    const [cardsNextData, setCardsNextData] = useState(cardsDataI);
+    const [changeCard, setChangeCard] = useState(true)
+
+    const onControlsClick = (isLeftPressed = false) => {
+        let dataI = []
+        if(isLeftPressed){
+            dataI = arrayMoveImmutable(cardsData, -1, 0);
+        }else {
+            dataI = arrayMoveImmutable(cardsData, 0, -1);
+        }
+
+        setCardsNextData(dataI)
+        setChangeCard(!changeCard)
+        setCardsData(dataI)
+    }
+
+    const onNextClick = () => {
+        router.push('/build_team_all_players')
+    }
+
+    const firstCard = cardsData[0]
+    const secondCard = cardsData[1]
+    const thirdCard = cardsData[2]
+    const fourthCard = cardsData[3]
+    const fifthCard = cardsData[4]
+
+    const nextFirstCard = cardsNextData[0]
+    const nextSecondCard = cardsNextData[1]
+    const nextThirdCard = cardsNextData[2]
+    const nextFourthCard = cardsNextData[3]
+    const nextFifthCard = cardsNextData[4]
+
     return (
         <Layout title="Select Club">
-            <div className="bg-[url('/images/green_grunge_border_with_halftone_background_2.png')] bg-[length:100%_100%] h-full bg-no-repeat pt-[3.4rem] bg-cover w-full">
-                <div>
-                    <img src="/images/logo_white.png" alt="" className="w-[16.4rem] h-[4rem] mb-[2rem] ml-[8rem]"/>
+            <div
+                className="bg-[url('/images/green_grunge_border_with_halftone_background_2.png')]
+                bg-[length:100%_100%] bg-no-repeat pt-[3.4rem] w-full relative"
+                 style={{
+                     minHeight: R()
+                 }}
+            >
+                <div className="absolute"
+                     style={{
+                         top: R(34),
+                         left: R(80),
+                         zIndex: 1
+                     }}
+                >
+                    <img src="/images/logo_white.png" alt="" className="w-[16.4rem] h-[4rem]"/>
                 </div>
                 <div className="flex flex-col items-center">
-                    <p className="text-white font-[800] leading-[5.4rem] text-[5rem] italic uppercase text-center">select your <br/>favorite club</p>
+                    <p className="text-white font-[800] leading-[5.4rem] mt-[5rem] text-[5rem] italic uppercase text-center">select your <br/>favorite club</p>
                     <p className="text-[1.8rem] leading-[2.6rem] font-[300] text-center text-white opacity-[0.7] mt-[2.4rem]">
                         Based on this choice, players will be prioritized when creating <br/>a team, and you will join a fan league of the selected club
                     </p>
                 </div>
 
-                <div className="flex justify-between items-center mt-[6rem]">
-                    <div className="w-[11.11%]">
-                        <img
-                            src="/images/card_blue_small_left.png"
-                            alt=""
-                            className="w-[100%]"
+                <div>
+                    <div className="flex justify-between items-center mt-[6rem] w-full" >
+                        <CardSection
+                            firstCard={firstCard}
+                            secondCard={secondCard}
+                            thirdCard={thirdCard}
+                            fourthCard={fourthCard}
+                            fifthCard={fifthCard}
+
+                            nextFirstCard={nextFirstCard}
+                            nextSecondCard={nextSecondCard}
+                            nextThirdCard={nextThirdCard}
+                            nextFourthCard={nextFourthCard}
+                            nextFifthCard={nextFifthCard}
+
+                            changeCard={changeCard}
                         />
                     </div>
-                    <SelectClubCard
-                        image={{
-                            name: 'fortuna.png',
-                            width: 68,
-                            height: 81
-                        }}
-                        heading ={{
-                            title: 'FORTUNA SITTARD',
-                            color: 'text-white',
-                            text: 20,
-                            pt: 20,
-                            leading: 24
-                        }}
-                        subHeading ={{
-                            title: 'Sittard',
-                            color: 'text-lavender_grey',
-                            text: 14,
-                            leading: 22,
-                            mt: 4
-                        }}
-                        containerStyle="w-[20.76%]"
-                        bgImage={'card_blue.png'}
-                        itemsCenter
-                    />
-
-                    {/*Select Box 3*/}
-
-                    <SelectClubCard
-                        image={{
-                            name: 'sparta.png',
-                            width: 150,
-                            height: 150
-                        }}
-                        heading ={{
-                            title: 'ajax',
-                            color: 'text-black',
-                            text: 32,
-                            pt: 20,
-                            leading: 44
-                        }}
-
-                        subHeading ={{
-                            title: 'Rotterdam',
-                            color: 'text-regent_grey',
-                            text: 18,
-                            leading: 26,
-                            mt: 4
-                        }}
-
-                        containerStyle="w-[28.33%] items-start"
-                        bgImage={'card_white.png'}
-                        boxPaddingTop={17.5}
-                        controls={{
-                            buttonHeight: 70,
-                            bottom: -130,
-                            buttonText: {
-                                fontSize: 16
-                            },
-                            mb: 40,
-                            icon: {
-                                width: 60,
-                                height: 60
-                            }
-                        }}
-                    />
-
-                    {/*Select Box 4*/}
-
-                    <SelectClubCard
-                        image={{
-                            name: 'sparta.png',
-                            width: 81,
-                            height: 81
-                        }}
-                        heading ={{
-                            title: 'SPARTA ROTTERDAM',
-                            color: 'text-white',
-                            text: 20,
-                            pt: 20,
-                            leading: 24
-                        }}
-                        subHeading ={{
-                            title: 'Rotterdam',
-                            color: 'text-lavender_grey',
-                            text: 14,
-                            leading: 22,
-                            mt: 4
-                        }}
-                        containerStyle="w-[20.76%]"
-                        bgImage={'card_blue.png'}
-                        itemsCenter
-                    />
-
-                    {/*5*/}
-                    <div className="w-[11.11%]">
-                        <img
-                            src="/images/card_blue_small_right.png"
-                            alt=""
-                            className="w-[100%]"
-                        />
-                    </div>
+                    {/*Controls*/}
+                    <ClubControls onControlsClick={onControlsClick} onNextClick={onNextClick}  />
                 </div>
-                <div className="h-[23rem]">
 
-                </div>
+                {/*left gradient*/}
+                <div
+                    className="bg-[url('/images/gradient_blue_left.png')] absolute bg-[length:100%_100%] bg-no-repeat  top-[0] left-[0] "
+                    style={STYLES.gradient}
+                />
+                {/*right gradient*/}
+                <div
+                    className="bg-[url('/images/gradient_blue_right.png')] absolute bg-[length:100%_100%] bg-no-repeat  top-[0] right-[0] "
+                    style={STYLES.gradient}
+                />
             </div>
         </Layout>
     )

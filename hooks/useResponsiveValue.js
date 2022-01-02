@@ -4,7 +4,7 @@ import useWindowSize from "hooks/useWindowSize";
 
 const containerWidth = 1440;
 
-const getResponsiveValue = (value= '', measurement = '') => {
+const GetResponsiveValue = (value= '', measurement = '') => {
 
     const [ width, height ] = useWindowSize();
 
@@ -23,4 +23,4 @@ const getResponsiveValue = (value= '', measurement = '') => {
     return responsiveValue
 }
 
-export default getResponsiveValue
+export default GetResponsiveValue

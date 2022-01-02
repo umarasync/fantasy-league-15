@@ -6,8 +6,8 @@
 
 @layer base {
     html {
-        /*font-size: 10px !important;*/
-        font-size: 62.5% !important;
+        font-size: 10px !important;
+        /*font-size: 62.5% !important;*/
     }
     select {
         -webkit-appearance: none;
@@ -48,21 +48,37 @@
 .select-options:hover{
     background-color: red;
 }
+input.disable-input-outline[type="text"]:focus{
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
 
-.primary-button {
+.primary-button-color {
     background: linear-gradient(180deg, #EE6384 0%, #D9335B 100%);
-    box-shadow: 0px 4px 0px #CB3156;
-    border-radius: 12px;
-    height: 7rem;
 }
 
-.bg-full {
-    /*background-image: url('../public/images/green_grunge_border_with_halftone_background_2.png');*/
-    min-height: 100%;
-    width: 100%;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center;
-    background-size: cover;
+.bg-blue-gradient {
+    background: linear-gradient(90deg, rgba(27, 24, 83, 0) 0%, #1B1853 100%);
 }
 
+.grey-faded-1 {
+    border: 1px solid transparent;
+    border-image: linear-gradient(360deg, rgba(102, 100, 137, 0) -0.15%, #666489 54.62%, rgba(102, 100, 137, 0) 100%);
+    border-image-slice: 1;
+    /*will have no affect*/
+    border-radius: 1px;
+}
+
+
+.grey-faded-2 {
+    border: 1px solid transparent;
+    border-image: linear-gradient(360deg, rgba(220, 227, 236, 0) -0.15%, #DCE3EC 54.62%, rgba(220, 227, 236, 0) 100%);
+    border-image-slice: 1;
+    /*will have no affect*/
+    border-radius: 1px;
+}
+
+.footer-blue-gradient {
+    background: linear-gradient(180deg, #2E2B63 0%, #252252 100%);
+    box-shadow: 0 10px 50px rgba(8, 6, 41, 0.2);
+}

@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import { motion} from "framer-motion";
 
-
 const Layout = ({ children, title }) => {
 
     const duration = 0.3
@@ -24,16 +23,9 @@ const Layout = ({ children, title }) => {
     };
 
     return (
-        <motion.div
-            variants={fadeInOutAnimation}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-        >
+        <motion.div variants={fadeInOutAnimation} initial="initial" animate="animate" exit="exit">
             <Head><title>{`Fantasy League ${title}`}</title></Head>
-            <main>
-                {children}
-            </main>
+            <main> {children} </main>
         </motion.div>
     )
 }
