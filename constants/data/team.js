@@ -1,26 +1,32 @@
 // Utils
 import {nFormatter} from "utils/helpers";
 
-// CLUBS/TEAMS
-export const ALL_TEAMS = 'All Teams'
-const CLUB_AJAX = 'Ajax'
-const CLUB_AZ = 'AZ'
-const CLUB_FC = 'FC GRONINGEN'
-const CLUB_FR = 'FEYENOORD'
-const CLUB_HEE = 'SC HEERENVEEN'
-const CLUB_SC = 'CAMBUUR'
-const CLUB_ZWO = 'PEC ZWOLLE'
-
 // POSITIONS
 export const POSITION_ALL = 'All'
 const POSITION_GK = 'GK'
 const POSITION_DEF = 'DEF'
 const POSITION_MID = 'MID'
 const POSITION_FWD = 'FWD'
+export const PLAYERS_POSITIONS = [
+    {
+        title: POSITION_ALL
+    },
+    {
+        title: POSITION_GK
+    },
+    {
+        title: POSITION_DEF
+    },
+    {
+        title: POSITION_MID
+    },
+    {
+        title: POSITION_FWD
+    },
+]
 
 // PRICES
 export const ALL_PRICES = 'All prices'
-
 export const PRICES = [
     {
         id: 1,
@@ -31,40 +37,45 @@ export const PRICES = [
         id: 2,
         label: '< €1m',
         value: {
-            type: 'single',
-            price: 1000000,
-            operator: '<'
+            from: 0,
+            to: 1000000,
         }
     },
     {
         id: 3,
         label: '€1m – €5m',
         value: {
-            type: 'range',
-            from_price: 1000000,
-            to_price: 1000000,
+            from: 1000000,
+            to: 5000000,
         }
     },
     {
         id: 4,
         label: '€10m – €20m',
         value: {
-            type: 'range',
-            from_price: 10000000,
-            to_price: 20000000,
+            from: 10000000,
+            to: 20000000,
         }
     },
     {
         id: 5,
         label: '€10m <',
         value: {
-            type: 'single',
-            price: 10000000,
-            operator: '<'
+            from: 10000000,
+            to: null
         }
     },
 ]
 
+// CLUBS/TEAMS
+export const ALL_TEAMS = 'All Teams'
+const CLUB_AJAX = 'Ajax'
+const CLUB_AZ = 'AZ'
+const CLUB_FC = 'FC GRONINGEN'
+const CLUB_FR = 'FEYENOORD'
+const CLUB_HEE = 'SC HEERENVEEN'
+const CLUB_SC = 'CAMBUUR'
+const CLUB_ZWO = 'PEC ZWOLLE'
 export const CLUBS = [
     {
         id: 1,
@@ -123,18 +134,17 @@ export const CLUBS = [
     }
 ]
 
-
+// PLAYERS
 const PLAYER1_PRICE = 6400000
-const PLAYER2_PRICE = 8100000
-const PLAYER3_PRICE = 2100000
+const PLAYER2_PRICE = 36000000
+const PLAYER3_PRICE = 15000000
 const PLAYER4_PRICE = 7300000
 const PLAYER5_PRICE = 9100000
-const PLAYER6_PRICE = 2300000
+const PLAYER6_PRICE = 19000000
 const PLAYER7_PRICE = 670000
 const PLAYER8_PRICE = 6400000
-const PLAYER9_PRICE = 7000000
+const PLAYER9_PRICE = 29000000
 const PLAYER10_PRICE = 100000
-
 
 export const PLAYERS = [
     {
@@ -456,23 +466,5 @@ export const PLAYERS = [
         position: 'MID',
         points: 10,
         most_transferred: 7
-    },
-]
-
-export const PLAYERS_POSITIONS = [
-    {
-        title: POSITION_ALL
-    },
-    {
-        title: POSITION_GK
-    },
-    {
-        title: POSITION_DEF
-    },
-    {
-        title: POSITION_MID
-    },
-    {
-        title: POSITION_FWD
     },
 ]

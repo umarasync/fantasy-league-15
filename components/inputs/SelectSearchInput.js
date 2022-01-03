@@ -71,14 +71,16 @@ const getStyles = (R) => {
 }
 export default function SelectSearchInput ({
        options,
-       setValue,
+       onOptionClicked,
        classes,
        label,
        style,
        textStyle,
        selectedClubs,
        parentContainerStyle,
-       dropDownBoxStyle
+       dropDownBoxStyle,
+       arrowImageStyle,
+       hideSearchBox
    }) {
 
     const OPTIONS = JSON.parse(JSON.stringify(options))
@@ -103,7 +105,7 @@ export default function SelectSearchInput ({
     }
 
     const setOptionValue = (item) => {
-        setValue(item)
+        onOptionClicked(item)
     }
 
     const handleKeyDown = (e) => {
@@ -111,7 +113,7 @@ export default function SelectSearchInput ({
             if(selectedClubs.length === 0) return
             let item = selectedClubs[selectedClubs.length - 1]
             item.fromBackSpace = true
-            setValue(item)
+            onOptionClicked(item)
         }
     }
 
@@ -126,7 +128,7 @@ export default function SelectSearchInput ({
         if(selectedClubs.length === 0) return null
 
         if(selectedClubs[0].name === ALL_TEAMS) {
-            return <span className={'whitespace-nowrap'}>{ALL_TEAMS}</span>
+            return <span className={'whitespace-nowrap'}onClick={handleClick} >{ALL_TEAMS}</span>
         }
 
         return selectedClubs.map(club =>  <div
@@ -160,21 +162,25 @@ export default function SelectSearchInput ({
                 <div className={'flex items-center justify-center'} style={STYLES.tagsInnerContainer}>
                     <ClubItems selectedClubs={selectedClubs}/>
                 </div>
-                <div className={'w-full'}>
-                    <Input
-                        classes={'disable-input-outline'}
-                        onChange={handleOnChange}
-                        type="text"
-                        onFocus={(v) => setOpened(v)}
-                        style={STYLES.input}
-                        onKeyDown={handleKeyDown}
-                    />
-                </div>
+                {
+                    !hideSearchBox && (
+                        <div className={'w-full'}>
+                            <Input
+                                classes={'disable-input-outline'}
+                                onChange={handleOnChange}
+                                type="text"
+                                onFocus={(v) => setOpened(v)}
+                                style={STYLES.input}
+                                onKeyDown={handleKeyDown}
+                            />
+                        </div>
+                    )
+                }
 
             </dv>
             <div onClick={handleClick}
                  className={'flex items-center'}
-                 style={STYLES.arrowImage}
+                 style={{...STYLES.arrowImage, ...arrowImageStyle}}
             >
                 <img src={opened ? '/images/arrow-up.png' : '/images/arrow-down.png'} width={R(15)} height={R(15)} alt=""/>
             </div>

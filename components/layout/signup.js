@@ -13,25 +13,18 @@ import ResetPasswordModal from "components/modals/ResetPasswordModal";
 
 // Utils
 import R from "utils/getResponsiveValue";
+import {clone} from "utils/helpers";
 
-const initialValue = 'Select'
-
-const options = [
-  {
-    label: 'Male',
-    value: 'male'
-  },
-  {
-    label: 'Female',
-    value: 'female'
-  }
-]
+// Constants
+import {GENDERS} from "constants/data/user";
 
 const testEmail = 'martine.bakkergmail.com'
 const testPassword = testEmail
 
 export default function SignUp(props) {
   const router = useRouter()
+
+  const GENDERS_INITIAL = clone(GENDERS)
 
   const [isLoginPage, setIsLoginPage] = useState(props.isLoginPage)
   const [initialOpacity, setInitialOpacity] = useState(1)
@@ -47,13 +40,13 @@ export default function SignUp(props) {
 
   const [fullName, setFullName] = useState('')
   const [dateOfBirth, setDateOfBirth] = useState('')
-  const [gender, setGender] = useState({
-    name:'',
-    value: ''
-  })
+
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState(false)
 
+  // Gender States
+  const [genders, setGenders] = useState([...GENDERS_INITIAL])
+  const [selectedGender, setSelectedGender] = useState(GENDERS_INITIAL[0])
 
   const duration = 0.2
 
@@ -78,7 +71,7 @@ export default function SignUp(props) {
 
   /*** Sign Up Flow:Starts ****/
   const validateSignUp = () => {
-    if(fullName && email && gender.value && gender.value !== initialValue && dateOfBirth && password){
+    if(fullName && email && selectedGender.value && selectedGender.value !== GENDERS_INITIAL[0].value && dateOfBirth && password){
       setDisabled(false)
     } else {
       setDisabled(true)
@@ -128,7 +121,7 @@ export default function SignUp(props) {
 
   useEffect(() => {
     validate()
-  }, [fullName, email, gender.value, dateOfBirth, password, loginEmail, loginPassword])
+  }, [fullName, email, selectedGender.value, dateOfBirth, password, loginEmail, loginPassword])
 
   useEffect(() => {
       if(initialOpacity) {
@@ -301,7 +294,16 @@ export default function SignUp(props) {
                         />
                         <Input value={email} name="email" id="email" placeholder="Email address" onChange={(v) => setEmail(v)}/>
                         <div className="grid grid-cols-2 gap-[2.4rem]">
-                          <SelectInput initialValue={initialValue} default name="gender" id="gender" placeholder="Gender" options={options} setValue={(v) => setGender(v)}/>
+                          <SelectInput
+                              name="gender"
+                              id="gender"
+                              placeholder="Gender"
+                              options={genders}
+                              selectedOption={selectedGender}
+                              default
+                              skipFirstOption={true}
+                              onOptionChange={(option) => setSelectedGender(option)}
+                          />
                           <Input value={dateOfBirth} name="dateOfBirth" id="dateOfBirth" placeholder="Date of birth" onChange={(v) => setDateOfBirth(v)}/>
                         </div>
                         <Input

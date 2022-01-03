@@ -22,7 +22,7 @@ import {
     PLAYERS,
     CLUBS,
     POSITION_ALL,
-    ALL_TEAMS, PRICES
+    ALL_TEAMS, PRICES, ALL_PRICES
 } from "constants/data/team";
 
 import filterOptions, {
@@ -68,8 +68,7 @@ export default function BuildTeamAllPlayer () {
     const [selectedClubs, setSelectedClubs] = useState([CLUBS_INITIAL[0]])
     // Prices States
     const [prices, setPrices] = useState([...PRICES_INITIAL])
-    const [selectedPrice, setSelectedPrice] = useState([...PRICES_INITIAL])
-
+    const [selectedPrice, setSelectedPrice] = useState(PRICES_INITIAL[0])
 
     const onSearch = () => false
 
@@ -90,7 +89,8 @@ export default function BuildTeamAllPlayer () {
         ])
     }
 
-    const handleClubSelection = (club) => {
+    // Handles Clubs/Teams Selection
+    const onClubSelected = (club) => {
 
         if(club.name === ALL_TEAMS) {
             return resetClubsState(club)
@@ -114,22 +114,37 @@ export default function BuildTeamAllPlayer () {
         setClubs([...clubsI])
     }
 
+
+    const runPriceFilter = (player) => {
+        if(
+            selectedPrice.value === ALL_PRICES ||
+            ((selectedPrice.value.to === null) && player.price > selectedPrice.value.from) ||
+            (player.price > selectedPrice.value.from && player.price < selectedPrice.value.to)) {
+            return true
+        }
+    }
+
+    const runTeamFilter = (player) => {
+        if(selectedClubs.length > 0 &&
+            (selectedClubs[0].name === ALL_TEAMS || selectedClubs.some( club => club.name === player.clubName ))){
+            return runPriceFilter(player)
+        }
+    }
+
+    const runPositionFilter = (player) => {
+        if(player.position === activePosition || activePosition === POSITION_ALL){
+            return runTeamFilter(player)
+        }
+    }
+
+    const startFiltering = (player) => runPositionFilter(player)
+
     const runFiltersOnPlayersData = () => {
 
         let playersDataI = [ ...PLAYERS_INITIAL ]
 
-        // Filter Players
         playersDataI = playersDataI.filter(player => {
-            // Position Filter
-            if(player.position === activePosition || activePosition === POSITION_ALL){
-                // Teams filter
-                if(selectedClubs.length > 0 &&
-                    (selectedClubs[0].name === ALL_TEAMS || selectedClubs.some( club => club.name === player.clubName ))
-                ){
-                    return true
-                }
-
-            }
+            return startFiltering(player)
         })
 
         // Sorting
@@ -148,7 +163,7 @@ export default function BuildTeamAllPlayer () {
 
     useEffect(() => {
             runFiltersOnPlayersData()
-    }, [clubs, activePosition, sortingOption])
+    }, [clubs, selectedPrice, activePosition, sortingOption])
 
     return (
         <Layout title="Build Team All Player">
@@ -189,11 +204,14 @@ export default function BuildTeamAllPlayer () {
                                     <div style={STYLES.allFiltersBox}>
                                         <BuildYourTeamFilters
                                             // Teams Filter Options
-                                            selectedClubs={selectedClubs}
                                             clubs={clubs}
-                                            onClubSelected={handleClubSelection}
+                                            selectedClubs={selectedClubs}
+                                            onClubSelected={onClubSelected}
 
                                             // Prices Filter Options
+                                            prices={prices}
+                                            selectedPrice={selectedPrice}
+                                            onPriceSelected={(price) => setSelectedPrice(price)}
                                         />
                                     </div>
                                 )
@@ -201,7 +219,9 @@ export default function BuildTeamAllPlayer () {
 
                             {/*sorting filter*/}
                             <div style={{marginBottom: R(16)}}>
-                                <SortingFilter options={filterOptions} onApplyFilter={(option) => setSortingOption(option)}/>
+                                <SortingFilter
+                                    options={filterOptions}
+                                    onApplyFilter={(option) => setSortingOption(option)}/>
                             </div>
 
                             {/*players cards*/}

@@ -26,10 +26,15 @@ const getStyles = (R) => {
 }
 
 export default function BuildYourTeamFilters({
-     clubs,
-     selectedClubs,
-     onClubSelected,
-     onSearchClubs
+    clubs,
+    selectedClubs,
+    onClubSelected,
+    onSearchClubs,
+
+    // Prices
+    prices,
+    onPriceSelected,
+    selectedPrice
  }){
 
     const STYLES =  { ... getStyles(R) }
@@ -38,39 +43,41 @@ export default function BuildYourTeamFilters({
         <div>
             <SelectSearchInput
                 label={'Teams'}
-                selectedClubs={selectedClubs}
                 options={clubs}
+                selectedClubs={selectedClubs}
                 onSearchClubs={onSearchClubs}
                 style={STYLES.container}
                 textStyle={STYLES.textStyle}
                 parentContainerStyle={STYLES.parentContainerStyle}
-                setValue={onClubSelected}
+                onOptionClicked={onClubSelected}
             />
 
             <div className={'flex items-center'}>
                 <SelectInput
-                    initialValue={'All Prices'}
-                    options={clubs}
+                    options={prices}
+                    selectedOption={selectedPrice}
+                    onOptionChange={onPriceSelected}
                     style={{...STYLES.container}}
                     parentContainerStyle={{
                         zIndex: 2,
-                        marginRight: R(7)
+                        marginRight: R(8)
                     }}
                     textStyle={STYLES.textStyle}
                     hideLabel
                     openedBorderColor={''}
                 />
-                <SelectInput
-                    initialValue={'All Prices'}
+
+                <SelectSearchInput
+                    label={'Teams'}
                     options={clubs}
-                    style={{...STYLES.container}}
-                    parentContainerStyle={{
-                        zIndex: 2,
-                        marginLeft: R(8)
-                    }}
+                    selectedClubs={selectedClubs}
+                    onSearchClubs={onSearchClubs}
+                    style={STYLES.container}
                     textStyle={STYLES.textStyle}
-                    hideLabel
-                    openedBorderColor={''}
+                    parentContainerStyle={{ marginLeft: R(8)}}
+                    onOptionClicked={onClubSelected}
+                    hideSearchBox
+                    arrowImageStyle={{width: R(33)}}
                 />
             </div>
         </div>

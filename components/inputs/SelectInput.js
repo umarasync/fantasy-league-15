@@ -30,39 +30,41 @@ const getStyles = (R) => {
             color: colors.regent_grey
         },
         dropDownOptionBox: {
-            padding: R(20)
+            padding: R(20),
         },
         optionText: {
             fontSize: R(18),
-            // marginLeft: R(12)
-        }
+        },
     }
 }
 
 export default function Input ({
-    placeholder,
-    options,
-    setValue,
-    classes,
-    initialValue,
-    style,
-    textStyle,
-    parentContainerStyle,
-    hideLabel,
-    openedBorderColor = 'black',
+   options,
+   placeholder,
+   selectedOption,
+   onOptionChange,
+   classes,
+   style,
+   textStyle,
+   parentContainerStyle,
+
+    // For label on border
+   hideLabel,
+   openedBorderColor = 'black',
+   skipFirstOption
 }) {
 
     const STYLES =  { ... getStyles(R) }
 
     const [opened, setOpened] = useState(false)
-    const [defaultValue, setDefaultValue] = useState(initialValue)
+
     const handleClick = () => {
         setOpened(!opened)
     }
+
     const setOptionValue = (option) => {
         setOpened(false)
-        setDefaultValue(option.name)
-        setValue(option)
+        onOptionChange(option)
     }
 
     const Label = () => {
@@ -70,7 +72,7 @@ export default function Input ({
         if(opened) {
             return <p className="input-focused text-black_rock">{placeholder}</p>
         }
-        if(!opened && defaultValue !== initialValue) {
+        if(!opened && selectedOption.label !== options[0].label) {
             return <p className="input-focused text-regent_grey">{placeholder}</p>
         }
 
@@ -88,7 +90,7 @@ export default function Input ({
             }}
             onClick={handleClick}
         >
-            <p style={{...STYLES.text, ...textStyle}}>{defaultValue}</p>
+            <p style={{...STYLES.text, ...textStyle}}>{selectedOption.label}</p>
             <div
                 className={'flex items-center'}
                 style={STYLES.arrowImage}
@@ -107,11 +109,17 @@ export default function Input ({
                 <div className="absolute border-[1px] rounded-[1.2rem] shadow-[4px 4px 40px rgba(0, 0, 0, 0.03)] bg-white w-full">
                     {
                         options.map((option, index) => {
+
                             return (
+                                !index && skipFirstOption ? null :
                                 <div
                                     key={index}
                                     className={'cursor-pointer flex items-center justify-between'}
-                                    style={STYLES.dropDownOptionBox}
+                                    style={{
+                                        ...STYLES.dropDownOptionBox,
+                                        borderBottom: '1px solid',
+                                        borderColor: options.length - 1 !== index ? colors.link_water : 'transparent'
+                                    }}
                                     onClick={() => setOptionValue(option)}
                                 >
                                     <p className="font-[600] text-black_rock rounded-t-[1.2rem]"
@@ -121,9 +129,6 @@ export default function Input ({
                                     >
                                         {option.label}
                                     </p>
-
-
-                                    {options.length - 1 !== index && <hr className="border-[1.5px] border-solid border-[link_water]"/> }
                                 </div>
                             )
 
