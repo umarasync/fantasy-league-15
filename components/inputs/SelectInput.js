@@ -24,6 +24,7 @@ const getStyles = (R) => {
         }
     }
 }
+
 export default function Input ({
        placeholder,
        options,

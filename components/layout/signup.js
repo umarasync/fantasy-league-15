@@ -274,6 +274,7 @@ export default function SignUp(props) {
                             onChange={ v => setLoginPassword(v)}
                             onIconClick={() => setIsLoginPasswordType(!isLoginPasswordType)}
                             value={loginPassword}
+                            style={{paddingRight: R(70)}}
                         />
                         <div className={`${error ? 'mb-[3.2rem]' : 'mb-[10.5rem]'}`}>
                           <p className={`text-mandy text-[1.4rem] font-[600] cursor-pointer` } onClick={() => setShowModal(true)}>Forget password?</p>
@@ -303,7 +304,16 @@ export default function SignUp(props) {
                           <SelectInput initialValue={initialValue} default name="gender" id="gender" placeholder="Gender" options={options} setValue={(v) => setGender(v)}/>
                           <Input value={dateOfBirth} name="dateOfBirth" id="dateOfBirth" placeholder="Date of birth" onChange={(v) => setDateOfBirth(v)}/>
                         </div>
-                        <Input value={password} name="password" id="password" type={isPasswordType ? 'password': 'text'} placeholder="Enter your password" icon={isPasswordType? 'eye.png': 'hide.png'} onChange={ v => setPassword(v)} onIconClick={() => setIsPasswordType(!isPasswordType)}/>
+                        <Input
+                            value={password}
+                            name="password"
+                            id="password"
+                            type={isPasswordType ? 'password': 'text'}
+                            placeholder="Enter your password"
+                            icon={isPasswordType? 'eye.png': 'hide.png'} onChange={ v => setPassword(v)}
+                            onIconClick={() => setIsPasswordType(!isPasswordType)}
+                            style={{paddingRight: R(70)}}
+                        />
                       </div>
                   )
                 }

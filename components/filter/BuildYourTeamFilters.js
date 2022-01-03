@@ -26,8 +26,9 @@ const getStyles = (R) => {
 
 export default function BuildYourTeamFilters({
      clubs,
-                                                 selectedClubsNames,
-     onClubSelected
+     selectedClubs,
+     onClubSelected,
+                                                 onSearchClubs
  }){
 
     const STYLES =  { ... getStyles(R) }
@@ -36,8 +37,9 @@ export default function BuildYourTeamFilters({
         <div>
             <SelectSearchInput
                 initialValue={'Teams'}
-                selectedClubsNames={selectedClubsNames}
+                selectedClubs={selectedClubs}
                 options={clubs}
+                onSearchClubs={onSearchClubs}
                 style={STYLES.container}
                 textStyle={STYLES.textStyle}
                 parentContainerStyle={STYLES.parentContainerStyle}

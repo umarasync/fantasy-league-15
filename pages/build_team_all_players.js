@@ -40,9 +40,12 @@ export default function BuildTeamAllPlayer () {
 
     const STYLES =  { ... getStyles(R) }
 
+    const CLUBS_INITIAL = JSON.parse(JSON.stringify(CLUBS))
+    const PLAYERS_DATA_INITIAL = JSON.parse(JSON.stringify(PLAYERS_DATA))
+
     const [totalSelectedPlayers, setTotalSelectedPlayers] = useState(0)
     const [resetDisabled, setResetDisabled] = useState(true)
-    const [showAllFilters, setShowAllFilters] = useState(true)
+    const [showAllFilters, setShowAllFilters] = useState(false)
     const [autoPickDisabled, setAutoPickDisabled] = useState(false)
     const [continueDisabled, setContinueDisabled] = useState(true)
     const [remainingBudget, setRemainingBudget] = useState('100m')
@@ -50,49 +53,63 @@ export default function BuildTeamAllPlayer () {
     const [sortingOption, setSortingOption] = useState(filterOptions[0])
     const [activePosition, setActivePosition] = useState(POSITION_ALL)
 
-    const [clubs, setClubs] = useState([...CLUBS])
+    const [clubs, setClubs] = useState([... CLUBS_INITIAL])
     const [selectedClubsNames, setSelectedClubsNames] = useState([ALL_TEAMS])
+    const [selectedClubs, setSelectedClubs] = useState([CLUBS_INITIAL[0]])
 
 
     const onSearch = () => false
 
-    const resetClubsState = () => {
+    const resetClubsState = (club) => {
 
-        console.log("1 ========", CLUBS)
-        setClubs([...CLUBS])
-        setSelectedClubsNames([ALL_TEAMS])
+        let CLUBS_INITIAL_I = [ ...CLUBS_INITIAL ]
+
+        if(club.fromBackSpace || club.checked) {
+            setSelectedClubs([])
+            setSelectedClubsNames([])
+            CLUBS_INITIAL_I[0].checked = false
+        }else {
+            // Reset
+            setSelectedClubs([CLUBS_INITIAL_I[0]])
+            setSelectedClubsNames([ALL_TEAMS])
+        }
+
+        setClubs([
+            ...CLUBS_INITIAL_I
+        ])
     }
 
-    const handleClubSelection = (option) => {
+    const handleClubSelection = (club) => {
 
-        if(option.clubName === ALL_TEAMS) {
-            return resetClubsState()
+        if(club.name === ALL_TEAMS) {
+            return resetClubsState(club)
         }
 
         let clubsI = [ ...clubs ]
 
-        // Uncheck all teams option
+        // Uncheck all_teams option
         let allTeamsOption = clubsI[0]
-
-
 
         if(allTeamsOption.checked) {allTeamsOption.checked = false}
 
-        let objIndex = clubsI.findIndex((obj) => obj.id === option.id)
+        let objIndex = clubsI.findIndex((obj) => obj.id === club.id)
+
         clubsI[objIndex].checked =  !clubsI[objIndex].checked
 
-        const selectedClubsNamesI = clubsI.map((team) => {
-            if(team.checked){return team.clubName}
-        }).filter(notUndefined => notUndefined !== undefined)
+        const selectedClubs = clubsI.filter((club) => club.checked)
 
+        setSelectedClubs([...selectedClubs])
+
+        const selectedClubsNamesI = selectedClubs.map((clubI) => clubI.name)
 
         setSelectedClubsNames([...selectedClubsNamesI])
+
         setClubs([...clubsI])
     }
 
-    const handleFilter = () => {
+    const runFiltersOnPlayersData = () => {
 
-        let playersDataI = [ ...PLAYERS_DATA ]
+        let playersDataI = [ ...PLAYERS_DATA_INITIAL ]
 
         if(activePosition !== POSITION_ALL && selectedClubsNames[0] === ALL_TEAMS) {
             playersDataI = playersDataI.filter(player => player.position === activePosition)
@@ -103,6 +120,7 @@ export default function BuildTeamAllPlayer () {
                 if((player.position === activePosition) && selectedClubsNames.includes(player.clubName)){return player}
             })
         }
+
 
         if(sortingOption.value === PRICE_FROM_HIGH_TO_LOW){
             playersDataI = playersDataI.sort((a, b) => a.price < b.price ? 1 : -1)
@@ -118,9 +136,8 @@ export default function BuildTeamAllPlayer () {
     }
 
     useEffect(() => {
-        // console.log("2 ========", CLUBS)
-            handleFilter()
-    }, [selectedClubsNames, activePosition, sortingOption])
+            runFiltersOnPlayersData()
+    }, [clubs, activePosition, sortingOption])
 
     return (
         <Layout title="Build Team All Player">
@@ -142,7 +159,7 @@ export default function BuildTeamAllPlayer () {
                                 </div>
                                 <div style={{marginLeft: R(8)}}/>
                                 <FilterIcon
-                                    // showAllFilters={showAllFilters}
+                                    showAllFilters={showAllFilters}
                                     onClick={() => setShowAllFilters(!showAllFilters)}
                                 />
                             </div>
@@ -156,17 +173,17 @@ export default function BuildTeamAllPlayer () {
 
                             {/*all filters*/}
 
-                            {/*{*/}
-                            {/*    showAllFilters && (*/}
-                            {/*        <div style={STYLES.allFiltersBox}>*/}
-                            {/*            <BuildYourTeamFilters*/}
-                            {/*                selectedClubsNames={selectedClubsNames}*/}
-                            {/*                clubs={clubs}*/}
-                            {/*                onClubSelected={handleClubSelection}*/}
-                            {/*            />*/}
-                            {/*        </div>*/}
-                            {/*    )*/}
-                            {/*}*/}
+                            {
+                                showAllFilters && (
+                                    <div style={STYLES.allFiltersBox}>
+                                        <BuildYourTeamFilters
+                                            selectedClubs={selectedClubs}
+                                            clubs={clubs}
+                                            onClubSelected={handleClubSelection}
+                                        />
+                                    </div>
+                                )
+                            }
 
                             {/*sorting filter*/}
                             <div style={{marginBottom: R(16)}}>

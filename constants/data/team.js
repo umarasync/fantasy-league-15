@@ -16,42 +16,49 @@ const POSITION_FWD = 'FWD'
 export const CLUBS = [
     {
         id: 1,
-        clubName: ALL_TEAMS,
+        name: ALL_TEAMS,
         checked: true
     },
     {
         id: 2,
-        clubName: CLUB_AJAX,
+        name: CLUB_AJAX,
+        image: 'club_ajax.svg',
         checked: false
     },
     {
         id: 3,
-        clubName: CLUB_AZ,
+        name: CLUB_AZ,
+        image: 'club_az.svg',
         checked: false
     },
     {
         id: 4,
-        clubName: CLUB_FC,
+        name: CLUB_FC,
+        image: 'club_fc.svg',
         checked: false
     },
     {
         id: 5,
-        clubName: CLUB_FR,
+        name: CLUB_FR,
+        image: 'club_fr.svg',
         checked: false
     },
     {
         id: 6,
-        clubName: CLUB_HEE,
+        name: CLUB_HEE,
+        image: 'club_hee.svg',
         checked: false
     },
     {
         id: 7,
-        clubName: CLUB_SC,
+        name: CLUB_SC,
+        image: 'club_sc.svg',
         checked: false
     },
     {
         id: 8,
-        clubName: CLUB_ZWO,
+        name: CLUB_ZWO,
+        image: 'club_zwo.svg',
         checked: false
     }
 ]
