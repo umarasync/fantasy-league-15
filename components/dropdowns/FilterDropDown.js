@@ -10,6 +10,9 @@ import colors from "constants/colors";
 // Styles
 const getStyles = (R) => {
     return {
+        container: {
+          zIndex: 1
+        },
         filterText: {
             fontSize: R(20),
             color: colors.regent_grey,
@@ -29,6 +32,7 @@ export default function FilterDropDown ({
    onOptionChange,
    classes,
    initialValue,
+   zIndex = '200'
 }) {
 
     const STYLES =  { ... getStyles(R) }
@@ -46,7 +50,7 @@ export default function FilterDropDown ({
         onOptionChange(option)
     }
 
-    return <div className="relative">
+    return <div className={`relative`} style={STYLES.container}>
 
         <div className={'flex cursor-pointer'}  onClick={handleClick}>
             <div className={'flex'}>
@@ -62,7 +66,7 @@ export default function FilterDropDown ({
         <div/>
         {
             opened && (
-                <div className="mt-[0.6rem] absolute z-10 border-[1px] rounded-[1.2rem] shadow-[4px 4px 40px rgba(0, 0, 0, 0.03)] bg-white">
+                <div className="mt-[0.6rem] absolute border-[1px] rounded-[1.2rem] shadow-[4px 4px 40px rgba(0, 0, 0, 0.03)] bg-white">
                     {
                         options.map((option, index) => {
                             return (

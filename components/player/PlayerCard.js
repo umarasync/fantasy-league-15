@@ -56,7 +56,7 @@ const getStyles = (R) => {
 
 export default function PlayerCard ({
     player,
-    playerType = 'MID'
+    index
 }){
     const STYLES =  { ... getStyles(R) }
 
@@ -69,7 +69,7 @@ export default function PlayerCard ({
                 <PlayerImage playerImage={player.image} clubImage={player.clubImage} imageStyle={STYLES.playerImage} />
                 <div>
                     <p className={'font-[600]'} style={STYLES.playerName}>
-                        R. Nelson
+                        {player.name}-{index}
                         <p style={{paddingTop: R(3)}}>
                             <span>{player.nextMatch.club}</span>
                             <span className={'font-[200]'}>{` vs ${player.nextMatch.vs}`}</span>
@@ -81,7 +81,7 @@ export default function PlayerCard ({
             <div className={'flex items-center'}>
                 <div style={{marginRight: R(16)}}>
                     <p style={STYLES.price}>
-                        {`€${player.price}m`}
+                        {player.formattedPrice}
                         <p style={STYLES.type}><span>{player.position}</span></p>
                     </p>
                 </div>

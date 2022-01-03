@@ -15,9 +15,15 @@ import BuildYourTeamFilters from "components/filter/BuildYourTeamFilters";
 
 // Utils
 import R from "utils/getResponsiveValue";
+import {clone, nFormatter} from "utils/helpers";
 
 // Constants
-import {PLAYERS_DATA, CLUBS, POSITION_ALL, ALL_TEAMS} from "constants/data/team";
+import {
+    PLAYERS,
+    CLUBS,
+    POSITION_ALL,
+    ALL_TEAMS, PRICES
+} from "constants/data/team";
 
 import filterOptions, {
     TOTAL_POINTS,
@@ -40,22 +46,29 @@ export default function BuildTeamAllPlayer () {
 
     const STYLES =  { ... getStyles(R) }
 
-    const CLUBS_INITIAL = JSON.parse(JSON.stringify(CLUBS))
-    const PLAYERS_DATA_INITIAL = JSON.parse(JSON.stringify(PLAYERS_DATA))
-
+    // Initial States
+    const CLUBS_INITIAL = clone(CLUBS)
+    const PLAYERS_INITIAL = clone(PLAYERS)
+    const PRICES_INITIAL = clone(PRICES)
+    // Footer Bar States
     const [totalSelectedPlayers, setTotalSelectedPlayers] = useState(0)
     const [resetDisabled, setResetDisabled] = useState(true)
     const [showAllFilters, setShowAllFilters] = useState(false)
     const [autoPickDisabled, setAutoPickDisabled] = useState(false)
     const [continueDisabled, setContinueDisabled] = useState(true)
-    const [remainingBudget, setRemainingBudget] = useState('100m')
+    const [remainingBudget, setRemainingBudget] = useState(nFormatter(100000000))
+    // Players States
     const [playersData, setPlayersData] = useState([])
+    // Sorting States
     const [sortingOption, setSortingOption] = useState(filterOptions[0])
+    // Positions States
     const [activePosition, setActivePosition] = useState(POSITION_ALL)
-
+    // Clubs States
     const [clubs, setClubs] = useState([... CLUBS_INITIAL])
-    const [selectedClubsNames, setSelectedClubsNames] = useState([ALL_TEAMS])
     const [selectedClubs, setSelectedClubs] = useState([CLUBS_INITIAL[0]])
+    // Prices States
+    const [prices, setPrices] = useState([...PRICES_INITIAL])
+    const [selectedPrice, setSelectedPrice] = useState([...PRICES_INITIAL])
 
 
     const onSearch = () => false
@@ -66,12 +79,10 @@ export default function BuildTeamAllPlayer () {
 
         if(club.fromBackSpace || club.checked) {
             setSelectedClubs([])
-            setSelectedClubsNames([])
             CLUBS_INITIAL_I[0].checked = false
         }else {
             // Reset
             setSelectedClubs([CLUBS_INITIAL_I[0]])
-            setSelectedClubsNames([ALL_TEAMS])
         }
 
         setClubs([
@@ -100,28 +111,28 @@ export default function BuildTeamAllPlayer () {
 
         setSelectedClubs([...selectedClubs])
 
-        const selectedClubsNamesI = selectedClubs.map((clubI) => clubI.name)
-
-        setSelectedClubsNames([...selectedClubsNamesI])
-
         setClubs([...clubsI])
     }
 
     const runFiltersOnPlayersData = () => {
 
-        let playersDataI = [ ...PLAYERS_DATA_INITIAL ]
+        let playersDataI = [ ...PLAYERS_INITIAL ]
 
-        if(activePosition !== POSITION_ALL && selectedClubsNames[0] === ALL_TEAMS) {
-            playersDataI = playersDataI.filter(player => player.position === activePosition)
-        } else if(activePosition === POSITION_ALL && selectedClubsNames[0] !== ALL_TEAMS) {
-            playersDataI = playersDataI.filter(player => selectedClubsNames.includes(player.clubName))
-        } else if (activePosition !== POSITION_ALL && selectedClubsNames[0] !== ALL_TEAMS) {
-            playersDataI = playersDataI.filter(player => {
-                if((player.position === activePosition) && selectedClubsNames.includes(player.clubName)){return player}
-            })
-        }
+        // Filter Players
+        playersDataI = playersDataI.filter(player => {
+            // Position Filter
+            if(player.position === activePosition || activePosition === POSITION_ALL){
+                // Teams filter
+                if(selectedClubs.length > 0 &&
+                    (selectedClubs[0].name === ALL_TEAMS || selectedClubs.some( club => club.name === player.clubName ))
+                ){
+                    return true
+                }
 
+            }
+        })
 
+        // Sorting
         if(sortingOption.value === PRICE_FROM_HIGH_TO_LOW){
             playersDataI = playersDataI.sort((a, b) => a.price < b.price ? 1 : -1)
         } else if(sortingOption.value === PRICE_FROM_LOW_TO_HIGH){
@@ -174,12 +185,15 @@ export default function BuildTeamAllPlayer () {
                             {/*all filters*/}
 
                             {
-                                showAllFilters && (
+                                (showAllFilters || true) && (
                                     <div style={STYLES.allFiltersBox}>
                                         <BuildYourTeamFilters
+                                            // Teams Filter Options
                                             selectedClubs={selectedClubs}
                                             clubs={clubs}
                                             onClubSelected={handleClubSelection}
+
+                                            // Prices Filter Options
                                         />
                                     </div>
                                 )
@@ -192,7 +206,7 @@ export default function BuildTeamAllPlayer () {
 
                             {/*players cards*/}
                             <div style={{height: R(700), paddingBottom: R(200), overflowY: 'scroll'}}>
-                                { playersData.map((player, index) => <PlayerCard key={index} player={player}/>) }
+                                { playersData.map((player, index) => <PlayerCard key={index + 1} index={index} player={player}/>) }
                             </div>
                         </div>
                     </div>

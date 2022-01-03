@@ -87,7 +87,7 @@ export default function FooterBar({
                         <img src="/images/info.png" alt="" width={'100%'} height={'100%'}/>
                     </div>
                     <p className={'italic text-white'} style={STYLES.remainingBudget}>
-                        €{remainingBudget}
+                       {remainingBudget}
                     </p>
                 </div>
 

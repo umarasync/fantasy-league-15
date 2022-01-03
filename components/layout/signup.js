@@ -18,11 +18,11 @@ const initialValue = 'Select'
 
 const options = [
   {
-    name: 'Male',
+    label: 'Male',
     value: 'male'
   },
   {
-    name: 'Female',
+    label: 'Female',
     value: 'female'
   }
 ]

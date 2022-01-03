@@ -1,69 +1,142 @@
+// Utils
+import {nFormatter} from "utils/helpers";
+
+// CLUBS/TEAMS
 export const ALL_TEAMS = 'All Teams'
 const CLUB_AJAX = 'Ajax'
 const CLUB_AZ = 'AZ'
 const CLUB_FC = 'FC GRONINGEN'
 const CLUB_FR = 'FEYENOORD'
 const CLUB_HEE = 'SC HEERENVEEN'
-const CLUB_SC = 'SC CAMBUUR'
+const CLUB_SC = 'CAMBUUR'
 const CLUB_ZWO = 'PEC ZWOLLE'
 
+// POSITIONS
 export const POSITION_ALL = 'All'
 const POSITION_GK = 'GK'
 const POSITION_DEF = 'DEF'
 const POSITION_MID = 'MID'
 const POSITION_FWD = 'FWD'
 
+// PRICES
+export const ALL_PRICES = 'All prices'
+
+export const PRICES = [
+    {
+        id: 1,
+        label: ALL_PRICES,
+        value: ALL_PRICES
+    },
+    {
+        id: 2,
+        label: '< €1m',
+        value: {
+            type: 'single',
+            price: 1000000,
+            operator: '<'
+        }
+    },
+    {
+        id: 3,
+        label: '€1m – €5m',
+        value: {
+            type: 'range',
+            from_price: 1000000,
+            to_price: 1000000,
+        }
+    },
+    {
+        id: 4,
+        label: '€10m – €20m',
+        value: {
+            type: 'range',
+            from_price: 10000000,
+            to_price: 20000000,
+        }
+    },
+    {
+        id: 5,
+        label: '€10m <',
+        value: {
+            type: 'single',
+            price: 10000000,
+            operator: '<'
+        }
+    },
+]
+
 export const CLUBS = [
     {
         id: 1,
         name: ALL_TEAMS,
+        label: ALL_TEAMS,
         checked: true
     },
     {
         id: 2,
         name: CLUB_AJAX,
+        label: CLUB_AJAX,
         image: 'club_ajax.svg',
         checked: false
     },
     {
         id: 3,
         name: CLUB_AZ,
+        label: CLUB_AZ,
         image: 'club_az.svg',
         checked: false
     },
     {
         id: 4,
         name: CLUB_FC,
+        label: CLUB_FC,
         image: 'club_fc.svg',
         checked: false
     },
     {
         id: 5,
         name: CLUB_FR,
+        label: CLUB_FR,
         image: 'club_fr.svg',
         checked: false
     },
     {
         id: 6,
         name: CLUB_HEE,
+        label: CLUB_HEE,
         image: 'club_hee.svg',
         checked: false
     },
     {
         id: 7,
         name: CLUB_SC,
+        label: CLUB_SC,
         image: 'club_sc.svg',
         checked: false
     },
     {
         id: 8,
         name: CLUB_ZWO,
+        label: CLUB_ZWO,
         image: 'club_zwo.svg',
         checked: false
     }
 ]
 
-export const PLAYERS_DATA = [
+
+const PLAYER1_PRICE = 6400000
+const PLAYER2_PRICE = 8100000
+const PLAYER3_PRICE = 2100000
+const PLAYER4_PRICE = 7300000
+const PLAYER5_PRICE = 9100000
+const PLAYER6_PRICE = 2300000
+const PLAYER7_PRICE = 670000
+const PLAYER8_PRICE = 6400000
+const PLAYER9_PRICE = 7000000
+const PLAYER10_PRICE = 100000
+
+
+export const PLAYERS = [
     {
         id: 1,
         image: 'player1.svg',
@@ -74,9 +147,10 @@ export const PLAYERS_DATA = [
             club: 'GRO',
             vs: 'BEN'
         },
-        price: 6.4,
+        price: PLAYER1_PRICE,
+        formattedPrice: nFormatter(PLAYER1_PRICE),
         position: 'MID',
-        points: 54,
+        points: 14,
         most_transferred: 2
     },
     {
@@ -89,9 +163,10 @@ export const PLAYERS_DATA = [
             club: 'AZ',
             vs: 'GRO'
         },
-        price: 8.0,
+        price: PLAYER2_PRICE,
+        formattedPrice: nFormatter(PLAYER2_PRICE),
         position: 'DEF',
-        points: 41,
+        points: 19,
         most_transferred: 4
     },
     {
@@ -104,7 +179,8 @@ export const PLAYERS_DATA = [
             club: 'HEE',
             vs: 'FOR'
         },
-        price: 2.1,
+        price: PLAYER3_PRICE,
+        formattedPrice: nFormatter(PLAYER3_PRICE),
         position: 'DEF',
         points: 32,
         most_transferred: 6
@@ -119,7 +195,8 @@ export const PLAYERS_DATA = [
             club: 'GRO',
             vs: 'AZ'
         },
-        price: 7.3,
+        price: PLAYER4_PRICE,
+        formattedPrice: nFormatter(PLAYER4_PRICE),
         position: 'FWD',
         points: 31,
         most_transferred: 8
@@ -134,9 +211,10 @@ export const PLAYERS_DATA = [
             club: 'ZWO',
             vs: 'AJA'
         },
-        price: 9.1,
+        price: PLAYER5_PRICE,
+        formattedPrice: nFormatter(PLAYER5_PRICE),
         position: 'MID',
-        points: 29,
+        points: 59,
         most_transferred: 1
     },
     {
@@ -149,7 +227,8 @@ export const PLAYERS_DATA = [
             club: 'GRO',
             vs: 'BEN'
         },
-        price: 9.1,
+        price: PLAYER6_PRICE,
+        formattedPrice: nFormatter(PLAYER6_PRICE),
         position: 'FWD',
         points: 13,
         most_transferred: 3
@@ -164,9 +243,10 @@ export const PLAYERS_DATA = [
             club: 'BAY',
             vs: 'BEN'
         },
-        price: 6.7,
+        price: PLAYER7_PRICE,
+        formattedPrice: nFormatter(PLAYER7_PRICE),
         position: 'MID',
-        points: 12,
+        points: 42,
         most_transferred: 5
     },
     {
@@ -179,9 +259,10 @@ export const PLAYERS_DATA = [
             club: 'GRO',
             vs: 'BEN'
         },
-        price: 6.4,
+        price: PLAYER8_PRICE,
+        formattedPrice: nFormatter(PLAYER8_PRICE),
         position: 'MID',
-        points: 54,
+        points: 24,
         most_transferred: 7
     },
     {
@@ -194,9 +275,10 @@ export const PLAYERS_DATA = [
             club: 'AZ',
             vs: 'GRO'
         },
-        price: 8.0,
+        price: PLAYER9_PRICE,
+        formattedPrice: nFormatter(PLAYER9_PRICE),
         position: 'DEF',
-        points: 41,
+        points: 13,
         most_transferred: 9
     },
     {
@@ -209,40 +291,43 @@ export const PLAYERS_DATA = [
             club: 'HEE',
             vs: 'FOR'
         },
-        price: 2.1,
+        price: PLAYER10_PRICE,
+        formattedPrice: nFormatter(PLAYER10_PRICE),
         position: 'DEF',
-        points: 32,
+        points: 16,
         most_transferred: 10
     },
     {
         id: 11,
-        image: 'player1.svg',
-        clubImage: 'club_fc.svg',
-        clubName: CLUB_FC,
-        name: 'R. Nelson',
+        image: 'player5.svg',
+        clubImage: 'club_zwo.svg',
+        clubName: CLUB_ZWO,
+        name: 'T. Tekie',
+        nextMatch: {
+            club: 'ZWO',
+            vs: 'AJA'
+        },
+        price: PLAYER5_PRICE,
+        formattedPrice: nFormatter(PLAYER5_PRICE),
+        position: 'MID',
+        points: 29,
+        most_transferred: 1
+    },
+    {
+        id: 12,
+        image: 'player6.svg',
+        clubImage: 'club_fr.svg',
+        clubName: CLUB_FR,
+        name: 'M. Nelom',
         nextMatch: {
             club: 'GRO',
             vs: 'BEN'
         },
-        price: 6.4,
-        position: 'MID',
-        points: 54,
-        most_transferred: 2
-    },
-    {
-        id: 12,
-        image: 'player2.svg',
-        clubImage: 'club_sc.svg',
-        clubName: CLUB_SC,
-        name: 'H. Veerman',
-        nextMatch: {
-            club: 'AZ',
-            vs: 'GRO'
-        },
-        price: 8.0,
-        position: 'DEF',
-        points: 41,
-        most_transferred: 4
+        price: PLAYER6_PRICE,
+        formattedPrice: nFormatter(PLAYER6_PRICE),
+        position: 'FWD',
+        points: 13,
+        most_transferred: 3
     },
     {
         id: 13,
@@ -254,9 +339,10 @@ export const PLAYERS_DATA = [
             club: 'HEE',
             vs: 'FOR'
         },
-        price: 2.1,
+        price: PLAYER3_PRICE,
+        formattedPrice: nFormatter(PLAYER3_PRICE),
         position: 'DEF',
-        points: 32,
+        points: 60,
         most_transferred: 6
     },
     {
@@ -269,58 +355,14 @@ export const PLAYERS_DATA = [
             club: 'GRO',
             vs: 'AZ'
         },
-        price: 7.3,
+        price: PLAYER4_PRICE,
+        formattedPrice: nFormatter(PLAYER4_PRICE),
         position: 'FWD',
-        points: 31,
+        points: 20,
         most_transferred: 8
     },
     {
         id: 15,
-        image: 'player5.svg',
-        clubImage: 'club_zwo.svg',
-        clubName: CLUB_ZWO,
-        name: 'T. Tekie',
-        nextMatch: {
-            club: 'ZWO',
-            vs: 'AJA'
-        },
-        price: 9.1,
-        position: 'MID',
-        points: 29,
-        most_transferred: 1
-    },
-    {
-        id: 16,
-        image: 'player6.svg',
-        clubImage: 'club_ajax.svg',
-        clubName: CLUB_AJAX,
-        name: 'M. Nelom',
-        nextMatch: {
-            club: 'GRO',
-            vs: 'BEN'
-        },
-        price: 9.1,
-        position: 'FWD',
-        points: 13,
-        most_transferred: 3
-    },
-    {
-        id: 17,
-        image: 'player7.svg',
-        clubImage: 'club_sc.svg',
-        clubName: CLUB_SC,
-        name: 'B. Nygren',
-        nextMatch: {
-            club: 'BAY',
-            vs: 'BEN'
-        },
-        price: 6.7,
-        position: 'MID',
-        points: 12,
-        most_transferred: 5
-    },
-    {
-        id: 18,
         image: 'player1.svg',
         clubImage: 'club_fc.svg',
         clubName: CLUB_FC,
@@ -329,13 +371,14 @@ export const PLAYERS_DATA = [
             club: 'GRO',
             vs: 'BEN'
         },
-        price: 6.4,
+        price: PLAYER1_PRICE,
+        formattedPrice: nFormatter(PLAYER1_PRICE),
         position: 'MID',
         points: 54,
-        most_transferred: 7
+        most_transferred: 2
     },
     {
-        id: 19,
+        id: 16,
         image: 'player2.svg',
         clubImage: 'club_az.svg',
         clubName: CLUB_AZ,
@@ -344,13 +387,30 @@ export const PLAYERS_DATA = [
             club: 'AZ',
             vs: 'GRO'
         },
-        price: 8.0,
+        price: PLAYER2_PRICE,
+        formattedPrice: nFormatter(PLAYER2_PRICE),
         position: 'DEF',
         points: 41,
+        most_transferred: 4
+    },
+    {
+        id: 17,
+        image: 'player2.svg',
+        clubImage: 'club_az.svg',
+        clubName: CLUB_AZ,
+        name: 'H. Veerman',
+        nextMatch: {
+            club: 'AZ',
+            vs: 'GRO'
+        },
+        price: PLAYER9_PRICE,
+        formattedPrice: nFormatter(PLAYER9_PRICE),
+        position: 'DEF',
+        points: 30,
         most_transferred: 9
     },
     {
-        id: 20,
+        id: 18,
         image: 'player3.svg',
         clubImage: 'club_hee.svg',
         clubName: CLUB_HEE,
@@ -359,10 +419,43 @@ export const PLAYERS_DATA = [
             club: 'HEE',
             vs: 'FOR'
         },
-        price: 2.1,
+        price: PLAYER10_PRICE,
+        formattedPrice: nFormatter(PLAYER10_PRICE),
         position: 'DEF',
-        points: 32,
+        points: 11,
         most_transferred: 10
+    },
+    {
+        id: 19,
+        image: 'player7.svg',
+        clubImage: 'club_fr.svg',
+        clubName: CLUB_FR,
+        name: 'B. Nygren',
+        nextMatch: {
+            club: 'BAY',
+            vs: 'BEN'
+        },
+        price: PLAYER7_PRICE,
+        formattedPrice: nFormatter(PLAYER7_PRICE),
+        position: 'MID',
+        points: 12,
+        most_transferred: 5
+    },
+    {
+        id: 20,
+        image: 'player1.svg',
+        clubImage: 'club_fc.svg',
+        clubName: CLUB_FC,
+        name: 'R. Nelson',
+        nextMatch: {
+            club: 'GRO',
+            vs: 'BEN'
+        },
+        price: PLAYER8_PRICE,
+        formattedPrice: nFormatter(PLAYER8_PRICE),
+        position: 'MID',
+        points: 10,
+        most_transferred: 7
     },
 ]
 

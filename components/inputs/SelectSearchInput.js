@@ -7,7 +7,7 @@ import Input from "components/inputs/input";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import {searchInArray} from "utils/helper";
+import {searchInArray} from "utils/helpers";
 
 // Constants
 import colors from 'constants/colors'
@@ -22,7 +22,7 @@ const getStyles = (R) => {
             marginBottom: R(7),
             borderRadius: R(12),
             paddingLeft: R(24),
-            paddingRight: R(14)
+            paddingRight: R(13)
         },
         tagsContainer: {
             fontSize: R(18),
@@ -56,6 +56,11 @@ const getStyles = (R) => {
             maxWidth: '80%',
         },
         dropDownBox: {
+          maxHeight: R(213),
+          minHeight: R(70),
+          overflowY: 'scroll'
+        },
+        dropDownOptionBox: {
             padding: R(20)
         },
         optionText: {
@@ -65,15 +70,15 @@ const getStyles = (R) => {
     }
 }
 export default function SelectSearchInput ({
-       placeholder,
        options,
        setValue,
        classes,
-       initialValue,
+       label,
        style,
        textStyle,
        selectedClubs,
-       parentContainerStyle
+       parentContainerStyle,
+       dropDownBoxStyle
    }) {
 
     const OPTIONS = JSON.parse(JSON.stringify(options))
@@ -81,8 +86,6 @@ export default function SelectSearchInput ({
     const STYLES =  { ... getStyles(R) }
 
     const [opened, setOpened] = useState(false)
-
-    const [defaultValue, setDefaultValue] = useState(initialValue)
 
     const [ allOptions, setAllOptions ] = useState([...options])
 
@@ -100,8 +103,6 @@ export default function SelectSearchInput ({
     }
 
     const setOptionValue = (item) => {
-        // setOpened(false)
-        setDefaultValue(item.name)
         setValue(item)
     }
 
@@ -130,17 +131,24 @@ export default function SelectSearchInput ({
 
         return selectedClubs.map(club =>  <div
             className={'flex items-center'}
-            key={club.name}
+            key={club.label}
             style={STYLES.tag}
         >
             <img src={`/images/${club.image}`} alt="" width={'100%'} height={'100%'}/>
         </div>)
     }
 
-    return <div className="relative w-full" style={{...parentContainerStyle}}>
-        { opened && <p className="input-focused text-black_rock">{placeholder}</p> }
-        { defaultValue !== initialValue  && !opened && <p className="input-focused text-regent_grey">{placeholder}</p> }
+    const Label = () => {
 
+        if(opened) {
+            return <p className="input-focused text-regent_grey">{label}</p>
+        }
+
+        return null
+    }
+
+    return <div className="relative w-full" style={{...parentContainerStyle}}>
+            <Label/>
         <div
             className={
                 `cursor-pointer flex items-center justify-between border-solid border-[0.15rem] 
@@ -168,28 +176,34 @@ export default function SelectSearchInput ({
                  className={'flex items-center'}
                  style={STYLES.arrowImage}
             >
-                <img src={opened ? '/images/arrow-up.png' : '/images/arrow-down.png'} width={R(12)} height={R(12)} alt=""/>
+                <img src={opened ? '/images/arrow-up.png' : '/images/arrow-down.png'} width={R(15)} height={R(15)} alt=""/>
             </div>
         </div>
 
         {
             opened && (
-                <div className="absolute z-10 border-[1px] rounded-[1.2rem] shadow-[4px 4px 40px rgba(0, 0, 0, 0.03)] bg-white w-full">
+                <div
+                    className="absolute z-10 border-[1px] rounded-[1.2rem] shadow-[4px 4px 40px rgba(0, 0, 0, 0.03)] bg-white w-full"
+                    style={{
+                        ...STYLES.dropDownBox,
+                        ...dropDownBoxStyle
+                    }}
+                >
                     {
                         allOptions.map((club, index) => {
                             return (
                                 <div
-                                    key={club.name}
+                                    key={club.label}
                                     className={'cursor-pointer flex items-center justify-between'}
-                                    style={STYLES.dropDownBox}
+                                    style={STYLES.dropDownOptionBox}
                                     onClick={() => setOptionValue(club)}
                                 >
                                     <div className={'flex items-center'}>
                                         {
-                                            club.name !== ALL_TEAMS ? (
+                                            club.label !== ALL_TEAMS ? (
                                                 <div
                                                     className={'flex items-center'}
-                                                    key={club.name}
+                                                    key={club.label}
                                                     style={STYLES.optionImage}
                                                 >
                                                     <img src={`/images/${club.image}`} alt="" width={'100%'} height={'100%'}/>
@@ -197,14 +211,13 @@ export default function SelectSearchInput ({
                                             ) : null
                                         }
 
-
                                         <p className="font-[600] text-black_rock rounded-t-[1.2rem]"
                                            style={{
                                                ...STYLES.optionText,
-                                               marginLeft: club.name !== ALL_TEAMS ? 12 : 5
+                                               marginLeft: club.label !== ALL_TEAMS ? 12 : 5
                                            }}
                                         >
-                                            {club.name}
+                                            {club.label}
                                         </p>
                                     </div>
 
