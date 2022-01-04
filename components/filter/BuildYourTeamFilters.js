@@ -8,6 +8,7 @@ import R from "utils/getResponsiveValue";
 // Constants
 import colors from 'constants/colors'
 import {ALL_STATUSES, ALL_TEAMS} from "constants/data/filters";
+import BorderHorizontal from "../Borders/BorderHorizontal";
 
 // Styles
 const getStyles = (R) => {
@@ -31,6 +32,11 @@ const getStyles = (R) => {
        tagImagesStyle: {
            width: R(20),
            height: R(20),
+       },
+       resetFilters:{
+           fontSize: R(16),
+           color: colors.mandy,
+           marginTop: R(20)
        }
    }
 }
@@ -55,12 +61,16 @@ export default function BuildYourTeamFilters({
     recommendations,
     selectedRecommendation,
     onRecommendationSelected,
+
+    // Reset Filters
+    onResetFilterClicked
  }){
 
     const STYLES =  { ... getStyles(R) }
 
     return(
         <div>
+            <BorderHorizontal style={{marginBottom: R(24)}}/>
             <SelectSearchInput
                 label={'Teams'}
                 options={clubs}
@@ -117,6 +127,14 @@ export default function BuildYourTeamFilters({
                 hideLabel
                 openedBorderColor={''}
             />
+            <p
+                className={'uppercase font-[900] italic text-center cursor-pointer'}
+                style={STYLES.resetFilters}
+                onClick={onResetFilterClicked}
+            >
+                reset filters
+            </p>
+            <BorderHorizontal style={{marginTop: R(24)}}/>
         </div>
     )
 }

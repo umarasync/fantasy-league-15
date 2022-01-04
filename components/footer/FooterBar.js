@@ -1,6 +1,6 @@
 // Components
 import PrimaryButton from "components/buttons/PrimaryButton";
-import Border from "components/misc/Border";
+import Border from "components/Borders/Border";
 
 // Utils
 import R from "utils/getResponsiveValue";

@@ -1,5 +1,6 @@
 // Packages
 import {useEffect, useState} from "react";
+import {AnimatePresence,motion} from "framer-motion";
 
 // Components
 import Layout from "components/layout/index";
@@ -16,6 +17,9 @@ import SelectInput from "components/inputs/SelectInput";
 // Utils
 import R from "utils/getResponsiveValue";
 import {clone, nFormatter} from "utils/helpers";
+
+// Animation
+import PlayersCardAnimation from "Animations/PlayersCardAnimations";
 
 // Constants
 import {
@@ -45,13 +49,14 @@ import {
 } from "constants/data/filters";
 
 import  { PLAYERS } from "constants/data/players"
+import NoResultFound from "../components/misc/NoResultFound";
 
 // Styles
 const getStyles = (R) => {
     return {
         allFiltersBox: {
             paddingBottom: R(20),
-            paddingTop: R(20)
+            paddingTop: R(15)
         }
     }
 }
@@ -99,11 +104,47 @@ export default function BuildTeamAllPlayer () {
     const [selectedRecommendation, setSelectedRecommendation] = useState(RECOMMENDATIONS_INITIAL[0])
 
     // Sorting
-    const [sortingOptions, setSortingOptions] = useState([...SORTING_OPTIONS])
-    const [selectedSortingOption, setSelectedSortingOption] = useState(SORTING_OPTIONS[0])
+    const [sortingOptions, setSortingOptions] = useState([...SORTING_OPTIONS_INITIAL])
+    const [selectedSortingOption, setSelectedSortingOption] = useState(SORTING_OPTIONS_INITIAL[0])
 
+    // Animation
+    const [initialOpacity, setInitialOpacity] = useState(1)
+    const duration = 1
+    const showAllFiltersAnimation = {
+        initial: {
+            opacity: initialOpacity, // Starting point we set initial opacity in state, so that on initial render it is one, but after the subsequent click we want it to be 0, to have fade in effect
+        },
+        animate: {
+            opacity: 1,
+            transition: {
+                duration: duration,
+            },
+        },
+        exit: {
+            opacity: 0,
+            transition: {
+                duration: duration,
+            },
+        },
+    };
 
     const onSearch = () => false
+
+    const handleResetFilter = () => {
+
+        setClubs([...CLUBS_INITIAL])
+        setSelectedClubs([CLUBS_INITIAL[0]])
+
+        setStatuses([...STATUSES_INITIAL])
+        setSelectedStatuses([STATUSES_INITIAL[0]])
+
+        setPrices([...PRICES_INITIAL])
+        setSelectedPrice(PRICES_INITIAL[0])
+
+        setRecommendations([...RECOMMENDATIONS_INITIAL])
+        setSelectedRecommendation(RECOMMENDATIONS_INITIAL[0])
+
+    }
 
     const resetMultiSelectsDataState = (option, data) => {
 
@@ -197,6 +238,20 @@ export default function BuildTeamAllPlayer () {
 
     const startFiltering = (player) => runPositionFilter(player)
 
+    const areFiltersApplied = () => {
+        if(selectedClubs.length === 0 ||
+            selectedClubs[0].value !== ALL_TEAMS ||
+            selectedStatuses.length === 0 ||
+            selectedStatuses[0].value !== ALL_STATUSES ||
+            selectedPrice.value !== ALL_PRICES ||
+            selectedRecommendation.value !== RECOMMENDED_PLAYERS
+        ) {
+            return true
+        }
+
+        return false
+    }
+
     const runFiltersOnPlayersData = () => {
 
         let playersDataI = [ ...PLAYERS_INITIAL ]
@@ -216,11 +271,17 @@ export default function BuildTeamAllPlayer () {
             playersDataI = playersDataI.sort((a, b) => a.most_transferred < b.most_transferred ? 1 : -1)
         }
 
+
         setPlayersData([...playersDataI])
     }
 
     useEffect(() => {
             runFiltersOnPlayersData()
+
+            // For animation
+            if(initialOpacity) {
+                setInitialOpacity(0)
+            }
     }, [clubs, statuses, selectedRecommendation, selectedPrice, activePosition, selectedSortingOption])
 
     return (
@@ -230,7 +291,7 @@ export default function BuildTeamAllPlayer () {
 
                     {/*Right Section*/}
                     <div className="w-[43%] flex justify-center" style={{minHeight: R()}}>
-                        <div style={{width: R(488), paddingTop: R(35)}}>
+                        <div className={'relative'} style={{width: R(488), paddingTop: R(35)}}>
                             {/*username*/}
                             <div className={'flex flex-row-reverse'} style={{marginBottom: R(46)}}>
                                 <Username username={'martine.bakker'} />
@@ -262,62 +323,97 @@ export default function BuildTeamAllPlayer () {
                             {/*all filters*/}
 
                             {
-                                (showAllFilters || true) && (
-                                    <div style={STYLES.allFiltersBox}>
-                                        <BuildYourTeamFilters
+                                showAllFilters ? (
+                                    <AnimatePresence>
+                                        <motion.div
+                                            variants={showAllFiltersAnimation}
+                                            initial="initial"
+                                            animate="animate"
+                                            exit="exit"
+                                            className={'absolute w-full'}
+                                            style={STYLES.allFiltersBox}
+                                        >
+                                            <BuildYourTeamFilters
 
-                                            // Teams Filter
-                                            clubs={clubs}
-                                            selectedClubs={selectedClubs}
-                                            onClubSelected={(option) => handleMultiSelectionDropDowns(option, {
-                                                firstOption: ALL_TEAMS,
-                                                initialState: CLUBS_INITIAL,
-                                                state: clubs,
-                                                setSelectedOptions: setSelectedClubs,
-                                                setOptions: setClubs
-                                            })}
+                                                // Teams Filter
+                                                clubs={clubs}
+                                                selectedClubs={selectedClubs}
+                                                onClubSelected={(option) => handleMultiSelectionDropDowns(option, {
+                                                    firstOption: ALL_TEAMS,
+                                                    initialState: CLUBS_INITIAL,
+                                                    state: clubs,
+                                                    setSelectedOptions: setSelectedClubs,
+                                                    setOptions: setClubs
+                                                })}
 
-                                            // Statuses Filter
-                                            statuses={statuses}
-                                            selectedStatuses={selectedStatuses}
-                                            onStatusSelected={(option) => handleMultiSelectionDropDowns(option, {
-                                                firstOption: ALL_STATUSES,
-                                                initialState: STATUSES_INITIAL,
-                                                state: statuses,
-                                                setSelectedOptions: setSelectedStatuses,
-                                                setOptions: setStatuses
-                                            })}
+                                                // Statuses Filter
+                                                statuses={statuses}
+                                                selectedStatuses={selectedStatuses}
+                                                onStatusSelected={(option) => handleMultiSelectionDropDowns(option, {
+                                                    firstOption: ALL_STATUSES,
+                                                    initialState: STATUSES_INITIAL,
+                                                    state: statuses,
+                                                    setSelectedOptions: setSelectedStatuses,
+                                                    setOptions: setStatuses
+                                                })}
 
-                                            // Prices Filter
-                                            prices={prices}
-                                            selectedPrice={selectedPrice}
-                                            onPriceSelected={(price) => setSelectedPrice(price)}
+                                                // Prices Filter
+                                                prices={prices}
+                                                selectedPrice={selectedPrice}
+                                                onPriceSelected={(price) => setSelectedPrice(price)}
 
-                                            // Recommendation Filter
-                                            recommendations={recommendations}
-                                            selectedRecommendation={selectedRecommendation}
-                                            onRecommendationSelected={(r) => setSelectedRecommendation(r)}
+                                                // Recommendation Filter
+                                                recommendations={recommendations}
+                                                selectedRecommendation={selectedRecommendation}
+                                                onRecommendationSelected={(r) => setSelectedRecommendation(r)}
 
-                                        />
-                                    </div>
+                                                // Reset Filters
+                                                onResetFilterClicked={handleResetFilter}
+
+                                            />
+                                        </motion.div>
+                                    </AnimatePresence>
+                                ): <AnimatePresence/>
+                            }
+
+                            { areFiltersApplied() && !playersData.length && <NoResultFound/>}
+
+                            {
+                                playersData.length > 0 && (
+                                    <motion.div
+                                        variants={PlayersCardAnimation}
+                                        animate={showAllFilters ? 'slideDown' : 'slideUp'}
+                                        style={{
+                                            height: showAllFilters ? 400 : 770,
+                                            paddingBottom: showAllFilters? 50 : 200,
+                                            overflowY: 'scroll'
+                                        }}
+                                    >
+
+                                        {/*sorting filter*/}
+                                        {
+                                            areFiltersApplied() ? null : (
+                                                <div style={{marginBottom: 16}}>
+                                                    <SelectInput
+                                                        options={sortingOptions}
+                                                        selectedOption={selectedSortingOption}
+                                                        onOptionChange={(s) => setSelectedSortingOption(s)}
+                                                        hideLabel
+                                                        dropDownOfInlineStyle
+                                                    />
+                                                </div>
+                                            )
+                                        }
+
+                                        {/* PLAYERS DATA */}
+
+                                        {
+                                            playersData.map((player, index) => <PlayerCard key={index + 1} index={index} player={player}/>)
+                                        }
+                                    </motion.div>
                                 )
                             }
 
-                            {/*sorting filter*/}
-                            <div style={{marginBottom: R(16)}}>
-                                <SelectInput
-                                    options={sortingOptions}
-                                    selectedOption={selectedSortingOption}
-                                    onOptionChange={(s) => setSelectedSortingOption(s)}
-                                    hideLabel
-                                    dropDownOfInlineStyle
-                                />
-                            </div>
-
-                            {/*players cards*/}
-                            <div style={{height: R(700), paddingBottom: R(200), overflowY: 'scroll'}}>
-                                { playersData.map((player, index) => <PlayerCard key={index + 1} index={index} player={player}/>) }
-                            </div>
                         </div>
                     </div>
                     <FooterBar

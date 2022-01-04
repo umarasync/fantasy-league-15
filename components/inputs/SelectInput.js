@@ -77,14 +77,12 @@ export default function Input ({
     }
 
     const Label = () => {
-
         if(opened) {
             return <p className="input-focused text-black_rock">{placeholder}</p>
         }
         if(!opened && selectedOption.label !== options[0].label) {
             return <p className="input-focused text-regent_grey">{placeholder}</p>
         }
-
         return null
     }
 
