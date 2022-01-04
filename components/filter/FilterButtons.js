@@ -39,13 +39,13 @@ export default function FilterButtons({
                 PLAYERS_POSITIONS.map((position) => {
                     return (
                         <PrimaryButtonSmall
-                            title={position.title}
+                            title={position.label}
                             style={{
                                 ...STYLES.position,
-                                ...getBgColor(position.title)
+                                ...getBgColor(position.label)
                             }}
-                            onClick={() => onClick(position.title)}
-                            key={position.title}
+                            onClick={() => onClick(position.value)}
+                            key={position.value}
                         />
                     )
                 })

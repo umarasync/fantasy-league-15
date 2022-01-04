@@ -3,25 +3,35 @@ import {nFormatter} from "utils/helpers";
 
 // POSITIONS
 export const POSITION_ALL = 'All'
-const POSITION_GK = 'GK'
-const POSITION_DEF = 'DEF'
-const POSITION_MID = 'MID'
-const POSITION_FWD = 'FWD'
+export const POSITION_GK = 'GK'
+export const POSITION_DEF = 'DEF'
+export const POSITION_MID = 'MID'
+export const POSITION_FWD = 'FWD'
 export const PLAYERS_POSITIONS = [
     {
-        title: POSITION_ALL
+        id: 1,
+        label: POSITION_ALL,
+        value: POSITION_ALL
     },
     {
-        title: POSITION_GK
+        id: 2,
+        label: POSITION_GK,
+        value: POSITION_GK,
     },
     {
-        title: POSITION_DEF
+        id: 3,
+        label: POSITION_DEF,
+        value: POSITION_DEF,
     },
     {
-        title: POSITION_MID
+        id: 4,
+        label: POSITION_MID,
+        value: POSITION_MID,
     },
     {
-        title: POSITION_FWD
+        id: 5,
+        label: POSITION_FWD,
+        value: POSITION_FWD,
     },
 ]
 

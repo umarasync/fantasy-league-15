@@ -50,8 +50,8 @@ import  { PLAYERS } from "constants/data/players"
 const getStyles = (R) => {
     return {
         allFiltersBox: {
-            marginBottom: R(50),
-            marginTop: R(50)
+            paddingBottom: R(20),
+            paddingTop: R(20)
         }
     }
 }
@@ -252,7 +252,11 @@ export default function BuildTeamAllPlayer () {
                             <div style={{
                                 marginBottom: R(24)
                             }}>
-                                <FilterButtons activePosition={activePosition} onClick={(activePosition) => setActivePosition(activePosition)}/>
+                                <FilterButtons
+                                    activePosition={activePosition}
+                                    onClick={(activePosition) =>
+                                        setActivePosition(activePosition)}
+                                />
                             </div>
 
                             {/*all filters*/}
@@ -301,7 +305,6 @@ export default function BuildTeamAllPlayer () {
 
                             {/*sorting filter*/}
                             <div style={{marginBottom: R(16)}}>
-
                                 <SelectInput
                                     options={sortingOptions}
                                     selectedOption={selectedSortingOption}
@@ -309,11 +312,6 @@ export default function BuildTeamAllPlayer () {
                                     hideLabel
                                     dropDownOfInlineStyle
                                 />
-
-                                {/*<SortingFilter*/}
-                                {/*    options={filterOptions}*/}
-                                {/*    onApplyFilter={(option) => setSelectedSortingOption(option)}*/}
-                                {/*/>*/}
                             </div>
 
                             {/*players cards*/}
