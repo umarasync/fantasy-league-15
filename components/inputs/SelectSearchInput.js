@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 // Components
 import CheckBox from "components/checkbox/CheckBox";
 import Input from "components/inputs/input";
+import { AnimatePresence,motion} from "framer-motion";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -11,7 +12,9 @@ import {searchInArray} from "utils/helpers";
 
 // Constants
 import colors from 'constants/colors'
-import {ALL_TEAMS} from "constants/data/team";
+
+// Animations
+import Animation from 'Animations/DropDownAnimation'
 
 // Styles
 const getStyles = (R) => {
@@ -29,7 +32,7 @@ const getStyles = (R) => {
             color: colors.regent_grey,
             marginRight: R(10)
         },
-        tag: {
+        tagImages: {
             marginRight: R(5),
             width: R(28),
             height: R(28)
@@ -72,15 +75,20 @@ const getStyles = (R) => {
 export default function SelectSearchInput ({
        options,
        onOptionClicked,
+                                               selectedOptions,
+                                               firstOptionName,
        classes,
        label,
        style,
        textStyle,
-       selectedClubs,
+
        parentContainerStyle,
        dropDownBoxStyle,
        arrowImageStyle,
-       hideSearchBox
+       hideSearchBox,
+                                               optionImageStyle,
+                                               tagImagesStyle,
+    offClickOnParent
    }) {
 
     const OPTIONS = JSON.parse(JSON.stringify(options))
@@ -110,8 +118,8 @@ export default function SelectSearchInput ({
 
     const handleKeyDown = (e) => {
         if(e.key === 'Backspace' && !e.target.value) {
-            if(selectedClubs.length === 0) return
-            let item = selectedClubs[selectedClubs.length - 1]
+            if(selectedOptions.length === 0) return
+            let item = selectedOptions[selectedOptions.length - 1]
             item.fromBackSpace = true
             onOptionClicked(item)
         }
@@ -122,21 +130,21 @@ export default function SelectSearchInput ({
     }, [options])
 
     const ClubItems = ({
-       selectedClubs
+       selectedOptions
    }) => {
 
-        if(selectedClubs.length === 0) return null
+        if(selectedOptions.length === 0) return null
 
-        if(selectedClubs[0].name === ALL_TEAMS) {
-            return <span className={'whitespace-nowrap'}onClick={handleClick} >{ALL_TEAMS}</span>
+        if(selectedOptions[0].value === firstOptionName) {
+            return <span className={'whitespace-nowrap'} >{firstOptionName}</span>
         }
 
-        return selectedClubs.map(club =>  <div
+        return selectedOptions.map(option =>  <div
             className={'flex items-center'}
-            key={club.label}
-            style={STYLES.tag}
+            key={option.label}
+            style={{...STYLES.tagImages, ...tagImagesStyle}}
         >
-            <img src={`/images/${club.image}`} alt="" width={'100%'} height={'100%'}/>
+            <img src={`/images/${option.image}`} alt="" width={'100%'} height={'100%'}/>
         </div>)
     }
 
@@ -158,9 +166,9 @@ export default function SelectSearchInput ({
             }
             style={{...STYLES.container, ...style}}
         >
-            <dv className={'w-full flex items-center'} style={{...STYLES.tagsContainer, ...textStyle}}>
+            <dv className={'w-full flex items-center'} onClick={ offClickOnParent ? () => false : handleClick} style={{...STYLES.tagsContainer, ...textStyle}}>
                 <div className={'flex items-center justify-center'} style={STYLES.tagsInnerContainer}>
-                    <ClubItems selectedClubs={selectedClubs}/>
+                    <ClubItems selectedOptions={selectedOptions}/>
                 </div>
                 {
                     !hideSearchBox && (
@@ -182,60 +190,70 @@ export default function SelectSearchInput ({
                  className={'flex items-center'}
                  style={{...STYLES.arrowImage, ...arrowImageStyle}}
             >
-                <img src={opened ? '/images/arrow-up.png' : '/images/arrow-down.png'} width={R(15)} height={R(15)} alt=""/>
+                <img src={opened ? '/images/arrow-up.svg' : '/images/arrow-down.svg'} width={R(15)} height={R(15)} alt=""/>
             </div>
         </div>
 
         {
-            opened && (
-                <div
-                    className="absolute z-10 border-[1px] rounded-[1.2rem] shadow-[4px 4px 40px rgba(0, 0, 0, 0.03)] bg-white w-full"
-                    style={{
-                        ...STYLES.dropDownBox,
-                        ...dropDownBoxStyle
-                    }}
-                >
-                    {
-                        allOptions.map((club, index) => {
-                            return (
-                                <div
-                                    key={club.label}
-                                    className={'cursor-pointer flex items-center justify-between'}
-                                    style={STYLES.dropDownOptionBox}
-                                    onClick={() => setOptionValue(club)}
-                                >
-                                    <div className={'flex items-center'}>
-                                        {
-                                            club.label !== ALL_TEAMS ? (
-                                                <div
-                                                    className={'flex items-center'}
-                                                    key={club.label}
-                                                    style={STYLES.optionImage}
-                                                >
-                                                    <img src={`/images/${club.image}`} alt="" width={'100%'} height={'100%'}/>
-                                                </div>
-                                            ) : null
-                                        }
+            opened ? (
 
-                                        <p className="font-[600] text-black_rock rounded-t-[1.2rem]"
-                                           style={{
-                                               ...STYLES.optionText,
-                                               marginLeft: club.label !== ALL_TEAMS ? 12 : 5
-                                           }}
-                                        >
-                                            {club.label}
-                                        </p>
+                <AnimatePresence>
+                    <motion.div
+                        className="absolute z-10 border-[1px] rounded-[1.2rem] shadow-[4px 4px 40px rgba(0, 0, 0, 0.03)] bg-white w-full"
+                        style={{
+                            ...STYLES.dropDownBox,
+                            ...dropDownBoxStyle
+                        }}
+                        variants={Animation}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                    >
+                        {
+                            allOptions.map((option, index) => {
+                                return (
+                                    <div
+                                        key={option.label}
+                                        className={'cursor-pointer flex items-center justify-between'}
+                                        style={{
+                                            ...STYLES.dropDownOptionBox,
+                                            borderBottom: '1px solid',
+                                            borderColor: options.length - 1 !== index ? colors.link_water : 'transparent'
+                                        }}
+                                        onClick={() => setOptionValue(option)}
+                                    >
+                                        <div className={'flex items-center'}>
+                                            {
+                                                option.label !== firstOptionName ? (
+                                                    <div
+                                                        className={'flex items-center'}
+                                                        key={option.label}
+                                                        style={{...STYLES.optionImage, ...optionImageStyle}}
+                                                    >
+                                                        <img src={`/images/${option.image}`} alt="" width={'100%'} height={'100%'}/>
+                                                    </div>
+                                                ) : null
+                                            }
+
+                                            <p className="font-[600] text-black_rock rounded-t-[1.2rem]"
+                                               style={{
+                                                   ...STYLES.optionText,
+                                                   marginLeft: option.label !== firstOptionName ? 12 : 5
+                                               }}
+                                            >
+                                                {option.label}
+                                            </p>
+                                        </div>
+
+                                        <CheckBox checked={option.checked}/>
                                     </div>
+                                )
 
-                                    {allOptions.length - 1 !== index && <hr className="border-[1.5px] border-solid border-[link_water]"/> }
-                                    <CheckBox checked={club.checked}/>
-                                </div>
-                            )
-
-                        })
-                    }
-                </div>
-            )
+                            })
+                        }
+                    </motion.div>
+                </AnimatePresence>
+            ) : <AnimatePresence/>
         }
     </div>
 }

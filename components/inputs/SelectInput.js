@@ -1,11 +1,15 @@
 // Packages
 import {useState} from "react";
+import {AnimatePresence, motion} from "framer-motion";
 
 // Utils
 import R from "utils/getResponsiveValue";
 
 // Constants
 import colors from 'constants/colors'
+
+// Animation
+import Animation from 'Animations/DropDownAnimation'
 
 // Styles
 const getStyles = (R) => {
@@ -55,7 +59,6 @@ export default function Input ({
 }) {
 
     const STYLES =  { ... getStyles(R) }
-
     const [opened, setOpened] = useState(false)
 
     const handleClick = () => {
@@ -96,7 +99,7 @@ export default function Input ({
                 style={STYLES.arrowImage}
             >
                 <img
-                    src={opened ? '/images/arrow-up.png' : '/images/arrow-down.png'}
+                    src={opened ? '/images/arrow-up.svg' : '/images/arrow-down.svg'}
                     width={R(15)}
                     height={R(15)}
                     alt=""
@@ -105,37 +108,46 @@ export default function Input ({
         </div>
 
         {
-            opened && (
-                <div className="absolute border-[1px] rounded-[1.2rem] shadow-[4px 4px 40px rgba(0, 0, 0, 0.03)] bg-white w-full">
-                    {
-                        options.map((option, index) => {
+            opened ? (
+                <AnimatePresence>
+                    <motion.div
+                        className="absolute border-[1px] rounded-[1.2rem] shadow-[4px 4px 40px rgba(0, 0, 0, 0.03)] bg-white w-full"
+                        variants={Animation}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                    >
+                        {
+                            options.map((option, index) => {
 
-                            return (
-                                !index && skipFirstOption ? null :
-                                <div
-                                    key={index}
-                                    className={'cursor-pointer flex items-center justify-between'}
-                                    style={{
-                                        ...STYLES.dropDownOptionBox,
-                                        borderBottom: '1px solid',
-                                        borderColor: options.length - 1 !== index ? colors.link_water : 'transparent'
-                                    }}
-                                    onClick={() => setOptionValue(option)}
-                                >
-                                    <p className="font-[600] text-black_rock rounded-t-[1.2rem]"
-                                       style={{
-                                           ...STYLES.optionText,
-                                       }}
+                                return (
+                                    !index && skipFirstOption ? null :
+                                    <div
+                                        key={index}
+                                        className={'cursor-pointer flex items-center justify-between'}
+                                        style={{
+                                            ...STYLES.dropDownOptionBox,
+                                            borderBottom: '1px solid',
+                                            borderColor: options.length - 1 !== index ? colors.link_water : 'transparent'
+                                        }}
+                                        onClick={() => setOptionValue(option)}
                                     >
-                                        {option.label}
-                                    </p>
-                                </div>
-                            )
+                                        <p className="font-[600] text-black_rock rounded-t-[1.2rem]"
+                                           style={{
+                                               ...STYLES.optionText,
+                                           }}
+                                        >
+                                            {option.label}
+                                        </p>
+                                    </div>
+                                )
 
-                        })
-                    }
-                </div>
-            )
+                            })
+                        }
+                    </motion.div>
+                </AnimatePresence>
+            ) : <AnimatePresence/>
+
         }
     </div>
 }

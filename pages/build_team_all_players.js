@@ -19,11 +19,16 @@ import {clone, nFormatter} from "utils/helpers";
 
 // Constants
 import {
-    PLAYERS,
     CLUBS,
     POSITION_ALL,
-    ALL_TEAMS, PRICES, ALL_PRICES
-} from "constants/data/team";
+    ALL_TEAMS,
+    PRICES,
+    ALL_PRICES,
+    STATUSES,
+    ALL_STATUSES
+} from "constants/data/filters";
+
+import  { PLAYERS } from "constants/data/players"
 
 import filterOptions, {
     TOTAL_POINTS,
@@ -50,6 +55,8 @@ export default function BuildTeamAllPlayer () {
     const CLUBS_INITIAL = clone(CLUBS)
     const PLAYERS_INITIAL = clone(PLAYERS)
     const PRICES_INITIAL = clone(PRICES)
+    const STATUSES_INITIAL = clone(STATUSES)
+
     // Footer Bar States
     const [totalSelectedPlayers, setTotalSelectedPlayers] = useState(0)
     const [resetDisabled, setResetDisabled] = useState(true)
@@ -57,76 +64,100 @@ export default function BuildTeamAllPlayer () {
     const [autoPickDisabled, setAutoPickDisabled] = useState(false)
     const [continueDisabled, setContinueDisabled] = useState(true)
     const [remainingBudget, setRemainingBudget] = useState(nFormatter(100000000))
+
     // Players States
     const [playersData, setPlayersData] = useState([])
+
     // Sorting States
     const [sortingOption, setSortingOption] = useState(filterOptions[0])
+
     // Positions States
     const [activePosition, setActivePosition] = useState(POSITION_ALL)
+
     // Clubs States
     const [clubs, setClubs] = useState([... CLUBS_INITIAL])
     const [selectedClubs, setSelectedClubs] = useState([CLUBS_INITIAL[0]])
+
+    // Clubs Statuses
+    const [statuses, setStatuses] = useState([... STATUSES_INITIAL])
+    const [selectedStatuses, setSelectedStatuses] = useState([STATUSES_INITIAL[0]])
+
     // Prices States
     const [prices, setPrices] = useState([...PRICES_INITIAL])
     const [selectedPrice, setSelectedPrice] = useState(PRICES_INITIAL[0])
 
+
+
     const onSearch = () => false
 
-    const resetClubsState = (club) => {
+    const resetMultiSelectsDataState = (option, data) => {
 
-        let CLUBS_INITIAL_I = [ ...CLUBS_INITIAL ]
+        const {
+            setSelectedOptions,
+            setOptions
+        } = data
 
-        if(club.fromBackSpace || club.checked) {
-            setSelectedClubs([])
-            CLUBS_INITIAL_I[0].checked = false
+        let STATE_INITIAL_I = [ ...data.initialState ]
+
+        if(option.fromBackSpace || option.checked) {
+            setSelectedOptions([])
+            STATE_INITIAL_I[0].checked = false
         }else {
-            // Reset
-            setSelectedClubs([CLUBS_INITIAL_I[0]])
+            setSelectedOptions([STATE_INITIAL_I[0]])
         }
 
-        setClubs([
-            ...CLUBS_INITIAL_I
+        setOptions([
+            ...STATE_INITIAL_I
         ])
     }
 
-    // Handles Clubs/Teams Selection
-    const onClubSelected = (club) => {
+    // Handles multi selections filters
+    const handleMultiSelectionDropDowns = (option, data) => {
 
-        if(club.name === ALL_TEAMS) {
-            return resetClubsState(club)
+        if(option.value === data.firstOption) {
+            return resetMultiSelectsDataState(option, data)
         }
 
-        let clubsI = [ ...clubs ]
+        const {
+            setSelectedOptions,
+            setOptions
+        } = data
 
-        // Uncheck all_teams option
-        let allTeamsOption = clubsI[0]
+        let newStateI = [ ...data.state ]
 
-        if(allTeamsOption.checked) {allTeamsOption.checked = false}
+        let firstOption = newStateI[0]
 
-        let objIndex = clubsI.findIndex((obj) => obj.id === club.id)
+        if(firstOption.checked) {firstOption.checked = false}
 
-        clubsI[objIndex].checked =  !clubsI[objIndex].checked
+        let objIndex = newStateI.findIndex((obj) => obj.id === option.id)
 
-        const selectedClubs = clubsI.filter((club) => club.checked)
+        newStateI[objIndex].checked =  !newStateI[objIndex].checked
 
-        setSelectedClubs([...selectedClubs])
+        const selectedOptions = newStateI.filter((option) => option.checked)
 
-        setClubs([...clubsI])
+        setSelectedOptions([...selectedOptions])
+        setOptions([...newStateI])
     }
 
+    const runStatusFilter = (player) => {
+        if(selectedStatuses.length > 0 &&
+            (selectedStatuses[0].value === ALL_STATUSES || selectedStatuses.some( status => status.value === player.status ))){
+            return true
+        }
+    }
 
     const runPriceFilter = (player) => {
         if(
             selectedPrice.value === ALL_PRICES ||
             ((selectedPrice.value.to === null) && player.price > selectedPrice.value.from) ||
             (player.price > selectedPrice.value.from && player.price < selectedPrice.value.to)) {
-            return true
+            return runStatusFilter(player)
         }
     }
 
     const runTeamFilter = (player) => {
         if(selectedClubs.length > 0 &&
-            (selectedClubs[0].name === ALL_TEAMS || selectedClubs.some( club => club.name === player.clubName ))){
+            (selectedClubs[0].value === ALL_TEAMS || selectedClubs.some( club => club.value === player.clubName ))){
             return runPriceFilter(player)
         }
     }
@@ -163,7 +194,7 @@ export default function BuildTeamAllPlayer () {
 
     useEffect(() => {
             runFiltersOnPlayersData()
-    }, [clubs, selectedPrice, activePosition, sortingOption])
+    }, [clubs, statuses,  selectedPrice, activePosition, sortingOption])
 
     return (
         <Layout title="Build Team All Player">
@@ -203,15 +234,34 @@ export default function BuildTeamAllPlayer () {
                                 (showAllFilters || true) && (
                                     <div style={STYLES.allFiltersBox}>
                                         <BuildYourTeamFilters
-                                            // Teams Filter Options
+                                            // Teams Filter
                                             clubs={clubs}
                                             selectedClubs={selectedClubs}
-                                            onClubSelected={onClubSelected}
+                                            onClubSelected={(option) => handleMultiSelectionDropDowns(option, {
+                                                firstOption: ALL_TEAMS,
+                                                initialState: CLUBS_INITIAL,
+                                                state: clubs,
+                                                setSelectedOptions: setSelectedClubs,
+                                                setOptions: setClubs
+                                            })}
 
-                                            // Prices Filter Options
+                                            // Statuses Filter
+                                            statuses={statuses}
+                                            selectedStatuses={selectedStatuses}
+                                            onStatusSelected={(option) => handleMultiSelectionDropDowns(option, {
+                                                firstOption: ALL_STATUSES,
+                                                initialState: STATUSES_INITIAL,
+                                                state: statuses,
+                                                setSelectedOptions: setSelectedStatuses,
+                                                setOptions: setStatuses
+                                            })}
+
+                                            // Prices Filter
                                             prices={prices}
                                             selectedPrice={selectedPrice}
                                             onPriceSelected={(price) => setSelectedPrice(price)}
+
+
                                         />
                                     </div>
                                 )

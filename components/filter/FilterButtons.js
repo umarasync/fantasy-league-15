@@ -6,7 +6,7 @@ import R from "utils/getResponsiveValue";
 
 // Constants
 import colors from "constants/colors";
-import { PLAYERS_POSITIONS } from "constants/data/team"
+import { PLAYERS_POSITIONS } from "constants/data/filters"
 
 // Styles
 const getStyles = (R) => {
