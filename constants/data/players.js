@@ -89,7 +89,12 @@ export const PLAYERS = [
         formattedPrice: nFormatter(PLAYER3_PRICE),
         position: 'DEF',
         points: 32,
-        most_transferred: 6
+        most_transferred: 6,
+
+        picked: 3,
+        pickedAsCaptain: 3,
+        recommended: true,
+        penaltyTaker: true,
     },
     {
         id: 4,
@@ -106,7 +111,12 @@ export const PLAYERS = [
         formattedPrice: nFormatter(PLAYER4_PRICE),
         position: 'FWD',
         points: 31,
-        most_transferred: 8
+        most_transferred: 8,
+
+        picked: 2,
+        pickedAsCaptain: 4,
+        recommended: true,
+        penaltyTaker: false,
     },
     {
         id: 5,
@@ -123,7 +133,12 @@ export const PLAYERS = [
         formattedPrice: nFormatter(PLAYER5_PRICE),
         position: 'MID',
         points: 59,
-        most_transferred: 1
+        most_transferred: 1,
+
+        picked: 20,
+        pickedAsCaptain: 0,
+        recommended: true,
+        penaltyTaker: false,
     },
     {
         id: 6,
@@ -140,7 +155,12 @@ export const PLAYERS = [
         formattedPrice: nFormatter(PLAYER6_PRICE),
         position: 'FWD',
         points: 13,
-        most_transferred: 3
+        most_transferred: 3,
+
+        picked: 16,
+        pickedAsCaptain: 9,
+        recommended: true,
+        penaltyTaker: false,
     },
     {
         id: 7,
@@ -157,7 +177,12 @@ export const PLAYERS = [
         formattedPrice: nFormatter(PLAYER7_PRICE),
         position: 'MID',
         points: 42,
-        most_transferred: 5
+        most_transferred: 5,
+
+        picked: 30,
+        pickedAsCaptain: 0,
+        recommended: true,
+        penaltyTaker: false,
     },
     {
         id: 8,
@@ -174,7 +199,12 @@ export const PLAYERS = [
         formattedPrice: nFormatter(PLAYER8_PRICE),
         position: 'MID',
         points: 24,
-        most_transferred: 7
+        most_transferred: 7,
+
+        picked: 40,
+        pickedAsCaptain: 0,
+        recommended: true,
+        penaltyTaker: false,
     },
     {
         id: 9,
@@ -191,7 +221,12 @@ export const PLAYERS = [
         formattedPrice: nFormatter(PLAYER9_PRICE),
         position: 'DEF',
         points: 13,
-        most_transferred: 9
+        most_transferred: 9,
+
+        picked: 33,
+        pickedAsCaptain: 18,
+        recommended: true,
+        penaltyTaker: false,
     },
     {
         id: 10,
@@ -208,7 +243,12 @@ export const PLAYERS = [
         formattedPrice: nFormatter(PLAYER10_PRICE),
         position: 'DEF',
         points: 16,
-        most_transferred: 10
+        most_transferred: 10,
+
+        picked: 40,
+        pickedAsCaptain: 0,
+        recommended: true,
+        penaltyTaker: false,
     },
 
 ]

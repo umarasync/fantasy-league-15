@@ -165,15 +165,13 @@ export const STATUSES = [
     },
 ]
 
-
-
 // RECOMMENDATION Filter
 export const RECOMMENDED_PLAYERS = 'Recommended players'
 export const MOST_PICKED_PLAYERS = 'Most picked players'
 export const MOST_PICKED_AS_CAPTAIN = 'Most picked as captain'
 export const POTENTIAL_PENALTY_TAKERS = 'Potential penalty takers'
 
-export const RECOMMENDATION = [
+export const RECOMMENDATIONS = [
     {
         id: 1,
         label: RECOMMENDED_PLAYERS,
@@ -193,5 +191,35 @@ export const RECOMMENDATION = [
         id: 4,
         label: POTENTIAL_PENALTY_TAKERS,
         value: POTENTIAL_PENALTY_TAKERS,
+    },
+]
+
+
+// SORTING
+export const TOTAL_POINTS = 'Total points'
+export const PRICE_FROM_HIGH_TO_LOW = 'Price (from high to low)'
+export const PRICE_FROM_LOW_TO_HIGH = 'Price (from low to high)'
+export const MOST_TRANSFERRED = 'Most transferred'
+
+export const SORTING_OPTIONS = [
+    {
+        id: 1,
+        label: TOTAL_POINTS,
+        value: TOTAL_POINTS
+    },
+    {
+        id: 2,
+        label: PRICE_FROM_HIGH_TO_LOW,
+        value: PRICE_FROM_HIGH_TO_LOW
+    },
+    {
+        id: 3,
+        label: PRICE_FROM_LOW_TO_HIGH,
+        value: PRICE_FROM_LOW_TO_HIGH
+    },
+    {
+        id: 3,
+        label: MOST_TRANSFERRED,
+        value: MOST_TRANSFERRED
     },
 ]

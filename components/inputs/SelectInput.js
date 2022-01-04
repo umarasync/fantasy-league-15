@@ -25,6 +25,11 @@ const getStyles = (R) => {
             paddingLeft: R(24),
             paddingRight: R(10)
         },
+        filterText: {
+            fontSize: R(20),
+            color: colors.regent_grey,
+            marginRight: R(4)
+        },
         arrowImage: {
             width: R(30),
             height: '100%'
@@ -51,11 +56,12 @@ export default function Input ({
    style,
    textStyle,
    parentContainerStyle,
-
+   dropDownOfInlineStyle,
     // For label on border
    hideLabel,
    openedBorderColor = 'black',
-   skipFirstOption
+   skipFirstOption,
+   textHoverColor = `text-mandy`
 }) {
 
     const STYLES =  { ... getStyles(R) }
@@ -84,34 +90,58 @@ export default function Input ({
 
     return <div className={`relative w-full`} style={{...STYLES.parentContainerStyle, ...parentContainerStyle}}>
         { !hideLabel && <Label/> }
-        <div
-            className={`cursor-pointer flex items-center justify-between ${classes}`}
-            style={{
-                ...STYLES.container, ...style,
-                border: `1px solid`,
-                borderColor: opened ? openedBorderColor : colors.link_water
-            }}
-            onClick={handleClick}
-        >
-            <p style={{...STYLES.text, ...textStyle}}>{selectedOption.label}</p>
-            <div
-                className={'flex items-center'}
-                style={STYLES.arrowImage}
-            >
-                <img
-                    src={opened ? '/images/arrow-up.svg' : '/images/arrow-down.svg'}
-                    width={R(15)}
-                    height={R(15)}
-                    alt=""
-                />
-            </div>
-        </div>
+
+        {
+            dropDownOfInlineStyle ?
+                (
+                    <div className={'flex cursor-pointer'}  onClick={handleClick}>
+                        <div className={'flex'}>
+                            <p style={STYLES.filterText}>Sort:</p>
+                            <p className="font-[600] text-black_rock" style={{fontSize: R(20)}} >
+                                {selectedOption.label}
+                            </p>
+                        </div>
+                        <div className={'flex items-center'} style={{marginLeft: R(15)}}>
+                            <img
+                                src={opened ? '/images/arrow-up.svg' : '/images/arrow-down.svg'}
+                                width={R(15)}
+                                height={R(15)}
+                                alt=""
+                            />
+                        </div>
+                    </div>
+                ) : (
+                <div
+                    className={`cursor-pointer flex items-center justify-between ${classes}`}
+                    style={{
+                        ...STYLES.container, ...style,
+                        border: `1px solid`,
+                        borderColor: opened ? openedBorderColor : colors.link_water
+                    }}
+                    onClick={handleClick}
+                >
+                    <p style={{...STYLES.text, ...textStyle}}>{selectedOption.label}</p>
+                    <div
+                        className={'flex items-center'}
+                        style={STYLES.arrowImage}
+                    >
+                        <img
+                            src={opened ? '/images/arrow-up.svg' : '/images/arrow-down.svg'}
+                            width={R(15)}
+                            height={R(15)}
+                            alt=""
+                        />
+                    </div>
+                </div>
+            )
+        }
+
 
         {
             opened ? (
                 <AnimatePresence>
                     <motion.div
-                        className="absolute border-[1px] rounded-[1.2rem] shadow-[4px 4px 40px rgba(0, 0, 0, 0.03)] bg-white w-full"
+                        className={`absolute border-[1px] rounded-[1.2rem] shadow-[4px 4px 40px rgba(0, 0, 0, 0.03)] bg-white ${!dropDownOfInlineStyle && 'w-full'}`}
                         variants={Animation}
                         initial="initial"
                         animate="animate"
@@ -119,12 +149,11 @@ export default function Input ({
                     >
                         {
                             options.map((option, index) => {
-
                                 return (
                                     !index && skipFirstOption ? null :
                                     <div
                                         key={index}
-                                        className={'cursor-pointer flex items-center justify-between'}
+                                        className={`cursor-pointer flex items-center justify-between`}
                                         style={{
                                             ...STYLES.dropDownOptionBox,
                                             borderBottom: '1px solid',
@@ -132,7 +161,7 @@ export default function Input ({
                                         }}
                                         onClick={() => setOptionValue(option)}
                                     >
-                                        <p className="font-[600] text-black_rock rounded-t-[1.2rem]"
+                                        <p className={`font-[600] hover:${textHoverColor} text-black_rock rounded-t-[1.2rem]`}
                                            style={{
                                                ...STYLES.optionText,
                                            }}

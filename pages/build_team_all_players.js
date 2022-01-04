@@ -8,10 +8,10 @@ import SearchBar from "components/search/SearchBar";
 import Username from "components/login/Username";
 import FilterIcon from "components/filter/FilterIcon";
 import FilterButtons from "components/filter/FilterButtons";
-import SortingFilter from "components/filter/SortingFilter/SortingFilter";
 import PlayerCard from "components/player/PlayerCard";
 import BuildTeamLeftSection from "components/buildTeam/BuildTeamLeftSection";
 import BuildYourTeamFilters from "components/filter/BuildYourTeamFilters";
+import SelectInput from "components/inputs/SelectInput";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -19,23 +19,32 @@ import {clone, nFormatter} from "utils/helpers";
 
 // Constants
 import {
-    CLUBS,
+    // POSITIONS
     POSITION_ALL,
+    // CLUBS
+    CLUBS,
     ALL_TEAMS,
+    // PRICES
     PRICES,
     ALL_PRICES,
+    // STATUES
     STATUSES,
-    ALL_STATUSES
-} from "constants/data/filters";
-
-import  { PLAYERS } from "constants/data/players"
-
-import filterOptions, {
+    ALL_STATUSES,
+    // RECOMMENDATIONS
+    RECOMMENDATIONS,
+    RECOMMENDED_PLAYERS,
+    POTENTIAL_PENALTY_TAKERS,
+    MOST_PICKED_PLAYERS,
+    MOST_PICKED_AS_CAPTAIN,
+    // SORTING
+    SORTING_OPTIONS,
     TOTAL_POINTS,
     PRICE_FROM_HIGH_TO_LOW,
     PRICE_FROM_LOW_TO_HIGH,
     MOST_TRANSFERRED
-} from "constants/data/sortingFilterData";
+} from "constants/data/filters";
+
+import  { PLAYERS } from "constants/data/players"
 
 // Styles
 const getStyles = (R) => {
@@ -56,6 +65,8 @@ export default function BuildTeamAllPlayer () {
     const PLAYERS_INITIAL = clone(PLAYERS)
     const PRICES_INITIAL = clone(PRICES)
     const STATUSES_INITIAL = clone(STATUSES)
+    const RECOMMENDATIONS_INITIAL = clone(RECOMMENDATIONS)
+    const SORTING_OPTIONS_INITIAL = clone(SORTING_OPTIONS)
 
     // Footer Bar States
     const [totalSelectedPlayers, setTotalSelectedPlayers] = useState(0)
@@ -68,9 +79,6 @@ export default function BuildTeamAllPlayer () {
     // Players States
     const [playersData, setPlayersData] = useState([])
 
-    // Sorting States
-    const [sortingOption, setSortingOption] = useState(filterOptions[0])
-
     // Positions States
     const [activePosition, setActivePosition] = useState(POSITION_ALL)
 
@@ -78,7 +86,7 @@ export default function BuildTeamAllPlayer () {
     const [clubs, setClubs] = useState([... CLUBS_INITIAL])
     const [selectedClubs, setSelectedClubs] = useState([CLUBS_INITIAL[0]])
 
-    // Clubs Statuses
+    // Statuses Statuses
     const [statuses, setStatuses] = useState([... STATUSES_INITIAL])
     const [selectedStatuses, setSelectedStatuses] = useState([STATUSES_INITIAL[0]])
 
@@ -86,6 +94,13 @@ export default function BuildTeamAllPlayer () {
     const [prices, setPrices] = useState([...PRICES_INITIAL])
     const [selectedPrice, setSelectedPrice] = useState(PRICES_INITIAL[0])
 
+    // Recommendations States
+    const [recommendations, setRecommendations] = useState([...RECOMMENDATIONS_INITIAL])
+    const [selectedRecommendation, setSelectedRecommendation] = useState(RECOMMENDATIONS_INITIAL[0])
+
+    // Sorting
+    const [sortingOptions, setSortingOptions] = useState([...SORTING_OPTIONS])
+    const [selectedSortingOption, setSelectedSortingOption] = useState(SORTING_OPTIONS[0])
 
 
     const onSearch = () => false
@@ -139,10 +154,22 @@ export default function BuildTeamAllPlayer () {
         setOptions([...newStateI])
     }
 
+    const runRecommendationsFilter = (player) => {
+
+        if(
+            (selectedRecommendation.value === RECOMMENDED_PLAYERS) && (player.recommended) ||
+            (selectedRecommendation.value === POTENTIAL_PENALTY_TAKERS) && (player.penaltyTaker) ||
+            (selectedRecommendation.value === MOST_PICKED_PLAYERS) && (player.picked > 0) ||
+            (selectedRecommendation.value === MOST_PICKED_AS_CAPTAIN) && (player.pickedAsCaptain > 0)
+        ){
+            return true
+        }
+    }
+
     const runStatusFilter = (player) => {
         if(selectedStatuses.length > 0 &&
             (selectedStatuses[0].value === ALL_STATUSES || selectedStatuses.some( status => status.value === player.status ))){
-            return true
+            return runRecommendationsFilter(player)
         }
     }
 
@@ -179,13 +206,13 @@ export default function BuildTeamAllPlayer () {
         })
 
         // Sorting
-        if(sortingOption.value === PRICE_FROM_HIGH_TO_LOW){
+        if(selectedSortingOption.value === PRICE_FROM_HIGH_TO_LOW){
             playersDataI = playersDataI.sort((a, b) => a.price < b.price ? 1 : -1)
-        } else if(sortingOption.value === PRICE_FROM_LOW_TO_HIGH){
+        } else if(selectedSortingOption.value === PRICE_FROM_LOW_TO_HIGH){
             playersDataI = playersDataI.sort((a, b) => a.price > b.price ? 1 : -1)
-        } else if(sortingOption.value === TOTAL_POINTS){
+        } else if(selectedSortingOption.value === TOTAL_POINTS){
             playersDataI = playersDataI.sort((a, b) => a.points < b.points ? 1 : -1)
-        }else if(sortingOption.value === MOST_TRANSFERRED) {
+        }else if(selectedSortingOption.value === MOST_TRANSFERRED) {
             playersDataI = playersDataI.sort((a, b) => a.most_transferred < b.most_transferred ? 1 : -1)
         }
 
@@ -194,7 +221,7 @@ export default function BuildTeamAllPlayer () {
 
     useEffect(() => {
             runFiltersOnPlayersData()
-    }, [clubs, statuses,  selectedPrice, activePosition, sortingOption])
+    }, [clubs, statuses, selectedRecommendation, selectedPrice, activePosition, selectedSortingOption])
 
     return (
         <Layout title="Build Team All Player">
@@ -234,6 +261,7 @@ export default function BuildTeamAllPlayer () {
                                 (showAllFilters || true) && (
                                     <div style={STYLES.allFiltersBox}>
                                         <BuildYourTeamFilters
+
                                             // Teams Filter
                                             clubs={clubs}
                                             selectedClubs={selectedClubs}
@@ -261,6 +289,10 @@ export default function BuildTeamAllPlayer () {
                                             selectedPrice={selectedPrice}
                                             onPriceSelected={(price) => setSelectedPrice(price)}
 
+                                            // Recommendation Filter
+                                            recommendations={recommendations}
+                                            selectedRecommendation={selectedRecommendation}
+                                            onRecommendationSelected={(r) => setSelectedRecommendation(r)}
 
                                         />
                                     </div>
@@ -269,9 +301,19 @@ export default function BuildTeamAllPlayer () {
 
                             {/*sorting filter*/}
                             <div style={{marginBottom: R(16)}}>
-                                <SortingFilter
-                                    options={filterOptions}
-                                    onApplyFilter={(option) => setSortingOption(option)}/>
+
+                                <SelectInput
+                                    options={sortingOptions}
+                                    selectedOption={selectedSortingOption}
+                                    onOptionChange={(s) => setSelectedSortingOption(s)}
+                                    hideLabel
+                                    dropDownOfInlineStyle
+                                />
+
+                                {/*<SortingFilter*/}
+                                {/*    options={filterOptions}*/}
+                                {/*    onApplyFilter={(option) => setSelectedSortingOption(option)}*/}
+                                {/*/>*/}
                             </div>
 
                             {/*players cards*/}

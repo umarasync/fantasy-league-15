@@ -50,6 +50,11 @@ export default function BuildYourTeamFilters({
     prices,
     selectedPrice,
     onPriceSelected,
+
+    // Recommendations
+    recommendations,
+    selectedRecommendation,
+    onRecommendationSelected,
  }){
 
     const STYLES =  { ... getStyles(R) }
@@ -75,7 +80,7 @@ export default function BuildYourTeamFilters({
                     onOptionChange={onPriceSelected}
                     style={{...STYLES.container}}
                     parentContainerStyle={{
-                        zIndex: 2,
+                        zIndex: 3,
                         marginRight: R(8)
                     }}
                     textStyle={STYLES.textStyle}
@@ -99,18 +104,20 @@ export default function BuildYourTeamFilters({
                 />
             </div>
 
-            {/*<SelectInput*/}
-            {/*    options={prices}*/}
-            {/*    selectedOption={selectedPrice}*/}
-            {/*    onOptionChange={onPriceSelected}*/}
-            {/*    style={{...STYLES.container}}*/}
-            {/*    parentContainerStyle={{*/}
-            {/*        marginTop: R(10)*/}
-            {/*    }}*/}
-            {/*    textStyle={STYLES.textStyle}*/}
-            {/*    hideLabel*/}
-            {/*    openedBorderColor={''}*/}
-            {/*/>*/}
+            <SelectInput
+                options={recommendations}
+                selectedOption={selectedRecommendation}
+                onOptionChange={onRecommendationSelected}
+                style={{...STYLES.container}}
+                parentContainerStyle={{
+                    zIndex: 2,
+                    marginTop: R(10)
+                }}
+                textStyle={STYLES.textStyle}
+                hideLabel
+                openedBorderColor={''}
+            />
         </div>
     )
 }
+
