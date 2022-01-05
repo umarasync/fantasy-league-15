@@ -19,7 +19,7 @@ import R from "utils/getResponsiveValue";
 import {clone, nFormatter} from "utils/helpers";
 
 // Animation
-import PlayersCardAnimation from "Animations/PlayersCardAnimations";
+import {PlayersCardAnimation, SortingFilterAnimation} from "Animations/PlayersCardAnimations";
 
 // Constants
 import {
@@ -107,9 +107,9 @@ export default function BuildTeamAllPlayer () {
     const [sortingOptions, setSortingOptions] = useState([...SORTING_OPTIONS_INITIAL])
     const [selectedSortingOption, setSelectedSortingOption] = useState(SORTING_OPTIONS_INITIAL[0])
 
-    // Animation
+    // showAllFiltersAnimation: Starts
     const [initialOpacity, setInitialOpacity] = useState(1)
-    const duration = 1
+    const duration = 0.6
     const showAllFiltersAnimation = {
         initial: {
             opacity: initialOpacity, // Starting point we set initial opacity in state, so that on initial render it is one, but after the subsequent click we want it to be 0, to have fade in effect
@@ -127,6 +127,10 @@ export default function BuildTeamAllPlayer () {
             },
         },
     };
+
+
+
+    //showAllFiltersAnimation:Ends
 
     const onSearch = () => false
 
@@ -277,12 +281,22 @@ export default function BuildTeamAllPlayer () {
 
     useEffect(() => {
             runFiltersOnPlayersData()
-
             // For animation
             if(initialOpacity) {
                 setInitialOpacity(0)
             }
     }, [clubs, statuses, selectedRecommendation, selectedPrice, activePosition, selectedSortingOption])
+
+
+    const getPlayersContainerHeight = () => {
+        if(areFiltersApplied() && !playersData.length){
+            return  0
+        }else if(showAllFilters) {
+            return 400
+        }else {
+            return 800
+        }
+    }
 
     return (
         <Layout title="Build Team All Player">
@@ -376,43 +390,89 @@ export default function BuildTeamAllPlayer () {
                                 ): <AnimatePresence/>
                             }
 
+
                             { areFiltersApplied() && !playersData.length && <NoResultFound/>}
 
-                            {
-                                playersData.length > 0 && (
-                                    <motion.div
-                                        variants={PlayersCardAnimation}
-                                        animate={showAllFilters ? 'slideDown' : 'slideUp'}
-                                        style={{
-                                            height: showAllFilters ? 400 : 770,
-                                            paddingBottom: showAllFilters? 50 : 200,
-                                            overflowY: 'scroll'
-                                        }}
-                                    >
+                            <motion.div
+                                variants={PlayersCardAnimation}
+                                animate={showAllFilters ? 'slideDown' : 'slideUp'}
+                                style={{
+                                    height: getPlayersContainerHeight(),
+                                }}
+                            >
+                                <div style={{marginBottom: R(16)}}>
+                                    {
+                                        areFiltersApplied() && !playersData.length ? null : (
 
-                                        {/*sorting filter*/}
-                                        {
-                                            areFiltersApplied() ? null : (
-                                                <div style={{marginBottom: 16}}>
-                                                    <SelectInput
-                                                        options={sortingOptions}
-                                                        selectedOption={selectedSortingOption}
-                                                        onOptionChange={(s) => setSelectedSortingOption(s)}
-                                                        hideLabel
-                                                        dropDownOfInlineStyle
-                                                    />
-                                                </div>
-                                            )
-                                        }
+                                            <SelectInput
+                                                options={sortingOptions}
+                                                selectedOption={selectedSortingOption}
+                                                onOptionChange={(s) => setSelectedSortingOption(s)}
+                                                parentContainerStyle={{
+                                                    zIndex: 288888,
+                                                }}
+                                                hideLabel
+                                                dropDownOfInlineStyle
+                                            />
 
-                                        {/* PLAYERS DATA */}
+                                        )
+                                    }
+                                </div>
 
-                                        {
-                                            playersData.map((player, index) => <PlayerCard key={index + 1} index={index} player={player}/>)
-                                        }
-                                    </motion.div>
-                                )
-                            }
+                                <div style={{
+                                    height: '100%',
+                                    paddingBottom: showAllFilters? 100 : 200,
+                                    overflow: 'scroll'}}
+                                >
+                                    {
+                                        playersData.map((player, index) => <PlayerCard key={index + 1} index={index} player={player}/>)
+                                    }
+                                </div>
+
+                            </motion.div>
+
+
+
+
+
+
+
+                            {/*{*/}
+                            {/*    playersData.length > 0 && (*/}
+
+
+                            {/*        <motion.div*/}
+                            {/*            variants={PlayersCardAnimation}*/}
+                            {/*            animate={showAllFilters ? 'slideDown' : 'slideUp'}*/}
+                            {/*            style={{*/}
+                            {/*                height: 770,*/}
+                            {/*                paddingBottom: showAllFilters? 50 : 200,*/}
+                            {/*                overflow: 'scroll'*/}
+
+
+                            {/*            }}*/}
+                            {/*        >*/}
+
+                            {/*            <motion.div*/}
+                            {/*                style={{*/}
+
+                            {/*                }}*/}
+                            {/*            >*/}
+                            {/*                {*/}
+                            {/*                    playersData.map((player, index) => <PlayerCard key={index + 1} index={index} player={player}/>)*/}
+                            {/*                }*/}
+
+                            {/*            </motion.div>*/}
+
+
+                            {/*        </motion.div>*/}
+
+
+                            {/*    )*/}
+                            {/*}*/}
+
+
+
 
                         </div>
                     </div>

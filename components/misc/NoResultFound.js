@@ -10,7 +10,7 @@ const getStyles = (R) => {
         noResultFoundText: {
             fontSize: R(18),
             color: colors.regent_grey,
-            marginTop: R(140)
+            marginTop: R(450)
         }
     }
 }

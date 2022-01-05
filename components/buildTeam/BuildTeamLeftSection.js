@@ -39,7 +39,8 @@ export default function BuildTeamLeftSection() {
     const STYLES =  { ... getStyles(R) }
 
     return (
-        <div className="bg-[url('/images/bg-blue.png')] bg-[length:100%_100%] bg-no-repeat  w-full h-full" style={STYLES.container}>
+        <div className="bg-[url('/images/bg-blue.png')] bg-[length:100%_100%] bg-no-repeat  w-full h-full"
+             style={STYLES.container}>
             <div className="" style={STYLES.logo}>
                 <img src="/images/logo_white.png" alt="" width="100%" height="100%"/>
             </div>

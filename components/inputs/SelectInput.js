@@ -139,7 +139,7 @@ export default function Input ({
             opened ? (
                 <AnimatePresence>
                     <motion.div
-                        className={`absolute border-[1px] rounded-[1.2rem] shadow-[4px 4px 40px rgba(0, 0, 0, 0.03)] bg-white ${!dropDownOfInlineStyle && 'w-full'}`}
+                        className={`absolute z-[100] border-[1px] rounded-[1.2rem] shadow-[4px 4px 40px rgba(0, 0, 0, 0.03)] bg-white ${!dropDownOfInlineStyle && 'w-full'}`}
                         variants={Animation}
                         initial="initial"
                         animate="animate"
@@ -159,7 +159,7 @@ export default function Input ({
                                         }}
                                         onClick={() => setOptionValue(option)}
                                     >
-                                        <p className={`font-[600] hover:${textHoverColor} text-black_rock rounded-t-[1.2rem]`}
+                                        <p className={`font-[600] hover:text-mandy text-black_rock rounded-t-[1.2rem]`}
                                            style={{
                                                ...STYLES.optionText,
                                            }}
