@@ -100,7 +100,7 @@ export default function SelectSearchInput ({
     const [ allOptions, setAllOptions ] = useState([...options])
 
     const handleOnChange = (value) => {
-        const matchedOptions = searchInArray(value, OPTIONS,"name")
+        const matchedOptions = searchInArray(value, OPTIONS,"label")
         if(matchedOptions.length === 0) {
             setAllOptions([...OPTIONS])
         }else {

@@ -434,7 +434,7 @@ export default function BuildTeamAllPlayer () {
 
                                     <div style={{
                                         height: '100%',
-                                        paddingBottom: showAllFilters? 100 : 200,
+                                        paddingBottom: getPlayersContainerHeight() === 'hide' ? 0 : 150,
                                         overflow: 'scroll'}}
                                     >
                                         {
