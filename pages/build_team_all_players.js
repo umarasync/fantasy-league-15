@@ -17,9 +17,10 @@ import SelectInput from "components/inputs/SelectInput";
 // Utils
 import R from "utils/getResponsiveValue";
 import {clone, nFormatter} from "utils/helpers";
+import {handleAutoPick, handleMultiSelectionDropDowns} from "utils/buildYourTeam";
 
 // Animation
-import {PlayersCardAnimation, PlayersCardAnimation1, SortingFilterAnimation} from "Animations/PlayersCardAnimations";
+import {PlayersCardAnimation, PlayersCardAnimation1} from "Animations/PlayersCardAnimations";
 
 // Constants
 import {
@@ -48,6 +49,10 @@ import {
     MOST_TRANSFERRED
 } from "constants/data/filters";
 
+import {
+    ALL_PLAYERS_INDEXES
+} from "constants/data/players";
+
 import  { PLAYERS } from "constants/data/players"
 import NoResultFound from "../components/misc/NoResultFound";
 
@@ -72,14 +77,20 @@ export default function BuildTeamAllPlayer () {
     const STATUSES_INITIAL = clone(STATUSES)
     const RECOMMENDATIONS_INITIAL = clone(RECOMMENDATIONS)
     const SORTING_OPTIONS_INITIAL = clone(SORTING_OPTIONS)
+    const ALL_PLAYERS_INDEXES_INITIAL = clone(ALL_PLAYERS_INDEXES)
+    const TOTAL_BUDGET = 100000000;
+
+    // Fields States
+    const [autoPickedPlayers, setAutoPickedPlayers] = useState([])
 
     // Footer Bar States
-    const [totalSelectedPlayers, setTotalSelectedPlayers] = useState(0)
+    const [totalChosenPlayers, setTotalChosenPlayers] = useState(0)
     const [resetDisabled, setResetDisabled] = useState(true)
     const [showAllFilters, setShowAllFilters] = useState(false)
     const [autoPickDisabled, setAutoPickDisabled] = useState(false)
     const [continueDisabled, setContinueDisabled] = useState(true)
-    const [remainingBudget, setRemainingBudget] = useState(nFormatter(100000000))
+    const [totalBudget, setTotalBudget] = useState(TOTAL_BUDGET)
+    const [remainingBudget, setRemainingBudget] = useState(TOTAL_BUDGET)
 
     // Players States
     const [playersData, setPlayersData] = useState([])
@@ -112,7 +123,7 @@ export default function BuildTeamAllPlayer () {
     const duration = 0.6
     const showAllFiltersAnimation = {
         initial: {
-            opacity: initialOpacity, // Starting point we set initial opacity in state, so that on initial render it is one, but after the subsequent click we want it to be 0, to have fade in effect
+            opacity: initialOpacity,
         },
         animate: {
             opacity: 1,
@@ -127,8 +138,6 @@ export default function BuildTeamAllPlayer () {
             },
         },
     };
-
-
 
     //showAllFiltersAnimation:Ends
 
@@ -150,54 +159,6 @@ export default function BuildTeamAllPlayer () {
 
     }
 
-    const resetMultiSelectsDataState = (option, data) => {
-
-        const {
-            setSelectedOptions,
-            setOptions
-        } = data
-
-        let STATE_INITIAL_I = [ ...data.initialState ]
-
-        if(option.fromBackSpace || option.checked) {
-            setSelectedOptions([])
-            STATE_INITIAL_I[0].checked = false
-        }else {
-            setSelectedOptions([STATE_INITIAL_I[0]])
-        }
-
-        setOptions([
-            ...STATE_INITIAL_I
-        ])
-    }
-
-    // Handles multi selections filters
-    const handleMultiSelectionDropDowns = (option, data) => {
-
-        if(option.value === data.firstOption) {
-            return resetMultiSelectsDataState(option, data)
-        }
-
-        const {
-            setSelectedOptions,
-            setOptions
-        } = data
-
-        let newStateI = [ ...data.state ]
-
-        let firstOption = newStateI[0]
-
-        if(firstOption.checked) {firstOption.checked = false}
-
-        let objIndex = newStateI.findIndex((obj) => obj.id === option.id)
-
-        newStateI[objIndex].checked =  !newStateI[objIndex].checked
-
-        const selectedOptions = newStateI.filter((option) => option.checked)
-
-        setSelectedOptions([...selectedOptions])
-        setOptions([...newStateI])
-    }
 
     const runRecommendationsFilter = (player) => {
 
@@ -288,17 +249,6 @@ export default function BuildTeamAllPlayer () {
     }, [clubs, statuses, selectedRecommendation, selectedPrice, activePosition, selectedSortingOption])
 
 
-    // const getPlayersContainerHeight = () => {
-    //     if(areFiltersApplied() && !playersData.length){
-    //         return  0
-    //     }else if(showAllFilters) {
-    //         return 400
-    //     }else {
-    //         return 800
-    //     }
-    // }
-
-
     const getPlayersContainerHeight = () => {
         if(areFiltersApplied() && !playersData.length){
             return  'hide'
@@ -309,10 +259,33 @@ export default function BuildTeamAllPlayer () {
         }
     }
 
+    const onAutoPick = () => {
+        const {
+            chosenPlayersWithinBudget,
+            remainingBudget,
+            totalChosenPlayers: totalChosenPlayersI
+        } = handleAutoPick({
+            players: PLAYERS,
+            allPlayersObjectIndexes: ALL_PLAYERS_INDEXES,
+            totalBudget: TOTAL_BUDGET
+        })
+
+        setAutoPickedPlayers(chosenPlayersWithinBudget)
+        setRemainingBudget(remainingBudget)
+        setTotalChosenPlayers(totalChosenPlayersI)
+        setAutoPickDisabled(true)
+        setResetDisabled(false)
+    }
+
     return (
         <Layout title="Build Team All Player">
             <div className="mx-auto flex bg-white">
-                    <div className="w-[57%]"><BuildTeamLeftSection/></div>
+                    <div className="w-[57%]"><
+                        BuildTeamLeftSection
+                            autoPickedPlayers={autoPickedPlayers}
+                            autoPickDisabled={autoPickDisabled}
+                        />
+                    </div>
 
                     {/*Right Section*/}
                     <div className="w-[43%] flex justify-center" style={{minHeight: R()}}>
@@ -443,61 +416,23 @@ export default function BuildTeamAllPlayer () {
                                     </div>
 
                                 </motion.div>
-
-
                             </motion.div>
-
-
-
-
-
-
-
-                            {/*{*/}
-                            {/*    playersData.length > 0 && (*/}
-
-
-                            {/*        <motion.div*/}
-                            {/*            variants={PlayersCardAnimation}*/}
-                            {/*            animate={showAllFilters ? 'slideDown' : 'slideUp'}*/}
-                            {/*            style={{*/}
-                            {/*                height: 770,*/}
-                            {/*                paddingBottom: showAllFilters? 50 : 200,*/}
-                            {/*                overflow: 'scroll'*/}
-
-
-                            {/*            }}*/}
-                            {/*        >*/}
-
-                            {/*            <motion.div*/}
-                            {/*                style={{*/}
-
-                            {/*                }}*/}
-                            {/*            >*/}
-                            {/*                {*/}
-                            {/*                    playersData.map((player, index) => <PlayerCard key={index + 1} index={index} player={player}/>)*/}
-                            {/*                }*/}
-
-                            {/*            </motion.div>*/}
-
-
-                            {/*        </motion.div>*/}
-
-
-                            {/*    )*/}
-                            {/*}*/}
-
-
-
 
                         </div>
                     </div>
                     <FooterBar
-                        totalSelectedPlayers={totalSelectedPlayers}
+                        totalChosenPlayers={totalChosenPlayers}
                         remainingBudget={remainingBudget}
                         resetDisabled={resetDisabled}
                         autoPickDisabled={autoPickDisabled}
                         continueDisabled={continueDisabled}
+                        onAutoPick={onAutoPick}
+                        onResetClick={() => {
+                            setAutoPickedPlayers([])
+                            setTotalChosenPlayers(0)
+                            setAutoPickDisabled(false)
+                            setResetDisabled(true)
+                        }}
                     />
             </div>
         </Layout>

@@ -34,7 +34,10 @@ const getStyles = (R) => {
         }
     }
 }
-export default function BuildTeamLeftSection() {
+export default function BuildTeamLeftSection({
+     autoPickedPlayers,
+                                                 autoPickDisabled
+}) {
 
     const STYLES =  { ... getStyles(R) }
 
@@ -54,8 +57,11 @@ export default function BuildTeamLeftSection() {
 
             <div>
                 <div style={STYLES.fieldImage}>
-                    <div className="bg-gray-500 bg-[url('/images/field1.png')] bg-[length:100%_100%] bg-no-repeat h-full w-full" >
-                        <AllPlayersOnField/>
+                    <div className="bg-[url('/images/field2.png')] bg-[length:100%_100%] bg-no-repeat h-full w-full" >
+                        <AllPlayersOnField
+                            autoPickedPlayers={autoPickedPlayers}
+                            autoPickDisabled={autoPickDisabled}
+                        />
                     </div>
                 </div>
             </div>

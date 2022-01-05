@@ -7,6 +7,7 @@ import R from "utils/getResponsiveValue";
 
 // Colors
 import colors from "constants/colors";
+import {nFormatter} from "utils/helpers";
 
 // Styles
 const getStyles = (R) => {
@@ -60,11 +61,13 @@ const getStyles = (R) => {
     }
 }
 export default function FooterBar({
-    totalSelectedPlayers,
+    totalChosenPlayers,
     remainingBudget,
     resetDisabled,
+    onAutoPick,
     autoPickDisabled,
-    continueDisabled
+    continueDisabled,
+                                      onResetClick
   }){
 
     const STYLES =  { ... getStyles(R) }
@@ -79,7 +82,7 @@ export default function FooterBar({
                 <div className={'flex items-center'}>
                     <p className={'text-lavender_grey normal'} style={STYLES.playersText}>Players</p>
                     <p className={'italic text-white font-[800]'} style={STYLES.totalPlayers}>
-                        {totalSelectedPlayers} / 15
+                        {totalChosenPlayers} / 15
                     </p>
                     <Border/>
                     <p className={'text-lavender_grey normal'} style={STYLES.RBText}>Remaining budget</p>
@@ -87,7 +90,7 @@ export default function FooterBar({
                         <img src="/images/info.png" alt="" width={'100%'} height={'100%'}/>
                     </div>
                     <p className={'italic text-white'} style={STYLES.remainingBudget}>
-                       {remainingBudget}
+                       {nFormatter(remainingBudget)}
                     </p>
                 </div>
 
@@ -99,6 +102,7 @@ export default function FooterBar({
                         disabled={autoPickDisabled}
                         buttonStyle={{ marginRight: R(16)}}
                         style={STYLES.autoPickBtn}
+                        onClick={onAutoPick}
                     />
                     <PrimaryButton
                         title={'reset'}
@@ -106,6 +110,7 @@ export default function FooterBar({
                         disabled={resetDisabled}
                         buttonStyle={{marginRight: R(40)}}
                         style={STYLES.resetBtn}
+                        onClick={onResetClick}
                     />
                     <PrimaryButton
                         title={'continue'}

@@ -40,7 +40,7 @@ export default function FilterButtons({
                     return (
                         <PrimaryButtonSmall
                             title={position.label}
-                            style={{
+                            containerStyle={{
                                 ...STYLES.position,
                                 ...getBgColor(position.label)
                             }}

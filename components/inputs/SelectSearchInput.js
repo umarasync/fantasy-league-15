@@ -75,8 +75,8 @@ const getStyles = (R) => {
 export default function SelectSearchInput ({
        options,
        onOptionClicked,
-                                               selectedOptions,
-                                               firstOptionName,
+       selectedOptions,
+       firstOptionName,
        classes,
        label,
        style,
@@ -86,8 +86,8 @@ export default function SelectSearchInput ({
        dropDownBoxStyle,
        arrowImageStyle,
        hideSearchBox,
-                                               optionImageStyle,
-                                               tagImagesStyle,
+       optionImageStyle,
+       tagImagesStyle,
     offClickOnParent
    }) {
 
