@@ -7,6 +7,7 @@ import R from "utils/getResponsiveValue";
 
 // Constants
 import colors from "constants/colors";
+import {useState} from "react";
 
 // Styles
 const getStyles = (R) => {
@@ -32,13 +33,11 @@ const getStyles = (R) => {
         },
         playerName:{
             fontSize: R(18),
-            color: colors.black_rock
         },
         price:{
             fontSize: R(18),
-            color: colors.black_rock,
             textAlign: 'right',
-            fontWeight: '600'
+            fontWeight: '600',
         },
         type: {
             paddingTop: R(3),
@@ -47,7 +46,6 @@ const getStyles = (R) => {
         totalPoints: {
             marginLeft: R(16),
             marginRight: R(34),
-            color: colors.brink_pink,
             fontSize: R(22),
             fontWeight: '600'
         }
@@ -56,20 +54,28 @@ const getStyles = (R) => {
 
 export default function PlayerCard ({
     player,
-    index
+    onSelectPlayer
 }){
     const STYLES =  { ... getStyles(R) }
 
+    const [hover, setHover] = useState(false);
+
+
     return (
-        <div className={'flex items-center justify-between'} style={STYLES.container}>
+        <div
+            className={'card-box flex text-black_rock hover:text-white items-center justify-between cursor-pointer'} style={STYLES.container}
+            onMouseEnter={()=>{setHover(true);}}
+            onMouseLeave={()=>{setHover(false)}}
+            onClick={() => onSelectPlayer(player)}
+        >
             {/*left side*/}
             <div className={'flex items-center'}>
-                <div style={STYLES.infoImage}><img src="/images/info.png" alt=""/></div>
+                <div style={STYLES.infoImage}><img src={`/images/${hover ? 'info_light.svg' : 'info_grey.svg'}`} alt=""/></div>
                 <Border/>
                 <PlayerImage playerImage={player.image} clubImage={player.clubImage} imageStyle={STYLES.playerImage} />
                 <div>
                     <p className={'font-[600]'} style={STYLES.playerName}>
-                        {player.name}-{index}
+                        {player.name}
                         <p style={{paddingTop: R(3)}}>
                             <span>{player.nextMatch.club}</span>
                             <span className={'font-[200]'}>{` vs ${player.nextMatch.vs}`}</span>
@@ -86,7 +92,10 @@ export default function PlayerCard ({
                     </p>
                 </div>
                 <Border/>
-                <p style={STYLES.totalPoints}>{player.points}</p>
+                <p style={{
+                    ...STYLES.totalPoints,
+                    color: hover? colors.white : colors.brink_pink
+                }}>{player.points}</p>
             </div>
         </div>
     )

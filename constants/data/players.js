@@ -286,3 +286,10 @@ PLAYERS.reduce(function(a, e, i) {
     return ALL_PLAYERS_INDEXES;
 }, []);
 
+
+export const SELECTED_PLAYERS = {
+    [POSITION_MID]: [],
+    [POSITION_GK]: [],
+    [POSITION_DEF]: [],
+    [POSITION_FWD]: [],
+}

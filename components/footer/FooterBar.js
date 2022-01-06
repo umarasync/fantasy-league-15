@@ -89,7 +89,7 @@ export default function FooterBar({
                     <div style={STYLES.infoImage}>
                         <img src="/images/info.png" alt="" width={'100%'} height={'100%'}/>
                     </div>
-                    <p className={'italic text-white'} style={STYLES.remainingBudget}>
+                    <p className={'italic text-white uppercase'} style={STYLES.remainingBudget}>
                        {nFormatter(remainingBudget)}
                     </p>
                 </div>

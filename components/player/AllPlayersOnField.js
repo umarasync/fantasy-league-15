@@ -6,7 +6,7 @@ import R from "utils/getResponsiveValue";
 import {POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID} from "../../constants/data/filters";
 
 // Styles
-const getStyles = (R, autoPickDisabled) => {
+const getStyles = (R) => {
     return {
         player1: {
             justifyContent: 'end',
@@ -72,13 +72,13 @@ const getStyles = (R, autoPickDisabled) => {
 }
 
 export default function AllPlayersOnField ({
-   autoPickedPlayers,
+   pickedPlayers,
    autoPickDisabled,
    onDeselectPlayer
 }){
 
 
-    const STYLES =  { ... getStyles(R, autoPickDisabled) }
+    const STYLES =  { ... getStyles(R) }
 
     const ZERO = 0
     const ONE = 1
@@ -92,14 +92,14 @@ export default function AllPlayersOnField ({
             <div className={'flex justify-center'}>
 
                 <PlayerOnPitch
-                    player={autoPickDisabled && autoPickedPlayers[POSITION_GK][ZERO]}
+                    player={pickedPlayers[POSITION_GK][ZERO]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add goalkeeper'}
                     style={STYLES.player1}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_GK, ZERO)}}
                 />
                 <PlayerOnPitch
-                    player={autoPickDisabled && autoPickedPlayers[POSITION_GK][ONE]}
+                    player={pickedPlayers[POSITION_GK][ONE]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add goalkeeper'}
                     style={STYLES.player2}
@@ -110,14 +110,14 @@ export default function AllPlayersOnField ({
             {/*2*/}
             <div className={'flex justify-between'}>
                 <PlayerOnPitch
-                    player={autoPickDisabled && autoPickedPlayers[POSITION_DEF][ZERO]}
+                    player={pickedPlayers[POSITION_DEF][ZERO]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add defender'}
                     style={STYLES.player3}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_DEF, ZERO)}}
                 />
                 <PlayerOnPitch
-                    player={autoPickDisabled && autoPickedPlayers[POSITION_DEF][ONE]}
+                    player={pickedPlayers[POSITION_DEF][ONE]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add defender'}
                     style={STYLES.player4}
@@ -125,7 +125,7 @@ export default function AllPlayersOnField ({
 
                 />
                 <PlayerOnPitch
-                    player={autoPickDisabled && autoPickedPlayers[POSITION_DEF][TWO]}
+                    player={pickedPlayers[POSITION_DEF][TWO]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add defender'}
                     style={STYLES.player5}
@@ -136,14 +136,14 @@ export default function AllPlayersOnField ({
             {/*3*/}
             <div className={'flex justify-center'}>
                 <PlayerOnPitch
-                    player={autoPickDisabled && autoPickedPlayers[POSITION_DEF][THREE]}
+                    player={pickedPlayers[POSITION_DEF][THREE]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add defender'}
                     style={STYLES.player6}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_DEF, THREE)}}
                 />
                 <PlayerOnPitch
-                    player={autoPickDisabled && autoPickedPlayers[POSITION_DEF][FOUR]}
+                    player={pickedPlayers[POSITION_DEF][FOUR]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add defender'}
                     style={STYLES.player7}
@@ -153,21 +153,21 @@ export default function AllPlayersOnField ({
             {/*4*/}
             <div className={'flex justify-between'}>
                 <PlayerOnPitch
-                    player={autoPickDisabled && autoPickedPlayers[POSITION_MID][ZERO]}
+                    player={pickedPlayers[POSITION_MID][ZERO]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add midfielder'}
                     style={STYLES.player3}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_MID, ZERO)}}
                 />
                 <PlayerOnPitch
-                    player={autoPickDisabled && autoPickedPlayers[POSITION_MID][ONE]}
+                    player={pickedPlayers[POSITION_MID][ONE]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add midfielder'}
                     style={STYLES.player4}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_MID, ONE)}}
                 />
                 <PlayerOnPitch
-                    player={autoPickDisabled && autoPickedPlayers[POSITION_MID][TWO]}
+                    player={pickedPlayers[POSITION_MID][TWO]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add midfielder'}
                     style={STYLES.player5}
@@ -177,14 +177,14 @@ export default function AllPlayersOnField ({
             {/*5*/}
             <div className={'flex justify-center'}>
                 <PlayerOnPitch
-                    player={autoPickDisabled && autoPickedPlayers[POSITION_MID][THREE]}
+                    player={pickedPlayers[POSITION_MID][THREE]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add midfielder'}
                     style={STYLES.player6}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_MID, THREE)}}
                 />
                 <PlayerOnPitch
-                    player={autoPickDisabled && autoPickedPlayers[POSITION_MID][FOUR]}
+                    player={pickedPlayers[POSITION_MID][FOUR]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add midfielder'}
                     style={STYLES.player7}
@@ -194,21 +194,21 @@ export default function AllPlayersOnField ({
             {/*6*/}
             <div className={'flex justify-between'}>
                 <PlayerOnPitch
-                    player={autoPickDisabled && autoPickedPlayers[POSITION_FWD][ZERO]}
+                    player={pickedPlayers[POSITION_FWD][ZERO]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add forward'}
                     style={STYLES.player13}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_FWD, ZERO)}}
                 />
                 <PlayerOnPitch
-                    player={autoPickDisabled && autoPickedPlayers[POSITION_FWD][ONE]}
+                    player={pickedPlayers[POSITION_FWD][ONE]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add forward'}
                     style={STYLES.player14}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_FWD, ONE)}}
                 />
                 <PlayerOnPitch
-                    player={autoPickDisabled && autoPickedPlayers[POSITION_FWD][TWO]}
+                    player={pickedPlayers[POSITION_FWD][TWO]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add forward'}
                     style={STYLES.player15}

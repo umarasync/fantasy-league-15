@@ -5,9 +5,10 @@ import {
     POSITION_GK,
     POSITION_MID
 } from "constants/data/filters";
+import {SELECTED_PLAYERS} from "constants/data/players";
 
 // Utils
-import {nFormatter, shuffle} from "utils/helpers";
+import {clone, nFormatter, shuffle} from "utils/helpers";
 
 export const resetMultiSelectsDataState = (option, data) => {
 
@@ -101,12 +102,7 @@ export const handleAutoPick = ({
 
     let shuffledFifteenChosenPlayersIndex = shuffle(fifteenChosenPlayersIndex)
 
-    let chosenPlayersWithinBudget = {
-        [POSITION_MID]: [],
-        [POSITION_GK]: [],
-        [POSITION_DEF]: [],
-        [POSITION_FWD]: [],
-    }
+    let chosenPlayersWithinBudget = clone(SELECTED_PLAYERS)
 
     let totalChosenPlayers = 0
     for(let i = 0; i < 15; i++) {

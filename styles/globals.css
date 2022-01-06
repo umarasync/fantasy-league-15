@@ -57,6 +57,11 @@ input.disable-input-outline[type="text"]:focus{
     background: linear-gradient(180deg, #EE6384 0%, #D9335B 100%);
 }
 
+.card-box:hover {
+    background: linear-gradient(180deg, #EE6384 0%, #D9335B 100%);
+}
+
+
 .bg-blue-gradient {
     background: linear-gradient(90deg, rgba(27, 24, 83, 0) 0%, #1B1853 100%);
 }
@@ -83,6 +88,8 @@ input.disable-input-outline[type="text"]:focus{
     border-image: linear-gradient(270deg, rgba(220, 227, 236, 0) -13.96%, #DCE3EC 55.55%, rgba(220, 227, 236, 0) 113.14%);
     border-image-slice: 1;
 }
+
+
 
 .footer-blue-gradient {
     background: linear-gradient(180deg, #2E2B63 0%, #252252 100%);

@@ -16,7 +16,7 @@ import SelectInput from "components/inputs/SelectInput";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import {clone, nFormatter} from "utils/helpers";
+import {clone, isEmpty, nFormatter} from "utils/helpers";
 import {handleAutoPick, handleMultiSelectionDropDowns} from "utils/buildYourTeam";
 
 // Animation
@@ -50,7 +50,8 @@ import {
 } from "constants/data/filters";
 
 import {
-    ALL_PLAYERS_INDEXES
+    ALL_PLAYERS_INDEXES,
+    SELECTED_PLAYERS
 } from "constants/data/players";
 
 import  { PLAYERS } from "constants/data/players"
@@ -78,10 +79,11 @@ export default function BuildTeamAllPlayer () {
     const RECOMMENDATIONS_INITIAL = clone(RECOMMENDATIONS)
     const SORTING_OPTIONS_INITIAL = clone(SORTING_OPTIONS)
     const ALL_PLAYERS_INDEXES_INITIAL = clone(ALL_PLAYERS_INDEXES)
+    const SELECTED_PLAYERS_INITIAL = clone(SELECTED_PLAYERS)
     const TOTAL_BUDGET = 100000000;
 
     // Fields States
-    const [autoPickedPlayers, setAutoPickedPlayers] = useState({})
+    const [pickedPlayers, setPickedPlayers] = useState(SELECTED_PLAYERS_INITIAL)
 
     // Footer Bar States
     const [totalChosenPlayers, setTotalChosenPlayers] = useState(0)
@@ -259,18 +261,34 @@ export default function BuildTeamAllPlayer () {
         }
     }
 
+    const handlePlayerSelection = (player) => {
+        const playerPositionI = player.position
+
+        const pickedPlayersI = { ...pickedPlayers }
+
+        if(pickedPlayersI[playerPositionI].length === 0) {
+            pickedPlayersI[playerPositionI].push(player)
+        }
+        // const indexOfEmptyPosition = pickedPlayersI[pickedPlayersI].findIndex(x => x === false)
+
+        setPickedPlayers({...pickedPlayersI})
+        console.log('3--------', {pickedPlayersI})
+
+    }
+
     const handlePlayerDeselection = (p, i) => {
 
-        const autoPicketPlayersI = { ... autoPickedPlayers }
-        const playerI = autoPicketPlayersI[p][i]
+        const pickedPlayersI = { ...pickedPlayers }
+
+        const playerI = pickedPlayersI[p][i]
 
         setRemainingBudget(remainingBudget + playerI.price)
 
         setTotalChosenPlayers(totalChosenPlayers -1)
         setContinueDisabled(true)
-        autoPicketPlayersI[p][i] = false
+        pickedPlayersI[p][i] = false
 
-        setAutoPickedPlayers(autoPicketPlayersI)
+        setPickedPlayers(pickedPlayersI)
     }
 
     useEffect(() => {
@@ -292,7 +310,7 @@ export default function BuildTeamAllPlayer () {
             totalBudget: TOTAL_BUDGET
         })
 
-        setAutoPickedPlayers(chosenPlayersWithinBudget)
+        setPickedPlayers(chosenPlayersWithinBudget)
         setRemainingBudget(remainingBudget)
         setTotalChosenPlayers(totalChosenPlayersI)
         setAutoPickDisabled(true)
@@ -307,7 +325,7 @@ export default function BuildTeamAllPlayer () {
             <div className="mx-auto flex bg-white">
                     <div className="w-[57%]"><
                         BuildTeamLeftSection
-                            autoPickedPlayers={autoPickedPlayers}
+                            pickedPlayers={pickedPlayers}
                             autoPickDisabled={autoPickDisabled}
                             onDeselectPlayer={handlePlayerDeselection}
                         />
@@ -403,46 +421,51 @@ export default function BuildTeamAllPlayer () {
 
                             { areFiltersApplied() && !playersData.length && <NoResultFound/>}
 
-                            {/*<motion.div*/}
-                            {/*    variants={PlayersCardAnimation}*/}
-                            {/*    animate={showAllFilters ? 'slideDown' : 'slideUp'}*/}
-                            {/*>*/}
+                            <motion.div
+                                variants={PlayersCardAnimation}
+                                animate={showAllFilters ? 'slideDown' : 'slideUp'}
+                            >
 
-                            {/*    <motion.div*/}
-                            {/*        variants={PlayersCardAnimation1}*/}
-                            {/*        animate={getPlayersContainerHeight()}*/}
-                            {/*    >*/}
-                            {/*        <div style={{marginBottom: R(16)}}>*/}
-                            {/*            {*/}
-                            {/*                areFiltersApplied() && !playersData.length ? null : (*/}
+                                <motion.div
+                                    variants={PlayersCardAnimation1}
+                                    animate={getPlayersContainerHeight()}
+                                >
+                                    <div style={{marginBottom: R(16)}}>
+                                        {
+                                            areFiltersApplied() && !playersData.length ? null : (
 
-                            {/*                    <SelectInput*/}
-                            {/*                        options={sortingOptions}*/}
-                            {/*                        selectedOption={selectedSortingOption}*/}
-                            {/*                        onOptionChange={(s) => setSelectedSortingOption(s)}*/}
-                            {/*                        parentContainerStyle={{*/}
-                            {/*                            zIndex: 288888,*/}
-                            {/*                        }}*/}
-                            {/*                        hideLabel*/}
-                            {/*                        dropDownOfInlineStyle*/}
-                            {/*                    />*/}
+                                                <SelectInput
+                                                    options={sortingOptions}
+                                                    selectedOption={selectedSortingOption}
+                                                    onOptionChange={(s) => setSelectedSortingOption(s)}
+                                                    parentContainerStyle={{
+                                                        zIndex: 288888,
+                                                    }}
+                                                    hideLabel
+                                                    dropDownOfInlineStyle
+                                                />
 
-                            {/*                )*/}
-                            {/*            }*/}
-                            {/*        </div>*/}
+                                            )
+                                        }
+                                    </div>
 
-                            {/*        <div style={{*/}
-                            {/*            height: '100%',*/}
-                            {/*            paddingBottom: getPlayersContainerHeight() === 'hide' ? 0 : 150,*/}
-                            {/*            overflow: 'scroll'}}*/}
-                            {/*        >*/}
-                            {/*            {*/}
-                            {/*                playersData.map((player, index) => <PlayerCard key={index + 1} index={index} player={player}/>)*/}
-                            {/*            }*/}
-                            {/*        </div>*/}
+                                    <div style={{
+                                        height: '100%',
+                                        paddingBottom: getPlayersContainerHeight() === 'hide' ? 0 : 150,
+                                        overflow: 'scroll'}}
+                                    >
+                                        {
+                                            playersData.map((player, index) => <PlayerCard
+                                                key={index + 1}
+                                                index={index}
+                                                player={player}
+                                                onSelectPlayer={handlePlayerSelection}
+                                            />)
+                                        }
+                                    </div>
 
-                            {/*    </motion.div>*/}
-                            {/*</motion.div>*/}
+                                </motion.div>
+                            </motion.div>
 
                         </div>
                     </div>
@@ -454,7 +477,7 @@ export default function BuildTeamAllPlayer () {
                         continueDisabled={continueDisabled}
                         onAutoPick={onAutoPick}
                         onResetClick={() => {
-                            setAutoPickedPlayers([])
+                            setPickedPlayers(SELECTED_PLAYERS_INITIAL)
                             setTotalChosenPlayers(0)
                             setRemainingBudget(totalBudget)
                             setAutoPickDisabled(false)
