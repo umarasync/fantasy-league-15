@@ -32,8 +32,17 @@ const getStyles = (R) => {
             marginLeft: R(32)
         },
         infoText: {
-            width: R(178),
-            height: R(32)
+            width: R(210),
+            background: 'rgb(252,252,252)',
+            color: colors.regent_grey,
+            fontSize: R(14),
+            paddingLeft: R(14),
+            paddingRight: R(14),
+            paddingTop: R(8),
+            paddingBottom: R(8),
+            borderRadius: R(12),
+            top: R(-68),
+            right: R(10)
         },
         infoImage: {
             width: R(21),
@@ -92,8 +101,14 @@ export default function FooterBar({
                     <Border/>
                     <p className={'text-lavender_grey normal'} style={STYLES.RBText}>Remaining budget</p>
                     <div className={'relative'}>
-                        <p className={'absolute'} style={STYLES.infoText}>You need to exchange some
-                            players for cheaper ones</p>
+                        {
+                            remainingBudget < 0 && (
+                                <p className={'absolute'} style={STYLES.infoText}>You need to exchange some
+                                    players for cheaper ones
+                                </p>
+                            )
+                        }
+
                         <div style={STYLES.infoImage}>
                             <img src="/images/info.png" alt="" width={'100%'} height={'100%'}/>
                         </div>
