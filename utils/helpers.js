@@ -36,3 +36,7 @@ export const shuffle = (a) => {
     }
     return a;
 }
+
+function isEmpty(obj) {
+    return Object.keys(obj).length === 0;
+}

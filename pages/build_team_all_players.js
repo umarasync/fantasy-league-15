@@ -81,7 +81,7 @@ export default function BuildTeamAllPlayer () {
     const TOTAL_BUDGET = 100000000;
 
     // Fields States
-    const [autoPickedPlayers, setAutoPickedPlayers] = useState([])
+    const [autoPickedPlayers, setAutoPickedPlayers] = useState({})
 
     // Footer Bar States
     const [totalChosenPlayers, setTotalChosenPlayers] = useState(0)
@@ -275,6 +275,9 @@ export default function BuildTeamAllPlayer () {
         setTotalChosenPlayers(totalChosenPlayersI)
         setAutoPickDisabled(true)
         setResetDisabled(false)
+        if(totalChosenPlayersI === 15) {
+            setContinueDisabled(false)
+        }
     }
 
     return (
@@ -284,6 +287,7 @@ export default function BuildTeamAllPlayer () {
                         BuildTeamLeftSection
                             autoPickedPlayers={autoPickedPlayers}
                             autoPickDisabled={autoPickDisabled}
+                            setAutoPickedPlayers={(playersObj) => setAutoPickedPlayers(playersObj)}
                         />
                     </div>
 
@@ -377,46 +381,46 @@ export default function BuildTeamAllPlayer () {
 
                             { areFiltersApplied() && !playersData.length && <NoResultFound/>}
 
-                            <motion.div
-                                variants={PlayersCardAnimation}
-                                animate={showAllFilters ? 'slideDown' : 'slideUp'}
-                            >
+                            {/*<motion.div*/}
+                            {/*    variants={PlayersCardAnimation}*/}
+                            {/*    animate={showAllFilters ? 'slideDown' : 'slideUp'}*/}
+                            {/*>*/}
 
-                                <motion.div
-                                    variants={PlayersCardAnimation1}
-                                    animate={getPlayersContainerHeight()}
-                                >
-                                    <div style={{marginBottom: R(16)}}>
-                                        {
-                                            areFiltersApplied() && !playersData.length ? null : (
+                            {/*    <motion.div*/}
+                            {/*        variants={PlayersCardAnimation1}*/}
+                            {/*        animate={getPlayersContainerHeight()}*/}
+                            {/*    >*/}
+                            {/*        <div style={{marginBottom: R(16)}}>*/}
+                            {/*            {*/}
+                            {/*                areFiltersApplied() && !playersData.length ? null : (*/}
 
-                                                <SelectInput
-                                                    options={sortingOptions}
-                                                    selectedOption={selectedSortingOption}
-                                                    onOptionChange={(s) => setSelectedSortingOption(s)}
-                                                    parentContainerStyle={{
-                                                        zIndex: 288888,
-                                                    }}
-                                                    hideLabel
-                                                    dropDownOfInlineStyle
-                                                />
+                            {/*                    <SelectInput*/}
+                            {/*                        options={sortingOptions}*/}
+                            {/*                        selectedOption={selectedSortingOption}*/}
+                            {/*                        onOptionChange={(s) => setSelectedSortingOption(s)}*/}
+                            {/*                        parentContainerStyle={{*/}
+                            {/*                            zIndex: 288888,*/}
+                            {/*                        }}*/}
+                            {/*                        hideLabel*/}
+                            {/*                        dropDownOfInlineStyle*/}
+                            {/*                    />*/}
 
-                                            )
-                                        }
-                                    </div>
+                            {/*                )*/}
+                            {/*            }*/}
+                            {/*        </div>*/}
 
-                                    <div style={{
-                                        height: '100%',
-                                        paddingBottom: getPlayersContainerHeight() === 'hide' ? 0 : 150,
-                                        overflow: 'scroll'}}
-                                    >
-                                        {
-                                            playersData.map((player, index) => <PlayerCard key={index + 1} index={index} player={player}/>)
-                                        }
-                                    </div>
+                            {/*        <div style={{*/}
+                            {/*            height: '100%',*/}
+                            {/*            paddingBottom: getPlayersContainerHeight() === 'hide' ? 0 : 150,*/}
+                            {/*            overflow: 'scroll'}}*/}
+                            {/*        >*/}
+                            {/*            {*/}
+                            {/*                playersData.map((player, index) => <PlayerCard key={index + 1} index={index} player={player}/>)*/}
+                            {/*            }*/}
+                            {/*        </div>*/}
 
-                                </motion.div>
-                            </motion.div>
+                            {/*    </motion.div>*/}
+                            {/*</motion.div>*/}
 
                         </div>
                     </div>
@@ -430,8 +434,10 @@ export default function BuildTeamAllPlayer () {
                         onResetClick={() => {
                             setAutoPickedPlayers([])
                             setTotalChosenPlayers(0)
+                            setRemainingBudget(totalBudget)
                             setAutoPickDisabled(false)
                             setResetDisabled(true)
+                            setContinueDisabled(true)
                         }}
                     />
             </div>

@@ -6,6 +6,7 @@ import {AnimatePresence, motion} from "framer-motion";
 import R from "utils/getResponsiveValue";
 import PlayerImage from "components/player/PlayerImage";
 import {useEffect, useState} from "react";
+import {nFormatter} from "../../utils/helpers";
 
 
 // Animation
@@ -14,13 +15,14 @@ import {useEffect, useState} from "react";
 const getStyles = (R) => {
   return {
       container: {
-          border: '5px solid red'
+          // border: '5px solid red'
       },
       imageContainer:{
           width: R(40),
           height: R(40),
           marginBottom: R(10),
-          position: 'absolute'
+          position: 'absolute',
+          top: 0
       },
       playerImage: {
           width: '100%',
@@ -40,6 +42,7 @@ const getStyles = (R) => {
           paddingBottom: R(5),
           paddingRight: R(10),
           borderRadius: R(50),
+          marginTop: R(3),
           fontSize: R(10)
       },
 
@@ -47,15 +50,19 @@ const getStyles = (R) => {
 }
 
 export default function PlayerOnPitch ({
+    player,
     style,
-    autoPickDisabled
+    autoPickDisabled,
+    boxClasses,
+    placeholderText,
+    onDeselectPlayer
 }) {
 
     const STYLES =  { ... getStyles(R) }
 
     const [initialOpacity, setInitialOpacity] = useState(1)
 
-    const duration = 3
+    const duration = 0.5
 
     const fadeInOutAnimation = {
         initial: {
@@ -75,7 +82,6 @@ export default function PlayerOnPitch ({
         },
     };
 
-
     useEffect(() => {
         if(initialOpacity) {
             setInitialOpacity(0)
@@ -83,13 +89,13 @@ export default function PlayerOnPitch ({
     }, [autoPickDisabled])
 
     return(
-        <div className="flex justify-center flex-col items-center relative" style={{ ...STYLES.container, ...style }}>
+        <div className={`flex relative ${boxClasses}`} style={{ ...STYLES.container, ...style }}>
 
                 {
-                    autoPickDisabled ? (
-                        <div className={'flex justify-center'}>
+                    autoPickDisabled && player ? (
                             <AnimatePresence>
                                 <motion.div
+                                    className={'flex flex-col items-center justify-center'}
                                     style={STYLES.imageContainer}
                                     variants={fadeInOutAnimation}
                                     initial="initial"
@@ -98,20 +104,26 @@ export default function PlayerOnPitch ({
                                     key={1}
                                 >
                                     <PlayerImage
-                                        playerImage={'player1.svg'}
-                                        clubImage={'club_fc.svg'}
+                                        playerImage={player.image}
+                                        clubImage={player.clubImage}
                                         imageStyle={STYLES.playerImage}
                                         clubImageStyle={STYLES.clubImageStyle}
                                         showCloseIcon
+                                        onDeselect={onDeselectPlayer}
                                     />
+                                    <p className={'items-center items-center text-center  justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
+                                       style={STYLES.buttonStyle}
+                                    >
+                                        <span>{player.name}</span><br/>
+                                        <span>{nFormatter(player.price)}</span><br/>
+                                    </p>
                                 </motion.div>
                             </AnimatePresence>
-                        </div>
 
                     ): (
-                        <div className={'flex justify-center'}>
                             <AnimatePresence>
                                 <motion.div
+                                    className={'flex flex-col items-center justify-center'}
                                     style={STYLES.imageContainer}
                                     variants={fadeInOutAnimation}
                                     initial="initial"
@@ -119,61 +131,58 @@ export default function PlayerOnPitch ({
                                     exit="exit"
                                     key={2}
                                 >
-                                    <img src="/images/player_empty.png" alt="" width='100%' height='100%'/>
+                                        <img src="/images/player_empty.png" alt="" width='100%' height='100%'/>
+                                        <p className={'items-center  justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
+                                           style={STYLES.buttonStyle}
+                                        >
+                                            <span>{placeholderText}</span><br/>
+                                        </p>
                                 </motion.div>
                             </AnimatePresence>
-                        </div>
                     )
                 }
 
+            {/*{*/}
+            {/*    autoPickDisabled ? (*/}
+            {/*        <AnimatePresence>*/}
+            {/*            <motion.div*/}
+            {/*                style={STYLES.title}*/}
+            {/*                variants={fadeInOutAnimation}*/}
+            {/*                initial="initial"*/}
+            {/*                animate="animate"*/}
+            {/*                exit="exit"*/}
+            {/*                key={1}*/}
+            {/*            >*/}
 
+            {/*                <p className={'items-center  justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}*/}
+            {/*                   style={STYLES.buttonStyle}*/}
+            {/*                >*/}
+            {/*                    <span>Add goalkeeper</span><br/>*/}
+            {/*                    <span>Add goalkeeper</span><br/>*/}
+            {/*                </p>*/}
+            {/*                */}
 
-            {
-                autoPickDisabled ? (
-                    <AnimatePresence>
-                        <motion.div
-                            style={STYLES.title}
-                            variants={fadeInOutAnimation}
-                            initial="initial"
-                            animate="animate"
-                            exit="exit"
-                            key={1}
-                        >
-
-                            <p className={'items-center  justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
-                               style={STYLES.buttonStyle}
-                            >
-                                <span>Add goalkeeper</span><br/>
-                                <span>Add goalkeeper</span><br/>
-                            </p>
-
-
-                            {/*<PrimaryButtonSmall>*/}
-                            {/*    <p className={'lowercase text-center'} style={STYLES.textStyle}>Add goalkeeper</p>*/}
-                            {/*    <p className={'lowercase'} style={STYLES.textStyle}>Add goalkeeper</p>*/}
-                            {/*</PrimaryButtonSmall>*/}
-
-                        </motion.div>
-                    </AnimatePresence>
-                ) : (
-                    <AnimatePresence>
-                        <motion.div
-                            style={{...STYLES.title, ...style}}
-                            variants={fadeInOutAnimation}
-                            initial="initial"
-                            animate="animate"
-                            exit="exit"
-                            key={2}
-                        >
-                            <p className={'items-center justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
-                               style={STYLES.buttonStyle}
-                            >
-                                <span>Add goalkeeper</span><br/>
-                            </p>
-                        </motion.div>
-                    </AnimatePresence>
-                )
-            }
+            {/*            </motion.div>*/}
+            {/*        </AnimatePresence>*/}
+            {/*    ) : (*/}
+            {/*        <AnimatePresence>*/}
+            {/*            <motion.div*/}
+            {/*                style={{...STYLES.title}}*/}
+            {/*                variants={fadeInOutAnimation}*/}
+            {/*                initial="initial"*/}
+            {/*                animate="animate"*/}
+            {/*                exit="exit"*/}
+            {/*                key={2}*/}
+            {/*            >*/}
+            {/*                <p className={'items-center justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}*/}
+            {/*                   style={STYLES.buttonStyle}*/}
+            {/*                >*/}
+            {/*                    <span>Add goalkeeper</span><br/>*/}
+            {/*                </p>*/}
+            {/*            </motion.div>*/}
+            {/*        </AnimatePresence>*/}
+            {/*    )*/}
+            {/*}*/}
 
         </div>
     )
