@@ -31,6 +31,10 @@ const getStyles = (R) => {
             fontSize: R(18),
             marginLeft: R(32)
         },
+        infoText: {
+            width: R(178),
+            height: R(32)
+        },
         infoImage: {
             width: R(21),
             height: R(21),
@@ -67,7 +71,8 @@ export default function FooterBar({
     onAutoPick,
     autoPickDisabled,
     continueDisabled,
-                                      onResetClick
+                                      onResetClick,
+                                      onContinueClick
   }){
 
     const STYLES =  { ... getStyles(R) }
@@ -86,11 +91,19 @@ export default function FooterBar({
                     </p>
                     <Border/>
                     <p className={'text-lavender_grey normal'} style={STYLES.RBText}>Remaining budget</p>
-                    <div style={STYLES.infoImage}>
-                        <img src="/images/info.png" alt="" width={'100%'} height={'100%'}/>
+                    <div className={'relative'}>
+                        <p className={'absolute'} style={STYLES.infoText}>You need to exchange some
+                            players for cheaper ones</p>
+                        <div style={STYLES.infoImage}>
+                            <img src="/images/info.png" alt="" width={'100%'} height={'100%'}/>
+                        </div>
                     </div>
-                    <p className={'italic text-white uppercase'} style={STYLES.remainingBudget}>
-                       {nFormatter(remainingBudget)}
+                    <p className={`italic uppercase`}
+                       style={{
+                           ...STYLES.remainingBudget,
+                           color: remainingBudget > 0 ? colors.white : colors.bean_red
+                       }}>
+                        {remainingBudget < 0 && '-'} {nFormatter(Math.abs(remainingBudget))}
                     </p>
                 </div>
 
@@ -113,6 +126,7 @@ export default function FooterBar({
                         onClick={onResetClick}
                     />
                     <PrimaryButton
+                        onClick={onContinueClick}
                         title={'continue'}
                         textClasses={'text-white'}
                         disabled={continueDisabled}

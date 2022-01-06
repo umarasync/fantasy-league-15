@@ -6,10 +6,10 @@ import {AnimatePresence, motion} from "framer-motion";
 import R from "utils/getResponsiveValue";
 import PlayerImage from "components/player/PlayerImage";
 import {useEffect, useState} from "react";
-import {nFormatter} from "../../utils/helpers";
+import {nFormatter} from "utils/helpers";
 
-
-// Animation
+// Constants
+import { STATUS_SUSPENDED, STATUS_INJURED } from "constants/data/filters";
 
 // Styles
 const getStyles = (R) => {
@@ -37,15 +37,23 @@ const getStyles = (R) => {
             top: R(45)
       },
       buttonStyle: {
-          paddingLeft: R(10),
+          paddingLeft: R(13),
           paddingTop: R(5),
           paddingBottom: R(5),
-          paddingRight: R(10),
+          paddingRight: R(13),
           borderRadius: R(50),
           marginTop: R(3),
           fontSize: R(10)
       },
-
+      statusImage: {
+          width: R(15),
+          height: R(15),
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          borderRadius: R(20),
+          background: 'white'
+      }
   }
 }
 
@@ -87,6 +95,7 @@ export default function PlayerOnPitch ({
         }
     }, [player])
 
+
     return(
         <div className={`flex relative ${boxClasses}`} style={{ ...STYLES.container, ...style }}>
                 {
@@ -109,9 +118,18 @@ export default function PlayerOnPitch ({
                                         showCloseIcon
                                         onDeselect={onDeselectPlayer}
                                     />
-                                    <p className={'items-center items-center text-center  justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
+                                    <p className={'items-center relative items-center text-center  justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
                                        style={STYLES.buttonStyle}
                                     >
+                                        {
+                                            player.status === STATUS_INJURED || player.status === STATUS_SUSPENDED && (
+                                                <div className={'flex items-center justify-center'} style={STYLES.statusImage}>
+                                                    <img src={`/images/${player.statusImage}`} alt="" width={10} height={10}/>
+                                                </div>
+                                            )
+
+                                        }
+
                                         <span>{player.name}</span><br/>
                                         <span>{nFormatter(player.price)}</span><br/>
                                     </p>

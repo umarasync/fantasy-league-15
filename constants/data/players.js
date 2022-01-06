@@ -63,6 +63,7 @@ export const PLAYERS_INITIAL = [
         clubImage: 'club_az.svg',
         clubName: CLUB_AZ,
         status: STATUS_SUSPENDED,
+        statusImage: 'suspended.svg',
         name: 'H. Veerman',
         nextMatch: {
             club: 'AZ',
@@ -129,6 +130,7 @@ export const PLAYERS_INITIAL = [
         clubImage: 'club_zwo.svg',
         clubName: CLUB_ZWO,
         status: STATUS_INJURED,
+        statusImage: 'injured.svg',
         name: 'T. Tekie',
         nextMatch: {
             club: 'ZWO',
@@ -173,6 +175,7 @@ export const PLAYERS_INITIAL = [
         clubImage: 'club_fr.svg',
         clubName: CLUB_FR,
         status: STATUS_INJURED,
+        statusImage: 'injured.svg',
         name: 'B. Nygren',
         nextMatch: {
             club: 'BAY',

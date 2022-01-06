@@ -46,7 +46,7 @@ import {
     TOTAL_POINTS,
     PRICE_FROM_HIGH_TO_LOW,
     PRICE_FROM_LOW_TO_HIGH,
-    MOST_TRANSFERRED
+    MOST_TRANSFERRED, POSITION_GK, POSITION_FWD, POSITION_MID, POSITION_DEF
 } from "constants/data/filters";
 
 import {
@@ -56,6 +56,7 @@ import {
 
 import  { PLAYERS } from "constants/data/players"
 import NoResultFound from "../components/misc/NoResultFound";
+import {useRouter} from "next/router";
 
 // Styles
 const getStyles = (R) => {
@@ -70,6 +71,7 @@ const getStyles = (R) => {
 export default function BuildTeamAllPlayer () {
 
     const STYLES =  { ... getStyles(R) }
+    const router= useRouter()
 
     // Initial States
     const CLUBS_INITIAL = clone(CLUBS)
@@ -81,6 +83,7 @@ export default function BuildTeamAllPlayer () {
     const ALL_PLAYERS_INDEXES_INITIAL = clone(ALL_PLAYERS_INDEXES)
     const SELECTED_PLAYERS_INITIAL = clone(SELECTED_PLAYERS)
     const TOTAL_BUDGET = 100000000;
+    // const TOTAL_BUDGET = 1000000;
 
     // Fields States
     const [pickedPlayers, setPickedPlayers] = useState(SELECTED_PLAYERS_INITIAL)
@@ -261,32 +264,52 @@ export default function BuildTeamAllPlayer () {
         }
     }
 
-    const handlePlayerSelection = (player) => {
-        const playerPositionI = player.position
+    const handlePlayerSelection = (playerI) => {
+
+        if(totalChosenPlayers === 15) return
+
+        const playerPositionI = playerI.position
 
         const pickedPlayersI = { ...pickedPlayers }
+        const pickedPlayersArray = pickedPlayersI[playerPositionI]
 
-        if(pickedPlayersI[playerPositionI].length === 0) {
-            pickedPlayersI[playerPositionI].push(player)
+        if(
+            (playerPositionI === POSITION_GK && pickedPlayersI[POSITION_GK].length < 2) ||
+            (playerPositionI === POSITION_FWD && pickedPlayersI[POSITION_FWD].length < 3) ||
+            (playerPositionI === POSITION_MID && pickedPlayersI[POSITION_MID].length < 5) ||
+            (playerPositionI === POSITION_DEF && pickedPlayersI[POSITION_DEF].length < 5)
+        ) {
+
+            if(pickedPlayersArray.length === 0 || (pickedPlayersArray.length > 0 && !pickedPlayersArray.some(p => p.id === playerI.id))) {
+                setRemainingBudget(remainingBudget - playerI.price)
+                setTotalChosenPlayers(totalChosenPlayers + 1)
+                pickedPlayersArray.push(playerI)
+            }
+
+        } else if (!pickedPlayersArray.some(p => p.id === playerI.id)) {
+
+            const indexOfEmptyPosition = pickedPlayersArray.findIndex(x => x === false)
+
+            if(indexOfEmptyPosition === -1) return
+
+            pickedPlayersArray[indexOfEmptyPosition] = playerI
+
+            setRemainingBudget(remainingBudget - playerI.price)
+            setTotalChosenPlayers(totalChosenPlayers + 1)
+
         }
-        // const indexOfEmptyPosition = pickedPlayersI[pickedPlayersI].findIndex(x => x === false)
 
         setPickedPlayers({...pickedPlayersI})
-        console.log('3--------', {pickedPlayersI})
-
     }
 
-    const handlePlayerDeselection = (p, i) => {
+    const handlePlayerDeselection = (position, i) => {
 
         const pickedPlayersI = { ...pickedPlayers }
-
-        const playerI = pickedPlayersI[p][i]
-
+        const playerI = pickedPlayersI[position][i]
         setRemainingBudget(remainingBudget + playerI.price)
-
         setTotalChosenPlayers(totalChosenPlayers -1)
         setContinueDisabled(true)
-        pickedPlayersI[p][i] = false
+        pickedPlayersI[position][i] = false
 
         setPickedPlayers(pickedPlayersI)
     }
@@ -296,6 +319,10 @@ export default function BuildTeamAllPlayer () {
             setAutoPickDisabled(false)
             setResetDisabled(true)
             setContinueDisabled(true)
+        }else if(totalChosenPlayers === 15 && remainingBudget > 0){
+            setAutoPickDisabled(true)
+            setResetDisabled(false)
+            setContinueDisabled(false)
         }
     }, [totalChosenPlayers])
 
@@ -313,11 +340,10 @@ export default function BuildTeamAllPlayer () {
         setPickedPlayers(chosenPlayersWithinBudget)
         setRemainingBudget(remainingBudget)
         setTotalChosenPlayers(totalChosenPlayersI)
+
         setAutoPickDisabled(true)
         setResetDisabled(false)
-        if(totalChosenPlayersI === 15) {
-            setContinueDisabled(false)
-        }
+
     }
 
     return (
@@ -476,6 +502,7 @@ export default function BuildTeamAllPlayer () {
                         autoPickDisabled={autoPickDisabled}
                         continueDisabled={continueDisabled}
                         onAutoPick={onAutoPick}
+                        onContinueClick={() => router.push('/create_team_name')}
                         onResetClick={() => {
                             setPickedPlayers(SELECTED_PLAYERS_INITIAL)
                             setTotalChosenPlayers(0)
