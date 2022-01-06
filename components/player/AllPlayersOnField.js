@@ -74,12 +74,11 @@ const getStyles = (R, autoPickDisabled) => {
 export default function AllPlayersOnField ({
    autoPickedPlayers,
    autoPickDisabled,
-   setAutoPickedPlayers
+   onDeselectPlayer
 }){
 
 
     const STYLES =  { ... getStyles(R, autoPickDisabled) }
-    const autoPicketPlayersInitial = { ... autoPickedPlayers }
 
     const ZERO = 0
     const ONE = 1
@@ -90,22 +89,21 @@ export default function AllPlayersOnField ({
     return(
         <div style={{paddingTop: R(27)}}>
             {/*1*/}
-            <div className={'flex justify-center'} >
+            <div className={'flex justify-center'}>
+
                 <PlayerOnPitch
                     player={autoPickDisabled && autoPickedPlayers[POSITION_GK][ZERO]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add goalkeeper'}
                     style={STYLES.player1}
-                    onDeselectPlayer={() => {
-                        autoPicketPlayersInitial[POSITION_GK][0] = false
-                        setAutoPickedPlayers(autoPicketPlayersInitial)
-                    }}
+                    onDeselectPlayer={() => {onDeselectPlayer(POSITION_GK, ZERO)}}
                 />
                 <PlayerOnPitch
                     player={autoPickDisabled && autoPickedPlayers[POSITION_GK][ONE]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add goalkeeper'}
                     style={STYLES.player2}
+                    onDeselectPlayer={() => {onDeselectPlayer(POSITION_GK, ONE)}}
                 />
             </div>
 
@@ -116,18 +114,23 @@ export default function AllPlayersOnField ({
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add defender'}
                     style={STYLES.player3}
+                    onDeselectPlayer={() => {onDeselectPlayer(POSITION_DEF, ZERO)}}
                 />
                 <PlayerOnPitch
                     player={autoPickDisabled && autoPickedPlayers[POSITION_DEF][ONE]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add defender'}
                     style={STYLES.player4}
+                    onDeselectPlayer={() => {onDeselectPlayer(POSITION_DEF, ONE)}}
+
                 />
                 <PlayerOnPitch
                     player={autoPickDisabled && autoPickedPlayers[POSITION_DEF][TWO]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add defender'}
                     style={STYLES.player5}
+                    onDeselectPlayer={() => {onDeselectPlayer(POSITION_DEF, TWO)}}
+
                 />
             </div>
             {/*3*/}
@@ -137,12 +140,14 @@ export default function AllPlayersOnField ({
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add defender'}
                     style={STYLES.player6}
+                    onDeselectPlayer={() => {onDeselectPlayer(POSITION_DEF, THREE)}}
                 />
                 <PlayerOnPitch
                     player={autoPickDisabled && autoPickedPlayers[POSITION_DEF][FOUR]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add defender'}
                     style={STYLES.player7}
+                    onDeselectPlayer={() => {onDeselectPlayer(POSITION_DEF, FOUR)}}
                 />
             </div>
             {/*4*/}
@@ -152,18 +157,21 @@ export default function AllPlayersOnField ({
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add midfielder'}
                     style={STYLES.player3}
+                    onDeselectPlayer={() => {onDeselectPlayer(POSITION_MID, ZERO)}}
                 />
                 <PlayerOnPitch
                     player={autoPickDisabled && autoPickedPlayers[POSITION_MID][ONE]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add midfielder'}
                     style={STYLES.player4}
+                    onDeselectPlayer={() => {onDeselectPlayer(POSITION_MID, ONE)}}
                 />
                 <PlayerOnPitch
                     player={autoPickDisabled && autoPickedPlayers[POSITION_MID][TWO]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add midfielder'}
                     style={STYLES.player5}
+                    onDeselectPlayer={() => {onDeselectPlayer(POSITION_MID, TWO)}}
                 />
             </div>
             {/*5*/}
@@ -173,12 +181,14 @@ export default function AllPlayersOnField ({
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add midfielder'}
                     style={STYLES.player6}
+                    onDeselectPlayer={() => {onDeselectPlayer(POSITION_MID, THREE)}}
                 />
                 <PlayerOnPitch
                     player={autoPickDisabled && autoPickedPlayers[POSITION_MID][FOUR]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add midfielder'}
                     style={STYLES.player7}
+                    onDeselectPlayer={() => {onDeselectPlayer(POSITION_MID, FOUR)}}
                 />
             </div>
             {/*6*/}
@@ -188,18 +198,21 @@ export default function AllPlayersOnField ({
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add forward'}
                     style={STYLES.player13}
+                    onDeselectPlayer={() => {onDeselectPlayer(POSITION_FWD, ZERO)}}
                 />
                 <PlayerOnPitch
                     player={autoPickDisabled && autoPickedPlayers[POSITION_FWD][ONE]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add forward'}
                     style={STYLES.player14}
+                    onDeselectPlayer={() => {onDeselectPlayer(POSITION_FWD, ONE)}}
                 />
                 <PlayerOnPitch
                     player={autoPickDisabled && autoPickedPlayers[POSITION_FWD][TWO]}
                     autoPickDisabled={autoPickDisabled}
                     placeholderText={'Add forward'}
                     style={STYLES.player15}
+                    onDeselectPlayer={() => {onDeselectPlayer(POSITION_FWD, TWO)}}
                 />
             </div>
         </div>

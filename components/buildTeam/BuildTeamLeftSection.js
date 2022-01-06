@@ -37,7 +37,7 @@ const getStyles = (R) => {
 export default function BuildTeamLeftSection({
      autoPickedPlayers,
      autoPickDisabled,
-                                                 setAutoPickedPlayers
+                                                 onDeselectPlayer
 
 }) {
 
@@ -63,7 +63,7 @@ export default function BuildTeamLeftSection({
                         <AllPlayersOnField
                             autoPickedPlayers={autoPickedPlayers}
                             autoPickDisabled={autoPickDisabled}
-                            setAutoPickedPlayers={setAutoPickedPlayers}
+                            onDeselectPlayer={onDeselectPlayer}
                         />
                     </div>
                 </div>

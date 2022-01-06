@@ -259,6 +259,28 @@ export default function BuildTeamAllPlayer () {
         }
     }
 
+    const handlePlayerDeselection = (p, i) => {
+
+        const autoPicketPlayersI = { ... autoPickedPlayers }
+        const playerI = autoPicketPlayersI[p][i]
+
+        setRemainingBudget(remainingBudget + playerI.price)
+
+        setTotalChosenPlayers(totalChosenPlayers -1)
+        setContinueDisabled(true)
+        autoPicketPlayersI[p][i] = false
+
+        setAutoPickedPlayers(autoPicketPlayersI)
+    }
+
+    useEffect(() => {
+        if(totalChosenPlayers === 0) {
+            setAutoPickDisabled(false)
+            setResetDisabled(true)
+            setContinueDisabled(true)
+        }
+    }, [totalChosenPlayers])
+
     const onAutoPick = () => {
         const {
             chosenPlayersWithinBudget,
@@ -287,7 +309,7 @@ export default function BuildTeamAllPlayer () {
                         BuildTeamLeftSection
                             autoPickedPlayers={autoPickedPlayers}
                             autoPickDisabled={autoPickDisabled}
-                            setAutoPickedPlayers={(playersObj) => setAutoPickedPlayers(playersObj)}
+                            onDeselectPlayer={handlePlayerDeselection}
                         />
                     </div>
 
