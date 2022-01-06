@@ -13,7 +13,8 @@ const colors = {
     "backdrop": 'rgba(0, 0, 0, 0.6)',
     "rhino": '#343162',
     "rhino_shine": '#3F3D6B',
-    "brink_pink": '#EE6384'
+    "brink_pink": '#EE6384',
+    "white": '#FFFFFF'
 }
 
 module.exports = colors

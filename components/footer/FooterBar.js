@@ -1,12 +1,13 @@
 // Components
 import PrimaryButton from "components/buttons/PrimaryButton";
-import Border from "components/misc/Border";
+import Border from "components/Borders/Border";
 
 // Utils
 import R from "utils/getResponsiveValue";
 
 // Colors
 import colors from "constants/colors";
+import {nFormatter} from "utils/helpers";
 
 // Styles
 const getStyles = (R) => {
@@ -29,6 +30,19 @@ const getStyles = (R) => {
         RBText: {
             fontSize: R(18),
             marginLeft: R(32)
+        },
+        infoText: {
+            width: R(210),
+            background: 'rgb(252,252,252)',
+            color: colors.regent_grey,
+            fontSize: R(14),
+            paddingLeft: R(14),
+            paddingRight: R(14),
+            paddingTop: R(8),
+            paddingBottom: R(8),
+            borderRadius: R(12),
+            top: R(-68),
+            right: R(10)
         },
         infoImage: {
             width: R(21),
@@ -60,11 +74,14 @@ const getStyles = (R) => {
     }
 }
 export default function FooterBar({
-    totalSelectedPlayers,
+    totalChosenPlayers,
     remainingBudget,
     resetDisabled,
+    onAutoPick,
     autoPickDisabled,
-    continueDisabled
+    continueDisabled,
+                                      onResetClick,
+                                      onContinueClick
   }){
 
     const STYLES =  { ... getStyles(R) }
@@ -79,15 +96,29 @@ export default function FooterBar({
                 <div className={'flex items-center'}>
                     <p className={'text-lavender_grey normal'} style={STYLES.playersText}>Players</p>
                     <p className={'italic text-white font-[800]'} style={STYLES.totalPlayers}>
-                        {totalSelectedPlayers} / 15
+                        {totalChosenPlayers} / 15
                     </p>
                     <Border/>
                     <p className={'text-lavender_grey normal'} style={STYLES.RBText}>Remaining budget</p>
-                    <div style={STYLES.infoImage}>
-                        <img src="/images/info.png" alt="" width={'100%'} height={'100%'}/>
+                    <div className={'relative'}>
+                        {
+                            remainingBudget < 0 && (
+                                <p className={'absolute'} style={STYLES.infoText}>You need to exchange some
+                                    players for cheaper ones
+                                </p>
+                            )
+                        }
+
+                        <div style={STYLES.infoImage}>
+                            <img src="/images/info.png" alt="" width={'100%'} height={'100%'}/>
+                        </div>
                     </div>
-                    <p className={'italic text-white'} style={STYLES.remainingBudget}>
-                        €{remainingBudget}
+                    <p className={`italic uppercase`}
+                       style={{
+                           ...STYLES.remainingBudget,
+                           color: remainingBudget > 0 ? colors.white : colors.bean_red
+                       }}>
+                        {remainingBudget < 0 && '-'} {nFormatter(Math.abs(remainingBudget))}
                     </p>
                 </div>
 
@@ -99,6 +130,7 @@ export default function FooterBar({
                         disabled={autoPickDisabled}
                         buttonStyle={{ marginRight: R(16)}}
                         style={STYLES.autoPickBtn}
+                        onClick={onAutoPick}
                     />
                     <PrimaryButton
                         title={'reset'}
@@ -106,8 +138,10 @@ export default function FooterBar({
                         disabled={resetDisabled}
                         buttonStyle={{marginRight: R(40)}}
                         style={STYLES.resetBtn}
+                        onClick={onResetClick}
                     />
                     <PrimaryButton
+                        onClick={onContinueClick}
                         title={'continue'}
                         textClasses={'text-white'}
                         disabled={continueDisabled}

@@ -1,12 +1,13 @@
 // Components
 import PlayerImage from "components/player/PlayerImage";
-import Border from "components/misc/Border";
+import Border from "components/Borders/Border";
 
 // utils
 import R from "utils/getResponsiveValue";
 
 // Constants
 import colors from "constants/colors";
+import {useState} from "react";
 
 // Styles
 const getStyles = (R) => {
@@ -32,13 +33,11 @@ const getStyles = (R) => {
         },
         playerName:{
             fontSize: R(18),
-            color: colors.black_rock
         },
         price:{
             fontSize: R(18),
-            color: colors.black_rock,
             textAlign: 'right',
-            fontWeight: '600'
+            fontWeight: '600',
         },
         type: {
             paddingTop: R(3),
@@ -47,7 +46,6 @@ const getStyles = (R) => {
         totalPoints: {
             marginLeft: R(16),
             marginRight: R(34),
-            color: colors.brink_pink,
             fontSize: R(22),
             fontWeight: '600'
         }
@@ -56,20 +54,28 @@ const getStyles = (R) => {
 
 export default function PlayerCard ({
     player,
-    playerType = 'MID'
+    onSelectPlayer
 }){
     const STYLES =  { ... getStyles(R) }
 
+    const [hover, setHover] = useState(false);
+
+
     return (
-        <div className={'flex items-center justify-between'} style={STYLES.container}>
+        <div
+            className={'card-box flex text-black_rock hover:text-white items-center justify-between cursor-pointer'} style={STYLES.container}
+            onMouseEnter={()=>{setHover(true);}}
+            onMouseLeave={()=>{setHover(false)}}
+            onClick={() => onSelectPlayer(player)}
+        >
             {/*left side*/}
             <div className={'flex items-center'}>
-                <div style={STYLES.infoImage}><img src="/images/info.png" alt=""/></div>
+                <div style={STYLES.infoImage}><img src={`/images/${hover ? 'info_light.svg' : 'info_grey.svg'}`} alt=""/></div>
                 <Border/>
                 <PlayerImage playerImage={player.image} clubImage={player.clubImage} imageStyle={STYLES.playerImage} />
                 <div>
                     <p className={'font-[600]'} style={STYLES.playerName}>
-                        R. Nelson
+                        {player.name}
                         <p style={{paddingTop: R(3)}}>
                             <span>{player.nextMatch.club}</span>
                             <span className={'font-[200]'}>{` vs ${player.nextMatch.vs}`}</span>
@@ -81,12 +87,15 @@ export default function PlayerCard ({
             <div className={'flex items-center'}>
                 <div style={{marginRight: R(16)}}>
                     <p style={STYLES.price}>
-                        {`€${player.price}m`}
+                        {player.formattedPrice}
                         <p style={STYLES.type}><span>{player.position}</span></p>
                     </p>
                 </div>
                 <Border/>
-                <p style={STYLES.totalPoints}>{player.points}</p>
+                <p style={{
+                    ...STYLES.totalPoints,
+                    color: hover? colors.white : colors.brink_pink
+                }}>{player.points}</p>
             </div>
         </div>
     )

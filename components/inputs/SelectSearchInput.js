@@ -1,12 +1,20 @@
 // Packages
-import {useState} from "react";
+import {useEffect, useState} from "react";
+
+// Components
+import CheckBox from "components/checkbox/CheckBox";
+import Input from "components/inputs/input";
+import { AnimatePresence,motion} from "framer-motion";
 
 // Utils
 import R from "utils/getResponsiveValue";
+import {searchInArray} from "utils/helpers";
 
 // Constants
 import colors from 'constants/colors'
-import CheckBox from "components/checkbox/CheckBox";
+
+// Animations
+import Animation from 'Animations/DropDownAnimation'
 
 // Styles
 const getStyles = (R) => {
@@ -17,136 +25,235 @@ const getStyles = (R) => {
             marginBottom: R(7),
             borderRadius: R(12),
             paddingLeft: R(24),
-            paddingRight: R(32)
+            paddingRight: R(13)
         },
         tagsContainer: {
             fontSize: R(18),
             color: colors.regent_grey,
             marginRight: R(10)
         },
-        tag: {
-            marginRight: R(5)
+        tagImages: {
+            marginRight: R(5),
+            width: R(28),
+            height: R(28)
+        },
+        optionImage: {
+            width: R(36),
+            height: R(36)
+        },
+        arrowImage: {
+            width: R(30),
+            height: '100%'
         },
         input: {
             width: '100%',
             height: R(40),
             border: 'none',
-            caretColor: colors.brick_red
+            paddingLeft: R(3),
+            paddingRight: R(10),
+            caretColor: colors.brick_red,
+            marginBottom: 0,
+            padding: 0
+        },
+        tagsInnerContainer: {
+            maxWidth: '80%',
         },
         dropDownBox: {
+          maxHeight: R(213),
+          minHeight: R(70),
+          overflowY: 'scroll'
+        },
+        dropDownOptionBox: {
             padding: R(20)
         },
-        option: {
-            fontSize: R(18)
+        optionText: {
+            fontSize: R(18),
+            marginLeft: R(12)
         }
     }
 }
 export default function SelectSearchInput ({
-    placeholder,
-    options,
-    setValue,
-    classes,
-    initialValue,
-    style,
-    textStyle,
-                                               selectedClubsNames,
-    parentContainerStyle
-}) {
+       options,
+       onOptionClicked,
+       selectedOptions,
+       firstOptionName,
+       classes,
+       label,
+       style,
+       textStyle,
+
+       parentContainerStyle,
+       dropDownBoxStyle,
+       arrowImageStyle,
+       hideSearchBox,
+       optionImageStyle,
+       tagImagesStyle,
+    offClickOnParent
+   }) {
+
+    const OPTIONS = JSON.parse(JSON.stringify(options))
 
     const STYLES =  { ... getStyles(R) }
 
     const [opened, setOpened] = useState(false)
-    const [defaultValue, setDefaultValue] = useState(initialValue)
 
-    const [tags, setTags] = useState(selectedClubsNames)
+    const [ allOptions, setAllOptions ] = useState([...options])
 
+    const handleOnChange = (value) => {
+        const matchedOptions = searchInArray(value, OPTIONS,"label")
+        if(matchedOptions.length === 0) {
+            setAllOptions([...OPTIONS])
+        }else {
+            setAllOptions([...matchedOptions])
+        }
+    }
 
     const handleClick = () => {
         setOpened(!opened)
     }
-    const setOptionValue = (option) => {
-        // setOpened(false)
-        setDefaultValue(option.name)
-        setValue(option)
-    }
 
-
-    const removeTag = (i) => {
-        const newTags = [ ...tags ];
-        newTags.splice(i, 1);
-        setTags(newTags)
+    const setOptionValue = (item) => {
+        onOptionClicked(item)
     }
 
     const handleKeyDown = (e) => {
-        const val = e.target.value;
-        if (e.key === 'Enter' && val) {
-            if (tags.find(tag => tag.toLowerCase() === val.toLowerCase())) {
-                return;
-            }
-            const newTags = [ ...tags, val ];
-            setTags(newTags)
-
-            // this.setState({ tags: [...this.state.tags, val]});
-
-            // this.tagInput.value = null;
-
-        } else if (e.key === 'Backspace' && !val) {
-            removeTag(tags.length - 1);
+        if(e.key === 'Backspace' && !e.target.value) {
+            if(selectedOptions.length === 0) return
+            let item = selectedOptions[selectedOptions.length - 1]
+            item.fromBackSpace = true
+            onOptionClicked(item)
         }
     }
 
+    useEffect(() => {
+        setAllOptions(options)
+    }, [options])
 
+    const ClubItems = ({
+       selectedOptions
+   }) => {
+
+        if(selectedOptions.length === 0) return null
+
+        if(selectedOptions[0].value === firstOptionName) {
+            return <span className={'whitespace-nowrap'} >{firstOptionName}</span>
+        }
+
+        return selectedOptions.map(option =>  <div
+            className={'flex items-center'}
+            key={option.label}
+            style={{...STYLES.tagImages, ...tagImagesStyle}}
+        >
+            <img src={`/images/${option.image}`} alt="" width={'100%'} height={'100%'}/>
+        </div>)
+    }
+
+    const Label = () => {
+
+        if(opened) {
+            return <p className="input-focused text-regent_grey">{label}</p>
+        }
+
+        return null
+    }
 
     return <div className="relative w-full" style={{...parentContainerStyle}}>
-        { opened && <p className="input-focused text-black_rock">{placeholder}</p> }
-        { defaultValue !== initialValue  && !opened && <p className="input-focused text-regent_grey">{placeholder}</p> }
-
+            <Label/>
         <div
             className={
                 `cursor-pointer flex items-center justify-between border-solid border-[0.15rem] 
               border-[#DCE3EC] ${classes}`
             }
             style={{...STYLES.container, ...style}}
-            onClick={handleClick}
         >
-            <dv className={'flex w-full items-center'} style={{...STYLES.tagsContainer, ...textStyle}}>
-                {tags.map((tag, index) => <span key={index} className={'whitespace-nowrap'} style={STYLES.tag}>{tag}</span>)}
-                <input
-                    className={'disable-input-outline'}
-                    type="text" style={STYLES.input}
-                    onKeyDown={handleKeyDown}
-                />
+            <dv className={'w-full flex items-center'} onClick={ offClickOnParent ? () => false : handleClick} style={{...STYLES.tagsContainer, ...textStyle}}>
+                <div className={'flex items-center justify-center'} style={STYLES.tagsInnerContainer}>
+                    <ClubItems selectedOptions={selectedOptions}/>
+                </div>
+                {
+                    !hideSearchBox && (
+                        <div className={'w-full'}>
+                            <Input
+                                classes={'disable-input-outline'}
+                                onChange={handleOnChange}
+                                type="text"
+                                onFocus={(v) => setOpened(v)}
+                                style={STYLES.input}
+                                onKeyDown={handleKeyDown}
+                            />
+                        </div>
+                    )
+                }
+
             </dv>
-            <img src={opened ? '/images/arrow-up.png' : '/images/arrow-down.png'} alt=""/>
+            <div onClick={handleClick}
+                 className={'flex items-center'}
+                 style={{...STYLES.arrowImage, ...arrowImageStyle}}
+            >
+                <img src={opened ? '/images/arrow-up.svg' : '/images/arrow-down.svg'} width={R(15)} height={R(15)} alt=""/>
+            </div>
         </div>
 
         {
-            opened && (
-                <div className="absolute z-10 border-[1px] rounded-[1.2rem] shadow-[4px 4px 40px rgba(0, 0, 0, 0.03)] bg-white w-full">
-                    {
-                        options.map((option, index) => {
-                            return (
-                                <div
-                                    key={index}
-                                    className={'cursor-pointer flex items-center justify-between'}
-                                    style={STYLES.dropDownBox}
-                                    onClick={() => setOptionValue(option)}
-                                >
-                                    <p
-                                        className="font-[600] text-black_rock rounded-t-[1.2rem]"
-                                        style={STYLES.option}
-                                    >
-                                        {option.clubName}
-                                    </p>
-                                    {options.length - 1 !== index && <hr className="border-[1.5px] border-solid border-[link_water]"/> }
-                                    <CheckBox checked={option.checked}/>
-                                </div>
-                            )
+            opened ? (
 
-                        })
-                    }
-                </div>
-            )
+                <AnimatePresence>
+                    <motion.div
+                        className="absolute z-10 border-[1px] rounded-[1.2rem] shadow-[4px 4px 40px rgba(0, 0, 0, 0.03)] bg-white w-full"
+                        style={{
+                            ...STYLES.dropDownBox,
+                            ...dropDownBoxStyle
+                        }}
+                        variants={Animation}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                    >
+                        {
+                            allOptions.map((option, index) => {
+                                return (
+                                    <div
+                                        key={option.label}
+                                        className={'cursor-pointer flex items-center justify-between'}
+                                        style={{
+                                            ...STYLES.dropDownOptionBox,
+                                            borderBottom: '1px solid',
+                                            borderColor: options.length - 1 !== index ? colors.link_water : 'transparent'
+                                        }}
+                                        onClick={() => setOptionValue(option)}
+                                    >
+                                        <div className={'flex items-center'}>
+                                            {
+                                                option.label !== firstOptionName ? (
+                                                    <div
+                                                        className={'flex items-center'}
+                                                        key={option.label}
+                                                        style={{...STYLES.optionImage, ...optionImageStyle}}
+                                                    >
+                                                        <img src={`/images/${option.image}`} alt="" width={'100%'} height={'100%'}/>
+                                                    </div>
+                                                ) : null
+                                            }
+
+                                            <p className="font-[600] text-black_rock rounded-t-[1.2rem]"
+                                               style={{
+                                                   ...STYLES.optionText,
+                                                   marginLeft: option.label !== firstOptionName ? 12 : 5
+                                               }}
+                                            >
+                                                {option.label}
+                                            </p>
+                                        </div>
+
+                                        <CheckBox checked={option.checked}/>
+                                    </div>
+                                )
+
+                            })
+                        }
+                    </motion.div>
+                </AnimatePresence>
+            ) : <AnimatePresence/>
         }
     </div>
 }

@@ -6,7 +6,7 @@ import R from "utils/getResponsiveValue";
 
 // Constants
 import colors from "constants/colors";
-import { PLAYERS_POSITIONS } from "constants/data/team"
+import { PLAYERS_POSITIONS } from "constants/data/filters"
 
 // Styles
 const getStyles = (R) => {
@@ -39,13 +39,13 @@ export default function FilterButtons({
                 PLAYERS_POSITIONS.map((position) => {
                     return (
                         <PrimaryButtonSmall
-                            title={position.title}
-                            style={{
+                            title={position.label}
+                            containerStyle={{
                                 ...STYLES.position,
-                                ...getBgColor(position.title)
+                                ...getBgColor(position.label)
                             }}
-                            onClick={() => onClick(position.title)}
-                            key={position.title}
+                            onClick={() => onClick(position.value)}
+                            key={position.value}
                         />
                     )
                 })

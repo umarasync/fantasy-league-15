@@ -1,5 +1,6 @@
 // Packages
 import {useState} from "react";
+import {AnimatePresence, motion} from "framer-motion";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -7,77 +8,173 @@ import R from "utils/getResponsiveValue";
 // Constants
 import colors from 'constants/colors'
 
+// Animation
+import Animation from 'Animations/DropDownAnimation'
+
 // Styles
 const getStyles = (R) => {
     return {
+        parentContainerStyle:{
+          zIndex: 1
+        },
         container: {
             height: R(70),
             fontSize: R(18),
             marginBottom: R(7),
             borderRadius: R(12),
             paddingLeft: R(24),
-            paddingRight: R(32)
+            paddingRight: R(10)
+        },
+        filterText: {
+            fontSize: R(20),
+            color: colors.regent_grey,
+            marginRight: R(4)
+        },
+        arrowImage: {
+            width: R(30),
+            height: '100%'
         },
         text: {
             fontSize: R(18),
             color: colors.regent_grey
-        }
+        },
+        dropDownOptionBox: {
+            padding: R(20),
+        },
+        optionText: {
+            fontSize: R(18),
+        },
     }
 }
+
 export default function Input ({
-       placeholder,
-       options,
-       setValue,
-       classes,
-       initialValue,
-       style,
-       textStyle,
-       parentContainerStyle
+   options,
+   placeholder,
+   selectedOption,
+   onOptionChange,
+   classes,
+   style,
+   textStyle,
+   parentContainerStyle,
+   dropDownOfInlineStyle,
+    // For label on border
+   hideLabel,
+   openedBorderColor = 'black',
+   skipFirstOption,
+   textHoverColor = `text-mandy`
 }) {
 
     const STYLES =  { ... getStyles(R) }
-
     const [opened, setOpened] = useState(false)
-    const [defaultValue, setDefaultValue] = useState(initialValue)
+
     const handleClick = () => {
         setOpened(!opened)
     }
+
     const setOptionValue = (option) => {
         setOpened(false)
-        setDefaultValue(option.name)
-        setValue(option)
+        onOptionChange(option)
     }
 
-    return <div className="relative w-full" style={{...parentContainerStyle}}>
-        { opened && <p className="input-focused text-black_rock">{placeholder}</p> }
-        { defaultValue !== initialValue  && !opened && <p className="input-focused text-regent_grey">{placeholder}</p> }
+    const Label = () => {
+        if(opened) {
+            return <p className="input-focused text-black_rock">{placeholder}</p>
+        }
+        if(!opened && selectedOption.label !== options[0].label) {
+            return <p className="input-focused text-regent_grey">{placeholder}</p>
+        }
+        return null
+    }
 
-        <div
-            className={
-                `cursor-pointer flex items-center justify-between border-solid border-[0.15rem] 
-                ${opened ? 'border-[#000000]': 'border-[#DCE3EC] ' } ${classes}`
-            }
-            style={{...STYLES.container, ...style}}
-            onClick={handleClick}
-        >
-            <p style={{...STYLES.text, ...textStyle}}>{defaultValue}</p>
-            <img src={opened ? '/images/arrow-up.png' : '/images/arrow-down.png'} alt=""/>
-        </div>
+    return <div className={`relative w-full`} style={{...STYLES.parentContainerStyle, ...parentContainerStyle}}>
+        { !hideLabel && <Label/> }
 
         {
-            opened && (
-                <div className="absolute z-10 border-[1px] rounded-[1.2rem] shadow-[4px 4px 40px rgba(0, 0, 0, 0.03)] bg-white w-full">
-                    {
-                        options.map((option, index) => {
-                            return <div key={index}>
-                                 <p className="cursor-pointer text-[1.8rem] font-[600] text-black_rock p-[2rem] hover:bg-mandy hover:text-white rounded-t-[1.2rem]" onClick={() => setOptionValue(option)}>{option.name}</p>
-                                {options.length - 1 !== index && <hr className="border-[1.5px] border-solid border-[link_water]"/> }
-                            </div>
-
-                        })
-                    }
+            dropDownOfInlineStyle ?
+                (
+                    <div className={'flex cursor-pointer'}  onClick={handleClick}>
+                        <div className={'flex'}>
+                            <p style={STYLES.filterText}>Sort:</p>
+                            <p className="font-[600] text-black_rock" style={{fontSize: R(20)}} >
+                                {selectedOption.label}
+                            </p>
+                        </div>
+                        <div className={'flex items-center'} style={{marginLeft: R(15)}}>
+                            <img
+                                src={opened ? '/images/arrow-up.svg' : '/images/arrow-down.svg'}
+                                width={R(15)}
+                                height={R(15)}
+                                alt=""
+                            />
+                        </div>
+                    </div>
+                ) : (
+                <div
+                    className={`cursor-pointer flex items-center justify-between ${classes}`}
+                    style={{
+                        ...STYLES.container, ...style,
+                        border: `1px solid`,
+                        borderColor: opened ? openedBorderColor : colors.link_water
+                    }}
+                    onClick={handleClick}
+                >
+                    <p style={{...STYLES.text, ...textStyle}}>{selectedOption.label}</p>
+                    <div
+                        className={'flex items-center'}
+                        style={STYLES.arrowImage}
+                    >
+                        <img
+                            src={opened ? '/images/arrow-up.svg' : '/images/arrow-down.svg'}
+                            width={R(15)}
+                            height={R(15)}
+                            alt=""
+                        />
+                    </div>
                 </div>
             )
+        }
+
+
+        {
+            opened ? (
+                <AnimatePresence>
+                    <motion.div
+                        className={`absolute z-[100] border-[1px] rounded-[1.2rem] shadow-[4px 4px 40px rgba(0, 0, 0, 0.03)] bg-white ${!dropDownOfInlineStyle && 'w-full'}`}
+                        variants={Animation}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                    >
+                        {
+                            options.map((option, index) => {
+                                return (
+                                    !index && skipFirstOption ? null :
+                                    <div
+                                        key={index}
+                                        className={`cursor-pointer flex items-center justify-between`}
+                                        style={{
+                                            ...STYLES.dropDownOptionBox,
+                                            borderBottom: '1px solid',
+                                            borderColor: options.length - 1 !== index ? colors.link_water : 'transparent'
+                                        }}
+                                        onClick={() => setOptionValue(option)}
+                                    >
+                                        <p className={`font-[600] hover:text-mandy text-black_rock rounded-t-[1.2rem]`}
+                                           style={{
+                                               ...STYLES.optionText,
+                                           }}
+                                        >
+                                            {option.label}
+                                        </p>
+                                    </div>
+                                )
+
+                            })
+                        }
+                    </motion.div>
+                </AnimatePresence>
+            ) : <AnimatePresence/>
+
         }
     </div>
 }
