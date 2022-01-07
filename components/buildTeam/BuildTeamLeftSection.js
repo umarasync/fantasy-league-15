@@ -17,10 +17,14 @@ const getStyles = (R) => {
         logo: {
             width: R(164),
             height: R(40),
+            marginLeft: R(-10)
         },
         heading: {
             fontSize: R(42),
             lineHeight: R(46, 'px'),
+        },
+        textContainer:{
+            paddingRight: R(50),
         },
         subHeading: {
             fontSize: R(18),
@@ -37,20 +41,20 @@ const getStyles = (R) => {
 export default function BuildTeamLeftSection({
      pickedPlayers,
      autoPickDisabled,
-                                                 onDeselectPlayer
+     onDeselectPlayer
 
 }) {
 
     const STYLES =  { ... getStyles(R) }
 
     return (
-        <div className="bg-[url('/images/bg-blue.png')] bg-[length:100%_100%] bg-no-repeat  w-full h-full"
+        <div className="bg-[url('/images/bg_blue_1.png')] bg-[length:100%_100%] bg-no-repeat  w-full h-full"
              style={STYLES.container}>
             <div className="" style={STYLES.logo}>
                 <img src="/images/logo_white.png" alt="" width="100%" height="100%"/>
             </div>
 
-            <div className="mt-[5rem] flex flex-col items-center">
+            <div className="mt-[5rem] flex flex-col items-center" style={STYLES.textContainer}>
                 <p className="uppercase font-[900] italic text-white" style = {STYLES.heading}>make your selection</p>
                 <p className="font-[300] text-center text-lavender_grey" style={STYLES.subHeading}>
                     Select a maximum of 3 players from a single team <br/>{`or 'Auto Pick' if you're short of time.`}

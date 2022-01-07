@@ -17,7 +17,11 @@ import SelectInput from "components/inputs/SelectInput";
 // Utils
 import R from "utils/getResponsiveValue";
 import {clone, isEmpty, nFormatter} from "utils/helpers";
-import {handleAutoPick, handleMultiSelectionDropDowns} from "utils/buildYourTeam";
+import {
+    handleAutoPick,
+    handleMultiSelectionDropDowns,
+    updatePlayersDataAfterSelectionOrDeselection
+} from "utils/buildYourTeam";
 
 // Animation
 import {PlayersCardAnimation, PlayersCardAnimation1} from "Animations/PlayersCardAnimations";
@@ -59,18 +63,20 @@ import NoResultFound from "../components/misc/NoResultFound";
 import {useRouter} from "next/router";
 
 // Styles
-const getStyles = (R) => {
+const getStyles = (R, showAllFilters) => {
     return {
         allFiltersBox: {
             paddingBottom: R(20),
             paddingTop: R(15)
+        },
+        noResultFound: {
+            top: R(600)
         }
     }
 }
 
 export default function BuildTeamAllPlayer () {
 
-    const STYLES =  { ... getStyles(R) }
     const router= useRouter()
 
     // Initial States
@@ -99,6 +105,7 @@ export default function BuildTeamAllPlayer () {
 
     // Players States
     const [playersData, setPlayersData] = useState([])
+    const [playersDataInitial, setPlayersDataInitial] = useState(PLAYERS_INITIAL)
 
     // Positions States
     const [activePosition, setActivePosition] = useState(POSITION_ALL)
@@ -122,6 +129,8 @@ export default function BuildTeamAllPlayer () {
     // Sorting
     const [sortingOptions, setSortingOptions] = useState([...SORTING_OPTIONS_INITIAL])
     const [selectedSortingOption, setSelectedSortingOption] = useState(SORTING_OPTIONS_INITIAL[0])
+
+    const STYLES =  { ... getStyles(R, showAllFilters) }
 
     // showAllFiltersAnimation: Starts
     const [initialOpacity, setInitialOpacity] = useState(1)
@@ -224,7 +233,7 @@ export default function BuildTeamAllPlayer () {
 
     const runFiltersOnPlayersData = () => {
 
-        let playersDataI = [ ...PLAYERS_INITIAL ]
+        let playersDataI = [ ...playersDataInitial ]
 
         playersDataI = playersDataI.filter(player => {
             return startFiltering(player)
@@ -251,7 +260,7 @@ export default function BuildTeamAllPlayer () {
             if(initialOpacity) {
                 setInitialOpacity(0)
             }
-    }, [clubs, statuses, selectedRecommendation, selectedPrice, activePosition, selectedSortingOption])
+    }, [clubs, playersDataInitial, statuses, selectedRecommendation, selectedPrice, activePosition, selectedSortingOption, playersDataInitial])
 
 
     const getPlayersContainerHeight = () => {
@@ -284,6 +293,9 @@ export default function BuildTeamAllPlayer () {
                 setRemainingBudget(remainingBudget - playerI.price)
                 setTotalChosenPlayers(totalChosenPlayers + 1)
                 pickedPlayersArray.push(playerI)
+
+                setPlayersDataInitial(updatePlayersDataAfterSelectionOrDeselection(playersDataInitial, playerI, true))
+
             }
 
         } else if (!pickedPlayersArray.some(p => p.id === playerI.id)) {
@@ -297,21 +309,30 @@ export default function BuildTeamAllPlayer () {
             setRemainingBudget(remainingBudget - playerI.price)
             setTotalChosenPlayers(totalChosenPlayers + 1)
 
+            setPlayersDataInitial(updatePlayersDataAfterSelectionOrDeselection(playersDataInitial, playerI, true))
+
         }
 
         setPickedPlayers({...pickedPlayersI})
     }
 
+
+
     const handlePlayerDeselection = (position, i) => {
 
         const pickedPlayersI = { ...pickedPlayers }
+
         const playerI = pickedPlayersI[position][i]
+
         setRemainingBudget(remainingBudget + playerI.price)
         setTotalChosenPlayers(totalChosenPlayers -1)
         setContinueDisabled(true)
         pickedPlayersI[position][i] = false
 
         setPickedPlayers(pickedPlayersI)
+
+        setPlayersDataInitial(updatePlayersDataAfterSelectionOrDeselection(playersDataInitial, playerI, false))
+
     }
 
     useEffect(() => {
@@ -330,7 +351,8 @@ export default function BuildTeamAllPlayer () {
         const {
             chosenPlayersWithinBudget,
             remainingBudget,
-            totalChosenPlayers: totalChosenPlayersI
+            totalChosenPlayers: totalChosenPlayersI,
+            players: playersI
         } = handleAutoPick({
             players: PLAYERS,
             allPlayersObjectIndexes: ALL_PLAYERS_INDEXES,
@@ -340,10 +362,20 @@ export default function BuildTeamAllPlayer () {
         setPickedPlayers(chosenPlayersWithinBudget)
         setRemainingBudget(remainingBudget)
         setTotalChosenPlayers(totalChosenPlayersI)
+        setPlayersDataInitial(playersI)
 
         setAutoPickDisabled(true)
         setResetDisabled(false)
+    }
 
+    const handleResetClick = () => {
+        setPickedPlayers(SELECTED_PLAYERS_INITIAL)
+        setTotalChosenPlayers(0)
+        setRemainingBudget(totalBudget)
+        setAutoPickDisabled(false)
+        setResetDisabled(true)
+        setContinueDisabled(true)
+        setPlayersData(PLAYERS_INITIAL)
     }
 
     return (
@@ -387,9 +419,7 @@ export default function BuildTeamAllPlayer () {
                                         setActivePosition(activePosition)}
                                 />
                             </div>
-
                             {/*all filters*/}
-
                             {
                                 showAllFilters ? (
                                     <AnimatePresence>
@@ -444,8 +474,13 @@ export default function BuildTeamAllPlayer () {
                                 ): <AnimatePresence/>
                             }
 
-
-                            { areFiltersApplied() && !playersData.length && <NoResultFound/>}
+                            {
+                                areFiltersApplied() && !playersData.length && (
+                                    <div className={'absolute w-full'} style={STYLES.noResultFound}>
+                                        <NoResultFound/>
+                                    </div>
+                                )
+                            }
 
                             <motion.div
                                 variants={PlayersCardAnimation}
@@ -503,14 +538,7 @@ export default function BuildTeamAllPlayer () {
                         continueDisabled={continueDisabled}
                         onAutoPick={onAutoPick}
                         onContinueClick={() => router.push('/create_team_name')}
-                        onResetClick={() => {
-                            setPickedPlayers(SELECTED_PLAYERS_INITIAL)
-                            setTotalChosenPlayers(0)
-                            setRemainingBudget(totalBudget)
-                            setAutoPickDisabled(false)
-                            setResetDisabled(true)
-                            setContinueDisabled(true)
-                        }}
+                        onResetClick={handleResetClick}
                     />
             </div>
         </Layout>

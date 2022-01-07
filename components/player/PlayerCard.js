@@ -10,16 +10,17 @@ import colors from "constants/colors";
 import {useState} from "react";
 
 // Styles
-const getStyles = (R) => {
+const getStyles = (R, chosen) => {
     return {
         container: {
             height: R(94),
             border: '0.1px solid whitesmoke',
             borderRadius: R(15),
             marginBottom: R(8),
-            backgroundColor: colors.white,
             // boxShadow: 'rgba(99, 99, 99, 0.2) 4px 4px 40px -10px'
-            boxShadow: '4px 4px 10px -5px rgba(0, 0, 0, 0.05)'
+            boxShadow: '4px 4px 10px -5px rgba(0, 0, 0, 0.05)',
+            color: chosen ? colors.white : colors.black_rock,
+            background: chosen ? 'linear-gradient(180deg, #EE6384 0%, #D9335B 100%)' : colors.white,
         },
         infoImage: {
             width: R(20),
@@ -47,7 +48,8 @@ const getStyles = (R) => {
             marginLeft: R(16),
             marginRight: R(34),
             fontSize: R(22),
-            fontWeight: '600'
+            fontWeight: '600',
+            color: chosen? colors.white : colors.brink_pink
         }
     }
 }
@@ -56,21 +58,23 @@ export default function PlayerCard ({
     player,
     onSelectPlayer
 }){
-    const STYLES =  { ... getStyles(R) }
 
     const [hover, setHover] = useState(false);
+    const chosen = player.chosen || hover
 
+    const STYLES =  { ... getStyles(R, chosen) }
 
     return (
         <div
-            className={'card-box flex text-black_rock hover:text-white items-center justify-between cursor-pointer'} style={STYLES.container}
+            className={'card-box flex items-center justify-between cursor-pointer'} style={STYLES.container}
             onMouseEnter={()=>{setHover(true);}}
             onMouseLeave={()=>{setHover(false)}}
             onClick={() => onSelectPlayer(player)}
         >
             {/*left side*/}
             <div className={'flex items-center'}>
-                <div style={STYLES.infoImage}><img src={`/images/${hover ? 'info_light.png' : 'info_grey.png'}`} alt=""/></div>
+                <div style={STYLES.infoImage}>
+                    <img src={`/images/${chosen ? 'info_light.png' : 'info_grey.png'}`} width={'100%'} height={'100%'} alt=""/></div>
                 <Border/>
                 <PlayerImage playerImage={player.image} clubImage={player.clubImage} imageStyle={STYLES.playerImage} />
                 <div>
@@ -92,10 +96,9 @@ export default function PlayerCard ({
                     </p>
                 </div>
                 <Border/>
-                <p style={{
-                    ...STYLES.totalPoints,
-                    color: hover? colors.white : colors.brink_pink
-                }}>{player.points}</p>
+                <p style={
+                    STYLES.totalPoints
+                }>{player.points}</p>
             </div>
         </div>
     )
