@@ -97,49 +97,49 @@ export const CLUBS = [
         id: 2,
         label: CLUB_AJAX,
         value: CLUB_AJAX,
-        image: 'club_ajax.svg',
+        image: 'club_ajax.png',
         checked: false
     },
     {
         id: 3,
         label: CLUB_AZ,
         value: CLUB_AZ,
-        image: 'club_az.svg',
+        image: 'club_az.png',
         checked: false
     },
     {
         id: 4,
         label: CLUB_FC,
         value: CLUB_FC,
-        image: 'club_fc.svg',
+        image: 'club_fc.png',
         checked: false
     },
     {
         id: 5,
         label: CLUB_FR,
         value: CLUB_FR,
-        image: 'club_fr.svg',
+        image: 'club_fr.png',
         checked: false
     },
     {
         id: 6,
         label: CLUB_HEE,
         value: CLUB_HEE,
-        image: 'club_hee.svg',
+        image: 'club_hee.png',
         checked: false
     },
     {
         id: 7,
         label: CLUB_SC,
         value: CLUB_SC,
-        image: 'club_sc.svg',
+        image: 'club_sc.png',
         checked: false
     },
     {
         id: 8,
         label: CLUB_ZWO,
         value: CLUB_ZWO,
-        image: 'club_zwo.svg',
+        image: 'club_zwo.png',
         checked: false
     }
 ]
@@ -163,14 +163,14 @@ export const STATUSES = [
         id: 2,
         label: STATUS_SUSPENDED,
         value: STATUS_SUSPENDED,
-        image: 'suspended.svg',
+        image: 'suspended.png',
         checked: false
     },
     {
         id: 3,
         label: STATUS_INJURED,
         value: STATUS_INJURED,
-        image: 'injured.svg',
+        image: 'injured.png',
         checked: false
     },
 ]

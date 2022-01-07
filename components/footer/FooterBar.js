@@ -110,7 +110,7 @@ export default function FooterBar({
                         }
 
                         <div style={STYLES.infoImage}>
-                            <img src="/images/info.png" alt="" width={'100%'} height={'100%'}/>
+                            <img src="/images/info_light.png" alt="" width={'100%'} height={'100%'}/>
                         </div>
                     </div>
                     <p className={`italic uppercase`}

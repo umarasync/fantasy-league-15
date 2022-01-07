@@ -37,8 +37,8 @@ const PLAYER10_PRICE = 100000
 export const PLAYERS_INITIAL = [
     {
         id: 1,
-        image: 'player1.svg',
-        clubImage: 'club_fc.svg',
+        image: 'player1.png',
+        clubImage: 'club_fc.png',
         clubName: CLUB_FC,
         status: STATUS_FIT,
         name: 'R. Nelson',
@@ -59,11 +59,11 @@ export const PLAYERS_INITIAL = [
     },
     {
         id: 2,
-        image: 'player2.svg',
-        clubImage: 'club_az.svg',
+        image: 'player2.png',
+        clubImage: 'club_az.png',
         clubName: CLUB_AZ,
         status: STATUS_SUSPENDED,
-        statusImage: 'suspended.svg',
+        statusImage: 'suspended.png',
         name: 'H. Veerman',
         nextMatch: {
             club: 'AZ',
@@ -82,8 +82,8 @@ export const PLAYERS_INITIAL = [
     },
     {
         id: 3,
-        image: 'player3.svg',
-        clubImage: 'club_hee.svg',
+        image: 'player3.png',
+        clubImage: 'club_hee.png',
         clubName: CLUB_HEE,
         status: STATUS_FIT,
         name: 'L. Sane',
@@ -104,8 +104,8 @@ export const PLAYERS_INITIAL = [
     },
     {
         id: 4,
-        image: 'player4.svg',
-        clubImage: 'club_ajax.svg',
+        image: 'player4.png',
+        clubImage: 'club_ajax.png',
         clubName: CLUB_AJAX,
         status: STATUS_FIT,
         name: 'N. Bannis',
@@ -126,11 +126,11 @@ export const PLAYERS_INITIAL = [
     },
     {
         id: 5,
-        image: 'player5.svg',
-        clubImage: 'club_zwo.svg',
+        image: 'player5.png',
+        clubImage: 'club_zwo.png',
         clubName: CLUB_ZWO,
         status: STATUS_INJURED,
-        statusImage: 'injured.svg',
+        statusImage: 'injured.png',
         name: 'T. Tekie',
         nextMatch: {
             club: 'ZWO',
@@ -149,8 +149,8 @@ export const PLAYERS_INITIAL = [
     },
     {
         id: 6,
-        image: 'player6.svg',
-        clubImage: 'club_fr.svg',
+        image: 'player6.png',
+        clubImage: 'club_fr.png',
         clubName: CLUB_FR,
         status: STATUS_FIT,
         name: 'M. Nelom',
@@ -171,11 +171,11 @@ export const PLAYERS_INITIAL = [
     },
     {
         id: 7,
-        image: 'player7.svg',
-        clubImage: 'club_fr.svg',
+        image: 'player7.png',
+        clubImage: 'club_fr.png',
         clubName: CLUB_FR,
         status: STATUS_INJURED,
-        statusImage: 'injured.svg',
+        statusImage: 'injured.png',
         name: 'B. Nygren',
         nextMatch: {
             club: 'BAY',
@@ -194,8 +194,8 @@ export const PLAYERS_INITIAL = [
     },
     {
         id: 8,
-        image: 'player1.svg',
-        clubImage: 'club_fc.svg',
+        image: 'player1.png',
+        clubImage: 'club_fc.png',
         clubName: CLUB_FC,
         status: STATUS_FIT,
         name: 'R. Nelson',
@@ -216,8 +216,8 @@ export const PLAYERS_INITIAL = [
     },
     {
         id: 9,
-        image: 'player2.svg',
-        clubImage: 'club_az.svg',
+        image: 'player2.png',
+        clubImage: 'club_az.png',
         clubName: CLUB_AZ,
         status: STATUS_FIT,
         name: 'H. Veerman',
@@ -238,8 +238,8 @@ export const PLAYERS_INITIAL = [
     },
     {
         id: 10,
-        image: 'player3.svg',
-        clubImage: 'club_hee.svg',
+        image: 'player3.png',
+        clubImage: 'club_hee.png',
         clubName: CLUB_HEE,
         status: STATUS_FIT,
         name: 'L. Sane',

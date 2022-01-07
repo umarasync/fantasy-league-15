@@ -190,7 +190,7 @@ export default function SelectSearchInput ({
                  className={'flex items-center'}
                  style={{...STYLES.arrowImage, ...arrowImageStyle}}
             >
-                <img src={opened ? '/images/arrow-up.svg' : '/images/arrow-down.svg'} width={R(15)} height={R(15)} alt=""/>
+                <img src={opened ? '/images/arrow-up.png' : '/images/arrow-down.png'} width={R(15)} height={R(15)} alt=""/>
             </div>
         </div>
 
