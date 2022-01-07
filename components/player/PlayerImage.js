@@ -46,7 +46,7 @@ export default function PlayerImage({
             {
                 showCloseIcon && (
                     <div style={{ ...STYLES.closeImage, ...closeImageStyle }} onClick={onDeselect}>
-                        <img src={`/images/close1.svg`} alt="" width={'100%'} height={'100%'} />
+                        <img src={`/images/close1.png`} alt="" width={'100%'} height={'100%'} />
                     </div>
                 )
             }

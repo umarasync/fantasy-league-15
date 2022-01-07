@@ -70,7 +70,7 @@ export default function PlayerCard ({
         >
             {/*left side*/}
             <div className={'flex items-center'}>
-                <div style={STYLES.infoImage}><img src={`/images/${hover ? 'info_light.svg' : 'info_grey.svg'}`} alt=""/></div>
+                <div style={STYLES.infoImage}><img src={`/images/${hover ? 'info_light.png' : 'info_grey.png'}`} alt=""/></div>
                 <Border/>
                 <PlayerImage playerImage={player.image} clubImage={player.clubImage} imageStyle={STYLES.playerImage} />
                 <div>
