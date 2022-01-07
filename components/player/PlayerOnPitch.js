@@ -12,14 +12,20 @@ import {nFormatter} from "utils/helpers";
 import { STATUS_SUSPENDED, STATUS_INJURED } from "constants/data/filters";
 
 // Styles
-const getStyles = (R) => {
+const getStyles = (R, player) => {
   return {
       container: {
           // border: '5px solid red'
       },
-      imageContainer:{
+      playerImageD: {
+          width: R(50),
+          height: R(50),
+      },
+      placeHolderD: {
           width: R(40),
           height: R(40),
+      },
+      imageContainer:{
           marginBottom: R(10),
           position: 'absolute',
           top: 0
@@ -37,11 +43,11 @@ const getStyles = (R) => {
             top: R(45)
       },
       buttonStyle: {
-          paddingLeft: R(13),
-          paddingTop: R(5),
-          paddingBottom: R(5),
-          paddingRight: R(13),
-          borderRadius: R(50),
+          paddingLeft: R(player ? 18 : 8),
+          paddingRight: R(player ? 18 : 8),
+          paddingTop: R(player ? 3 : 6),
+          paddingBottom: R(player ? 3 : 6),
+          borderRadius: R(40),
           marginTop: R(3),
           fontSize: R(10)
       },
@@ -65,7 +71,7 @@ export default function PlayerOnPitch ({
     onDeselectPlayer
 }) {
 
-    const STYLES =  { ... getStyles(R) }
+    const STYLES =  { ... getStyles(R, player) }
 
     const [initialOpacity, setInitialOpacity] = useState(1)
 
@@ -103,7 +109,7 @@ export default function PlayerOnPitch ({
                             <AnimatePresence>
                                 <motion.div
                                     className={'flex flex-col items-center justify-center'}
-                                    style={STYLES.imageContainer}
+                                    style={{...STYLES.imageContainer, ...STYLES.playerImageD}}
                                     variants={fadeInOutAnimation}
                                     initial="initial"
                                     animate="animate"
@@ -127,9 +133,7 @@ export default function PlayerOnPitch ({
                                                     <img src={`/images/${player.statusImage}`} alt="" width={10} height={10}/>
                                                 </div>
                                             )
-
                                         }
-
                                         <span>{player.name}</span><br/>
                                         <span>{nFormatter(player.price)}</span><br/>
                                     </p>
@@ -140,7 +144,7 @@ export default function PlayerOnPitch ({
                             <AnimatePresence>
                                 <motion.div
                                     className={'flex flex-col items-center justify-center'}
-                                    style={STYLES.imageContainer}
+                                    style={{...STYLES.imageContainer, ...STYLES.placeHolderD}}
                                     variants={fadeInOutAnimation}
                                     initial="initial"
                                     animate="animate"

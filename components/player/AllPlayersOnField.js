@@ -12,21 +12,21 @@ const getStyles = (R) => {
             justifyContent: 'end',
             width: '50%',
             height: R(110),
-            paddingRight: R(45),
+            paddingRight: R(37),
             marginTop: R(15),
         },
         player2: {
             justifyContent: 'start',
             width: '50%',
             height: R(110),
-            paddingLeft: R(45),
+            paddingLeft: R(40),
             marginTop: R(15),
         },
         player3:{
             width: '33%',
             height: R(50),
             justifyContent: 'center',
-            paddingLeft: R(70),
+            paddingLeft: R(42),
         },
         player4:{
             width: '33%',
@@ -37,7 +37,7 @@ const getStyles = (R) => {
             width: '33%',
             height: R(50),
             justifyContent: 'center',
-            paddingRight: R(70)
+            paddingRight: R(32)
         },
         player6: {
             justifyContent: 'end',
@@ -49,7 +49,7 @@ const getStyles = (R) => {
             justifyContent: 'start',
             width: '50%',
             height: R(117),
-            paddingLeft: R(65),
+            paddingLeft: R(75),
         },
         player13:{
             width: '33%',

@@ -67,6 +67,7 @@ export const handleAutoPick = ({
 }) => {
 
     let remainingBudget = totalBudget
+    let playersI = clone(players)
 
     const GKsIndexes = shuffle(allPlayersObjectIndexes[POSITION_GK])
     const FWDsIndexes = shuffle(allPlayersObjectIndexes[POSITION_FWD])
@@ -100,15 +101,19 @@ export const handleAutoPick = ({
         ...chosenDEFsIndexes
     ]
 
-    let shuffledFifteenChosenPlayersIndex = shuffle(fifteenChosenPlayersIndex)
+    let shuffledFifteenChosenPlayersIndex = shuffle(fifteenChosenPlayersIndex).filter( x => x !== undefined)
 
     let chosenPlayersWithinBudget = clone(SELECTED_PLAYERS)
 
     let totalChosenPlayers = 0
-    for(let i = 0; i < 15; i++) {
-        let player = players[shuffledFifteenChosenPlayersIndex[i]]
+
+    for(let i = 0; i < shuffledFifteenChosenPlayersIndex.length; i++) {
+        let player = playersI[shuffledFifteenChosenPlayersIndex[i]]
+
         if(player.price < remainingBudget) {
+            player.chosen = true
             chosenPlayersWithinBudget[player.position].push(player)
+
             remainingBudget = remainingBudget - player.price
             totalChosenPlayers += 1
         }else {
@@ -119,7 +124,14 @@ export const handleAutoPick = ({
     return {
         chosenPlayersWithinBudget,
         remainingBudget,
-        totalChosenPlayers
+        totalChosenPlayers,
+        players: playersI
     }
+}
 
+export const updatePlayersDataAfterSelectionOrDeselection = (players, player, value) => {
+    const playersI = clone(players)
+    const playerIndex = playersI.findIndex(p => p.id === player.id)
+    playersI[playerIndex].chosen = value
+    return playersI
 }
