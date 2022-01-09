@@ -376,6 +376,7 @@ export default function BuildTeamAllPlayer () {
         setResetDisabled(true)
         setContinueDisabled(true)
         setPlayersData(PLAYERS_INITIAL)
+        setPlayersDataInitial(PLAYERS_INITIAL)
     }
 
     return (
