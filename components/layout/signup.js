@@ -5,7 +5,7 @@ import { AnimatePresence } from 'framer-motion'
 
 // Components
 import Layout from "components/layout";
-import PrimaryButton from "components/buttons/PrimaryButton";
+import Button from "components/html/Button";
 import {useRouter} from "next/router";
 import Input from "components/inputs/input";
 import SelectInput from "components/inputs/SelectInput";
@@ -320,11 +320,11 @@ export default function SignUp(props) {
                   )
                 }
 
-                <PrimaryButton
+                <Button
                     title='Next'
                     onClick={handleOnClick}
                     disabled={isLoginPage ? loginDisabled : disabled}
-                    buttonClasses="mb-[4rem]"
+                    mb={40}
                 />
                 <p className="text-regent_grey text-[1.6rem] font-[400] leading-[2rem] text-center">
                   {isLoginPage ? 'Don’t have an account?' : 'Already have an account?'}

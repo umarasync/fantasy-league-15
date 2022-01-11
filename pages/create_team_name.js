@@ -7,7 +7,7 @@ import Layout from "components/layout";
 // Utils
 import R from "utils/getResponsiveValue";
 import {useState} from "react";
-import PrimaryButton from "../components/buttons/PrimaryButton";
+import Button from "../components/html/Button";
 
 
 // Styles
@@ -42,6 +42,7 @@ const getStyles = (R) => {
             fontSize: R(36),
             background: 'transparent',
             color: 'white',
+            border: 'none'
         },
         border: {
             border: '1px solid white',
@@ -92,7 +93,7 @@ export default function ConfirmAccount() {
                         <hr className={'w-full'} style={STYLES.border}/>
                         <div className="w-full flex items-center justify-center">
                             <div style={STYLES.button}>
-                                <PrimaryButton title={'CONFIRM'} onClick={handleOnClick}/>
+                                <Button title={'CONFIRM'} onClick={handleOnClick}/>
                             </div>
                         </div>
                     </div>

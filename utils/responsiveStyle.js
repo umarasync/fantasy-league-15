@@ -30,10 +30,35 @@ const SPACING = {
     marginBottom: v => v ? {marginBottom: R(v)} : {},
 }
 
+const BORDER = {
+    borderRadius: v => v ? {borderRadius: R(v)} : {},
+}
+
+const FLEX = {
+    center: v => v ? {display: 'flex', alignItems: 'center', justifyContent: 'center'} : {}
+}
+
+const EFFECTS = {
+    boxShadow: v => v ? {boxShadow: v} : {},
+}
+
+const INTERACTIVITY = {
+    cursor: v => v ? {cursor: v} : {},
+}
+
+const BACKGROUNDS = {
+    background: v => v ? {background: v} : {},
+}
+
 const ResponsiveStyle = {
     ...TYPOGRAPHY,
     ...SIZING,
-    ...SPACING
+    ...SPACING,
+    ...BORDER,
+    ...FLEX,
+    ...EFFECTS,
+    ...INTERACTIVITY,
+    ...BACKGROUNDS
 }
 
 export default ResponsiveStyle

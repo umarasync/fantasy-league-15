@@ -1,5 +1,5 @@
 // Components
-import PrimaryButton from "components/buttons/PrimaryButton";
+import Button from "components/html/Button";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -28,7 +28,7 @@ export default function clubControls({
     return (
         <div className="flex items-center justify-center">
             <div style={STYLES.container}>
-                <PrimaryButton
+                <Button
                     title={'select'}
                     buttonStyle={STYLES.buttonStyle}
                     onClick={onNextClick}

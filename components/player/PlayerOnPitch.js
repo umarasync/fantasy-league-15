@@ -1,5 +1,4 @@
 // Components
-import PrimaryButtonSmall from "components/buttons/PrimaryButtonSmall";
 import {AnimatePresence, motion} from "framer-motion";
 
 // Utils

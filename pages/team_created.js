@@ -7,7 +7,7 @@ import Layout from "components/layout";
 // Utils
 import R from "utils/getResponsiveValue";
 import {useState} from "react";
-import PrimaryButton from "../components/buttons/PrimaryButton";
+import Button from "../components/html/Button";
 
 
 // Styles
@@ -90,7 +90,7 @@ export default function ConfirmAccount() {
                         </p>
                         <div className="w-full flex items-center justify-center">
                             <div style={STYLES.button}>
-                                <PrimaryButton title={'CONFIRM'} onClick={handleOnClick}/>
+                                <Button title={'CONFIRM'} onClick={handleOnClick}/>
                             </div>
                         </div>
                     </div>

@@ -6,6 +6,8 @@ const containerWidth = 1440;
 
 const getResponsiveValue = (value= '', measurement = '') => {
 
+    if(typeof(value) === 'string') return value
+
     const [ width, height ] = useWindowSize();
 
     let responsiveValue = ''

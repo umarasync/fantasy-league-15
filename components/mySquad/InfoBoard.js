@@ -11,7 +11,7 @@ import R from "utils/getResponsiveValue";
 // Constants
 import colors from "constants/colors";
 import Image from "../html/Image";
-import PrimaryButton from "../buttons/PrimaryButton";
+import Button from "../html/Button";
 
 export default function InfoBoard() {
 
@@ -77,7 +77,7 @@ export default function InfoBoard() {
                     color={colors.regent_grey}
                 />
                 <Div>
-                    <PrimaryButton title={'Create a league'} />
+                    <Button title={'Create a league'} />
                 </Div>
             </Div>
 
