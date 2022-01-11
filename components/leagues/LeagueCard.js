@@ -6,9 +6,12 @@ import Div from "components/html/Div";
 // Constants
 import colors from "constants/colors";
 
-export default function LeagueCard() {
+export default function LeagueCard({
+    pb = 24,
+    pt = 24,
+}) {
     return (
-        <Div className={'w-full flex items-center justify-between'}>
+        <Div className={'w-full flex items-center justify-between'} pb={pb} pt={pt}>
             <Div className={'flex'}>
                 <Image w={42} h={42} name={'club_ajax.png'}/>
                 <Div ml={12}>

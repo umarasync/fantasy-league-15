@@ -1,44 +1,38 @@
 // Utils
-import R from "utils/getResponsiveValue";
+import RS from "utils/responsiveStyle";
 
 // Styles
-const getStyles = (R, style) => {
-    const {pl, pr, pt, pb } = style
+const getStyles = (RS, style) => {
+    const {
+        w, h, p, pl, pr, pt, pb,
+    } = style
+
     return {
         container: {
-            paddingLeft: pl ? R(pl): 0,
-            paddingRight: pr ? R(pr): 0,
-            paddingTop: pt ? R(pt): 0,
-            paddingBottom: pb ? R(pb): 0
+            ...RS.padding(p),
+            ...RS.paddingLeft(pl),
+            ...RS.paddingRight(pr),
+            ...RS.paddingTop(pt),
+            ...RS.paddingBottom(pb),
+        },
+        image: {
+            ...RS.width(w),
+            ...RS.height(h),
         }
     }
 }
 
-export default function Image({
-    w,
-    h,
-    name,
-    alt= '',
-    pl,
-    pr,
-    pt,
-    pb,
-}) {
+export default function Image(props) {
 
-    const STYLES =  { ... getStyles(R, {
-            pl,
-            pr,
-            pt,
-            pb
-        })}
+    const STYLES =  { ... getStyles(RS, { ...props })}
 
+    const { name, alt } = props
 
     return (
         <div style={STYLES.container}>
-            <div style={{width: R(w), height: R(h)}}>
+            <div style={STYLES.image}>
                 <img src={`images/${name}`} alt={alt} width={'100%'} height={'100%'}/>
             </div>
         </div>
-
     )
 }

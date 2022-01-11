@@ -26,7 +26,8 @@ const getStyles = (R) => {
     return {}
 }
 
-export default function BuildTeamAllPlayer () {
+export default function MySquadGameWeek () {
+
 
     const STYLES =  { ... getStyles(R) }
 
@@ -62,3 +63,5 @@ export default function BuildTeamAllPlayer () {
         </Layout>
     )
 }
+
+

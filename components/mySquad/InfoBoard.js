@@ -1,127 +1,86 @@
 // Components
 import Username from "components/user/Username";
 import BorderHorizontal from "components/Borders/BorderHorizontal";
+import Div from "components/html/Div";
+import Text from "components/html/Text";
+import LeagueCard from "components/leagues/LeagueCard";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import colors from "../../constants/colors";
-import LeagueCard from "../leagues/LeagueCard";
 
-// Styles
-const getStyles = (R) => {
-    return {
-        person: {
-            width: R(16.2),
-            height: R(16.2)
-        },
-        container: {
-            width: R(390),
-            paddingTop: R(35)
-        },
-        gameWeekHeading: {
-            fontSize: R(34),
-            lineHeight: R(38, 'px'),
-            color: colors.dark_indigo,
-            marginTop: R(45)
-        },
-        gameWeekSubHeading: {
-            fontSize: R(18),
-            lineHeight: R(26, 'px'),
-            color: colors.dark_indigo,
-            marginTop: R(8)
-        },
-        clubNameText: {
-            fontSize: R(22),
-            padding: R(24)
-        },
-        points: {
-            fontSize: R(42),
-            lineHeight: R(46, 'px'),
-            marginBottom: R(8),
-            paddingRight: R(10),
-            fontStyle: 'italic',
-            fontWeight: '800'
-        },
-        pointsSubHeading: {
-            fontSize: R(18),
-            color: colors.regent_grey
-        },
-        clubNameBox: {
-            marginTop: R(32),
-        },
-        pointBox: {
-            paddingTop: R(24),
-            paddingBottom: R(24),
-        },
-        rankingText: {
-            fontSize: R(22),
-            paddingBottom: R(24)
-        },
-        leagueContainer: {
-            padding: R(24),
-            marginTop: R(24)
-        },
-        leaguePointBox: {
-            paddingTop: R(24),
-            paddingBottom: R(40)
-        },
-        infoIcon: {
-            width: R(24),
-            height: R(24)
-        },
-        clubImage: {
-
-        }
-    }
-}
+// Constants
+import colors from "constants/colors";
+import Image from "../html/Image";
+import PrimaryButton from "../buttons/PrimaryButton";
 
 export default function InfoBoard() {
 
-    const STYLES =  { ... getStyles(R) }
+    const leagues = [0, 1]
 
     return (
-        <div className={'relative'} style={STYLES.container}>
+        <Div className={'relative'} w={390} pt={35}>
             {/*username*/}
             <div className={'flex flex-row-reverse'}>
-                <Username username={'martine.bakker'} iconStyle={STYLES.person} />
+                <Username username={'martine.bakker'} iconStyle={{ width: R(16.2), height: R(16.2) }} />
             </div>
-            <div>
-                <p className={'uppercase italic font-[900]'} style={STYLES.gameWeekHeading}>gameweek 10</p>
-                <p style={STYLES.gameWeekSubHeading}>Transfer deadline: <span className={'text-brick_red'}>10 Nov, 18:45</span></p>
-            </div>
+            <Div mt={45}>
+                <Text text={'gameweek 10'} fs={34} fw={900} fst={'italic'} tt={'uppercase'} lh={38} color={colors.dark_indigo}/>
+                <Div mt={8}>
+                    <Text text={'Transfer deadline:'} fs={18} lh={26} color={colors.dark_indigo} className={'inline'}/>
+                    <Text text={' 10 Nov, 18:45'} fs={18} lh={26} color={colors.brick_red} className={'inline'}/>
+                </Div>
+            </Div>
 
-            <div className={'white-shadowed-background'} style={STYLES.clubNameBox}>
-                <p className={'uppercase italic font-[900]'} style={STYLES.clubNameText}>Champions fc</p>
-                <BorderHorizontal/>
-                <div className={'flex justify-evenly'} style={STYLES.pointBox}>
-                    <div className={'flex flex-col items-center'}>
-                        <p className={'gradient-text-1'} style={STYLES.points}>40</p>
-                        <p style={STYLES.pointsSubHeading}>Weekly points</p>
-                    </div>
-                    <div className={'flex flex-col items-center'}>
-                        <p style={STYLES.points}>813</p>
-                        <p style={STYLES.pointsSubHeading}>Total points</p>
-                    </div>
-                </div>
-            </div>
-
-            <div className={'white-shadowed-background'} style={STYLES.leagueContainer}>
-                <div className={'flex items-center justify-between'} style={STYLES.rankingText}>
-                    <p className={'uppercase italic font-[900]'} >
-                        leagues and ranking
-                    </p>
-                    <div style={STYLES.infoIcon}>
-                        <img src="/images/info_grey.png" alt="" width={'100%'} height={'100%'}/>
-                    </div>
-                </div>
+            <Div className={'white-shadowed-background'} mt={32}>
+                <Text text={'Champions fc'} fw={900} fst={'italic'} tt={'uppercase'} fs={22} p={24} color={colors.black_rock}/>
                 <BorderHorizontal/>
 
-                <div className={'flex justify-evenly'} style={STYLES.leaguePointBox}>
-                    <LeagueCard/>
-                </div>
+                <Div className={'flex justify-evenly'} pt={24} pb={24}>
+                    <Div className={'flex flex-col items-center'}>
+                        <Text text={40} className={'gradient-text-1'} fs={42} lh={46} mb={8} pr={10} fst={'italic'} fw={800}/>
+                        <Text text={'Weekly points'} fs={18} color={colors.regent_grey}/>
+                    </Div>
+                    <Div className={'flex flex-col items-center'}>
+                        <Text text={813} fs={42} lh={46} mb={8} pr={10} fst={'italic'} fw={800}/>
+                        <Text text={'Total points'} fs={18} color={colors.regent_grey}/>
+                    </Div>
+                </Div>
+            </Div>
 
-            </div>
+            <Div className={'white-shadowed-background'} p={24} mt={24}>
+                <Div className={'flex items-center justify-between'} pb={24}>
+                    <Text text={'leagues and ranking'} fs={22} fw={900} fst={'italic'} tt={'uppercase'} lh={26}/>
+                    <Image w={24} h={24} name={'info_grey.png'}/>
+                </Div>
+                <BorderHorizontal/>
+                <Div>
+                    {
+                        leagues.map((e, index) => (
+                            <Div key={e}>
+                                <LeagueCard pt={24} pb={24}/>
+                                { index !== leagues.length - 1 && <BorderHorizontal/>}
+                            </Div>
+                        ))
+                    }
+                </Div>
 
-        </div>
+                <Div className={'flex items-center justify-between'} pt={16} mb={16}>
+                    <Text
+                        text={'leagues and ranking'} fs={22} fw={900} fst={'italic'} tt={'uppercase'} lh={26}/>
+                    <Image w={24} h={24} name={'info_grey.png'}/>
+                </Div>
+                <Text
+                    text={"You aren't in any private leagues yet. Create or join one to battle it out Eredivisie stage"}
+                    fs={16}
+                    lh={20}
+                    pr={12}
+                    color={colors.regent_grey}
+                />
+                <Div>
+                    <PrimaryButton title={'Create a league'} />
+                </Div>
+            </Div>
+
+        </Div>
     )
 }

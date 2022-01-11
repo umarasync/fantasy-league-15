@@ -9,7 +9,6 @@ const getStyles = (R) => {
             borderRadius: R(12),
             fontSize: R(16),
             height: R(70),
-            // paddingTop: R(3),
         }
     }
 }
@@ -34,7 +33,8 @@ export default function PrimaryButton({
             className={`w-full ${buttonClasses}`}
             style={{
                 opacity: disabled ? disabledOpacity : 1,
-                ...buttonStyle}}
+                ...buttonStyle
+            }}
         >
                 <p
                     className={`primary-button-color w-full flex items-center bg-white justify-center font-[900] italic text-white uppercase cursor-pointer ${textClasses}`}

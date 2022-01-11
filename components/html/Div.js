@@ -1,67 +1,33 @@
 // Utils
-import R from "utils/getResponsiveValue";
+import RS from "utils/responsiveStyle";
 
 // Styles
-const getStyles = (R, style) => {
+const getStyles = (RS, style) => {
     const {
-        w,
-        h,
-        pl,
-        pr,
-        pt,
-        pb,
-        ml,
-        mr,
-        mt,
-        mb,
+        w, h, p, pl, pr, pt, pb, m, ml, mr, mt, mb,
     } = style
-
-   const getWidth = w ? {width: R(w)} : {}
-   const getHeight = h ? {width: R(h)} : {}
 
     return {
         container: {
-            ...getWidth,
-            ...getHeight,
-            paddingLeft: pl ? R(pl): 0,
-            paddingRight: pr ? R(pr): 0,
-            paddingTop: pt ? R(pt): 0,
-            paddingBottom: pb ? R(pb): 0,
-            marginLeft: ml ? R(ml): 0,
-            marginRight: mr ? R(mr): 0,
-            marginTop: mt ? R(mt): 0,
-            marginBottom: mb ? R(mb): 0,
+            ...RS.width(w),
+            ...RS.height(h),
+
+            ...RS.padding(p),
+            ...RS.paddingLeft(pl),
+            ...RS.paddingRight(pr),
+            ...RS.paddingTop(pt),
+            ...RS.paddingBottom(pb),
+            ...RS.margin(m),
+            ...RS.marginLeft(ml),
+            ...RS.marginRight(mr),
+            ...RS.marginTop(mt),
+            ...RS.marginBottom(mb),
         }
     }
 }
 
-export default function Div({
-    children,
-    w,
-    h,
-    pl,
-    pr,
-    pt,
-    pb,
-    ml,
-    mr,
-    mt,
-    mb,
-    style,
-    className
-}) {
-    const STYLES =  { ... getStyles(R, {
-        w,
-        h,
-        pl,
-        pr,
-        pt,
-        pb,
-        ml,
-        mr,
-        mt,
-        mb
-    })}
-
+export default function Div(props) {
+    const STYLES =  { ... getStyles(RS, { ...props })}
+    const { children, style, className } = props
     return (<div className={className} style={{...STYLES.container, ...style}}>{children}</div>)
 }
