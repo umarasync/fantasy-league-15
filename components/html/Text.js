@@ -45,7 +45,7 @@ const getStyles = (RS, style) => {
 
 export default function Text(props) {
 
-    const STYLES =  { ... getStyles(RS, { ...props })}
+    const STYLES =  { ...getStyles(RS, { ...props })}
 
     const { text, style, className } = props
 

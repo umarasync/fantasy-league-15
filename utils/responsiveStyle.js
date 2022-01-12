@@ -8,6 +8,7 @@ const TYPOGRAPHY = {
     textTransform: v => ({ textTransform: v || 'none' }),
     lineHeight: v => v ? {lineHeight: R(v, 'px')} : {},
     color: v => ({ color: v || 'black' }),
+    textCenter: v => v ? {textAlign: 'center'} : {},
 }
 
 
@@ -30,13 +31,21 @@ const SPACING = {
     marginBottom: v => v ? {marginBottom: R(v)} : {},
 }
 
+const POSITIONING = {
+    position: v => v ? {position: v} : {},
+    left: v => v ? {left: R(v)} : {},
+    right: v => v ? {right: R(v)} : {},
+    top: v => v ? {top: R(v)} : {},
+    bottom: v => v ? {bottom: R(v)} : {},
+}
+
 const BORDER = {
     borderRadius: v => v ? {borderRadius: R(v)} : {},
 }
 
 const FLEX = {
     center: v => v ? {display: 'flex', alignItems: 'center', justifyContent: 'center'} : {},
-    justifyBetween: v => v ? {display: 'flex', alignItems: 'center', justifyContent: 'between'} : {}
+    justifyBetween: v => v ? {display: 'flex', justifyContent: 'space-between'} : {}
 }
 
 const EFFECTS = {
@@ -51,6 +60,10 @@ const BACKGROUNDS = {
     background: v => v ? {background: v} : {},
 }
 
+const LAYOUT = {
+    display: v => v ? { display: v} : {}
+}
+
 const ResponsiveStyle = {
     ...TYPOGRAPHY,
     ...SIZING,
@@ -59,7 +72,9 @@ const ResponsiveStyle = {
     ...FLEX,
     ...EFFECTS,
     ...INTERACTIVITY,
-    ...BACKGROUNDS
+    ...BACKGROUNDS,
+    ...POSITIONING,
+    ...LAYOUT
 }
 
 export default ResponsiveStyle

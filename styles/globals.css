@@ -89,7 +89,9 @@ input.disable-input-outline[type="text"]:focus{
     border-image-slice: 1;
 }
 
-
+::-webkit-scrollbar {
+    display: none;
+}
 
 .footer-blue-gradient {
     background: linear-gradient(180deg, #2E2B63 0%, #252252 100%);

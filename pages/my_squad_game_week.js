@@ -5,6 +5,7 @@ import {useState} from "react";
 import Layout from "components/layout/index";
 import Username from "components/user/Username";
 import MySquadLeftSection from "components/mySquad/MySquadLeftSection";
+import Div from "components/html/Div";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -20,6 +21,7 @@ import {useRouter} from "next/router";
 import colors from "constants/colors";
 import BorderHorizontal from "../components/Borders/BorderHorizontal";
 import InfoBoard from "../components/mySquad/InfoBoard";
+import MatchBoard from "../components/mySquad/MatchBoard";
 
 // Styles
 const getStyles = (R) => {
@@ -46,20 +48,27 @@ export default function MySquadGameWeek () {
 
     return (
         <Layout title="Build Team All Player">
-            <div className="mx-auto flex bg-white">
-                    <div className="w-[62%]">
+            <Div className="mx-auto relative bg-white">
+                <div className={'flex'}>
+                    <Div className="w-[62%]">
                         <MySquadLeftSection
                             pickedPlayers={pickedPlayers}
                             autoPickDisabled={autoPickDisabled}
                             onDeselectPlayer={() => false}
                         />
-                    </div>
+                    </Div>
 
                     {/*Right Section*/}
                     <div className="w-[38%] flex justify-center" style={{minHeight: R()}}>
                         <InfoBoard/>
                     </div>
-            </div>
+                </div>
+
+                <Div center w={'100%'} position={'absolute'} bottom={100}>
+                    <MatchBoard/>
+                </Div>
+
+            </Div>
         </Layout>
     )
 }
