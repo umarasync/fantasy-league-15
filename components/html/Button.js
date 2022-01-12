@@ -11,7 +11,7 @@ import colors from "constants/colors";
 // Styles
 const getStyles = (R, RS, style) => {
 
-    const { disabled,mb, mr, inline } = style
+    const { disabled,mb, mr, ml, inline } = style
 
 
     return {
@@ -19,6 +19,7 @@ const getStyles = (R, RS, style) => {
             ...RS.width(!inline && '100%'),
             ...RS.marginBottom(mb),
             ...RS.marginRight(mr),
+            ...RS.marginLeft(ml),
             opacity: disabled ? 0.5 : 1
         }
     }
@@ -34,6 +35,7 @@ export default function Button(props){
         tt = 'uppercase',
         br = 12,
         fw = 900,
+        lh,
         bg,
 
         p,
@@ -63,6 +65,7 @@ export default function Button(props){
                     center
                     color={color || colors.white}
                     br={br}
+                    lh={lh}
                     bs={bs}
                     tt={tt}
                     fw={fw}

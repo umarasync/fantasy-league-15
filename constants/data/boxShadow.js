@@ -1,0 +1,1 @@
+export const SHADOW_DARK_INDIGO = '0px 4px 0px #0F0C45'

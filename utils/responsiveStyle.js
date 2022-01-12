@@ -35,7 +35,8 @@ const BORDER = {
 }
 
 const FLEX = {
-    center: v => v ? {display: 'flex', alignItems: 'center', justifyContent: 'center'} : {}
+    center: v => v ? {display: 'flex', alignItems: 'center', justifyContent: 'center'} : {},
+    justifyBetween: v => v ? {display: 'flex', alignItems: 'center', justifyContent: 'between'} : {}
 }
 
 const EFFECTS = {

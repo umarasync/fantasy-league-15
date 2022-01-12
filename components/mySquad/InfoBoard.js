@@ -4,14 +4,16 @@ import BorderHorizontal from "components/Borders/BorderHorizontal";
 import Div from "components/html/Div";
 import Text from "components/html/Text";
 import LeagueCard from "components/leagues/LeagueCard";
+import Image from "components/html/Image";
+import Button from "components/html/Button";
 
 // Utils
 import R from "utils/getResponsiveValue";
 
 // Constants
 import colors from "constants/colors";
-import Image from "../html/Image";
-import Button from "../html/Button";
+import { SHADOW_DARK_INDIGO} from "constants/data/boxShadow";
+
 
 export default function InfoBoard() {
 
@@ -76,8 +78,25 @@ export default function InfoBoard() {
                     pr={12}
                     color={colors.regent_grey}
                 />
-                <Div>
-                    <Button title={'Create a league'} />
+                <Div justifyBetween mt={40}>
+                    <Button
+                        w={162}
+                        h={50}
+                        fs={14}
+                        lh={20}
+                        mr={8}
+                        title={'Create a league'}
+                    />
+                    <Button
+                        w={162}
+                        h={50}
+                        fs={14}
+                        lh={20}
+                        ml={9}
+                        bg={colors.dark_indigo}
+                        title={'Join a league'}
+                        bs={SHADOW_DARK_INDIGO}
+                    />
                 </Div>
             </Div>
 

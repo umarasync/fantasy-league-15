@@ -4,7 +4,7 @@ import RS from "utils/responsiveStyle";
 // Styles
 const getStyles = (RS, style) => {
     const {
-        w, h, p, pl, pr, pt, pb, m, ml, mr, mt, mb, bs, center, br
+        w, h, p, pl, pr, pt, pb, m, ml, mr, mt, mb, bs, center, justifyBetween, br
     } = style
 
     return {
@@ -24,6 +24,7 @@ const getStyles = (RS, style) => {
             ...RS.marginBottom(mb),
 
             ...RS.center(center),
+            ...RS.justifyBetween(justifyBetween),
 
             ...RS.borderRadius(br),
 
