@@ -1,6 +1,6 @@
 // Packages
 import {motion, useAnimation} from "framer-motion";
-import {useEffect, useRef, useState} from "react";
+import {createRef, useEffect, useRef, useState} from "react";
 
 // Components
 import Div from "components/html/Div";
@@ -140,12 +140,39 @@ export default function MatchBoard () {
     const [moved, setMoved] = useState(0)
     const [firstLoad, setFirstLoad] = useState(true)
     const [animationInProgress, setAnimationInProgress] = useState(false)
+    const [areElementsPositionSet, setAreElementsPositionSet] = useState(false)
     const [borderWidth, setBorderWidth] = useState(0)
+
+
+
+    const [rights, setRights] = useState([]);
+    const elementsRef = useRef(data.map(() => createRef()));
+
+    const calculateAllRefs = ($matches) => {
+        const nextRights = elementsRef.current.map(ref => {
+            if(ref.current){
+                return getActiveRect(ref)
+            }else if(activeRef){
+                return getActiveRect(activeRef)
+            }
+        });
+
+        const $matchesI = $matches.map((match, index) => {
+            match.elementPosition = nextRights[index]
+            return match
+        })
+
+        setMatches($matchesI)
+        setRights(nextRights);
+        setAreElementsPositionSet(true)
+        // handleScroll()
+    }
+
 
     const scrollBoxOriginPointForBorder = R(517.421)
     const scrollBoxOriginPoint = R(350.421)
 
-    const duration = 0.5
+    const duration = 0.7
 
     const scrollAnimationVariant = {
         scroll: {
@@ -165,20 +192,23 @@ export default function MatchBoard () {
         }
     };
 
-    const getActiveRect = () => {
+    const getActiveRect = (itemRef) => {
+
+        if(!itemRef) return;
+
         const scrollRect = scrollContainer.current.getBoundingClientRect()
-        const activeRect = activeRef.current.getBoundingClientRect()
+        const activeRect = itemRef.current.getBoundingClientRect()
 
         return {
-            scrollRect,
             activeRect,
             activeLeft: activeRect.left - scrollRect.left,
+            activeRight: activeRect.right - scrollRect.right,
         };
     }
 
     const handleScroll = () => {
 
-        const { activeLeft, activeRect} = getActiveRect()
+        const { activeLeft, activeRect, activeRight} = getActiveRect(activeRef)
 
         setBorderWidth(activeRect.width)
 
@@ -201,14 +231,21 @@ export default function MatchBoard () {
             return item
         })
         setFirstLoad(false)
-        setMatches($matches)
+        // setMatches($matches)
+        calculateAllRefs($matches)
     }
+
+    // useEffect(() => {
+    //     if(!firstLoad){
+    //         handleScroll()
+    //     }
+    // }, [matches, firstLoad])
 
     useEffect(() => {
         if(!firstLoad){
             handleScroll()
         }
-    }, [matches, firstLoad])
+    }, [firstLoad])
 
     useEffect(() => {
         if(!firstLoad){
@@ -217,17 +254,21 @@ export default function MatchBoard () {
         }
     }, [moved])
 
-    const handleBorderWidth = () => {
+    const initialRender = () => {
+
         setTimeout(() => {
-            const { activeRect } = getActiveRect()
+            const { activeRect } = getActiveRect(activeRef)
             setBorderWidth(activeRect.width)
-            handleScroll()
+            // handleScroll()
+            // setTimeout(() => {
+            //     calculateAllRefs()
+            // }, 1000)
+            setFirstLoad(false)
         }, 300)
     }
     useEffect(() => {
-                handleBorderWidth()
+        initialRender()
     }, [])
-
 
     const handleControls = (isNext = false) => {
         if(animationInProgress) return;
@@ -237,6 +278,34 @@ export default function MatchBoard () {
         if(nextIndex === $matches.length || nextIndex === -1) return
         handleOnClick($matches[nextIndex])
     }
+
+    const onAnimationComplete = (definition) => {
+        if(definition === 'scroll') {
+            setAnimationInProgress(false)
+        }
+    }
+
+
+    const onBorderAnimationComplete = (definition) => {
+        calculateAllRefs(matches)
+        if(definition === 'borderWidth') {
+            setAnimationInProgress(false)
+        }
+    }
+
+    const getOpacity = (match) => {
+        const elPos = match.elementPosition;
+
+        if(elPos && elPos.activeLeft > 0 && elPos.activeLeft < 947 && elPos.activeRight < 0 && elPos.activeRight > -947) {
+            return 1
+            console.log('true=========', elPos)
+        }
+
+        console.log('false=========', elPos)
+
+        return 0.5
+    }
+
 
     return (
         <Div h={720} pt={40} w={1280} style={STYLES.container}  className={'bg-red-200'} position="relative"  br={12} bs={SHADOW_WHITE_SMOKE}>
@@ -251,27 +320,27 @@ export default function MatchBoard () {
                                     variants={scrollAnimationVariant}
                                     animate={controls}
                                     onAnimationStart={() => setAnimationInProgress(true)}
-                                    onAnimationComplete={(definition) => {
-                                        if(definition === 'scroll') {
-                                            setAnimationInProgress(false)
-                                        }
-                                    }}
+                                    onAnimationComplete={(definition) => onAnimationComplete(definition)}
                                     key={match.id}
                                     className={'flex flex-col items-center'}
                                     style={{...
                                             STYLES.item,
                                         marginLeft: index ? R(32)  : 0,
                                         marginRight: index !== data.length -1 ? R(31) : 0,
-                                        background: match.active ? 'yellow': 'whitesmoke'
+                                        background: match.active ? 'yellow': 'whitesmoke',
+                                        opacity: getOpacity(match)
                                     }}
                                 >
                                     <div
                                         className={'flex flex-col items-center'}
-                                        ref={ match.active ? activeRef : null }
+                                        // ref={elementsRef.current[index]}
+                                        ref={ match.active ? activeRef : elementsRef.current[index] }
+                                        // ref={ match.active ? activeRef : null }
                                         onClick={() => handleOnClick(match)}
                                         data-lastChild={match.lastChild}
                                         data-firstChild={match.firstChild}
                                     >
+
                                         <Text text={match.week} color={colors.regent_grey} fs={18} lh={26}/>
                                         <Text text={match.date} color={colors.regent_grey} fs={28} lh={32} fst={'italic'} tt={'uppercase'} fw={700}/>
 
@@ -296,6 +365,7 @@ export default function MatchBoard () {
 
             <motion.div
                 variants={borderAnimationVariant}
+                onAnimationComplete={(definition) => onBorderAnimationComplete(definition)}
                 animate={controls}
                 style={{
                     width: borderWidth,
