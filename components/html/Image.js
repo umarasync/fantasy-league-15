@@ -28,10 +28,10 @@ export default function Image(props) {
 
     const STYLES =  { ... getStyles(RS, { ...props })}
 
-    const { name, alt, onClick } = props
+    const { name, alt, onClick, disabled } = props
 
     return (
-        <div style={STYLES.container} onClick={onClick}>
+        <div style={STYLES.container} onClick={disabled ? () => false: onClick}>
             <div style={STYLES.image}>
                 <img src={`images/${name}`} alt={alt} width={'100%'} height={'100%'}/>
             </div>

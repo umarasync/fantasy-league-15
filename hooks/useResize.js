@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 
-const useResize = (myRef, size = 50) => {
+const useResize = (myRef) => {
     const getDimensions = () => ({
         width: myRef.current.offsetWidth,
         height: myRef.current.offsetHeight

@@ -24,7 +24,15 @@ const getStyles = (R) => {
         },
         scrollContainer:{
             whiteSpace: 'nowrap',
-            overflow: 'hidden',
+            // overflow: 'hidden',
+            background: 'red',
+            // height: 80,
+            // paddingLeft: R(167),
+            // paddingRight: R(166),
+            // height: 'max-content',
+            width: R(947)
+            // width: R(1107)
+            // marginLeft: R(-10)
         },
         item: {
             height: 'max-content',
@@ -32,6 +40,8 @@ const getStyles = (R) => {
             display: 'inline-block',
             textAlign: 'center',
             background: 'white',
+            // border: '1px solid red',
+            // width: R(189.4)
         }
     }
 }
@@ -39,6 +49,13 @@ const getStyles = (R) => {
 const data = [
     {
         id: 1,
+        week: 'Gameweek 8',
+        date: '29 sep',
+        active: false,
+        firstChild: true,
+    },
+    {
+        id: 111,
         week: 'Gameweek 8',
         date: '29 sep',
         active: false
@@ -58,8 +75,8 @@ const data = [
     {
         id: 4,
         week: 'Gameweek 8',
-        date: 'Make transfers',
-        active: true
+        date: '29 sep',
+        active: false
     },
     {
         id: 5,
@@ -70,14 +87,15 @@ const data = [
     {
         id: 6,
         week: 'Gameweek 8',
-        date: '29 sep',
-        active: false
+        date: 'Make transfers',
+        active: true
     },
     {
         id: 7,
         week: 'Gameweek 8',
-        date: 'Make transfers',
-        active: false
+        date: '29 sep',
+        active: false,
+        lastChild: true
     },
     {
         id: 8,
@@ -121,7 +139,11 @@ export default function MatchBoard () {
 
     const [moved, setMoved] = useState(0)
     const [firstLoad, setFirstLoad] = useState(true)
+    const [animationInProgress, setAnimationInProgress] = useState(false)
     const [borderWidth, setBorderWidth] = useState(0)
+
+    const scrollBoxOriginPointForBorder = R(517.421)
+    const scrollBoxOriginPoint = R(350.421)
 
     const duration = 0.5
 
@@ -150,15 +172,13 @@ export default function MatchBoard () {
         return {
             scrollRect,
             activeRect,
-            activeLeft: activeRect.left - scrollRect.left
+            activeLeft: activeRect.left - scrollRect.left,
         };
     }
 
     const handleScroll = () => {
 
-        const scrollBoxOriginPoint = 507.421875
-
-        const { activeLeft, activeRect } = getActiveRect()
+        const { activeLeft, activeRect} = getActiveRect()
 
         setBorderWidth(activeRect.width)
 
@@ -172,22 +192,23 @@ export default function MatchBoard () {
 
         setFirstLoad(false)
         setMoved(moved + movedPixels)
+
     }
 
     const handleOnClick = (match) => {
-
         const $matches = matches.map((item) => {
             item.active = item.id === match.id;
             return item
         })
-
         setFirstLoad(false)
         setMatches($matches)
     }
 
     useEffect(() => {
-        if(!firstLoad){ handleScroll()}
-    }, [matches])
+        if(!firstLoad){
+            handleScroll()
+        }
+    }, [matches, firstLoad])
 
     useEffect(() => {
         if(!firstLoad){
@@ -196,68 +217,81 @@ export default function MatchBoard () {
         }
     }, [moved])
 
-    useEffect(() => {
+    const handleBorderWidth = () => {
         setTimeout(() => {
             const { activeRect } = getActiveRect()
             setBorderWidth(activeRect.width)
             handleScroll()
         }, 300)
+    }
+    useEffect(() => {
+                handleBorderWidth()
     }, [])
 
+
     const handleControls = (isNext = false) => {
+        if(animationInProgress) return;
         const $matches = clone(matches)
         let objIndex = $matches.findIndex((match) => match.active)
-        $matches[objIndex].active = false
-
         let nextIndex = isNext ? objIndex + 1 : objIndex - 1
-
         if(nextIndex === $matches.length || nextIndex === -1) return
-
-        $matches[nextIndex].active = true
-        setFirstLoad(false)
-        setMatches($matches)
+        handleOnClick($matches[nextIndex])
     }
 
     return (
         <Div h={720} pt={40} w={1280} style={STYLES.container}  className={'bg-red-200'} position="relative"  br={12} bs={SHADOW_WHITE_SMOKE}>
-            <div style={{...STYLES.scrollContainer, marginLeft: -25}} ref={scrollContainer}>
-                {
-                    matches.map((match, index) => {
-                        return (
-                            <motion.div
-                                variants={scrollAnimationVariant}
-                                animate={controls}
-                                key={match.id}
-                                className={'flex flex-col items-center'}
-                                style={{...
-                                        STYLES.item,
-                                    marginLeft: index ? 31 : 0,
-                                    marginRight: index !== data.length -1 ? 31 : 0,
-                                    background: match.active ? 'yellow': 'whitesmoke'
-                                }}
-                            >
-                                <div
+            <Div className={'flex justify-center'}>
+                <div style={{...STYLES.scrollContainer}}
+                    // className={'flex justify-between'}
+                     ref={scrollContainer}>
+                    {
+                        matches.map((match, index) => {
+                            return (
+                                <motion.div
+                                    variants={scrollAnimationVariant}
+                                    animate={controls}
+                                    onAnimationStart={() => setAnimationInProgress(true)}
+                                    onAnimationComplete={(definition) => {
+                                        if(definition === 'scroll') {
+                                            setAnimationInProgress(false)
+                                        }
+                                    }}
+                                    key={match.id}
                                     className={'flex flex-col items-center'}
-                                    ref={ match.active ? activeRef : null }
-                                    onClick={() => handleOnClick(match)}
+                                    style={{...
+                                            STYLES.item,
+                                        marginLeft: index ? R(32)  : 0,
+                                        marginRight: index !== data.length -1 ? R(31) : 0,
+                                        background: match.active ? 'yellow': 'whitesmoke'
+                                    }}
                                 >
-                                    <Text text={match.week} color={colors.regent_grey} fs={18} lh={26}/>
-                                    <Text text={match.date} color={colors.regent_grey} fs={28} lh={32} fst={'italic'} tt={'uppercase'} fw={700}/>
+                                    <div
+                                        className={'flex flex-col items-center'}
+                                        ref={ match.active ? activeRef : null }
+                                        onClick={() => handleOnClick(match)}
+                                        data-lastChild={match.lastChild}
+                                        data-firstChild={match.firstChild}
+                                    >
+                                        <Text text={match.week} color={colors.regent_grey} fs={18} lh={26}/>
+                                        <Text text={match.date} color={colors.regent_grey} fs={28} lh={32} fst={'italic'} tt={'uppercase'} fw={700}/>
 
-                                </div>
+                                    </div>
 
-                            </motion.div>
-                        )
-                    })
-                }
-            </div>
+                                </motion.div>
+                            )
+                        })
+                    }
+                </div>
+            </Div>
+
 
             <Div position='absolute' top={40} left={40}>
                 <Image w={60} h={60} name={'arrow-prev.png'} cursor={'pointer'} bg={'green'} onClick={() => handleControls()}/>
+
             </Div>
 
             <Div position='absolute' top={40} right={40}>
-                <Image w={60} h={60} name={'arrow-next.png'} cursor={'pointer'} bg={'green'} onClick={() => handleControls(true)}/>
+                <Image w={60} h={60} name={'arrow-next.png'}  cursor={'pointer'} bg={'green'} onClick={() => handleControls(true)}/>
             </Div>
 
             <motion.div
@@ -265,11 +299,11 @@ export default function MatchBoard () {
                 animate={controls}
                 style={{
                     width: borderWidth,
-                    height: 2,
+                    height: R(2),
                     position: 'absolute',
                     background: colors.mandy,
-                    marginTop: 10,
-                    left: 481
+                    marginTop: R(20),
+                    left: scrollBoxOriginPointForBorder
                 }}
             />
         </Div>

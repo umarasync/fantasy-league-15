@@ -53,5 +53,5 @@ const getStyles = (RS, style) => {
 export default function Div(props) {
     const STYLES =  { ... getStyles(RS, { ...props })}
     const { children, style, className } = props
-    return (<div className={className} style={{...STYLES.container, ...style}}>{children}</div>)
+    return (<div className={className} style={{...STYLES.container, ...style}} >{children}</div>)
 }
