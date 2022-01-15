@@ -20,7 +20,8 @@ const getStyles = (R) => {
 }
 
 export default function Username({
-     username
+     username,
+     iconStyle
  }) {
 
     const STYLES =  { ... getStyles(R) }
@@ -28,7 +29,7 @@ export default function Username({
     return (
         <div className={'flex'}>
             <p style={STYLES.username}>{username}</p>
-            <div style={STYLES.person}><img src="/images/person.png" alt="" width={'100%'} height={'100%'}/></div>
+            <div style={{...STYLES.person, ...iconStyle}}><img src="/images/person.png" alt="" width={'100%'} height={'100%'}/></div>
         </div>
     )
 }

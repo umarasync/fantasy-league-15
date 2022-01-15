@@ -6,7 +6,7 @@ import {AnimatePresence,motion} from "framer-motion";
 import Layout from "components/layout/index";
 import FooterBar from "components/footer/FooterBar";
 import SearchBar from "components/search/SearchBar";
-import Username from "components/login/Username";
+import Username from "components/user/Username";
 import FilterIcon from "components/filter/FilterIcon";
 import FilterButtons from "components/filter/FilterButtons";
 import PlayerCard from "components/player/PlayerCard";
@@ -310,7 +310,6 @@ export default function BuildTeamAllPlayer () {
             setTotalChosenPlayers(totalChosenPlayers + 1)
 
             setPlayersDataInitial(updatePlayersDataAfterSelectionOrDeselection(playersDataInitial, playerI, true))
-
         }
 
         setPickedPlayers({...pickedPlayersI})

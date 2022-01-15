@@ -1,7 +1,7 @@
 // Components
-import PrimaryButton from "components/buttons/PrimaryButton";
+import Button from "components/html/Button";
 import Border from "components/Borders/Border";
-
+import Div from "components/html/Div";
 // Utils
 import R from "utils/getResponsiveValue";
 
@@ -55,18 +55,7 @@ const getStyles = (R) => {
             lineHeight: R(32, 'px'),
             fontWeight: '800'
         },
-        autoPickBtn: {
-            boxShadow: 'unset',
-            background: 'white',
-            height: R(50),
-            width: R(190),
-        },
-        resetBtn: {
-            boxShadow: 'unset',
-            background: colors.rhino,
-            height: R(50),
-            width: R(190)
-        },
+
         continueBtn: {
             height: R(50),
             width: R(163)
@@ -123,31 +112,38 @@ export default function FooterBar({
                 </div>
 
                 {/*Right Section*/}
-                <div className={'flex items-center text-black_rock'}>
-                    <PrimaryButton
+                <Div center>
+                    <Button
                         title={'auto pick'}
-                        textClasses={'text-black_rock'}
+                        color={colors.black_rock}
                         disabled={autoPickDisabled}
-                        buttonStyle={{ marginRight: R(16)}}
-                        style={STYLES.autoPickBtn}
+                        mr={16}
+                        h={50}
+                        w={190}
+                        bs={'unset'}
+                        bg={colors.white}
                         onClick={onAutoPick}
                     />
-                    <PrimaryButton
+                    <Button
                         title={'reset'}
-                        textClasses={'text-white'}
                         disabled={resetDisabled}
-                        buttonStyle={{marginRight: R(40)}}
-                        style={STYLES.resetBtn}
+                        mr={40}
+                        bs={'unset'}
+                        h={50}
+                        w={190}
+                        bg={colors.rhino}
                         onClick={onResetClick}
                     />
-                    <PrimaryButton
+                    <Button
                         onClick={onContinueClick}
                         title={'continue'}
-                        textClasses={'text-white'}
+                        h={50}
+                        w={163}
+                        color={colors.white}
                         disabled={continueDisabled}
                         style={STYLES.continueBtn}
                     />
-                </div>
+                </Div>
             </div>
 
         </div>

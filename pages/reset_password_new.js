@@ -4,7 +4,7 @@ import {useState, useEffect} from "react";
 // Components
 import Layout from "components/layout";
 import Input from "components/inputs/input";
-import PrimaryButton from "../components/buttons/PrimaryButton";
+import Button from "../components/html/Button";
 import {useRouter} from "next/router";
 
 // Utils
@@ -60,7 +60,7 @@ export default function ResetPassword() {
                         value={cPassword}
                         style={{ marginBottom: R(60)}}
                     />
-                    <PrimaryButton title={'Next'} disabled={disabled} onClick={() => !disabled && router.push('/reset_password_new_success')}/>
+                    <Button title={'Next'} disabled={disabled} onClick={() => !disabled && router.push('/reset_password_new_success')}/>
                 </div>
             </div>
         </Layout>

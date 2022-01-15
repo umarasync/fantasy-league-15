@@ -3,7 +3,7 @@ import {useRouter} from "next/router";
 
 // Components
 import Layout from "components/layout";
-import PrimaryButton from "components/buttons/PrimaryButton";
+import Button from "components/html/Button";
 
 export default function ResetPasswordSuccess() {
     const router = useRouter()
@@ -19,7 +19,7 @@ export default function ResetPasswordSuccess() {
                     <p className="text-[1.8rem] leading-[2.6rem] normal text-center text-lavender_grey mb-[6rem]">
                         Now you can sign in to your account using <br/>your new password
                     </p>
-                    <PrimaryButton title={'SIGN IN'} onClick={() => router.push('/sign_in')} />
+                    <Button title={'SIGN IN'} onClick={() => router.push('/sign_in')} />
                 </div>
             </div>
         </Layout>
