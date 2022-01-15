@@ -63,6 +63,7 @@ const getStyles = (R) => {
     }
 }
 
+
 export default function MatchBoard () {
 
     const STYLES =  { ...getStyles(R) }
@@ -71,7 +72,7 @@ export default function MatchBoard () {
 
     const [matches, setMatches] = useState([])
 
-    const scrollContainer = useRef()
+    const scrollContainerRef = useRef()
     let activeRef = useRef()
 
     const controls = useAnimation()
@@ -81,32 +82,13 @@ export default function MatchBoard () {
     const [initialRenderDone, setInitialRenderDone] = useState(false)
     const [animationInProgress, setAnimationInProgress] = useState(false)
     const [areElementsPositionSet, setAreElementsPositionSet] = useState(false)
+    const [rerender, setRender] = useState(false)
     const [borderWidth, setBorderWidth] = useState(0)
+
+
 
     const [rights, setRights] = useState([]);
     const elementsRef = useRef(INITIAL_MATCHES.map(() => createRef()));
-
-    // const calculateAllRefs = ($matches) => {
-    //     const nextRights = elementsRef.current.map(ref => {
-    //         if(ref.current){
-    //             return getActiveRect(ref)
-    //         }else if(activeRef){
-    //             return getActiveRect(activeRef)
-    //         }
-    //     });
-    //
-    //     const $matchesI = $matches.map((match, index) => {
-    //         match.elementPosition = nextRights[index]
-    //         return match
-    //     })
-    //
-    //     setMatches($matchesI)
-    //     setRights(nextRights);
-    //     setAreElementsPositionSet(true)
-    //     // handleScroll()
-    // }
-
-
 
     const calculateAllRefs = ($matches) => {
 
@@ -131,10 +113,8 @@ export default function MatchBoard () {
 
         const $matches = matches.map((item, index) => {
             const elPos = rights[index]
-            item.overflowing = true
-            if(elPos && elPos.activeLeft > 0 && elPos.activeLeft < 947 && elPos.activeRight < 0 && elPos.activeRight > -947) {
-                item.overflowing = false
-            }
+
+            item.overflowing = !(elPos && elPos.activeLeft > 0 && elPos.activeLeft < 1080 && elPos.activeRight < 0 && elPos.activeRight > -1080);
             return item
         })
 
@@ -150,6 +130,8 @@ export default function MatchBoard () {
     // const duration = 3
 
     const getOpacity = (match) => {
+
+
         if(match.active || match.lastActive) {
             return 1
         }else if(!match.overflowing) {
@@ -158,10 +140,16 @@ export default function MatchBoard () {
             return 0.1
         }
 
+
+        // if(match.active || match.lastActive) {
+        //     return 1
+        // }else{
+        //     return 0.5
+        // }
     }
 
     const scrollAnimation = {
-        scroll: (match) => {
+        scroll: ({match, index}) => {
             return {
                 x: -moved,
                 opacity: getOpacity(match),
@@ -204,7 +192,7 @@ export default function MatchBoard () {
 
         if(!itemRef.current) return;
 
-        const scrollRect = scrollContainer.current.getBoundingClientRect()
+        const scrollRect = scrollContainerRef.current.getBoundingClientRect()
         const activeRect = itemRef.current.getBoundingClientRect()
 
         return {
@@ -218,15 +206,10 @@ export default function MatchBoard () {
 
         const { activeLeft, activeRect, activeRight} = getActiveRect(activeRef)
 
-        console.log('data=======', {
-            activeLeft: parseInt(activeLeft),
-            rights,
-            scrollBoxOriginPoint: parseInt(scrollBoxOriginPoint)
-        })
-
-        if(animationInProgress || parseInt(activeLeft) === parseInt(scrollBoxOriginPoint)) return
+        // if(animationInProgress || parseInt(activeLeft) === parseInt(scrollBoxOriginPoint)) return
 
         setBorderWidth(activeRect.width)
+
 
         let movedPixels = 0;
 
@@ -235,10 +218,20 @@ export default function MatchBoard () {
         }else {
             movedPixels = -1 * (scrollBoxOriginPoint - activeLeft)
         }
+
+        // console.log('data=======', {
+        //     activeLeft: parseInt(activeLeft),
+        //     rights,
+        //     scrollBoxOriginPoint: parseInt(scrollBoxOriginPoint),
+        //     movedPixels
+        // })
+
         setMoved(moved + movedPixels)
     }
 
     const handleTabClick = (match) => {
+
+
         let currentActive = matches.findIndex((match) => match.active)
 
         const $matches = matches.map((item, index) => {
@@ -246,9 +239,10 @@ export default function MatchBoard () {
             const elPos = rights[index]
 
             item.active = item.id === match.id;
+
             item.lastActive = index === currentActive
 
-            item.overflowing = !(elPos && elPos.activeLeft > 0 && elPos.activeLeft < 947 && elPos.activeRight < 0 && elPos.activeRight > -947);
+            item.overflowing = !(elPos && elPos.activeLeft > 0 && elPos.activeLeft < 1090 && elPos.activeRight < 0 && elPos.activeRight > -1080);
 
             return item
         })
@@ -285,6 +279,7 @@ export default function MatchBoard () {
     useEffect(() => {
         const $matches = INITIAL_MATCHES.map((item, index) => {
             item.active = index === 5;
+            // item.overflowing = ![3, 4, 5, 6, 7].includes(index);
             return item
         })
         setMatches($matches)
@@ -293,26 +288,32 @@ export default function MatchBoard () {
     const onAnimationComplete = (definition) => {
         if(definition === 'borderWidth') {
             setAnimationInProgress(false)
-            calculateAllRefs()
+            setTimeout(()=> {
+                calculateAllRefs()
+            }, 300)
         }
     }
-
 
     return (
         <Div h={720} pt={40} w={1280} style={STYLES.container}
              className={'bg-white'}
              position="relative" br={12} bs={SHADOW_WHITE_SMOKE}>
             <Div className={'flex justify-center'}>
+
                 <div style={{...STYLES.scrollContainer}}
                     // className={'flex justify-between'}
-                     ref={scrollContainer}>
+                     ref={scrollContainerRef}
+                >
                     {
                         matches.length > 0 && matches.map((match, index) => {
                             return (
                                 <motion.div
                                     variants={scrollAnimation}
                                     animate={controls}
-                                    custom={match}
+                                    custom={{
+                                        match,
+                                        index
+                                    }}
                                     key={match.id}
                                     className={'flex flex-col items-center'}
                                     style={{
@@ -322,9 +323,7 @@ export default function MatchBoard () {
                                 >
                                     <div
                                         className={'flex flex-col items-center'}
-                                        // ref={elementsRef.current[index]}
                                         ref={match.active ? activeRef : elementsRef.current[index]}
-                                        // ref={ match.active ? activeRef : null }
                                         onClick={() => handleTabClick(match)}
                                         data-lastChild={match.lastChild}
                                         data-firstChild={match.firstChild}
@@ -348,6 +347,7 @@ export default function MatchBoard () {
                         })
                     }
                 </div>
+
             </Div>
 
             <Div position='absolute' top={40} left={40}>
