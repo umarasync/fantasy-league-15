@@ -46,6 +46,8 @@ export default function MySquadGameWeek () {
     // Footer Bar States
     const [autoPickDisabled, setAutoPickDisabled] = useState(false)
 
+    return null
+
     return (
         <Layout title="Build Team All Player">
             <Div className="mx-auto relative bg-white">
