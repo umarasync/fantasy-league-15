@@ -1,6 +1,6 @@
 // Packages
-import {motion, useAnimation} from "framer-motion";
-import {createRef, useEffect, useMemo, useRef, useState} from "react";
+import {AnimatePresence, motion, useAnimation} from "framer-motion";
+import {createRef, useEffect, useRef, useState} from "react";
 
 // Components
 import Div from "components/html/Div";
@@ -25,7 +25,7 @@ const getStyles = (R) => {
         },
         scrollContainer:{
             whiteSpace: 'nowrap',
-            // overflow: 'hidden',
+            overflow: 'hidden',
             // background: 'red',
             // height: 80,
             // paddingLeft: R(167),
@@ -82,9 +82,8 @@ export default function MatchBoard () {
     const [initialRenderDone, setInitialRenderDone] = useState(false)
     const [animationInProgress, setAnimationInProgress] = useState(false)
     const [areElementsPositionSet, setAreElementsPositionSet] = useState(false)
-    const [rerender, setRender] = useState(false)
+    const [rerender, setReRender] = useState(false)
     const [borderWidth, setBorderWidth] = useState(0)
-
 
 
     const [rights, setRights] = useState([]);
@@ -109,16 +108,18 @@ export default function MatchBoard () {
 
     useEffect(()=> {
 
-        let currentActive = matches.findIndex((match) => match.active)
-
         const $matches = matches.map((item, index) => {
             const elPos = rights[index]
-
             item.overflowing = !(elPos && elPos.activeLeft > 0 && elPos.activeLeft < 1080 && elPos.activeRight < 0 && elPos.activeRight > -1080);
             return item
         })
 
+
          setMatches($matches)
+
+        setTimeout(() => {
+            setReRender(true)
+        }, 2000)
 
     }, [rights])
 
@@ -131,13 +132,14 @@ export default function MatchBoard () {
 
     const getOpacity = (match) => {
 
-
         if(match.active || match.lastActive) {
             return 1
-        }else if(!match.overflowing) {
+        }
+        // else if(!match.overflowing) {
+        //     return 0.5
+        // }
+        else {
             return 0.5
-        }else {
-            return 0.1
         }
 
 
@@ -148,16 +150,45 @@ export default function MatchBoard () {
         // }
     }
 
+
     const scrollAnimation = {
-        scroll: ({match, index}) => {
+        scroll: ({match, isOverflowing}) => {
+
+            // console.log('isOverflowing =======', isOverflowing)
             return {
                 x: -moved,
                 opacity: getOpacity(match),
                 transition: {
-                    duration: duration + 0.2,
+                    duration: duration,
                 },
             }
         },
+
+        scroll1: {
+            x: -moved,
+            opacity: 0.5,
+            transition: {
+                duration: duration,
+            },
+        },
+
+        scroll2: {
+            x: -moved,
+            opacity: 0.3,
+            transition: {
+                duration: duration,
+            },
+        },
+
+        scroll3: {
+            x: -moved,
+            opacity: 1,
+            transition: {
+                duration: duration,
+            },
+        },
+
+
     };
 
     const borderAnimation = {
@@ -182,6 +213,8 @@ export default function MatchBoard () {
 
     useEffect(() => {
         if(initialRenderDone){
+            // controls.start('scroll1')
+            // controls.start('scroll2')
             controls.start('scroll')
             borderAnimationControls.start('borderWidth')
             controls.start('changeTextColor')
@@ -279,7 +312,7 @@ export default function MatchBoard () {
     useEffect(() => {
         const $matches = INITIAL_MATCHES.map((item, index) => {
             item.active = index === 5;
-            // item.overflowing = ![3, 4, 5, 6, 7].includes(index);
+            item.overflowing = ![3, 4, 5, 6, 7].includes(index);
             return item
         })
         setMatches($matches)
@@ -289,8 +322,19 @@ export default function MatchBoard () {
         if(definition === 'borderWidth') {
             setAnimationInProgress(false)
             setTimeout(()=> {
-                calculateAllRefs()
+                // calculateAllRefs()
             }, 300)
+        }
+    }
+
+    const getAnimation = (match) => {
+
+        if(match.active || match.lastActive) {
+            return 'scroll3'
+        }else if(!match.overflowing){
+            return 'scroll1'
+        }else {
+            return  'scroll2'
         }
     }
 
@@ -299,54 +343,58 @@ export default function MatchBoard () {
              className={'bg-white'}
              position="relative" br={12} bs={SHADOW_WHITE_SMOKE}>
             <Div className={'flex justify-center'}>
+                    <div style={{...STYLES.scrollContainer}}
+                        // className={'flex justify-between'}
+                         ref={scrollContainerRef}
+                    >
+                        {
+                            matches.length > 0 && matches.map((match, index) => {
+                                return(
+                                    <motion.div
+                                        variants={scrollAnimation}
+                                        animate={controls}
 
-                <div style={{...STYLES.scrollContainer}}
-                    // className={'flex justify-between'}
-                     ref={scrollContainerRef}
-                >
-                    {
-                        matches.length > 0 && matches.map((match, index) => {
-                            return (
-                                <motion.div
-                                    variants={scrollAnimation}
-                                    animate={controls}
-                                    custom={{
-                                        match,
-                                        index
-                                    }}
-                                    key={match.id}
-                                    className={'flex flex-col items-center'}
-                                    style={{
-                                        ...STYLES.item,
-                                        opacity: match.overflowing ? 0 : 1
-                                    }}
-                                >
-                                    <div
+                                        // animate={getAnimation(match)}
+
+
+                                        custom={{
+                                            match,
+                                            isOverflowing: match.overflowing
+                                        }}
+
+                                        key={match.id}
                                         className={'flex flex-col items-center'}
-                                        ref={match.active ? activeRef : elementsRef.current[index]}
-                                        onClick={() => handleTabClick(match)}
-                                        data-lastChild={match.lastChild}
-                                        data-firstChild={match.firstChild}
+                                        style={{...STYLES.item}}
                                     >
-                                        <Text text={match.week} color={colors.regent_grey} fs={18} lh={26}/>
-                                        <Text text={match.overflowing ? 'yes' : 'no'} color={colors.regent_grey}
-                                              fs={18} lh={26}/>
-                                        <motion.p
-                                            variants={subHeadingAnimation}
-                                            animate={controls}
-                                            custom={match}
-                                            className={'italic uppercase font-[700]'}
-                                            style={STYLES.subHeading}
-                                        >
-                                            {match.date}
-                                        </motion.p>
-                                    </div>
+                                        <div
+                                            className={'flex flex-col items-center'}
+                                            ref={match.active ? activeRef : elementsRef.current[index]}
+                                            onClick={() => handleTabClick(match)}
+                                            data-lastChild={match.lastChild}
+                                            data-firstChild={match.firstChild}
 
-                                </motion.div>
-                            )
-                        })
-                    }
-                </div>
+                                        >
+                                            <Text text={match.week} color={colors.regent_grey} fs={18} lh={26}/>
+
+                                            {/*<Text text={match.overflowing ? 'yessss' : 'noooo'} color={colors.regent_grey}*/}
+                                            {/*      fs={18} lh={26}/>*/}
+
+                                            <motion.p
+                                                variants={subHeadingAnimation}
+                                                animate={controls}
+                                                custom={match}
+                                                className={'italic uppercase font-[700]'}
+                                                style={STYLES.subHeading}
+                                            >
+                                                {match.date}
+                                            </motion.p>
+                                        </div>
+
+                                    </motion.div>
+                                    )
+                            })
+                        }
+                    </div>
 
             </Div>
 
@@ -372,4 +420,5 @@ export default function MatchBoard () {
             />
         </Div>
     )
+
 }
