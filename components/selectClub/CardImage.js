@@ -8,8 +8,10 @@ export default function CardImage ({
     changeCard,
     fadeInOutAnimation,
     image,
-    containerStyle
+    containerStyle,
+    custom
 }){
+
     return (
         <div className="relative w-full flex justify-center" style={containerStyle}>
             {
@@ -22,6 +24,7 @@ export default function CardImage ({
                                 height: R(image.height)
                             }}
                             variants={fadeInOutAnimation}
+                            custom={custom}
                             initial="initial"
                             animate="animate"
                             exit="exit"
@@ -46,6 +49,7 @@ export default function CardImage ({
                             initial="initial"
                             animate="animate"
                             exit="exit"
+                            custom={custom}
                             key={2}
                         >
                             <img

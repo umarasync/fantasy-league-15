@@ -1,11 +1,13 @@
 // Packages
-import {AnimatePresence, motion, useAnimation} from "framer-motion";
+import {motion, useAnimation} from "framer-motion";
 import {createRef, useEffect, useRef, useState} from "react";
+import dayjs from 'dayjs'
 
 // Components
 import Div from "components/html/Div";
 import Text from "components/html/Text";
 import Image from "components/html/Image";
+import Button from "components/html/Button";
 
 // Constants
 import {SHADOW_WHITE_SMOKE} from "constants/data/boxShadow";
@@ -15,26 +17,18 @@ import {MATCHES} from "constants/data/matches";
 // utils
 import {clone} from "utils/helpers";
 import R from "utils/getResponsiveValue";
+import MatchBoardContent from "components/mySquad/MatchBoardContent";
 
 // Styles
 const getStyles = (R) => {
     return {
-        container: {
+        scrollBox: {
             whiteSpace: 'nowrap',
-            overflow: 'hidden',
         },
         scrollContainer:{
             whiteSpace: 'nowrap',
             overflow: 'hidden',
-            // background: 'red',
-            // height: 80,
-            // paddingLeft: R(167),
-            // paddingRight: R(166),
-            // height: 'max-content',
-            // width: R(947)
             width: R(1080)
-            // width: R(1107)
-            // marginLeft: R(-10)
         },
         item: {
             height: 'max-content',
@@ -42,11 +36,8 @@ const getStyles = (R) => {
             display: 'inline-block',
             textAlign: 'center',
             background: 'white',
-            // marginLeft: R(32),
-            // marginRight: R(32),
             marginLeft: R(35),
             marginRight: R(35),
-
             opacity: 0,
         },
         subHeading: {
@@ -62,7 +53,6 @@ const getStyles = (R) => {
         }
     }
 }
-
 
 export default function MatchBoard () {
 
@@ -81,114 +71,28 @@ export default function MatchBoard () {
     const [moved, setMoved] = useState(0)
     const [initialRenderDone, setInitialRenderDone] = useState(false)
     const [animationInProgress, setAnimationInProgress] = useState(false)
-    const [areElementsPositionSet, setAreElementsPositionSet] = useState(false)
-    const [rerender, setReRender] = useState(false)
+    const [tabChanged, setTabChanged] = useState(false)
     const [borderWidth, setBorderWidth] = useState(0)
+    const [activeTabContent, setActiveTabContent] = useState({})
+    const MAKE_TRANSFERS = 'make transfers'
 
-
-    const [rights, setRights] = useState([]);
     const elementsRef = useRef(INITIAL_MATCHES.map(() => createRef()));
 
-    const calculateAllRefs = ($matches) => {
-
-        const nextRights = elementsRef.current.map(ref => {
-            if(ref.current){
-                return getActiveRect(ref)
-            }else if(activeRef){
-                return getActiveRect(activeRef)
-            }
-        });
-
-        if(!rights.length){
-            setRights(nextRights)
-        } else if(rights[0].activeLeft !== nextRights[0].activeLeft) {
-            setRights(nextRights);
-        }
-    }
-
-    useEffect(()=> {
-
-        const $matches = matches.map((item, index) => {
-            const elPos = rights[index]
-            item.overflowing = !(elPos && elPos.activeLeft > 0 && elPos.activeLeft < 1080 && elPos.activeRight < 0 && elPos.activeRight > -1080);
-            return item
-        })
-
-
-         setMatches($matches)
-
-        setTimeout(() => {
-            setReRender(true)
-        }, 2000)
-
-    }, [rights])
-
     const scrollBoxOriginPointForBorder = R(517.421)
-    // const scrollBoxOriginPoint = R(350.421)
     const scrollBoxOriginPoint = R(417)
 
     const duration = 0.7
-    // const duration = 3
-
-    const getOpacity = (match) => {
-
-        if(match.active || match.lastActive) {
-            return 1
-        }
-        // else if(!match.overflowing) {
-        //     return 0.5
-        // }
-        else {
-            return 0.5
-        }
-
-
-        // if(match.active || match.lastActive) {
-        //     return 1
-        // }else{
-        //     return 0.5
-        // }
-    }
-
 
     const scrollAnimation = {
-        scroll: ({match, isOverflowing}) => {
-
-            // console.log('isOverflowing =======', isOverflowing)
+        scroll: ({match}) => {
             return {
                 x: -moved,
-                opacity: getOpacity(match),
+                opacity: match.active || match.lastActive ? 1 : 0.5,
                 transition: {
                     duration: duration,
                 },
             }
         },
-
-        scroll1: {
-            x: -moved,
-            opacity: 0.5,
-            transition: {
-                duration: duration,
-            },
-        },
-
-        scroll2: {
-            x: -moved,
-            opacity: 0.3,
-            transition: {
-                duration: duration,
-            },
-        },
-
-        scroll3: {
-            x: -moved,
-            opacity: 1,
-            transition: {
-                duration: duration,
-            },
-        },
-
-
     };
 
     const borderAnimation = {
@@ -213,8 +117,6 @@ export default function MatchBoard () {
 
     useEffect(() => {
         if(initialRenderDone){
-            // controls.start('scroll1')
-            // controls.start('scroll2')
             controls.start('scroll')
             borderAnimationControls.start('borderWidth')
             controls.start('changeTextColor')
@@ -222,12 +124,9 @@ export default function MatchBoard () {
     }, [moved])
 
     const getActiveRect = (itemRef) => {
-
         if(!itemRef.current) return;
-
         const scrollRect = scrollContainerRef.current.getBoundingClientRect()
         const activeRect = itemRef.current.getBoundingClientRect()
-
         return {
             activeRect,
             activeLeft: activeRect.left - scrollRect.left,
@@ -236,64 +135,37 @@ export default function MatchBoard () {
     }
 
     const handleScroll = () => {
-
         const { activeLeft, activeRect, activeRight} = getActiveRect(activeRef)
-
-        // if(animationInProgress || parseInt(activeLeft) === parseInt(scrollBoxOriginPoint)) return
-
         setBorderWidth(activeRect.width)
-
-
         let movedPixels = 0;
-
         if(activeLeft > scrollBoxOriginPoint) {
             movedPixels = activeLeft - scrollBoxOriginPoint
         }else {
             movedPixels = -1 * (scrollBoxOriginPoint - activeLeft)
         }
-
-        // console.log('data=======', {
-        //     activeLeft: parseInt(activeLeft),
-        //     rights,
-        //     scrollBoxOriginPoint: parseInt(scrollBoxOriginPoint),
-        //     movedPixels
-        // })
-
         setMoved(moved + movedPixels)
     }
 
     const handleTabClick = (match) => {
-
-
         let currentActive = matches.findIndex((match) => match.active)
-
         const $matches = matches.map((item, index) => {
-
-            const elPos = rights[index]
-
             item.active = item.id === match.id;
-
+            if(item.active) {
+                setActiveTabContent({...item})
+                setTabChanged(!tabChanged)
+            }
             item.lastActive = index === currentActive
-
-            item.overflowing = !(elPos && elPos.activeLeft > 0 && elPos.activeLeft < 1090 && elPos.activeRight < 0 && elPos.activeRight > -1080);
-
             return item
         })
-
         setMatches($matches)
     }
 
     const handleControls = (isNext = false) => {
-
         if(animationInProgress) return;
-
         const $matches = clone(matches)
         let objIndex = $matches.findIndex((match) => match.active)
-
         let nextIndex = isNext ? objIndex + 1 : objIndex - 1
-
         if(nextIndex === $matches.length || nextIndex === -1) return
-
         handleTabClick($matches[nextIndex])
     }
 
@@ -302,19 +174,31 @@ export default function MatchBoard () {
         setInitialRenderDone(true)
         if(initialRenderDone){
          setTimeout(() => {
-             const { activeRect } = getActiveRect(activeRef)
-             setBorderWidth(activeRect.width)
-             handleScroll()
+             if(getActiveRect(activeRef)){
+                 const { activeRect } = getActiveRect(activeRef)
+                 setBorderWidth(activeRect.width)
+                 handleScroll()
+             }
          }, 50)
         }
     }, [matches, initialRenderDone])
 
+    // useEffect(() => {
+    //     setTabChanged(!tabChanged)
+    // }, [nextActiveTabContent])
+
     useEffect(() => {
-        const $matches = INITIAL_MATCHES.map((item, index) => {
-            item.active = index === 5;
-            item.overflowing = ![3, 4, 5, 6, 7].includes(index);
-            return item
+        const $matches = INITIAL_MATCHES.map((match, index) => {
+            const todayDate = dayjs().format('YYYY-MM-D')
+
+            if(dayjs(match.date).isSame(todayDate)) {
+                match.date = MAKE_TRANSFERS
+                match.active = true
+                setActiveTabContent({...match})
+            }
+            return match
         })
+
         setMatches($matches)
     }, [])
 
@@ -322,27 +206,31 @@ export default function MatchBoard () {
         if(definition === 'borderWidth') {
             setAnimationInProgress(false)
             setTimeout(()=> {
-                // calculateAllRefs()
             }, 300)
         }
     }
 
-    const getAnimation = (match) => {
-
-        if(match.active || match.lastActive) {
-            return 'scroll3'
-        }else if(!match.overflowing){
-            return 'scroll1'
-        }else {
-            return  'scroll2'
-        }
-    }
-
     return (
-        <Div h={720} pt={40} w={1280} style={STYLES.container}
-             className={'bg-white'}
-             position="relative" br={12} bs={SHADOW_WHITE_SMOKE}>
-            <Div className={'flex justify-center'}>
+        <Div
+            minHeight={720}
+            pt={40}
+            pb={50}
+            w={1280}
+            className={'bg-white'}
+            position="relative"
+            br={12}
+            bs={SHADOW_WHITE_SMOKE}
+        >
+            <Div justifyBetween ml={40} mr={40} mb={40}>
+                <Text text={'MATCHES'} fs={34} fw={900} lh={38} color={colors.black_rock} fst={'italic'} />
+                <div>
+                    <Button title={'Sync to calendar'} h={50} pr={24} pl={24} pt={15} pb={15}/>
+                </div>
+            </Div>
+
+            {/*Tabs*/}
+            <Div position={'relative'} style={STYLES.scrollBox}>
+                <Div className={'flex justify-center'}>
                     <div style={{...STYLES.scrollContainer}}
                         // className={'flex justify-between'}
                          ref={scrollContainerRef}
@@ -353,15 +241,7 @@ export default function MatchBoard () {
                                     <motion.div
                                         variants={scrollAnimation}
                                         animate={controls}
-
-                                        // animate={getAnimation(match)}
-
-
-                                        custom={{
-                                            match,
-                                            isOverflowing: match.overflowing
-                                        }}
-
+                                        custom={{match}}
                                         key={match.id}
                                         className={'flex flex-col items-center'}
                                         style={{...STYLES.item}}
@@ -372,13 +252,8 @@ export default function MatchBoard () {
                                             onClick={() => handleTabClick(match)}
                                             data-lastChild={match.lastChild}
                                             data-firstChild={match.firstChild}
-
                                         >
                                             <Text text={match.week} color={colors.regent_grey} fs={18} lh={26}/>
-
-                                            {/*<Text text={match.overflowing ? 'yessss' : 'noooo'} color={colors.regent_grey}*/}
-                                            {/*      fs={18} lh={26}/>*/}
-
                                             <motion.p
                                                 variants={subHeadingAnimation}
                                                 animate={controls}
@@ -386,38 +261,50 @@ export default function MatchBoard () {
                                                 className={'italic uppercase font-[700]'}
                                                 style={STYLES.subHeading}
                                             >
-                                                {match.date}
+                                                {
+                                                    match.date !== MAKE_TRANSFERS
+                                                        ? dayjs(match.date).format('DD MMM')
+                                                        : match.date
+                                                }
                                             </motion.p>
                                         </div>
 
                                     </motion.div>
-                                    )
+                                )
                             })
                         }
                     </div>
 
+                </Div>
+
+                <Div position='absolute' top={1} left={40}>
+                    <Image w={60} h={60} name={'arrow-prev.png'} cursor={'pointer'} onClick={() => handleControls()}/>
+                </Div>
+                <Div position='absolute' top={1} right={40}>
+                    <Image w={60} h={60} name={'arrow-next.png'} cursor={'pointer'}
+                           onClick={() => handleControls(true)}/>
+                </Div>
+
+                <motion.div
+                    variants={borderAnimation}
+                    animate={borderAnimationControls}
+                    onAnimationStart={() => setAnimationInProgress(true)}
+                    onAnimationComplete={(definition) => onAnimationComplete(definition)}
+                    style={{
+                        ...STYLES.borderStyle,
+                        width: borderWidth,
+                        left: scrollBoxOriginPointForBorder
+                    }}
+                />
             </Div>
 
-            <Div position='absolute' top={40} left={40}>
-                <Image w={60} h={60} name={'arrow-prev.png'} cursor={'pointer'} onClick={() => handleControls()}/>
+            {/*Content*/}
+            <Div mt={30} center>
+                <MatchBoardContent
+                    tabChanged={tabChanged}
+                    activeTabContent={activeTabContent}
+                />
             </Div>
-            <Div position='absolute' top={40} right={40}>
-                <Image w={60} h={60} name={'arrow-next.png'} cursor={'pointer'}
-                       onClick={() => handleControls(true)}/>
-            </Div>
-
-            <motion.div
-                variants={borderAnimation}
-                animate={borderAnimationControls}
-                onAnimationStart={() => setAnimationInProgress(true)}
-
-                onAnimationComplete={(definition) => onAnimationComplete(definition)}
-                style={{
-                    ...STYLES.borderStyle,
-                    width: borderWidth,
-                    left: scrollBoxOriginPointForBorder
-                }}
-            />
         </Div>
     )
 

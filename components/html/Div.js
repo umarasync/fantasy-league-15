@@ -5,13 +5,14 @@ import RS from "utils/responsiveStyle";
 const getStyles = (RS, style) => {
     const {
         w, h, p, pl, pr, pt, pb, m, ml, mr, mt, mb, bs, center, justifyBetween, br,
-        position, left, right, top, bottom, bg, cursor, display, textCenter
+        position, left, right, top, bottom, bg, cursor, display, textCenter, minHeight
     } = style
 
     return {
         container: {
             ...RS.width(w),
             ...RS.height(h),
+            ...RS.minHeight(minHeight),
 
             ...RS.padding(p),
             ...RS.paddingLeft(pl),

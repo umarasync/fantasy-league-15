@@ -1,8 +1,9 @@
 // Components
 import AllPlayersOnField from "components/player/AllPlayersOnField";
-
+import Div from 'components/html/div'
 // Utils
 import R from "utils/getResponsiveValue";
+import MatchBoard from "./MatchBoard";
 
 // Styles
 const getStyles = (R) => {
@@ -12,7 +13,8 @@ const getStyles = (R) => {
             paddingLeft: R(81.26),
             paddingRight: R(81.26),
             // paddingBottom: R(150),
-            paddingBottom: R(950),
+            // paddingBottom: R(950),
+            paddingBottom: R(40),
             minHeight: R()
         },
         logo: {
@@ -72,6 +74,9 @@ export default function MySquadLeftSection({
                     </div>
                 </div>
             </div>
+            <Div mt={115}>
+                <MatchBoard/>
+            </Div>
         </div>
     )
 }
