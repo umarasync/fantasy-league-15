@@ -9,11 +9,23 @@
   },
   "dependencies": {
     "array-move": "^4.0.0",
+    "dayjs": "^1.10.7",
+    "axios": "^0.24.0",
     "framer-motion": "^5.5.5",
+    "graphql": "^16.2.0",
+    "graphql-tag": "^2.12.6",
     "next": "12.0.7",
     "react": "17.0.2",
     "react-custom-checkbox": "^2.0.0",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-redux": "^7.2.6",
+    "react-toastify": "^8.1.0",
+    "redux": "^4.1.2",
+    "redux-api-middleware": "^3.2.1",
+    "redux-cached-api-middleware": "^0.3.0",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-promise-middleware": "^6.1.2",
+    "redux-thunk": "^2.4.1"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.0",

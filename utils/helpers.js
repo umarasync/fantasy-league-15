@@ -40,3 +40,5 @@ export const shuffle = (a) => {
 export const isEmpty = (obj) => {
     return Object.keys(obj).length === 0;
 }
+
+export const isOdd = (num) => num % 2

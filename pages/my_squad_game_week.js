@@ -46,8 +46,6 @@ export default function MySquadGameWeek () {
     // Footer Bar States
     const [autoPickDisabled, setAutoPickDisabled] = useState(false)
 
-    return null
-
     return (
         <Layout title="Build Team All Player">
             <Div className="mx-auto relative bg-white">
@@ -61,15 +59,10 @@ export default function MySquadGameWeek () {
                     </Div>
 
                     {/*Right Section*/}
-                    <div className="w-[38%] flex justify-center" style={{minHeight: R()}}>
+                    <div className="w-[38%] flex justify-center" style={{height: 'max-content'}}>
                         <InfoBoard/>
                     </div>
                 </div>
-
-                <Div center w={'100%'} position={'absolute'} bottom={100}>
-                    <MatchBoard/>
-                </Div>
-
             </Div>
         </Layout>
     )
