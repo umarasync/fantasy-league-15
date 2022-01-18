@@ -1,6 +1,6 @@
 // Components
 import AllPlayersOnField from "components/player/AllPlayersOnField";
-import Div from 'components/html/div'
+import Div from 'components/html/Div'
 // Utils
 import R from "utils/getResponsiveValue";
 import MatchBoard from "./MatchBoard";
