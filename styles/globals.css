@@ -109,3 +109,9 @@ input.disable-input-outline[type="text"]:focus{
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+/****** Custom CSS ****/
+.Toastify__toast-body {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+}
