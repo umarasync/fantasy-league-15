@@ -47,9 +47,9 @@ export default function Text(props) {
 
     const STYLES =  { ...getStyles(RS, { ...props })}
 
-    const { text, style, className } = props
+    const { text, style, className, onClick } = props
 
     return (
-        <p className={className} style={{...STYLES.text, ...style}}>{text}</p>
+        <p className={className} style={{...STYLES.text, ...style}} onClick={() => onClick ? onClick() : false}>{text}</p>
     )
 }

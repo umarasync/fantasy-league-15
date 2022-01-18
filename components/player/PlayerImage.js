@@ -33,7 +33,7 @@ export default function PlayerImage({
     clubImage,
     imageStyle,
     clubImageStyle,
-    showCloseIcon,
+    clickedIcon,
     onDeselect = () => false,
     closeImageStyle
 }) {
@@ -44,9 +44,9 @@ export default function PlayerImage({
         <div style={{...STYLES.playerImage, ...imageStyle}}>
             <img src={`/images/${playerImage}`} alt="" width={'100%'} height={'100%'}/>
             {
-                showCloseIcon && (
+                clickedIcon && (
                     <div style={{ ...STYLES.closeImage, ...closeImageStyle }} onClick={onDeselect}>
-                        <img src={`/images/close1.png`} alt="" width={'100%'} height={'100%'} />
+                        <img src={`/images/${clickedIcon}`} alt="" width={'100%'} height={'100%'} />
                     </div>
                 )
             }

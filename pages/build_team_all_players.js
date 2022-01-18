@@ -378,6 +378,8 @@ export default function BuildTeamAllPlayer () {
         setPlayersDataInitial(PLAYERS_INITIAL)
     }
 
+
+
     return (
         <Layout title="Build Team All Player">
             <div className="mx-auto flex bg-white">
@@ -537,7 +539,7 @@ export default function BuildTeamAllPlayer () {
                         autoPickDisabled={autoPickDisabled}
                         continueDisabled={continueDisabled}
                         onAutoPick={onAutoPick}
-                        onContinueClick={() => router.push('/create_team_name')}
+                        onContinueClick={() => { router.push('/create_team_name')}}
                         onResetClick={handleResetClick}
                     />
             </div>
