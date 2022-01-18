@@ -50,6 +50,11 @@ const getStyles = (R) => {
             position: 'absolute',
             background: colors.mandy,
             marginTop: R(20),
+        },
+        calendarIcon: {
+            position: 'absolute',
+            top: R(15),
+            left: R(23)
         }
     }
 }
@@ -223,9 +228,12 @@ export default function MatchBoard () {
         >
             <Div justifyBetween ml={40} mr={40} mb={40}>
                 <Text text={'MATCHES'} fs={34} fw={900} lh={38} color={colors.black_rock} fst={'italic'} />
-                <div>
-                    <Button title={'Sync to calendar'} h={50} pr={24} pl={24} pt={15} pb={15}/>
-                </div>
+                <Div position={'relative'} cursor={'pointer'}>
+                    <Button title={'Sync to calendar'} h={50} pr={24} pl={55} pt={15} pb={15}/>
+                    <div style={STYLES.calendarIcon}>
+                        <Image w={20} h={20} name={'calendar.png'}/>
+                    </div>
+                </Div>
             </Div>
 
             {/*Tabs*/}

@@ -1,17 +1,28 @@
 // Packages
 import dayjs from 'dayjs';
-import {shuffle} from "../../utils/helpers";
+
+// Utils
+import {clone, shuffle} from "utils/helpers";
+
+// Data
+import {PLAYERS} from "constants/data/players";
 
 // Functions for test data
 const getSomePreviousDate = days => dayjs().subtract(days, 'days').format('YYYY-MM-DD')
 const getSomeNextDate = days => dayjs().add(days, 'days').format('YYYY-MM-DD')
 const getTodayDate = () => dayjs().format('YYYY-MM-DD')
+const TIMES = ['13:30:00', '18:00:00', '05:00:00', '07:45:00', '15:20:00', '14:30:00', '17:30:00', '23:45:00', '19:10:00']
 const DAYS_TO = 10
+const playersData = clone(PLAYERS)
+
 const CLUBS_GROUP_1= [
     {
         name: 'Zwolle',
         logo: 'club_zwo.png',
-        players: [],
+        players: [
+            playersData[0],
+            playersData[1]
+        ],
         goals: 1
     },
     {
@@ -23,7 +34,10 @@ const CLUBS_GROUP_1= [
     {
         name: 'Heerenven',
         logo: 'club_hee.png',
-        players: [],
+        players: [
+            playersData[2],
+            playersData[3],
+        ],
         goals: 2
     },
     {
@@ -56,7 +70,11 @@ const CLUBS_GROUP_2= [
     {
         name: 'Sparta Roterdam',
         logo: 'club_sparta.png',
-        players: [],
+        players: [
+            playersData[7],
+            playersData[8],
+            playersData[10],
+        ],
         goals: 5
     },
     {
@@ -68,13 +86,18 @@ const CLUBS_GROUP_2= [
     {
         name: 'AZ',
         logo: 'club_az.png',
-        players: [],
+        players: [
+            playersData[11],
+        ],
         goals: 3
     },
     {
         name: 'Ajax',
         logo: 'club_ajax.png',
-        players: [],
+        players: [
+            playersData[12],
+            playersData[13]
+        ],
         goals: 2
     },
     {
@@ -87,7 +110,7 @@ const CLUBS_GROUP_2= [
 
 const matchesDates = (data) => {
 
-    const { date, finished, clubImage} = data
+    const { date, finished} = data
 
     return [
         {
@@ -95,14 +118,14 @@ const matchesDates = (data) => {
             matches: [
                 {
                     id: 1,
-                    time: `${date}T13:30:00`,
+                    time: `${date}T${shuffle(TIMES)[0]}`,
                     finished,
                     club1: shuffle(CLUBS_GROUP_1)[0],
                     club2: shuffle(CLUBS_GROUP_2)[0]
                 },
                 {
                     id: 2,
-                    time: `${date}T18:30:00`,
+                    time: `${date}T${shuffle(TIMES)[0]}`,
                     finished,
                     club1: shuffle(CLUBS_GROUP_1)[0],
                     club2: shuffle(CLUBS_GROUP_2)[0]
@@ -114,14 +137,14 @@ const matchesDates = (data) => {
             matches: [
                 {
                     id: 1,
-                    time: `${date}T13:30:00`,
+                    time: `${date}T${shuffle(TIMES)[0]}`,
                     finished,
                     club1: shuffle(CLUBS_GROUP_1)[0],
                     club2: shuffle(CLUBS_GROUP_2)[0]
                 },
                 {
                     id: 1,
-                    time: `${date}T18:30:00`,
+                    time: `${date}T${shuffle(TIMES)[0]}`,
                     finished,
                     club1: shuffle(CLUBS_GROUP_1)[0],
                     club2: shuffle(CLUBS_GROUP_2)[0]
