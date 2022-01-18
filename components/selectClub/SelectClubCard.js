@@ -57,11 +57,16 @@ export default  function SelectClubCard({
                 paddingTop: boxPaddingTop ? R(boxPaddingTop) : 0
             }}
         >
-            <CardImage changeCard={changeCard} fadeInOutAnimation={fadeInOutAnimation} image={image} containerStyle={{
-                width: R(image.width),
-                height: R(image.height),
-                marginTop: R(image.mt)
-            }} />
+            <CardImage
+                changeCard={changeCard}
+                fadeInOutAnimation={fadeInOutAnimation}
+                image={image}
+                containerStyle={{
+                    width: R(image.width),
+                    height: R(image.height),
+                    marginTop: R(image.mt)
+             }}
+            />
             <CardTitle changeCard={changeCard} fadeInOutAnimation={fadeInOutAnimation} heading={heading} />
             <CardSubTitle changeCard={changeCard} fadeInOutAnimation={fadeInOutAnimation} subHeading={subHeading} />
 

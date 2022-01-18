@@ -15,6 +15,7 @@ const TYPOGRAPHY = {
 const SIZING = {
     width: v => v ? {width: R(v)} : {},
     height: v => v ? {height: R(v)} : {},
+    minHeight: v => v ? {minHeight: R(v)} : {},
 }
 
 
@@ -45,7 +46,7 @@ const BORDER = {
 
 const FLEX = {
     center: v => v ? {display: 'flex', alignItems: 'center', justifyContent: 'center'} : {},
-    justifyBetween: v => v ? {display: 'flex', justifyContent: 'space-between'} : {}
+    justifyBetween: v => v ? {display: 'flex', alignItems: 'center',  justifyContent: 'space-between'} : {}
 }
 
 const EFFECTS = {

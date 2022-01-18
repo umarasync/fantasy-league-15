@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "array-move": "^4.0.0",
+    "dayjs": "^1.10.7",
     "axios": "^0.24.0",
     "framer-motion": "^5.5.5",
     "graphql": "^16.2.0",
