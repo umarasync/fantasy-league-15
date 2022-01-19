@@ -1,6 +1,6 @@
 const duration = 0.7
 
-const ClubImageAnimation = {
+const SelectedPlayerOnPitchAnimation = {
     initial: ({initialOpacity}) => {
         return {
             opacity: initialOpacity,
@@ -20,4 +20,4 @@ const ClubImageAnimation = {
     },
 };
 
-export default ClubImageAnimation
+export default SelectedPlayerOnPitchAnimation

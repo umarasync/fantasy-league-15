@@ -104,10 +104,6 @@ export default function selectedSquadOnPitch ({
     const THREE = 3
     const FOUR = 4
 
-    console.log({
-        transferInProgress
-    })
-
     return(
         <div style={{paddingTop: R(27)}}>
             {/*1*/}

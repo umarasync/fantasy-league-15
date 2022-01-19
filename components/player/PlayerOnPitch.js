@@ -116,8 +116,7 @@ export default function PlayerOnPitch ({
                                     key={1}
                                 >
                                     <PlayerImage
-                                        playerImage={player.image}
-                                        clubImage={player.clubImage}
+                                        player={player}
                                         imageStyle={STYLES.playerImage}
                                         clubImageStyle={STYLES.clubImageStyle}
                                         clickedIcon={'close1.png'}

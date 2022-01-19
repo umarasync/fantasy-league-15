@@ -10,6 +10,9 @@ import {nFormatter} from "utils/helpers";
 // Constants
 import { STATUS_SUSPENDED, STATUS_INJURED } from "constants/data/filters";
 
+// Animation
+import SelectedPlayerOnPitchAnimation from "Animations/mySquad/SelectedPlayerOnPitchAnimation";
+
 // Styles
 const getStyles = (R, player) => {
     return {
@@ -58,24 +61,29 @@ const getStyles = (R, player) => {
             right: 0,
             borderRadius: R(20),
             background: 'white'
+        },
+        clickedIcon: {
+            width: R(16),
+            height: R(16)
         }
     }
 }
 
 const PlayerComponent = ({player, onPlayerChange}) => {
+
     const STYLES =  { ... getStyles(R, player) }
 
     return (
         <>
             <PlayerImage
-                playerImage={player.image}
-                clubImage={player.clubImage}
+                player={player}
                 imageStyle={STYLES.playerImage}
                 clubImageStyle={STYLES.clubImageStyle}
                 clickedIcon={player.clickedIcon}
                 onDeselect={() => onPlayerChange(player)}
+                clickedIconStyle={STYLES.clickedIcon}
             />
-            <p className={'items-center relative items-center text-center  justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
+            <p className={'items-center relative items-center text-center justify-center primary-button-color text-white whitespace-nowrap'}
                style={STYLES.buttonStyle}
             >
                 {
@@ -93,6 +101,7 @@ const PlayerComponent = ({player, onPlayerChange}) => {
 }
 
 export default function SelectedPlayerOnPitch ({
+  changed,
    player,
    style,
    boxClasses,
@@ -103,42 +112,22 @@ export default function SelectedPlayerOnPitch ({
 
     const [initialOpacity, setInitialOpacity] = useState(1)
 
-    const duration = 0.5
-
-    const fadeInOutAnimation = {
-        initial: {
-            opacity: initialOpacity,
-        },
-        animate: {
-            opacity: 1,
-            transition: {
-                duration: duration,
-            },
-        },
-        exit: {
-            opacity: 0,
-            transition: {
-                duration: duration,
-            },
-        },
-    };
-
     useEffect(() => {
         if(initialOpacity) {
             setInitialOpacity(0)
         }
-    }, [player])
-
+    }, [changed])
 
     return(
         <div className={`flex relative items-center justify-center ${boxClasses}`} style={{ ...STYLES.container, ...style }}>
             {
-                player ? (
+                changed ? (
                     <AnimatePresence>
                         <motion.div
                             className={'flex flex-col items-center justify-center'}
                             style={{...STYLES.imageContainer, ...STYLES.playerImageD}}
-                            variants={fadeInOutAnimation}
+                            variants={SelectedPlayerOnPitchAnimation}
+                            custom={{initialOpacity}}
                             initial="initial"
                             animate="animate"
                             exit="exit"
@@ -156,7 +145,8 @@ export default function SelectedPlayerOnPitch ({
                         <motion.div
                             className={'flex flex-col items-center justify-center'}
                             style={{...STYLES.imageContainer, ...STYLES.playerImageD}}
-                            variants={fadeInOutAnimation}
+                            variants={SelectedPlayerOnPitchAnimation}
+                            custom={{initialOpacity}}
                             initial="initial"
                             animate="animate"
                             exit="exit"

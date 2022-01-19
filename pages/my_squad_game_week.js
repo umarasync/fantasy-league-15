@@ -11,12 +11,17 @@ import InfoBoard from "components/mySquad/InfoBoard";
 // Utils
 import R from "utils/getResponsiveValue";
 import {clone} from "utils/helpers";
+import {setInitialClickedIcons} from "utils/mySquad";
 
 // Constants
 import SELECTED_PLAYERS from "constants/data/selectedPlayers";
 import {SELECTED_PLAYERS as SP} from "constants/data/players";
 import {POSITION_GK} from "../constants/data/filters";
-import {setInitialClickedIcons} from "../utils/mySquad";
+import {ELEVEN, ZERO} from "constants/arrayIndexes";
+
+// Utils
+import {handlePlayerTransfer as HPT, DIAMOND_UP_GREEN} from "utils/mySquad";
+
 
 // Styles
 const getStyles = (R) => {
@@ -28,6 +33,7 @@ export default function MySquadGameWeek () {
 
     const STYLES =  { ... getStyles(R) }
 
+
     const router= useRouter()
 
     // Initial States
@@ -38,24 +44,34 @@ export default function MySquadGameWeek () {
     const SELECTED_PLAYERS_INITIAL = clone(SELECTED_PLAYERS)
 
     const [pickedPlayers, setPickedPlayers] = useState([])
+    const [savedPlayers, setSavedPlayers] = useState([])
 
     // Footer Bar States
     const [autoPickDisabled, setAutoPickDisabled] = useState(false)
-    const [transferInProgress, setTransferInProgress] = useState({
-        state: false,
-        forPosition: null
-    })
+    // const [transferInProgress, setTransferInProgress] = useState({
+    //     state: false,
+    //     forPosition: ''
+    // })
 
-    const handlePlayerChange = (player) => {
-        console.log("player -======", player)
-        setTransferInProgress({
-            state: true,
-            forPosition: player.position
+    const [transferInProgress, setTransferInProgress] = useState(false)
+
+    const handlePlayerTransfer = (player, arrayIndex) => {
+
+        if(player.clickedIcon === DIAMOND_UP_GREEN) return
+
+        const players = HPT({
+            player,
+            arrayIndex,
+            pickedPlayers
         })
+
+        setPickedPlayers(players)
     }
 
     useEffect(() => {
-        setPickedPlayers(setInitialClickedIcons(SELECTED_PLAYERS_INITIAL))
+        const players = setInitialClickedIcons(SELECTED_PLAYERS_INITIAL)
+        setPickedPlayers(players)
+        setSavedPlayers(players)
     }, [])
 
     return (
@@ -67,7 +83,7 @@ export default function MySquadGameWeek () {
                             transferInProgress={transferInProgress}
                             pickedPlayers={pickedPlayers}
                             autoPickDisabled={autoPickDisabled}
-                            onPlayerChange={(p) => handlePlayerChange(p)}
+                            onPlayerChange={(p, i) => handlePlayerTransfer(p, i)}
                         />
                     </Div>
 

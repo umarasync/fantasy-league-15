@@ -1,283 +1,249 @@
+// Packages
+import {motion} from "framer-motion";
+
 // Components
 import SelectedPlayerOnPitch from "components/mySquad/SelectedPlayerOnPitch";
 import Div from "components/html/Div";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import {POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID} from "../../constants/data/filters";
+
+// Constants
+import {POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID} from "constants/data/filters";
+import {ZERO, ONE,TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE, THIRTEEN, FOURTEEN} from "constants/arrayIndexes";
 
 // Styles
 const getStyles = (R, transferInProgress) => {
 
     const { state, forPosition } = transferInProgress
-    const getOpacity = (v) => v ? 0.5 : 1
+    // const getOpacity = (v) => v ? 1 : 0.5
 
+    const getOpacity = (v) => {
+        if(!state) return 1
+        return v ? 1 : 0.5
+    }
     return {
         player1: {
-            height: R(50),
             marginTop: R(15),
-            opacity: getOpacity(state && forPosition === POSITION_GK),
         },
         player3:{
-            height: R(50),
-            opacity: getOpacity(state)
-        },
-        player4:{
             marginLeft: R(120),
             marginRight: R(120),
-            height: R(50),
-            opacity: getOpacity(state)
-        },
-        player5:{
-            height: R(50),
-            opacity: getOpacity(state)
         },
         row3: {
           marginLeft: R(57),
           marginRight: R(57),
         },
-        player8: {
-            height: R(50),
-            opacity: getOpacity(state)
-        },
-        player9: {
-            height: R(50),
-            opacity: getOpacity(state)
-        },
-        player10: {
-            height: R(50),
-            opacity: getOpacity(state)
-        },
-        player11: {
-            height: R(50),
-            opacity: getOpacity(state)
-        },
-        player13:{
-            height: R(50),
-            opacity: getOpacity(state)
-        },
-        player14:{
-            height: R(50),
+        player10:{
             marginLeft: R(100),
             marginRight: R(100),
-            opacity: getOpacity(state)
         },
-        player15:{
-            height: R(50),
-            opacity: getOpacity(state)
-        },
+
         benchContainer: {
             marginLeft: R(62),
             marginRight: R(62),
         },
-        player2: {
+
+        commonPlayersStyle: {
             height: R(50),
-            opacity: getOpacity(state)
-        },
-        player6: {
-            height: R(50),
-            opacity: getOpacity(state)
-        },
-        player7: {
-            height: R(50),
-            opacity: getOpacity(state)
-        },
-        player12: {
-            height: R(50),
-            opacity: getOpacity(state)
-        },
+        }
+
     }
 }
 
 export default function selectedSquadOnPitch ({
    pickedPlayers,
-   autoPickDisabled,
    onPlayerChange,
    transferInProgress
 }){
 
     const STYLES =  { ... getStyles(R, transferInProgress) }
 
-    const ZERO = 0
-    const ONE = 1
-    const TWO = 2
-    const THREE = 3
-    const FOUR = 4
+    if(!pickedPlayers.length) return null
 
-    console.log({
-        transferInProgress
-    })
+    const p1 = pickedPlayers[ZERO]
+    const p2 = pickedPlayers[ONE]
+    const p3 = pickedPlayers[TWO]
+    const p4 = pickedPlayers[THREE]
+    const p5 = pickedPlayers[FOUR]
+    const p6 = pickedPlayers[FIVE]
+    const p7 = pickedPlayers[SIX]
+    const p8 = pickedPlayers[SEVEN]
+    const p9 = pickedPlayers[EIGHT]
+    const p10 = pickedPlayers[NINE]
+    const p11 = pickedPlayers[TEN]
+    const p12 = pickedPlayers[ELEVEN]
+    const p13 = pickedPlayers[TWELVE]
+    const p14 = pickedPlayers[THIRTEEN]
+    const p15 = pickedPlayers[FOURTEEN]
 
     return(
         <div style={{paddingTop: R(27)}}>
             {/*1*/}
             <Div center>
                 <SelectedPlayerOnPitch
-                    player={pickedPlayers[POSITION_GK][ZERO]}
-                    autoPickDisabled={autoPickDisabled}
-                    placeholderText={'Add goalkeeper'}
-                    style={STYLES.player1}
-                    // onPlayerChange={() => {onPlayerChange(POSITION_GK, ZERO)}}
-                    onPlayerChange={onPlayerChange}
+                    player={p1}
+                    changed={p1.animationState}
+                    onPlayerChange={(player) => onPlayerChange(player, ZERO)}
+                    style={{
+                        ...STYLES.commonPlayersStyle,
+                        ...STYLES.player1,
+                        opacity: p1.opacity
+                    }}
                 />
-                {/*<SelectedPlayerOnPitch*/}
-                {/*    player={pickedPlayers[POSITION_GK][ONE]}*/}
-                {/*    autoPickDisabled={autoPickDisabled}*/}
-                {/*    placeholderText={'Add goalkeeper'}*/}
-                {/*    style={STYLES.player2}*/}
-                {/*    onPlayerChange={() => {onPlayerChange(POSITION_GK, ONE)}}*/}
-                {/*/>*/}
             </Div>
             {/*2*/}
             <Div center mt={60}>
                 <SelectedPlayerOnPitch
-                    player={pickedPlayers[POSITION_DEF][ZERO]}
-                    autoPickDisabled={autoPickDisabled}
-                    placeholderText={'Add defender'}
-                    style={STYLES.player3}
-                    // onPlayerChange={() => {onPlayerChange(POSITION_DEF, ZERO)}}
-                    onPlayerChange={onPlayerChange}
+                    player={p2}
+                    changed={p2.animationState}
+                    onPlayerChange={(player) => onPlayerChange(player, ONE)}
+                    style={{
+                        ...STYLES.commonPlayersStyle,
+                        opacity: p2.opacity
+                    }}
                 />
                 <SelectedPlayerOnPitch
-                    player={pickedPlayers[POSITION_DEF][ONE]}
-                    autoPickDisabled={autoPickDisabled}
-                    placeholderText={'Add defender'}
-                    style={STYLES.player4}
-                    // onPlayerChange={() => {onPlayerChange(POSITION_DEF, ONE)}}
-                    onPlayerChange={onPlayerChange}
+                    player={p3}
+                    changed={p3.animationState}
+                    onPlayerChange={(player) => onPlayerChange(player, TWO)}
+                    style={{
+                        ...STYLES.commonPlayersStyle,
+                        ...STYLES.player3,
+                        opacity: p3.opacity
+                    }}
+                />
+                <motion.div
+                    className={'bg-green-200'}
+                >
+                    <SelectedPlayerOnPitch
+                        player={p4}
+                        changed={p4.animationState}
+                        onPlayerChange={(player) => onPlayerChange(player, THREE)}
+                        style={{
+                            ...STYLES.commonPlayersStyle,
+                            opacity: p4.opacity
+                        }}
+                    />
+                </motion.div>
 
-                />
-                <SelectedPlayerOnPitch
-                    player={pickedPlayers[POSITION_DEF][TWO]}
-                    autoPickDisabled={autoPickDisabled}
-                    placeholderText={'Add defender'}
-                    style={STYLES.player5}
-                    // onPlayerChange={() => {onPlayerChange(POSITION_DEF, TWO)}}
-                    onPlayerChange={onPlayerChange}
-                />
             </Div>
             {/*3*/}
-            <div className={'flex justify-center'}>
-                {/*<SelectedPlayerOnPitch*/}
-                {/*    player={pickedPlayers[POSITION_DEF][THREE]}*/}
-                {/*    autoPickDisabled={autoPickDisabled}*/}
-                {/*    placeholderText={'Add defender'}*/}
-                {/*    style={STYLES.player6}*/}
-                {/*    onPlayerChange={() => {onPlayerChange(POSITION_DEF, THREE)}}*/}
-                {/*/>*/}
-                {/*<SelectedPlayerOnPitch*/}
-                {/*    player={pickedPlayers[POSITION_DEF][FOUR]}*/}
-                {/*    autoPickDisabled={autoPickDisabled}*/}
-                {/*    placeholderText={'Add defender'}*/}
-                {/*    style={STYLES.player7}*/}
-                {/*    onPlayerChange={() => {onPlayerChange(POSITION_DEF, FOUR)}}*/}
-                {/*/>*/}
-            </div>
-            {/*4*/}
-            <Div center mt={70}>
+
+            <Div center mt={65}>
                 <SelectedPlayerOnPitch
-                    player={pickedPlayers[POSITION_MID][ZERO]}
-                    autoPickDisabled={autoPickDisabled}
-                    placeholderText={'Add midfielder'}
-                    style={{...STYLES.row3, ...STYLES.player8}}
-                    // onPlayerChange={() => {onPlayerChange(POSITION_MID, ZERO)}}
-                    onPlayerChange={onPlayerChange}
+                    player={p5}
+                    changed={p5.animationState}
+                    onPlayerChange={(player) => onPlayerChange(player, FOUR)}
+                    style={{
+                        ...STYLES.row3,
+                        ...STYLES.commonPlayersStyle,
+                        opacity: p5.opacity
+                    }}
                 />
                 <SelectedPlayerOnPitch
-                    player={pickedPlayers[POSITION_MID][ONE]}
-                    autoPickDisabled={autoPickDisabled}
-                    placeholderText={'Add midfielder'}
-                    style={{...STYLES.row3, ...STYLES.player9}}
-                    // onPlayerChange={() => {onPlayerChange(POSITION_MID, ONE)}}
-                    onPlayerChange={onPlayerChange}
+                    player={p6}
+                    changed={p6.animationState}
+                    onPlayerChange={(player) => onPlayerChange(player, FIVE)}
+                    style={{
+                        ...STYLES.row3,
+                        ...STYLES.commonPlayersStyle,
+                        opacity: p6.opacity
+                    }}
                 />
                 <SelectedPlayerOnPitch
-                    player={pickedPlayers[POSITION_MID][TWO]}
-                    autoPickDisabled={autoPickDisabled}
-                    placeholderText={'Add midfielder'}
-                    style={{...STYLES.row3, ...STYLES.player10}}
-                    // onPlayerChange={() => {onPlayerChange(POSITION_MID, TWO)}}
-                    onPlayerChange={onPlayerChange}
+                    player={p7}
+                    changed={p7.animationState}
+                    onPlayerChange={(player) => onPlayerChange(player, SIX)}
+                    style={{
+                        ...STYLES.row3,
+                        ...STYLES.commonPlayersStyle,
+                        opacity: p7.opacity
+                    }}
                 />
                 <SelectedPlayerOnPitch
-                    player={pickedPlayers[POSITION_MID][THREE]}
-                    autoPickDisabled={autoPickDisabled}
-                    placeholderText={'Add midfielder'}
-                    style={{...STYLES.row3, ...STYLES.player11}}
-                    // onPlayerChange={() => {onPlayerChange(POSITION_MID, THREE)}}
-                    onPlayerChange={onPlayerChange}
+                    player={p8}
+                    changed={p8.animationState}
+                    onPlayerChange={(player) => onPlayerChange(player, SEVEN)}
+                    style={{
+                        ...STYLES.row3,
+                        ...STYLES.commonPlayersStyle,
+                        opacity: p8.opacity
+                    }}
                 />
             </Div>
-            {/*5*/}
-            <div className={'flex justify-center'}>
-                {/*<SelectedPlayerOnPitch*/}
-                {/*    player={pickedPlayers[POSITION_MID][FOUR]}*/}
-                {/*    autoPickDisabled={autoPickDisabled}*/}
-                {/*    placeholderText={'Add midfielder'}*/}
-                {/*    style={STYLES.player7}*/}
-                {/*    onPlayerChange={() => {onPlayerChange(POSITION_MID, FOUR)}}*/}
-                {/*/>*/}
-            </div>
             {/*6*/}
-            <Div center mt={70}>
+            <Div center mt={65}>
                 <SelectedPlayerOnPitch
-                    player={pickedPlayers[POSITION_FWD][ZERO]}
-                    autoPickDisabled={autoPickDisabled}
-                    placeholderText={'Add forward'}
-                    style={STYLES.player13}
-                    // onPlayerChange={() => {onPlayerChange(POSITION_FWD, ZERO)}}
-                    onPlayerChange={onPlayerChange}
+                    player={p9}
+                    changed={p9.animationState}
+                    onPlayerChange={(player) => onPlayerChange(player, EIGHT)}
+                    style={{
+                        ...STYLES.commonPlayersStyle,
+                        opacity: p9.opacity
+                    }}
                 />
                 <SelectedPlayerOnPitch
-                    player={pickedPlayers[POSITION_FWD][ONE]}
-                    autoPickDisabled={autoPickDisabled}
-                    placeholderText={'Add forward'}
-                    style={STYLES.player14}
-                    // onPlayerChange={() => {onPlayerChange(POSITION_FWD, ONE)}}
-                    onPlayerChange={onPlayerChange}
+                    player={p10}
+                    changed={p10.animationState}
+                    onPlayerChange={(player) => onPlayerChange(player, NINE)}
+                    style={{
+                        ...STYLES.commonPlayersStyle,
+                        ...STYLES.player10,
+                        opacity: p10.opacity
+                    }}
                 />
                 <SelectedPlayerOnPitch
-                    player={pickedPlayers[POSITION_FWD][TWO]}
-                    autoPickDisabled={autoPickDisabled}
-                    placeholderText={'Add forward'}
-                    style={STYLES.player15}
-                    // onPlayerChange={() => {onPlayerChange(POSITION_FWD, TWO)}}
-                    onPlayerChange={onPlayerChange}
+                    player={p11}
+                    changed={p11.animationState}
+                    onPlayerChange={(player) => onPlayerChange(player, TEN)}
+                    style={{
+                        ...STYLES.commonPlayersStyle,
+                        opacity: p11.opacity
+                    }}
                 />
             </Div>
 
             <Div center mt={90}>
                 <SelectedPlayerOnPitch
-                    player={pickedPlayers[POSITION_GK][ONE]}
-                    autoPickDisabled={autoPickDisabled}
-                    placeholderText={'Add goalkeeper'}
-                    style={{...STYLES.benchContainer, ...STYLES.player2}}
-                    // onPlayerChange={() => {onPlayerChange(POSITION_GK, ONE)}}
-                    onPlayerChange={onPlayerChange}
+                    player={p12}
+                    changed={p12.animationState}
+                    onPlayerChange={(player) => onPlayerChange(player, ELEVEN)}
+                    style={{
+                        ...STYLES.benchContainer,
+                        ...STYLES.commonPlayersStyle,
+                        opacity: p12.opacity
+                    }}
                 />
                 <SelectedPlayerOnPitch
-                    player={pickedPlayers[POSITION_DEF][THREE]}
-                    autoPickDisabled={autoPickDisabled}
-                    placeholderText={'Add defender'}
-                    style={{...STYLES.benchContainer, ...STYLES.player6}}
-                    // onPlayerChange={() => {onPlayerChange(POSITION_DEF, THREE)}}
-                    onPlayerChange={onPlayerChange}
+                    player={p13}
+                    changed={p13.animationState}
+                    onPlayerChange={(player) => onPlayerChange(player, TWELVE)}
+                    style={{
+                        ...STYLES.benchContainer,
+                        ...STYLES.commonPlayersStyle,
+                        opacity: p13.opacity
+                    }}
                 />
                 <SelectedPlayerOnPitch
-                    player={pickedPlayers[POSITION_DEF][FOUR]}
-                    autoPickDisabled={autoPickDisabled}
-                    placeholderText={'Add defender'}
-                    style={{...STYLES.benchContainer, ...STYLES.player7}}
-                    // onPlayerChange={() => {onPlayerChange(POSITION_DEF, FOUR)}}
-                    onPlayerChange={onPlayerChange}
+                    player={p14}
+                    changed={p14.animationState}
+                    onPlayerChange={(player) => onPlayerChange(player, THIRTEEN)}
+                    style={{
+                        ...STYLES.benchContainer,
+                        ...STYLES.commonPlayersStyle,
+                        opacity: p14.opacity
+                    }}
                 />
                 <SelectedPlayerOnPitch
-                    player={pickedPlayers[POSITION_MID][FOUR]}
-                    autoPickDisabled={autoPickDisabled}
-                    placeholderText={'Add midfielder'}
-                    style={{...STYLES.benchContainer, ...STYLES.player12}}
-                    // onPlayerChange={() => {onPlayerChange(POSITION_MID, FOUR)}}
-                    onPlayerChange={onPlayerChange}
+                    player={p15}
+                    changed={p15.animationState}
+                    onPlayerChange={(player) => onPlayerChange(player, FOURTEEN)}
+                    style={{
+                        ...STYLES.benchContainer,
+                        ...STYLES.commonPlayersStyle,
+                        opacity: p15.opacity
+                    }}
                 />
             </Div>
         </div>

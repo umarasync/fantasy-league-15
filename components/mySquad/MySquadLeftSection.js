@@ -68,7 +68,6 @@ export default function MySquadLeftSection({
 
     const handleClick = (v) => setCurrentActiveButton(v)
 
-
     return (
         <div className="bg-[url('/images/bg_my_squad.png')] bg-[length:100%_100%] bg-no-repeat  w-full h-full"
              style={STYLES.container}>
@@ -86,16 +85,16 @@ export default function MySquadLeftSection({
 
             <div className={'flex items-center justify-center'}>
                 <div style={STYLES.fieldImage}>
-                    <div className="bg-[url('/images/field1.png')] bg-[length:100%_100%] bg-no-repeat h-full w-full" >
+                    <div className="bg-[url('/images/field2.png')] bg-[length:100%_100%] bg-no-repeat h-full w-full" >
                         {
-                            !pickedPlayers.length && (
+                            pickedPlayers.length ? (
                                 <SelectedSquadOnPitch
                                     transferInProgress={transferInProgress}
                                     pickedPlayers={pickedPlayers}
                                     autoPickDisabled={autoPickDisabled}
                                     onPlayerChange={onPlayerChange}
                                 />
-                            )
+                            ): null
                         }
                     </div>
                 </div>
