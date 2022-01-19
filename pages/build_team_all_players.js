@@ -1,6 +1,7 @@
 // Packages
 import {useEffect, useState} from "react";
 import {AnimatePresence,motion} from "framer-motion";
+import {useRouter} from "next/router";
 
 // Components
 import Layout from "components/layout/index";
@@ -17,7 +18,7 @@ import NoResultFound from "components/misc/NoResultFound";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import {clone, isEmpty, nFormatter} from "utils/helpers";
+import {clone} from "utils/helpers";
 import {
     handleAutoPick,
     handleMultiSelectionDropDowns,
@@ -60,10 +61,9 @@ import {
 } from "constants/data/players";
 
 import  { PLAYERS } from "constants/data/players"
-import {useRouter} from "next/router";
 
 // Styles
-const getStyles = (R, showAllFilters) => {
+const getStyles = (R) => {
     return {
         allFiltersBox: {
             paddingBottom: R(20),
