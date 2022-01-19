@@ -62,7 +62,8 @@ const BACKGROUNDS = {
 }
 
 const LAYOUT = {
-    display: v => v ? { display: v} : {}
+    display: v => v ? { display: v} : {},
+    zIndex: v => v ? { zIndex: v} : {}
 }
 
 const ResponsiveStyle = {

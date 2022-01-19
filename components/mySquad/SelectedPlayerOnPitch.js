@@ -1,11 +1,14 @@
-// Components
+// Packages
+import {useEffect, useState} from "react";
 import {AnimatePresence, motion} from "framer-motion";
+
+// Components
+import PlayerImage from "components/player/PlayerImage";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import PlayerImage from "components/player/PlayerImage";
-import {useEffect, useState} from "react";
 import {nFormatter} from "utils/helpers";
+import {MATCHES, TOTAL_POINTS} from "utils/mySquad";
 
 // Constants
 import { STATUS_SUSPENDED, STATUS_INJURED } from "constants/data/filters";
@@ -44,6 +47,11 @@ const getStyles = (R, player) => {
             position: 'absolute',
             top: R(45)
         },
+        subTitle:{
+            position: 'absolute',
+            left: 0,
+            right: 0
+        },
         buttonStyle: {
             paddingLeft: R(player ? 18 : 8),
             paddingRight: R(player ? 18 : 8),
@@ -69,7 +77,64 @@ const getStyles = (R, player) => {
     }
 }
 
-const PlayerComponent = ({player, onPlayerChange}) => {
+const SubTitle = ({player, initialOpacity}) => {
+
+    const STYLES =  { ... getStyles(R, player) }
+
+    if(player.activeFilter === TOTAL_POINTS) {
+        return (
+            <AnimatePresence>
+                    <motion.span
+                        variants={SelectedPlayerOnPitchAnimation}
+                        custom={{initialOpacity}}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                        key={1}
+                        style={STYLES.subTitle}
+                    >
+                        {`${player.points} pts`}
+                    </motion.span>
+            </AnimatePresence>
+        )
+    } else if(player.activeFilter === MATCHES) {
+        return (
+            <AnimatePresence>
+                <motion.span
+                    variants={SelectedPlayerOnPitchAnimation}
+                    custom={{initialOpacity}}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    key={2}
+                    style={STYLES.subTitle}
+                >
+                    {'PSV (H)'}
+                </motion.span>
+            </AnimatePresence>
+
+        )
+    }
+    return (
+        <AnimatePresence>
+            <motion.span
+                variants={SelectedPlayerOnPitchAnimation}
+                custom={{initialOpacity}}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                key={3}
+                style={STYLES.subTitle}
+            >
+                {nFormatter(player.price)}
+            </motion.span>
+        </AnimatePresence>
+
+    )
+
+}
+
+const PlayerComponent = ({player, onPlayerChange, initialOpacity}) => {
 
     const STYLES =  { ... getStyles(R, player) }
 
@@ -94,7 +159,10 @@ const PlayerComponent = ({player, onPlayerChange}) => {
                     )
                 }
                 <span>{player.name}</span><br/>
-                <span>{nFormatter(player.price)}</span><br/>
+                <div className={'relative'}>
+                    <SubTitle player={player} initialOpacity={initialOpacity}/>
+                </div>
+                <br/>
             </p>
         </>
     )
@@ -136,6 +204,7 @@ export default function SelectedPlayerOnPitch ({
                             <PlayerComponent
                                 player={player}
                                 onPlayerChange={onPlayerChange}
+                                initialOpacity={initialOpacity}
                             />
                         </motion.div>
                     </AnimatePresence>
@@ -155,6 +224,7 @@ export default function SelectedPlayerOnPitch ({
                             <PlayerComponent
                                 player={player}
                                 onPlayerChange={onPlayerChange}
+                                initialOpacity={initialOpacity}
                             />
                         </motion.div>
                     </AnimatePresence>

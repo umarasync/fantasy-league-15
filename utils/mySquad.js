@@ -3,10 +3,15 @@ import {POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID} from "constants/d
 
 // Utils
 import {clone} from "utils/helpers";
-import {ELEVEN, ZERO} from "../constants/arrayIndexes";
+
+// Constants
+import {ELEVEN, ZERO} from "constants/arrayIndexes";
 const CLICKED_ICON = 'transfer.png'
 export const DIAMOND_UP_GREEN = 'diamond_up_green.png'
 export const DIAMOND_DOWN_RED = 'diamond_down_red.png'
+export const TOTAL_POINTS = 'Total pts'
+export const PRICES = 'Price'
+export const MATCHES = 'Matches'
 
 export const setInitialClickedIcons = (pickedPlayersObject) => {
 
@@ -21,8 +26,6 @@ export const setInitialClickedIcons = (pickedPlayersObject) => {
             player.clickedIcon = false
         }
 
-        player.opacity = 1
-        player.animationState = true
         return player
     })
 
@@ -34,8 +37,6 @@ export const setInitialClickedIcons = (pickedPlayersObject) => {
         }else{
             player.clickedIcon = false
         }
-        player.opacity = 1
-        player.animationState = true
 
         return player
     })
@@ -48,21 +49,16 @@ export const setInitialClickedIcons = (pickedPlayersObject) => {
         }else{
             player.clickedIcon = false
         }
-        player.opacity = 1
-        player.animationState = true
-
         return player
     })
 
     // Set icon for FWDs
     const FWDs = $pickedPlayersObject[POSITION_FWD].map((player) => {
         player.clickedIcon = false
-        player.opacity = 1
-        player.animationState = true
         return player
     })
 
-    return [
+    const players = [
         GKs[0],
         DEFs[0],
         DEFs[1],
@@ -79,17 +75,26 @@ export const setInitialClickedIcons = (pickedPlayersObject) => {
         DEFs[4],
         MIDs[4],
     ]
+
+    return players.map((player) => {
+        player.opacity = 1
+        player.animationState = true
+        player.activeFilter = TOTAL_POINTS
+        return player
+    })
 }
 
 
 export const handlePlayerTransfer = ({
     player,
     arrayIndex,
-    pickedPlayers
+    pickedPlayers,
+    setChangeFormation
 }) => {
 
     const $pickedPlayers = clone(pickedPlayers)
 
+    // Transfer Player
     if(player.clickedIcon === DIAMOND_DOWN_RED) {
 
         const replacedPlayerIndex = $pickedPlayers.findIndex(p => p.id === player.id)
@@ -111,9 +116,16 @@ export const handlePlayerTransfer = ({
         transferredPlayers[replacedPlayerIndex] = addedPlayer
         transferredPlayers[addedPlayerIndex] = replacedPlayer
 
-        return transferredPlayers.map(p => {
+        if([4,5,6,7,8,9,10].includes(arrayIndex)) {
+            setChangeFormation(true)
+        }
+
+        return transferredPlayers.map((p, index) => {
             p.opacity = 1;
             p.disableIconClick = !!p.alreadyTransferred;
+            if(!p.alreadyTransferred && ![11,12,13,14].includes(index)) {
+                p.clickedIcon = false
+            }
             return p
         })
 
@@ -139,7 +151,7 @@ export const handlePlayerTransfer = ({
             return p
         })
     }else {
-
+        // For other players transfer
         return $pickedPlayers.map((p, index) => {
             if([0, 11, 12, 13, 14].includes(index) && (p.id !== player.id)){
                 p.opacity = 0.5

@@ -3,7 +3,9 @@ import PlayerOnPitch from "components/player/PlayerOnPitch";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import {POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID} from "../../constants/data/filters";
+
+// Constants
+import {POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID} from "constants/data/filters";
 
 // Styles
 const getStyles = (R) => {

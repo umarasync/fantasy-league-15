@@ -1,5 +1,6 @@
 // Packages
-import {motion} from "framer-motion";
+import {useEffect} from "react";
+import {motion, useAnimation} from "framer-motion";
 
 // Components
 import SelectedPlayerOnPitch from "components/mySquad/SelectedPlayerOnPitch";
@@ -9,8 +10,10 @@ import Div from "components/html/Div";
 import R from "utils/getResponsiveValue";
 
 // Constants
-import {POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID} from "constants/data/filters";
 import {ZERO, ONE,TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE, THIRTEEN, FOURTEEN} from "constants/arrayIndexes";
+
+// Animations
+import {Player5Animation, Player6Animation, Player9Animation, Player10Animation, Player11Animation} from "Animations/mySquad/PlayersFormationAnimation";
 
 // Styles
 const getStyles = (R, transferInProgress) => {
@@ -51,13 +54,24 @@ const getStyles = (R, transferInProgress) => {
     }
 }
 
-export default function selectedSquadOnPitch ({
+export default function SelectedSquadOnPitch ({
    pickedPlayers,
    onPlayerChange,
-   transferInProgress
+   transferInProgress,
+   changeFormation
 }){
 
     const STYLES =  { ... getStyles(R, transferInProgress) }
+    const controls = useAnimation()
+
+    useEffect(() => {
+        if(!changeFormation || !pickedPlayers.length) return
+        controls.start('p5Animation')
+        controls.start('p6Animation')
+        controls.start('p9Animation')
+        controls.start('p10Animation')
+        controls.start('p11Animation')
+    }, [changeFormation])
 
     if(!pickedPlayers.length) return null
 
@@ -113,9 +127,6 @@ export default function selectedSquadOnPitch ({
                         opacity: p3.opacity
                     }}
                 />
-                <motion.div
-                    className={'bg-green-200'}
-                >
                     <SelectedPlayerOnPitch
                         player={p4}
                         changed={p4.animationState}
@@ -125,83 +136,97 @@ export default function selectedSquadOnPitch ({
                             opacity: p4.opacity
                         }}
                     />
-                </motion.div>
-
             </Div>
             {/*3*/}
 
             <Div center mt={65}>
-                <SelectedPlayerOnPitch
-                    player={p5}
-                    changed={p5.animationState}
-                    onPlayerChange={(player) => onPlayerChange(player, FOUR)}
-                    style={{
-                        ...STYLES.row3,
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p5.opacity
-                    }}
-                />
-                <SelectedPlayerOnPitch
-                    player={p6}
-                    changed={p6.animationState}
-                    onPlayerChange={(player) => onPlayerChange(player, FIVE)}
-                    style={{
-                        ...STYLES.row3,
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p6.opacity
-                    }}
-                />
-                <SelectedPlayerOnPitch
-                    player={p7}
-                    changed={p7.animationState}
-                    onPlayerChange={(player) => onPlayerChange(player, SIX)}
-                    style={{
-                        ...STYLES.row3,
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p7.opacity
-                    }}
-                />
-                <SelectedPlayerOnPitch
-                    player={p8}
-                    changed={p8.animationState}
-                    onPlayerChange={(player) => onPlayerChange(player, SEVEN)}
-                    style={{
-                        ...STYLES.row3,
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p8.opacity
-                    }}
-                />
+                <motion.div variants={Player5Animation} animate={controls}>
+                    <SelectedPlayerOnPitch
+                        player={p5}
+                        changed={p5.animationState}
+                        onPlayerChange={(player) => onPlayerChange(player, FOUR)}
+                        style={{
+                            ...STYLES.row3,
+                            ...STYLES.commonPlayersStyle,
+                            opacity: p5.opacity
+                        }}
+                    />
+                </motion.div>
+                <motion.div variants={Player6Animation} animate={controls}>
+                    <SelectedPlayerOnPitch
+                        player={p6}
+                        changed={p6.animationState}
+                        onPlayerChange={(player) => onPlayerChange(player, FIVE)}
+                        style={{
+                            ...STYLES.row3,
+                            ...STYLES.commonPlayersStyle,
+                            opacity: p6.opacity
+                        }}
+                    />
+                </motion.div>
+                <motion.div variants={Player6Animation} animate={controls}>
+                    <SelectedPlayerOnPitch
+                        player={p7}
+                        changed={p7.animationState}
+                        onPlayerChange={(player) => onPlayerChange(player, SIX)}
+                        style={{
+                            ...STYLES.row3,
+                            ...STYLES.commonPlayersStyle,
+                            opacity: p7.opacity
+                        }}
+                    />
+                </motion.div>
+                <motion.div variants={Player6Animation} animate={controls}>
+                    <SelectedPlayerOnPitch
+                        player={p8}
+                        changed={p8.animationState}
+                        onPlayerChange={(player) => onPlayerChange(player, SEVEN)}
+                        style={{
+                            ...STYLES.row3,
+                            ...STYLES.commonPlayersStyle,
+                            opacity: p8.opacity
+                        }}
+                    />
+                </motion.div>
             </Div>
             {/*6*/}
             <Div center mt={65}>
-                <SelectedPlayerOnPitch
-                    player={p9}
-                    changed={p9.animationState}
-                    onPlayerChange={(player) => onPlayerChange(player, EIGHT)}
-                    style={{
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p9.opacity
-                    }}
-                />
-                <SelectedPlayerOnPitch
-                    player={p10}
-                    changed={p10.animationState}
-                    onPlayerChange={(player) => onPlayerChange(player, NINE)}
-                    style={{
-                        ...STYLES.commonPlayersStyle,
-                        ...STYLES.player10,
-                        opacity: p10.opacity
-                    }}
-                />
-                <SelectedPlayerOnPitch
-                    player={p11}
-                    changed={p11.animationState}
-                    onPlayerChange={(player) => onPlayerChange(player, TEN)}
-                    style={{
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p11.opacity
-                    }}
-                />
+                <motion.div variants={Player9Animation} animate={controls}>
+                    <SelectedPlayerOnPitch
+                        player={p9}
+                        changed={p9.animationState}
+                        onPlayerChange={(player) => onPlayerChange(player, EIGHT)}
+                        style={{
+                            ...STYLES.commonPlayersStyle,
+                            opacity: p9.opacity
+                        }}
+                    />
+                </motion.div>
+
+                <motion.div variants={Player10Animation} animate={controls}>
+                    <SelectedPlayerOnPitch
+                        player={p10}
+                        changed={p10.animationState}
+                        onPlayerChange={(player) => onPlayerChange(player, NINE)}
+                        style={{
+                            ...STYLES.commonPlayersStyle,
+                            ...STYLES.player10,
+                            opacity: p10.opacity
+                        }}
+                    />
+                </motion.div>
+
+                <motion.div variants={Player11Animation} animate={controls}>
+                    <SelectedPlayerOnPitch
+                        player={p11}
+                        changed={p11.animationState}
+                        onPlayerChange={(player) => onPlayerChange(player, TEN)}
+                        style={{
+                            ...STYLES.commonPlayersStyle,
+                            opacity: p11.opacity
+                        }}
+                    />
+                </motion.div>
             </Div>
 
             <Div center mt={90}>

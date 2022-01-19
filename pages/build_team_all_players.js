@@ -13,6 +13,7 @@ import PlayerCard from "components/player/PlayerCard";
 import BuildTeamLeftSection from "components/buildTeam/BuildTeamLeftSection";
 import BuildYourTeamFilters from "components/filter/BuildYourTeamFilters";
 import SelectInput from "components/inputs/SelectInput";
+import NoResultFound from "components/misc/NoResultFound";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -59,7 +60,6 @@ import {
 } from "constants/data/players";
 
 import  { PLAYERS } from "constants/data/players"
-import NoResultFound from "../components/misc/NoResultFound";
 import {useRouter} from "next/router";
 
 // Styles
