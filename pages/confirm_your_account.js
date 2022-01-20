@@ -1,8 +1,14 @@
+import {useEffect, useState} from "react";
 // Components
 import Layout from "components/layout";
 
+
 export default function ConfirmAccount() {
-    const Email = localStorage.getItem('email') ? localStorage.getItem('email'): 'Your Email Address';
+    const [userEmail, setUserEmail] = useState(false)
+    useEffect(() => {
+        setUserEmail(localStorage.getItem('email') ? localStorage.getItem('email'): 'Your Email Address');
+}, [])
+    
     return (
         <Layout title="Confirm Your Account">
             <div className="bg-[url('/images/bg_full.png')] bg-[length:100%_100%] h-screen bg-no-repeat pt-[6.2rem]">
@@ -12,7 +18,7 @@ export default function ConfirmAccount() {
                     <p className="text-white font-[800] leading-[5.4rem] text-[5rem] italic uppercase">confirm your account</p>
                     <p className="text-[1.8rem] leading-[2.6rem] normal text-center text-regent_grey mt-[2.4rem]">Thanks for signing up!
                         <br/>
-                        Visit your email (<span className="text-white">{Email}</span>) and use the link
+                        Visit your email (<span className="text-white">{userEmail}</span>) and use the link
                         <br/>{`we've sent you to activate your account`}
                     </p>
                 </div>
