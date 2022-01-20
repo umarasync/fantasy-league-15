@@ -109,10 +109,9 @@ const SubTitle = ({player, initialOpacity}) => {
                     key={2}
                     style={STYLES.subTitle}
                 >
-                    {player.nextMatch.vs}
+                    {`${player.nextMatch.vs} (${player.nextMatch.matchType})`}
                 </motion.span>
             </AnimatePresence>
-
         )
     }
     return (

@@ -60,7 +60,7 @@ export default function MySquadGameWeek () {
     }
 
     const handleSave = () => {
-        const players = resetPlayers(pickedPlayers)
+        const players = resetPlayers({players: pickedPlayers, activeFilter})
         setPickedPlayers(players)
         setSavedPlayers(players)
         setTransferInProgress(false)

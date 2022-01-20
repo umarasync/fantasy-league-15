@@ -44,7 +44,8 @@ export const PLAYERS_INITIAL = [
         name: 'R. Nelson',
         nextMatch: {
             club: 'GRO',
-            vs: 'BEN'
+            vs: 'BEN',
+            matchType: 'H'
         },
         price: PLAYER1_PRICE,
         formattedPrice: nFormatter(PLAYER1_PRICE),
@@ -69,7 +70,8 @@ export const PLAYERS_INITIAL = [
         name: 'H. Veerman',
         nextMatch: {
             club: 'AZ',
-            vs: 'GRO'
+            vs: 'GRO',
+            matchType: 'A'
         },
         price: PLAYER2_PRICE,
         formattedPrice: nFormatter(PLAYER2_PRICE),
@@ -93,7 +95,8 @@ export const PLAYERS_INITIAL = [
         name: 'L. Sane',
         nextMatch: {
             club: 'HEE',
-            vs: 'FOR'
+            vs: 'FOR',
+            matchType: 'A'
         },
         price: PLAYER3_PRICE,
         formattedPrice: nFormatter(PLAYER3_PRICE),
@@ -117,7 +120,8 @@ export const PLAYERS_INITIAL = [
         name: 'N. Bannis',
         nextMatch: {
             club: 'GRO',
-            vs: 'AZ'
+            vs: 'AZ',
+            matchType: 'H'
         },
         price: PLAYER4_PRICE,
         formattedPrice: nFormatter(PLAYER4_PRICE),
@@ -142,7 +146,8 @@ export const PLAYERS_INITIAL = [
         name: 'T. Tekie',
         nextMatch: {
             club: 'ZWO',
-            vs: 'AJA'
+            vs: 'AJA',
+            matchType: 'A'
         },
         price: PLAYER5_PRICE,
         formattedPrice: nFormatter(PLAYER5_PRICE),
@@ -166,7 +171,8 @@ export const PLAYERS_INITIAL = [
         name: 'M. Nelom',
         nextMatch: {
             club: 'GRO',
-            vs: 'BEN'
+            vs: 'BEN',
+            matchType: 'H'
         },
         price: PLAYER6_PRICE,
         formattedPrice: nFormatter(PLAYER6_PRICE),
@@ -191,7 +197,8 @@ export const PLAYERS_INITIAL = [
         name: 'B. Nygren',
         nextMatch: {
             club: 'BAY',
-            vs: 'BEN'
+            vs: 'BEN',
+            matchType: 'A'
         },
         price: PLAYER7_PRICE,
         formattedPrice: nFormatter(PLAYER7_PRICE),
@@ -215,7 +222,8 @@ export const PLAYERS_INITIAL = [
         name: 'R. Nelson',
         nextMatch: {
             club: 'GRO',
-            vs: 'BEN'
+            vs: 'BEN',
+            matchType: 'A'
         },
         price: PLAYER8_PRICE,
         formattedPrice: nFormatter(PLAYER8_PRICE),
@@ -239,7 +247,8 @@ export const PLAYERS_INITIAL = [
         name: 'H. Veerman',
         nextMatch: {
             club: 'AZ',
-            vs: 'GRO'
+            vs: 'GRO',
+            matchType: 'H'
         },
         price: PLAYER9_PRICE,
         formattedPrice: nFormatter(PLAYER9_PRICE),
@@ -263,7 +272,8 @@ export const PLAYERS_INITIAL = [
         name: 'L. Sane',
         nextMatch: {
             club: 'HEE',
-            vs: 'FOR'
+            vs: 'FOR',
+            matchType: 'A'
         },
         price: PLAYER10_PRICE,
         formattedPrice: nFormatter(PLAYER10_PRICE),
