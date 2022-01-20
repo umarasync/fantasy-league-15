@@ -120,7 +120,7 @@ export default function PlayerOnPitch ({
                                         imageStyle={STYLES.playerImage}
                                         clubImageStyle={STYLES.clubImageStyle}
                                         clickedIcon={'close1.png'}
-                                        onDeselect={onDeselectPlayer}
+                                        onIconClick={onDeselectPlayer}
                                     />
                                     <p className={'items-center relative items-center text-center  justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
                                        style={STYLES.buttonStyle}

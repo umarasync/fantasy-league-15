@@ -39,6 +39,13 @@ export default function MySquadGameWeek () {
         setPickedPlayers(players)
     }
 
+    const handlePlayerClick = (player, arrayIndex) => {
+        console.log({
+            player,
+            arrayIndex
+        })
+    }
+
     useEffect(() => {
             if(!pickedPlayers.length) return
             const $pickedPlayers = pickedPlayers.map((player) => {
@@ -64,7 +71,6 @@ export default function MySquadGameWeek () {
         setPickedPlayers(players)
         setSavedPlayers(players)
         setTransferInProgress(false)
-        // setChangeFormation(INITIAL)
     }
 
     return (
@@ -76,11 +82,11 @@ export default function MySquadGameWeek () {
                             transferInProgress={transferInProgress}
                             handleFilterButtonClick={(v) => setActiveFilter(v)}
                             pickedPlayers={pickedPlayers}
-                            onPlayerChange={(p, i) => handlePlayerTransfer(p, i)}
+                            onPlayerChange={handlePlayerTransfer}
                             changeFormation={changeFormation}
+                            onPlayerClick={handlePlayerClick}
                         />
                     </Div>
-
                     {/*Right Section*/}
                     <div className="w-[38%] flex justify-center" style={{height: 'max-content'}}>
                         <InfoBoard/>

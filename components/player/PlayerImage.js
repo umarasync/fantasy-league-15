@@ -10,6 +10,9 @@ const getStyles = (R) => {
             borderRadius: '50%',
             position: 'relative',
         },
+        pImage: {
+            cursor: 'pointer'
+        },
         clubImageStyle: {
             width: R(26),
             height: R(26),
@@ -32,8 +35,9 @@ export default function PlayerImage({
     imageStyle,
     clubImageStyle,
     clickedIcon,
-    onDeselect,
-    clickedIconStyle
+    onIconClick,
+    clickedIconStyle,
+    onPlayerClick = () => false
 }) {
 
     const STYLES =  { ... getStyles(R) }
@@ -42,7 +46,9 @@ export default function PlayerImage({
 
     return (
         <div style={{...STYLES.playerImage, ...imageStyle}}>
-            <img src={`/images/${player.image}`} alt="" width={'100%'} height={'100%'}/>
+            <img src={`/images/${player.image}`} alt="" width={'100%'} height={'100%'}
+                 style={STYLES.pImage}
+                 onClick={onPlayerClick}/>
             {
                 clickedIcon && (
                     <div style={{
@@ -50,7 +56,7 @@ export default function PlayerImage({
                         ...clickedIconStyle,
                         cursor: !player.disableIconClick ? 'pointer' : 'auto'
                     }}
-                         onClick={() => !player.disableIconClick && onDeselect ? onDeselect() : false}>
+                         onClick={() => !player.disableIconClick && onIconClick ? onIconClick() : false}>
                         <img src={`/images/${clickedIcon}`} alt="" width={'100%'} height={'100%'} />
                     </div>
                 )
