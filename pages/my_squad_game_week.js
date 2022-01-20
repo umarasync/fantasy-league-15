@@ -16,6 +16,7 @@ import {handlePlayerTransfer as HPT, DIAMOND_UP_GREEN} from "utils/mySquad";
 // Constants
 import SELECTED_PLAYERS from "constants/data/selectedPlayers";
 import {INITIAL} from "constants/animationStates";
+import PlayerInfoModal from "../components/modals/PlayerInfoModal";
 
 export default function MySquadGameWeek () {
 
@@ -24,6 +25,7 @@ export default function MySquadGameWeek () {
     const [pickedPlayers, setPickedPlayers] = useState([])
     const [savedPlayers, setSavedPlayers] = useState([])
     const [transferInProgress, setTransferInProgress] = useState(false)
+    const [showModal, setShowModal] = useState(false);
     const [activeFilter, setActiveFilter] = useState(TOTAL_POINTS)
     const [changeFormation, setChangeFormation] = useState(INITIAL)
 
@@ -40,10 +42,7 @@ export default function MySquadGameWeek () {
     }
 
     const handlePlayerClick = (player, arrayIndex) => {
-        console.log({
-            player,
-            arrayIndex
-        })
+        setShowModal(true)
     }
 
     useEffect(() => {
@@ -100,6 +99,7 @@ export default function MySquadGameWeek () {
                     onCancel={handleCancel}
                     onSave={handleSave}
                 />
+                {/*<PlayerInfoModal show={showModal} onClose={() => setShowModal(false)}/>*/}
             </Div>
         </Layout>
     )

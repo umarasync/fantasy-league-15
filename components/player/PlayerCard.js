@@ -28,10 +28,6 @@ const getStyles = (R, chosen) => {
             marginLeft: R(20),
             marginRight: R(17)
         },
-        playerImage: {
-            marginLeft: R(16),
-            marginRight: R(16)
-        },
         playerName:{
             fontSize: R(18),
         },
@@ -76,7 +72,7 @@ export default function PlayerCard ({
                 <div style={STYLES.infoImage}>
                     <img src={`/images/${chosen ? 'info_light.png' : 'info_grey.png'}`} width={'100%'} height={'100%'} alt=""/></div>
                 <Border/>
-                <PlayerImage player={player} imageStyle={STYLES.playerImage} />
+                <PlayerImage player={player} ml={16} mr={16} w={70} h={70} />
                 <div>
                     <p className={'font-[600]'} style={STYLES.playerName}>
                         {player.name}

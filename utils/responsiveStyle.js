@@ -35,14 +35,49 @@ const SPACING = {
 
 const POSITIONING = {
     position: v => v ? {position: v} : {},
-    left: v => v ? {left: R(v)} : {},
-    right: v => v ? {right: R(v)} : {},
-    top: v => v ? {top: R(v)} : {},
-    bottom: v => v ? {bottom: R(v)} : {},
+    left: v => {
+        if(v === 0) {
+            return {left: 0}
+        }else if(v > 0) {
+            return {left: R(v)}
+        }
+        return {}
+    },
+
+    right: v => {
+        if (v === 0) {
+            return {right: 0}
+        } else if (v > 0) {
+            return {right: R(v)}
+        }
+        return {}
+    },
+
+    top: v => {
+        if (v === 0) {
+            return {top: 0}
+        } else if (v > 0) {
+            return {top: R(v)}
+        }
+        return {}
+    },
+
+    bottom: v => {
+        if (v === 0) {
+            return {bottom: 0}
+        } else if (v > 0) {
+            return {bottom: R(v)}
+        }
+        return {}
+    }
 }
 
 const BORDER = {
     borderRadius: v => v ? {borderRadius: R(v)} : {},
+    borderTopLeftRadius: v => v ? {borderTopLeftRadius: R(v)} : {},
+    borderTopRightRadius: v => v ? {borderTopRightRadius: R(v)} : {},
+    borderBottomLeftRadius: v => v ? {borderBottomLeftRadius: R(v)} : {},
+    borderBottomRightRadius: v => v ? {borderBottomRightRadius: R(v)} : {},
 }
 
 const FLEX = {

@@ -39,10 +39,6 @@ const getStyles = (R, player) => {
             width: '100%',
             height:'100%'
         },
-        clubImageStyle: {
-            width: R(13),
-            height: R(13)
-        },
         title:{
             position: 'absolute',
             top: R(45)
@@ -141,8 +137,9 @@ const PlayerComponent = ({player, onPlayerChange, onPlayerClick, initialOpacity}
         <>
             <PlayerImage
                 player={player}
+                ciw={18}
+                cih={18}
                 imageStyle={STYLES.playerImage}
-                clubImageStyle={STYLES.clubImageStyle}
                 clickedIcon={player.clickedIcon}
                 onIconClick={() => onPlayerChange(player)}
                 onPlayerClick={() => onPlayerClick(player)}
