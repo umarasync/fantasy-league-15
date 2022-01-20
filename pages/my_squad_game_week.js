@@ -1,50 +1,71 @@
 // Packages
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 // Components
 import Layout from "components/layout/index";
-import Username from "components/user/Username";
 import MySquadLeftSection from "components/mySquad/MySquadLeftSection";
 import Div from "components/html/Div";
+import InfoBoard from "components/mySquad/InfoBoard";
+import MySquadFooterBar from "components/mySquad/MySquadFooterBar";
 
 // Utils
-import R from "utils/getResponsiveValue";
 import {clone} from "utils/helpers";
-
-import {
-    SELECTED_PLAYERS
-} from "constants/data/players";
-
-import {useRouter} from "next/router";
+import {resetPlayers, setInitialClickedIcons, TOTAL_POINTS} from "utils/mySquad";
+import {handlePlayerTransfer as HPT, DIAMOND_UP_GREEN} from "utils/mySquad";
 
 // Constants
-import colors from "constants/colors";
-import BorderHorizontal from "../components/Borders/BorderHorizontal";
-import InfoBoard from "../components/mySquad/InfoBoard";
-import MatchBoard from "../components/mySquad/MatchBoard";
-
-// Styles
-const getStyles = (R) => {
-    return {}
-}
+import SELECTED_PLAYERS from "constants/data/selectedPlayers";
+import {INITIAL} from "constants/animationStates";
 
 export default function MySquadGameWeek () {
 
-
-    const STYLES =  { ... getStyles(R) }
-
-    const router= useRouter()
-
-    // Initial States
     const SELECTED_PLAYERS_INITIAL = clone(SELECTED_PLAYERS)
-    const TOTAL_BUDGET = 100000000;
-    // const TOTAL_BUDGET = 1000000;
 
-    // Fields States
-    const [pickedPlayers, setPickedPlayers] = useState(SELECTED_PLAYERS_INITIAL)
+    const [pickedPlayers, setPickedPlayers] = useState([])
+    const [savedPlayers, setSavedPlayers] = useState([])
+    const [transferInProgress, setTransferInProgress] = useState(false)
+    const [activeFilter, setActiveFilter] = useState(TOTAL_POINTS)
+    const [changeFormation, setChangeFormation] = useState(INITIAL)
 
-    // Footer Bar States
-    const [autoPickDisabled, setAutoPickDisabled] = useState(false)
+    const handlePlayerTransfer = (player, arrayIndex) => {
+        if(player.clickedIcon === DIAMOND_UP_GREEN) return
+        const players = HPT({
+            player,
+            arrayIndex,
+            pickedPlayers,
+            setChangeFormation,
+            setTransferInProgress
+        })
+        setPickedPlayers(players)
+    }
+
+    useEffect(() => {
+            if(!pickedPlayers.length) return
+            const $pickedPlayers = pickedPlayers.map((player) => {
+                player.activeFilter = activeFilter
+                return player
+            })
+            setPickedPlayers($pickedPlayers)
+    }, [activeFilter])
+
+    useEffect(() => {
+        const players = setInitialClickedIcons(SELECTED_PLAYERS_INITIAL)
+        setPickedPlayers(players)
+        setSavedPlayers(players)
+    }, [])
+
+    const handleCancel = () => {
+        setPickedPlayers(savedPlayers)
+        setTransferInProgress(false)
+    }
+
+    const handleSave = () => {
+        const players = resetPlayers(pickedPlayers)
+        setPickedPlayers(players)
+        setSavedPlayers(players)
+        setTransferInProgress(false)
+        // setChangeFormation(INITIAL)
+    }
 
     return (
         <Layout title="Build Team All Player">
@@ -52,9 +73,11 @@ export default function MySquadGameWeek () {
                 <div className={'flex'}>
                     <Div className="w-[62%]">
                         <MySquadLeftSection
+                            transferInProgress={transferInProgress}
+                            handleFilterButtonClick={(v) => setActiveFilter(v)}
                             pickedPlayers={pickedPlayers}
-                            autoPickDisabled={autoPickDisabled}
-                            onDeselectPlayer={() => false}
+                            onPlayerChange={(p, i) => handlePlayerTransfer(p, i)}
+                            changeFormation={changeFormation}
                         />
                     </Div>
 
@@ -63,6 +86,14 @@ export default function MySquadGameWeek () {
                         <InfoBoard/>
                     </div>
                 </div>
+                <MySquadFooterBar
+                    transferInProgress={transferInProgress}
+                    onBenchBoost={()=>false}
+                    onTripleCaptain={()=>false}
+                    onMakeTransfers={()=>false}
+                    onCancel={handleCancel}
+                    onSave={handleSave}
+                />
             </Div>
         </Layout>
     )

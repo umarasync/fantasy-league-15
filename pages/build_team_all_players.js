@@ -1,6 +1,7 @@
 // Packages
 import {useEffect, useState} from "react";
 import {AnimatePresence,motion} from "framer-motion";
+import {useRouter} from "next/router";
 
 // Components
 import Layout from "components/layout/index";
@@ -13,10 +14,11 @@ import PlayerCard from "components/player/PlayerCard";
 import BuildTeamLeftSection from "components/buildTeam/BuildTeamLeftSection";
 import BuildYourTeamFilters from "components/filter/BuildYourTeamFilters";
 import SelectInput from "components/inputs/SelectInput";
+import NoResultFound from "components/misc/NoResultFound";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import {clone, isEmpty, nFormatter} from "utils/helpers";
+import {clone} from "utils/helpers";
 import {
     handleAutoPick,
     handleMultiSelectionDropDowns,
@@ -59,11 +61,9 @@ import {
 } from "constants/data/players";
 
 import  { PLAYERS } from "constants/data/players"
-import NoResultFound from "../components/misc/NoResultFound";
-import {useRouter} from "next/router";
 
 // Styles
-const getStyles = (R, showAllFilters) => {
+const getStyles = (R) => {
     return {
         allFiltersBox: {
             paddingBottom: R(20),
@@ -378,6 +378,8 @@ export default function BuildTeamAllPlayer () {
         setPlayersDataInitial(PLAYERS_INITIAL)
     }
 
+
+
     return (
         <Layout title="Build Team All Player">
             <div className="mx-auto flex bg-white">
@@ -537,7 +539,9 @@ export default function BuildTeamAllPlayer () {
                         autoPickDisabled={autoPickDisabled}
                         continueDisabled={continueDisabled}
                         onAutoPick={onAutoPick}
-                        onContinueClick={() => router.push('/create_team_name')}
+                        onContinueClick={() => {
+                            router.push('/create_team_name')
+                        }}
                         onResetClick={handleResetClick}
                     />
             </div>

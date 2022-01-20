@@ -7,7 +7,9 @@ import ClubImageAnimation from "Animations/mySquad/ClubImageAnimation";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import colors from "../../constants/colors";
+
+// Constants
+import colors from "constants/colors";
 
 // Styles
 const getStyles = (R) => {

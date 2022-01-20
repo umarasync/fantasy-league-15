@@ -12,10 +12,12 @@ const colors = {
     "lavender_grey": "#C2C1D3",
     "backdrop": 'rgba(0, 0, 0, 0.6)',
     "rhino": '#343162',
+    "gloomy_blue": '#3F3D6A',
     "rhino_shine": '#3F3D6B',
     "brink_pink": '#EE6384',
     "white": '#FFFFFF',
-    "dark_indigo": '#1B1853'
+    "dark_indigo": '#1B1853',
+    "hibiscus": '#B6315B',
 }
 
 module.exports = colors

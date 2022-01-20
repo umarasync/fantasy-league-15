@@ -9,6 +9,7 @@ const TYPOGRAPHY = {
     lineHeight: v => v ? {lineHeight: R(v, 'px')} : {},
     color: v => ({ color: v || 'black' }),
     textCenter: v => v ? {textAlign: 'center'} : {},
+    noWrap: v => v ? {whiteSpace: 'nowrap'} : {},
 }
 
 
@@ -62,7 +63,8 @@ const BACKGROUNDS = {
 }
 
 const LAYOUT = {
-    display: v => v ? { display: v} : {}
+    display: v => v ? { display: v} : {},
+    zIndex: v => v ? { zIndex: v} : {}
 }
 
 const ResponsiveStyle = {

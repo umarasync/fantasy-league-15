@@ -4,7 +4,7 @@ import {useState, useEffect} from "react";
 // Components
 import Layout from "components/layout";
 import Input from "components/inputs/input";
-import Button from "../components/html/Button";
+import Button from "components/html/Button";
 import {useRouter} from "next/router";
 
 // Utils

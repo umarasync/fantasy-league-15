@@ -17,41 +17,46 @@ const getStyles = (R) => {
             right: 0,
             position: 'absolute',
         },
-        closeImage: {
+        clickedIcon: {
             position: 'absolute',
             width: R(13),
             height: R(13),
             top: 0,
-            left: 0,
-            cursor: 'pointer'
+            left: 0
         }
     }
 }
 
 export default function PlayerImage({
-    playerImage,
-    clubImage,
+    player,
     imageStyle,
     clubImageStyle,
-    showCloseIcon,
-    onDeselect = () => false,
-    closeImageStyle
+    clickedIcon,
+    onDeselect,
+    clickedIconStyle
 }) {
 
     const STYLES =  { ... getStyles(R) }
 
+    if(!player) return null
+
     return (
         <div style={{...STYLES.playerImage, ...imageStyle}}>
-            <img src={`/images/${playerImage}`} alt="" width={'100%'} height={'100%'}/>
+            <img src={`/images/${player.image}`} alt="" width={'100%'} height={'100%'}/>
             {
-                showCloseIcon && (
-                    <div style={{ ...STYLES.closeImage, ...closeImageStyle }} onClick={onDeselect}>
-                        <img src={`/images/close1.png`} alt="" width={'100%'} height={'100%'} />
+                clickedIcon && (
+                    <div style={{
+                        ...STYLES.clickedIcon,
+                        ...clickedIconStyle,
+                        cursor: !player.disableIconClick ? 'pointer' : 'auto'
+                    }}
+                         onClick={() => !player.disableIconClick && onDeselect ? onDeselect() : false}>
+                        <img src={`/images/${clickedIcon}`} alt="" width={'100%'} height={'100%'} />
                     </div>
                 )
             }
             <div style={{ ...STYLES.clubImageStyle, ...clubImageStyle }}>
-                <img src={`/images/${clubImage}`} alt="" width={'100%'} height={'100%'} />
+                <img src={`/images/${player.clubImage}`} alt="" width={'100%'} height={'100%'} />
             </div>
         </div>
     )

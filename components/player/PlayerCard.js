@@ -76,7 +76,7 @@ export default function PlayerCard ({
                 <div style={STYLES.infoImage}>
                     <img src={`/images/${chosen ? 'info_light.png' : 'info_grey.png'}`} width={'100%'} height={'100%'} alt=""/></div>
                 <Border/>
-                <PlayerImage playerImage={player.image} clubImage={player.clubImage} imageStyle={STYLES.playerImage} />
+                <PlayerImage player={player} imageStyle={STYLES.playerImage} />
                 <div>
                     <p className={'font-[600]'} style={STYLES.playerName}>
                         {player.name}

@@ -1,9 +1,11 @@
 // Components
-import AllPlayersOnField from "components/player/AllPlayersOnField";
 import Div from 'components/html/Div'
+import MySquadFilterButtons from "components/mySquad/MySquadFilterButtons";
+import MatchBoard from "components/mySquad/MatchBoard";
+import SelectedSquadOnPitch from 'components/mySquad/SelectedSquadOnPitch'
+
 // Utils
 import R from "utils/getResponsiveValue";
-import MatchBoard from "./MatchBoard";
 
 // Styles
 const getStyles = (R) => {
@@ -12,9 +14,7 @@ const getStyles = (R) => {
             paddingTop: R(34),
             paddingLeft: R(81.26),
             paddingRight: R(81.26),
-            // paddingBottom: R(150),
-            // paddingBottom: R(950),
-            paddingBottom: R(40),
+            paddingBottom: R(136),
             minHeight: R()
         },
         logo: {
@@ -37,15 +37,19 @@ const getStyles = (R) => {
         fieldImage: {
             width: R(610),
             height: R(621),
-            marginTop: R(40),
+            marginTop: R(44),
         }
     }
 }
 export default function MySquadLeftSection({
      pickedPlayers,
-     autoPickDisabled,
-     onDeselectPlayer
+     onPlayerChange,
+     transferInProgress,
+     changeFormation,
+     handleFilterButtonClick
  }) {
+
+
 
     const STYLES =  { ... getStyles(R) }
 
@@ -56,21 +60,22 @@ export default function MySquadLeftSection({
                 <img src="/images/logo_white.png" alt="" width="100%" height="100%"/>
             </div>
 
-            <div className="mt-[5rem] flex flex-col items-center" style={STYLES.textContainer}>
-                <p className="uppercase font-[900] italic text-white" style = {STYLES.heading}>make your selection</p>
-                <p className="font-[300] text-center text-lavender_grey" style={STYLES.subHeading}>
-                    Select a maximum of 3 players from a single team <br/>{`or 'Auto Pick' if you're short of time.`}
-                </p>
-            </div>
+            {/*<TestButtons/>*/}
+            <MySquadFilterButtons handleClick={(v) => handleFilterButtonClick(v)}/>
 
-            <div>
+            <div className={'flex items-center justify-center'}>
                 <div style={STYLES.fieldImage}>
                     <div className="bg-[url('/images/field2.png')] bg-[length:100%_100%] bg-no-repeat h-full w-full" >
-                        <AllPlayersOnField
-                            pickedPlayers={pickedPlayers}
-                            autoPickDisabled={autoPickDisabled}
-                            onDeselectPlayer={onDeselectPlayer}
-                        />
+                        {
+                            pickedPlayers.length ? (
+                                <SelectedSquadOnPitch
+                                    changeFormation={changeFormation}
+                                    transferInProgress={transferInProgress}
+                                    pickedPlayers={pickedPlayers}
+                                    onPlayerChange={onPlayerChange}
+                                />
+                            ): null
+                        }
                     </div>
                 </div>
             </div>

@@ -10,7 +10,7 @@ import Image from "components/html/Image";
 import Button from "components/html/Button";
 
 // Constants
-import {SHADOW_WHITE_SMOKE} from "constants/data/boxShadow";
+import {SHADOW_WHITE_SMOKE} from "constants/boxShadow";
 import colors from "constants/colors";
 import {MATCHES} from "constants/data/matches";
 

@@ -8,7 +8,7 @@ import R from "utils/getResponsiveValue";
 // Constants
 import colors from 'constants/colors'
 import {ALL_STATUSES, ALL_TEAMS} from "constants/data/filters";
-import BorderHorizontal from "../Borders/BorderHorizontal";
+import BorderHorizontal from "components/Borders/BorderHorizontal";
 
 // Styles
 const getStyles = (R) => {

@@ -1,6 +1,3 @@
-// Utils
-import {isOdd} from "utils/helpers";
-
 const duration = 0.7
 
 const ClubImageAnimation = {

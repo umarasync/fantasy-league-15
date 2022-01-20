@@ -6,7 +6,7 @@ import store from "../redux/store/";
 function MyApp({ Component, pageProps, router }) {
   return (
     <AnimatePresence exitBeforeEnter>
-      <Provider store={store}>
+      <Provider store={store} key={router.route}>
         <Component {...pageProps} key={router.route} />
       </Provider>
     </AnimatePresence>
