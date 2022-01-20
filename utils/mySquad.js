@@ -181,7 +181,7 @@ export const handlePlayerTransfer = ({
     }
 }
 
-export const resetPlayers = (players) => {
+export const resetPlayers = ({players, activeFilter}) => {
     return players.map((player, index) => {
 
         if([11,12,13,14].includes(index)) {
@@ -192,7 +192,7 @@ export const resetPlayers = (players) => {
 
         player.opacity = 1
         player.animationState = true
-        player.activeFilter = TOTAL_POINTS
+        player.activeFilter = activeFilter
         player.disableIconClick = false
         player.alreadyTransferred = false
         player.latestToBeAdded = false
