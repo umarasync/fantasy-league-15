@@ -5,6 +5,7 @@ import RS from "utils/responsiveStyle";
 const getStyles = (RS, style) => {
     const {
         w, h, p, pl, pr, pt, pb, m, ml, mr, mt, mb, bs, center, justifyBetween, br,
+        btlr, btrr, bblr, bbrr,
         position, left, right, top, bottom, bg, cursor, display, textCenter, minHeight
     } = style
 
@@ -29,6 +30,10 @@ const getStyles = (RS, style) => {
             ...RS.justifyBetween(justifyBetween),
 
             ...RS.borderRadius(br),
+            ...RS.borderTopLeftRadius(btlr),
+            ...RS.borderTopRightRadius(btrr),
+            ...RS.borderBottomLeftRadius(bblr),
+            ...RS.borderBottomRightRadius(bbrr),
 
             ...RS.boxShadow(bs),
 
@@ -45,14 +50,18 @@ const getStyles = (RS, style) => {
             ...RS.display(display),
 
             ...RS.textCenter(textCenter),
-
-
         }
     }
 }
 
 export default function Div(props) {
     const STYLES =  { ... getStyles(RS, { ...props })}
-    const { children, style, className } = props
-    return (<div className={className} style={{...STYLES.container, ...style}} >{children}</div>)
+    const { children, style, className, onClick } = props
+    return (
+        <div
+            className={className}
+            style={{...STYLES.container, ...style}}
+            onClick={() => onClick ? onClick(): false}
+        >{children}</div>
+    )
 }

@@ -39,10 +39,6 @@ const getStyles = (R, player) => {
             width: '100%',
             height:'100%'
         },
-        clubImageStyle: {
-            width: R(13),
-            height: R(13)
-        },
         title:{
             position: 'absolute',
             top: R(45)
@@ -133,7 +129,7 @@ const SubTitle = ({player, initialOpacity}) => {
 
 }
 
-const PlayerComponent = ({player, onPlayerChange, initialOpacity}) => {
+const PlayerComponent = ({player, onPlayerChange, onPlayerClick, initialOpacity}) => {
 
     const STYLES =  { ... getStyles(R, player) }
 
@@ -141,14 +137,17 @@ const PlayerComponent = ({player, onPlayerChange, initialOpacity}) => {
         <>
             <PlayerImage
                 player={player}
+                ciw={18}
+                cih={18}
                 imageStyle={STYLES.playerImage}
-                clubImageStyle={STYLES.clubImageStyle}
                 clickedIcon={player.clickedIcon}
-                onDeselect={() => onPlayerChange(player)}
+                onIconClick={() => onPlayerChange(player)}
+                onPlayerClick={() => onPlayerClick(player)}
                 clickedIconStyle={STYLES.clickedIcon}
             />
-            <p className={'items-center relative items-center text-center justify-center primary-button-color text-white whitespace-nowrap'}
+            <p className={'items-center relative items-center text-center justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
                style={STYLES.buttonStyle}
+               onClick={() => onPlayerClick(player)}
             >
                 {
                     player.status === STATUS_INJURED || player.status === STATUS_SUSPENDED && (
@@ -172,7 +171,8 @@ export default function SelectedPlayerOnPitch ({
    player,
    style,
    boxClasses,
-   onPlayerChange
+   onPlayerChange,
+   onPlayerClick,
 }) {
 
     const STYLES =  { ... getStyles(R, player) }
@@ -203,6 +203,7 @@ export default function SelectedPlayerOnPitch ({
                             <PlayerComponent
                                 player={player}
                                 onPlayerChange={onPlayerChange}
+                                onPlayerClick={onPlayerClick}
                                 initialOpacity={initialOpacity}
                             />
                         </motion.div>
@@ -223,6 +224,7 @@ export default function SelectedPlayerOnPitch ({
                             <PlayerComponent
                                 player={player}
                                 onPlayerChange={onPlayerChange}
+                                onPlayerClick={onPlayerClick}
                                 initialOpacity={initialOpacity}
                             />
                         </motion.div>

@@ -36,10 +36,6 @@ const getStyles = (R, props) => {
             textTransform: 'capitalize',
             position: 'absolute',
         },
-        playerImage: {
-            width: R(40),
-            height: R(40),
-        },
         playerImagesContainer: {
             marginLeft: R(16),
             marginRight: R(16),
@@ -88,7 +84,7 @@ export default function TeamName({
                                             key={index}
                                             style={STYLES.playerBox}
                                         >
-                                            <PlayerImage playerImage={player.image} imageStyle={STYLES.playerImage} />
+                                            <PlayerImage hideClubImage player={player} w={40} h={40}/>
                                         </div>
                                     )
                                 })
@@ -121,7 +117,7 @@ export default function TeamName({
                                             key={index}
                                             style={STYLES.playerBox}
                                         >
-                                            <PlayerImage playerImage={player.image} imageStyle={STYLES.playerImage} />
+                                            <PlayerImage hideClubImage player={player} w={40} h={40}/>
                                         </div>
                                     )
                                 })
@@ -156,7 +152,7 @@ export default function TeamName({
                                            key={index}
                                            style={STYLES.playerBox}
                                        >
-                                           <PlayerImage playerImage={player.image} imageStyle={STYLES.playerImage} />
+                                           <PlayerImage hideClubImage player={player} w={40} h={40}/>
                                        </div>
                                    )
                                })
@@ -188,7 +184,7 @@ export default function TeamName({
                                            key={index}
                                            style={STYLES.playerBox}
                                        >
-                                           <PlayerImage playerImage={player.image} imageStyle={STYLES.playerImage} />
+                                           <PlayerImage hideClubImage player={player} w={40} h={40}/>
                                        </div>
                                    )
                                })

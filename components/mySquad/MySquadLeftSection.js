@@ -46,10 +46,9 @@ export default function MySquadLeftSection({
      onPlayerChange,
      transferInProgress,
      changeFormation,
-     handleFilterButtonClick
+     handleFilterButtonClick,
+     onPlayerClick
  }) {
-
-
 
     const STYLES =  { ... getStyles(R) }
 
@@ -73,6 +72,7 @@ export default function MySquadLeftSection({
                                     transferInProgress={transferInProgress}
                                     pickedPlayers={pickedPlayers}
                                     onPlayerChange={onPlayerChange}
+                                    onPlayerClick={onPlayerClick}
                                 />
                             ): null
                         }
