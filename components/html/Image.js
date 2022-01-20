@@ -31,7 +31,7 @@ export default function Image(props) {
     const { name, alt, onClick, disabled } = props
 
     return (
-        <div style={STYLES.container} onClick={disabled ? () => false: onClick}>
+        <div style={STYLES.container} onClick={() => (disabled || !onClick) ? false : onClick()}>
             <div style={STYLES.image}>
                 <img src={`images/${name}`} alt={alt} width={'100%'} height={'100%'}/>
             </div>

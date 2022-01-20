@@ -16,6 +16,7 @@ import {handlePlayerTransfer as HPT, DIAMOND_UP_GREEN} from "utils/mySquad";
 // Constants
 import SELECTED_PLAYERS from "constants/data/selectedPlayers";
 import {INITIAL} from "constants/animationStates";
+import PlayerInfoModal from "../components/modals/PlayerInfoModal";
 
 export default function MySquadGameWeek () {
 
@@ -24,6 +25,7 @@ export default function MySquadGameWeek () {
     const [pickedPlayers, setPickedPlayers] = useState([])
     const [savedPlayers, setSavedPlayers] = useState([])
     const [transferInProgress, setTransferInProgress] = useState(false)
+    const [showModal, setShowModal] = useState(false);
     const [activeFilter, setActiveFilter] = useState(TOTAL_POINTS)
     const [changeFormation, setChangeFormation] = useState(INITIAL)
 
@@ -37,6 +39,10 @@ export default function MySquadGameWeek () {
             setTransferInProgress
         })
         setPickedPlayers(players)
+    }
+
+    const handlePlayerClick = (player, arrayIndex) => {
+        setShowModal(true)
     }
 
     useEffect(() => {
@@ -64,7 +70,6 @@ export default function MySquadGameWeek () {
         setPickedPlayers(players)
         setSavedPlayers(players)
         setTransferInProgress(false)
-        // setChangeFormation(INITIAL)
     }
 
     return (
@@ -76,11 +81,11 @@ export default function MySquadGameWeek () {
                             transferInProgress={transferInProgress}
                             handleFilterButtonClick={(v) => setActiveFilter(v)}
                             pickedPlayers={pickedPlayers}
-                            onPlayerChange={(p, i) => handlePlayerTransfer(p, i)}
+                            onPlayerChange={handlePlayerTransfer}
                             changeFormation={changeFormation}
+                            onPlayerClick={handlePlayerClick}
                         />
                     </Div>
-
                     {/*Right Section*/}
                     <div className="w-[38%] flex justify-center" style={{height: 'max-content'}}>
                         <InfoBoard/>
@@ -94,6 +99,7 @@ export default function MySquadGameWeek () {
                     onCancel={handleCancel}
                     onSave={handleSave}
                 />
+                {/*<PlayerInfoModal show={showModal} onClose={() => setShowModal(false)}/>*/}
             </Div>
         </Layout>
     )

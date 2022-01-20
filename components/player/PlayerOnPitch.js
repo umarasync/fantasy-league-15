@@ -33,10 +33,8 @@ const getStyles = (R, player) => {
           width: '100%',
           height:'100%'
       },
-      clubImageStyle: {
-          width: R(13),
-          height: R(13)
-      },
+
+
       title:{
             position: 'absolute',
             top: R(45)
@@ -118,9 +116,10 @@ export default function PlayerOnPitch ({
                                     <PlayerImage
                                         player={player}
                                         imageStyle={STYLES.playerImage}
-                                        clubImageStyle={STYLES.clubImageStyle}
+                                        ciw={18}
+                                        cih={18}
                                         clickedIcon={'close1.png'}
-                                        onDeselect={onDeselectPlayer}
+                                        onIconClick={onDeselectPlayer}
                                     />
                                     <p className={'items-center relative items-center text-center  justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
                                        style={STYLES.buttonStyle}

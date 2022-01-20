@@ -1,0 +1,1 @@
+export const CAPTAIN_CHOSEN = "CAPTAIN_CHOSEN"

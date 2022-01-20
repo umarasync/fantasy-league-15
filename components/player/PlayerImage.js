@@ -1,63 +1,75 @@
+// Components
+import Div from "components/html/Div"
+import Image from "components/html/Image";
+
 // Utils
 import R from "utils/getResponsiveValue";
+import RS from "utils/responsiveStyle"
+
 
 // Styles
-const getStyles = (R) => {
+const getStyles = (R, RS, style) => {
+    const {
+        ml, mr, mt, mb,
+    } = style
     return {
-        playerImage: {
-            width: R(70),
-            height: R(70),
+        image: {
+            ...RS.marginLeft(ml),
+            ...RS.marginRight(mr),
+            ...RS.marginTop(mt),
+            ...RS.marginBottom(mb),
             borderRadius: '50%',
             position: 'relative',
         },
-        clubImageStyle: {
-            width: R(26),
-            height: R(26),
-            bottom: 0,
-            right: 0,
-            position: 'absolute',
-        },
+
         clickedIcon: {
             position: 'absolute',
-            width: R(13),
-            height: R(13),
+            width: R(16),
+            height: R(16),
             top: 0,
             left: 0
         }
     }
 }
 
-export default function PlayerImage({
-    player,
-    imageStyle,
-    clubImageStyle,
-    clickedIcon,
-    onDeselect,
-    clickedIconStyle
-}) {
+export default function PlayerImage(props) {
+    const {
+        w = 50,
+        h = 50,
+        ciw = 26,
+        cih = 26,
+        player,
+        clickedIcon,
+        onIconClick,
+        onPlayerClick,
+        hideClubImage
+    } = props
 
-    const STYLES =  { ... getStyles(R) }
+    const STYLES =  { ... getStyles(R, RS, { ...props }) }
 
     if(!player) return null
 
     return (
-        <div style={{...STYLES.playerImage, ...imageStyle}}>
-            <img src={`/images/${player.image}`} alt="" width={'100%'} height={'100%'}/>
+        <Div w={w} h={h} style={STYLES.image}>
+            <Image onClick={onPlayerClick} name={player.image} cursor={'pointer'}/>
             {
                 clickedIcon && (
-                    <div style={{
-                        ...STYLES.clickedIcon,
-                        ...clickedIconStyle,
-                        cursor: !player.disableIconClick ? 'pointer' : 'auto'
-                    }}
-                         onClick={() => !player.disableIconClick && onDeselect ? onDeselect() : false}>
-                        <img src={`/images/${clickedIcon}`} alt="" width={'100%'} height={'100%'} />
-                    </div>
+                    <Div h={16} w={16} position={'absolute'} left={0} top={0} cursor={!player.disableIconClick ? 'pointer' : 'auto'}
+                         onClick={() => !player.disableIconClick && onIconClick ? onIconClick() : false}
+                    >
+                        <Image name={clickedIcon}/>
+                    </Div>
+
                 )
             }
-            <div style={{ ...STYLES.clubImageStyle, ...clubImageStyle }}>
-                <img src={`/images/${player.clubImage}`} alt="" width={'100%'} height={'100%'} />
-            </div>
-        </div>
+
+            {
+                !hideClubImage && (
+                    <Div position='absolute' bottom={0} right={0}>
+                        <Image w={ciw} h={cih} onClick={onPlayerClick} name={player.clubImage}/>
+                    </Div>
+                )
+            }
+        </Div>
     )
 }
