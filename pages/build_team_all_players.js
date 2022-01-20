@@ -539,7 +539,9 @@ export default function BuildTeamAllPlayer () {
                         autoPickDisabled={autoPickDisabled}
                         continueDisabled={continueDisabled}
                         onAutoPick={onAutoPick}
-                        onContinueClick={() => { router.push('/create_team_name')}}
+                        onContinueClick={() => {
+                            router.push('/create_team_name')
+                        }}
                         onResetClick={handleResetClick}
                     />
             </div>

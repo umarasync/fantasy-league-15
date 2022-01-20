@@ -12,7 +12,7 @@ import R from "utils/getResponsiveValue";
 
 // Constants
 import colors from "constants/colors";
-import { SHADOW_DARK_INDIGO} from "constants/data/boxShadow";
+import { SHADOW_DARK_INDIGO} from "constants/boxShadow";
 
 
 export default function InfoBoard() {

@@ -4,7 +4,7 @@ import RS from "utils/responsiveStyle"
 // Styles
 const getStyles = (RS, style) => {
     const {
-        w, h, p, pl, pr, pt, pb, m, ml, mr, mt, mb, fs, lh, fw, fst, tt, br, bs, bg, cursor, center, color, z
+        w, h, p, pl, pr, pt, pb, m, ml, mr, mt, mb, fs, lh, fw, fst, tt, br, bs, bg, cursor, center, color, z, nowrap
     } = style
 
     return {
@@ -15,6 +15,7 @@ const getStyles = (RS, style) => {
             ...RS.textTransform(tt),
             ...RS.color(color),
             ...RS.lineHeight(lh),
+            ...RS.noWrap(nowrap),
 
             ...RS.width(w),
             ...RS.height(h),

@@ -14,7 +14,7 @@ const getStyles = (R) => {
             paddingTop: R(34),
             paddingLeft: R(81.26),
             paddingRight: R(81.26),
-            paddingBottom: R(40),
+            paddingBottom: R(136),
             minHeight: R()
         },
         logo: {

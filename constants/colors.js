@@ -16,7 +16,8 @@ const colors = {
     "rhino_shine": '#3F3D6B',
     "brink_pink": '#EE6384',
     "white": '#FFFFFF',
-    "dark_indigo": '#1B1853'
+    "dark_indigo": '#1B1853',
+    "hibiscus": '#B6315B',
 }
 
 module.exports = colors

@@ -14,6 +14,7 @@ import {ZERO, ONE,TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, 
 
 // Animations
 import {Player5Animation, Player6Animation, Player9Animation, Player10Animation, Player11Animation} from "Animations/mySquad/PlayersFormationAnimation";
+import {ANIMATE, INITIAL} from "constants/animationStates";
 
 // Styles
 const getStyles = (R, transferInProgress) => {
@@ -65,12 +66,21 @@ export default function SelectedSquadOnPitch ({
     const controls = useAnimation()
 
     useEffect(() => {
-        if(!changeFormation || !pickedPlayers.length) return
-        controls.start('p5Animation')
-        controls.start('p6Animation')
-        controls.start('p9Animation')
-        controls.start('p10Animation')
-        controls.start('p11Animation')
+        if(!pickedPlayers.length) return
+        if(changeFormation === ANIMATE) {
+            controls.start('p5Animation')
+            controls.start('p6Animation')
+            controls.start('p9Animation')
+            controls.start('p10Animation')
+            controls.start('p11Animation')
+        }else if(changeFormation === INITIAL) {
+            controls.start('p5Initial')
+            controls.start('p6Initial')
+            controls.start('p9Initial')
+            controls.start('p10Initial')
+            controls.start('p11Initial')
+        }
+
     }, [changeFormation])
 
     if(!pickedPlayers.length) return null

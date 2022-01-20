@@ -6,7 +6,9 @@ import {clone} from "utils/helpers";
 
 // Constants
 import {ELEVEN, ZERO} from "constants/arrayIndexes";
-const CLICKED_ICON = 'transfer.png'
+import {ANIMATE} from "constants/animationStates";
+
+const TRANSFER_ICON = 'transfer.png'
 export const DIAMOND_UP_GREEN = 'diamond_up_green.png'
 export const DIAMOND_DOWN_RED = 'diamond_down_red.png'
 export const TOTAL_POINTS = 'Total pts'
@@ -21,7 +23,7 @@ export const setInitialClickedIcons = (pickedPlayersObject) => {
     const GKs = $pickedPlayersObject[POSITION_GK].map((player, index) => {
 
         if(index === $pickedPlayersObject[POSITION_GK].length - 1){
-            player.clickedIcon = CLICKED_ICON
+            player.clickedIcon = TRANSFER_ICON
         }else{
             player.clickedIcon = false
         }
@@ -33,7 +35,7 @@ export const setInitialClickedIcons = (pickedPlayersObject) => {
     const DEFs = $pickedPlayersObject[POSITION_DEF].map((player, index) => {
 
         if(index === $pickedPlayersObject[POSITION_DEF].length - 1 || index === $pickedPlayersObject[POSITION_DEF].length - 2){
-            player.clickedIcon = CLICKED_ICON
+            player.clickedIcon = TRANSFER_ICON
         }else{
             player.clickedIcon = false
         }
@@ -45,7 +47,7 @@ export const setInitialClickedIcons = (pickedPlayersObject) => {
     const MIDs = $pickedPlayersObject[POSITION_MID].map((player, index) => {
 
         if(index === $pickedPlayersObject[POSITION_MID].length - 1){
-            player.clickedIcon = CLICKED_ICON
+            player.clickedIcon = TRANSFER_ICON
         }else{
             player.clickedIcon = false
         }
@@ -80,6 +82,7 @@ export const setInitialClickedIcons = (pickedPlayersObject) => {
         player.opacity = 1
         player.animationState = true
         player.activeFilter = TOTAL_POINTS
+        player.disableIconClick = false
         return player
     })
 }
@@ -89,10 +92,12 @@ export const handlePlayerTransfer = ({
     player,
     arrayIndex,
     pickedPlayers,
-    setChangeFormation
+    setChangeFormation,
+    setTransferInProgress,
 }) => {
 
     const $pickedPlayers = clone(pickedPlayers)
+    setTransferInProgress(true)
 
     // Transfer Player
     if(player.clickedIcon === DIAMOND_DOWN_RED) {
@@ -117,7 +122,7 @@ export const handlePlayerTransfer = ({
         transferredPlayers[addedPlayerIndex] = replacedPlayer
 
         if([4,5,6,7,8,9,10].includes(arrayIndex)) {
-            setChangeFormation(true)
+            setChangeFormation(ANIMATE)
         }
 
         return transferredPlayers.map((p, index) => {
@@ -128,7 +133,6 @@ export const handlePlayerTransfer = ({
             }
             return p
         })
-
     }
 
     // For goal keeper transfer
@@ -165,6 +169,9 @@ export const handlePlayerTransfer = ({
                     p.clickedIcon = DIAMOND_DOWN_RED
                     p.latestToBeAdded = false
                     p.disableIconClick = false
+                    p.alreadyTransferred = false
+
+                    p.animationState = true
                 }
                 p.opacity = 1
             }
@@ -172,5 +179,26 @@ export const handlePlayerTransfer = ({
             return p
         })
     }
-
 }
+
+export const resetPlayers = (players) => {
+    return players.map((player, index) => {
+
+        if([11,12,13,14].includes(index)) {
+            player.clickedIcon = TRANSFER_ICON
+        }else {
+            player.clickedIcon = false
+        }
+
+        player.opacity = 1
+        player.animationState = true
+        player.activeFilter = TOTAL_POINTS
+        player.disableIconClick = false
+        player.alreadyTransferred = false
+        player.latestToBeAdded = false
+
+        return player
+    })
+}
+
+

@@ -14,7 +14,7 @@ import {MATCHES, TOTAL_POINTS} from "utils/mySquad";
 import { STATUS_SUSPENDED, STATUS_INJURED } from "constants/data/filters";
 
 // Animation
-import SelectedPlayerOnPitchAnimation from "Animations/mySquad/SelectedPlayerOnPitchAnimation";
+import SelectedPlayerOnPitchAnimation, {TextUnderPlayerNameAnimation } from "Animations/mySquad/SelectedPlayerOnPitchAnimation";
 
 // Styles
 const getStyles = (R, player) => {
@@ -85,7 +85,7 @@ const SubTitle = ({player, initialOpacity}) => {
         return (
             <AnimatePresence>
                     <motion.span
-                        variants={SelectedPlayerOnPitchAnimation}
+                        variants={TextUnderPlayerNameAnimation}
                         custom={{initialOpacity}}
                         initial="initial"
                         animate="animate"
@@ -101,7 +101,7 @@ const SubTitle = ({player, initialOpacity}) => {
         return (
             <AnimatePresence>
                 <motion.span
-                    variants={SelectedPlayerOnPitchAnimation}
+                    variants={TextUnderPlayerNameAnimation}
                     custom={{initialOpacity}}
                     initial="initial"
                     animate="animate"
@@ -109,7 +109,7 @@ const SubTitle = ({player, initialOpacity}) => {
                     key={2}
                     style={STYLES.subTitle}
                 >
-                    {'PSV (H)'}
+                    {player.nextMatch.vs}
                 </motion.span>
             </AnimatePresence>
 
@@ -118,7 +118,7 @@ const SubTitle = ({player, initialOpacity}) => {
     return (
         <AnimatePresence>
             <motion.span
-                variants={SelectedPlayerOnPitchAnimation}
+                variants={TextUnderPlayerNameAnimation}
                 custom={{initialOpacity}}
                 initial="initial"
                 animate="animate"

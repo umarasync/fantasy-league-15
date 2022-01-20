@@ -1,26 +1,23 @@
 // Packages
 import {useEffect, useState} from "react";
-import {useRouter} from "next/router";
 
 // Components
 import Layout from "components/layout/index";
 import MySquadLeftSection from "components/mySquad/MySquadLeftSection";
 import Div from "components/html/Div";
 import InfoBoard from "components/mySquad/InfoBoard";
+import MySquadFooterBar from "components/mySquad/MySquadFooterBar";
 
 // Utils
-import R from "utils/getResponsiveValue";
 import {clone} from "utils/helpers";
-import {setInitialClickedIcons, TOTAL_POINTS} from "utils/mySquad";
+import {resetPlayers, setInitialClickedIcons, TOTAL_POINTS} from "utils/mySquad";
+import {handlePlayerTransfer as HPT, DIAMOND_UP_GREEN} from "utils/mySquad";
 
 // Constants
 import SELECTED_PLAYERS from "constants/data/selectedPlayers";
-
-// Utils
-import {handlePlayerTransfer as HPT, DIAMOND_UP_GREEN} from "utils/mySquad";
+import {INITIAL} from "constants/animationStates";
 
 export default function MySquadGameWeek () {
-
 
     const SELECTED_PLAYERS_INITIAL = clone(SELECTED_PLAYERS)
 
@@ -28,7 +25,7 @@ export default function MySquadGameWeek () {
     const [savedPlayers, setSavedPlayers] = useState([])
     const [transferInProgress, setTransferInProgress] = useState(false)
     const [activeFilter, setActiveFilter] = useState(TOTAL_POINTS)
-    const [changeFormation, setChangeFormation] = useState(false)
+    const [changeFormation, setChangeFormation] = useState(INITIAL)
 
     const handlePlayerTransfer = (player, arrayIndex) => {
         if(player.clickedIcon === DIAMOND_UP_GREEN) return
@@ -36,7 +33,8 @@ export default function MySquadGameWeek () {
             player,
             arrayIndex,
             pickedPlayers,
-            setChangeFormation
+            setChangeFormation,
+            setTransferInProgress
         })
         setPickedPlayers(players)
     }
@@ -55,6 +53,19 @@ export default function MySquadGameWeek () {
         setPickedPlayers(players)
         setSavedPlayers(players)
     }, [])
+
+    const handleCancel = () => {
+        setPickedPlayers(savedPlayers)
+        setTransferInProgress(false)
+    }
+
+    const handleSave = () => {
+        const players = resetPlayers(pickedPlayers)
+        setPickedPlayers(players)
+        setSavedPlayers(players)
+        setTransferInProgress(false)
+        // setChangeFormation(INITIAL)
+    }
 
     return (
         <Layout title="Build Team All Player">
@@ -75,6 +86,14 @@ export default function MySquadGameWeek () {
                         <InfoBoard/>
                     </div>
                 </div>
+                <MySquadFooterBar
+                    transferInProgress={transferInProgress}
+                    onBenchBoost={()=>false}
+                    onTripleCaptain={()=>false}
+                    onMakeTransfers={()=>false}
+                    onCancel={handleCancel}
+                    onSave={handleSave}
+                />
             </Div>
         </Layout>
     )
