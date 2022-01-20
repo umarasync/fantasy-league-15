@@ -5,6 +5,8 @@ import {
   LOGIN_SUCCESS,
   RESET_PASSWORD_FAILED,
   RESET_PASSWORD_SUCCESS,
+  CONFIRMATION_FAILED,
+  CONFIRMATION_SUCCESS,
   RESET_PAGE,
 } from "../actions/auth";
 
@@ -15,6 +17,8 @@ function authReducer(
     loginError: "",
     signUpSuccess: "",
     signUpError: "",
+    confirmationError:"",
+    confirmationSuccess:"",
     user: {},
   },
   action
@@ -44,6 +48,18 @@ function authReducer(
         loading: false,
         signUpError: action.payload,
       };
+    case CONFIRMATION_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        confirmationSuccess: action.payload,
+      };
+    case CONFIRMATION_FAILED:
+      return {
+        ...state,
+        loading: false,
+        confirmationError: action.payload,
+      };
     case RESET_PASSWORD_SUCCESS:
       return {
         ...state,
@@ -66,6 +82,8 @@ function authReducer(
         loginError: "",
         signUpSuccess: "",
         signUpError: "",
+        confirmationError:"",
+        confirmationSuccess:"",
         user: {},
       };
     default:

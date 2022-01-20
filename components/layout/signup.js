@@ -112,6 +112,8 @@ export default function SignUp(props) {
     //Mutation API response
     if (successSignUp) {
       setSignUpError(false);
+      //store user email
+      localStorage.setItem("email", email);
       toast.success(successSignUp, {
         onClose: () => router.push("/confirm_your_account"),
       });

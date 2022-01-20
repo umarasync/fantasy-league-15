@@ -1,7 +1,7 @@
 import axios from "axios";
 import store from "../redux/store/index";
 
-let url = "http://localhost:9090/dev/";
+let url = process.env.NEXT_PUBLIC_BACKEND_SERVER;
 
 const api = axios.create({
   baseURL: url,
