@@ -10,16 +10,10 @@ import R from "utils/getResponsiveValue";
 // Constants
 import colors from "constants/colors";
 
-// Styles
-const getStyles = (R) => {
-    return {}
-}
-
 export default function Header ({
     player,
     onClose
 }) {
-    const STYLES = {...getStyles(R)}
 
     const controls = [
         {

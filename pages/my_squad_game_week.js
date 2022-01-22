@@ -15,14 +15,15 @@ import {handlePlayerTransfer as HPT, DIAMOND_UP_GREEN} from "utils/mySquad";
 
 // Constants
 import SELECTED_PLAYERS from "constants/data/selectedPlayers";
-import {INITIAL} from "constants/animationStates";
-import PlayerInfoModal from "../components/modals/PlayerInfoModal";
+import {INITIAL} from "constants/animations";
+import PlayerInfoModal from "components/modals/PlayerInfoModal";
 
 export default function MySquadGameWeek () {
 
     const SELECTED_PLAYERS_INITIAL = clone(SELECTED_PLAYERS)
 
     const [pickedPlayers, setPickedPlayers] = useState([])
+    const [player, setPlayer] = useState({})
     const [savedPlayers, setSavedPlayers] = useState([])
     const [transferInProgress, setTransferInProgress] = useState(false)
     const [showModal, setShowModal] = useState(false);
@@ -41,9 +42,14 @@ export default function MySquadGameWeek () {
         setPickedPlayers(players)
     }
 
+    // For Player Info Modal: Start
     const handlePlayerClick = (player, arrayIndex) => {
-        setShowModal(true)
+        setPlayer({...player})
     }
+    useEffect(() => {
+        setShowModal(true)
+    }, [player])
+    // For Player Info Modal: Ends
 
     useEffect(() => {
             if(!pickedPlayers.length) return
@@ -58,6 +64,7 @@ export default function MySquadGameWeek () {
         const players = setInitialClickedIcons(SELECTED_PLAYERS_INITIAL)
         setPickedPlayers(players)
         setSavedPlayers(players)
+        setShowModal(false)
     }, [])
 
     const handleCancel = () => {
@@ -99,7 +106,7 @@ export default function MySquadGameWeek () {
                     onCancel={handleCancel}
                     onSave={handleSave}
                 />
-                {/*<PlayerInfoModal show={showModal} onClose={() => setShowModal(false)}/>*/}
+                <PlayerInfoModal show={showModal} onClose={() => setShowModal(false)} player={player}/>
             </Div>
         </Layout>
     )

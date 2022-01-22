@@ -6,7 +6,7 @@ import {clone} from "utils/helpers";
 
 // Constants
 import {ELEVEN, ZERO} from "constants/arrayIndexes";
-import {ANIMATE} from "constants/animationStates";
+import {ANIMATE} from "constants/animations";
 
 const TRANSFER_ICON = 'transfer.png'
 export const DIAMOND_UP_GREEN = 'diamond_up_green.png'

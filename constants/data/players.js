@@ -22,6 +22,7 @@ import {
     POSITION_DEF,
     POSITION_FWD, POSITION_ALL,
 } from "constants/data/filters";
+import PLAYER_POINTS from "constants/data/playerPoints";
 
 const PLAYER1_PRICE = 6400000
 const PLAYER2_PRICE = 23000000
@@ -301,7 +302,8 @@ export const DUMMY_PLAYERS = [
 export const PLAYERS = DUMMY_PLAYERS.map((player, index) =>  {
     return {
         ...player,
-        id: index + 1
+        id: index + 1,
+        playersPointsInfo: PLAYER_POINTS
     }
 })
 

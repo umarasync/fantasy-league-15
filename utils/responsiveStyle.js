@@ -9,6 +9,7 @@ const TYPOGRAPHY = {
     lineHeight: v => v ? {lineHeight: R(v, 'px')} : {},
     color: v => ({ color: v || 'black' }),
     textCenter: v => v ? {textAlign: 'center'} : {},
+    textAlign: v => v ? {textAlign: v} : {},
     noWrap: v => v ? {whiteSpace: 'nowrap'} : {},
 }
 

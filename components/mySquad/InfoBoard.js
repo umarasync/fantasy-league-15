@@ -39,7 +39,7 @@ export default function InfoBoard() {
 
                 <Div className={'flex justify-evenly'} pt={24} pb={24}>
                     <Div className={'flex flex-col items-center'}>
-                        <Text text={40} className={'gradient-text-1'} fs={42} lh={46} mb={8} pr={10} fst={'italic'} fw={800}/>
+                        <Text text={40} className={'text-froly-cerise_red'} fs={42} lh={46} mb={8} pr={10} fst={'italic'} fw={800}/>
                         <Text text={'Weekly points'} fs={18} color={colors.regent_grey}/>
                     </Div>
                     <Div className={'flex flex-col items-center'}>

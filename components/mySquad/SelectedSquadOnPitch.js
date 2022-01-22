@@ -14,7 +14,7 @@ import {ZERO, ONE,TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, 
 
 // Animations
 import {Player5Animation, Player6Animation, Player9Animation, Player10Animation, Player11Animation} from "Animations/mySquad/PlayersFormationAnimation";
-import {ANIMATE, INITIAL} from "constants/animationStates";
+import {ANIMATE, INITIAL} from "constants/animations";
 
 // Styles
 const getStyles = (R, transferInProgress) => {
