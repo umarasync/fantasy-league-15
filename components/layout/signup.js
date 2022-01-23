@@ -115,6 +115,7 @@ export default function SignUp(props) {
         innerRef={ref}
       />
     ));
+    CustomInputPicker.displayName = "DatePickerInput";
     return (
       <DatePicker
         renderCustomHeader={({
