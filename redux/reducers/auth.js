@@ -3,10 +3,12 @@ import {
   SIGNUP_SUCCESS,
   LOGIN_FAILED,
   LOGIN_SUCCESS,
-  RESET_PASSWORD_FAILED,
-  RESET_PASSWORD_SUCCESS,
   CONFIRMATION_FAILED,
   CONFIRMATION_SUCCESS,
+  RESET_PASSWORD_REQUEST_FAILED,
+  RESET_PASSWORD_REQUEST_SUCCESS,
+  RESET_PASSWORD_FAILED,
+  RESET_PASSWORD_SUCCESS,
   RESET_PAGE,
 } from "../actions/auth";
 
@@ -19,6 +21,10 @@ function authReducer(
     signUpError: "",
     confirmationError:"",
     confirmationSuccess:"",
+    resetRequestSuccess:"",
+    resetRequestError:"",
+    resetPasswordSuccess:"",
+    resetPasswordError:"",
     user: {},
   },
   action
@@ -60,20 +66,29 @@ function authReducer(
         loading: false,
         confirmationError: action.payload,
       };
+    case RESET_PASSWORD_REQUEST_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        resetRequestSuccess: action.payload,
+      };
+    case RESET_PASSWORD_REQUEST_FAILED:
+      return {
+        ...state,
+        loading: false,
+        resetRequestError: action.payload,
+      };
     case RESET_PASSWORD_SUCCESS:
       return {
         ...state,
         loading: false,
-        message:
-          action.payload && action.payload.message
-            ? action.payload.message
-            : "",
+        resetPasswordSuccess: action.payload,
       };
     case RESET_PASSWORD_FAILED:
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        resetPasswordError: action.payload,
       };
     case RESET_PAGE:
       return {
@@ -84,6 +99,10 @@ function authReducer(
         signUpError: "",
         confirmationError:"",
         confirmationSuccess:"",
+        resetRequestSuccess:"",
+        resetRequestError:"",
+        resetPasswordSuccess:"",
+        resetPasswordError:"",
         user: {},
       };
     default:

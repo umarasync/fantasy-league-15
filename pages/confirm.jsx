@@ -41,7 +41,7 @@ export default function EmailConfirmation() {
     //Listening to Redux Reponse
     useEffect(() => {
         if (success) {
-            toast.success(success, {
+            toast.success("Account Activated Successfully! Please login to continue.", {
                 onClose: () => router.push("/sign_in"),
             });
         } else if (error) {
