@@ -22,13 +22,7 @@ import Image from "../html/Image";
 const getStyles = (R, player) => {
     return {
         container: {
-            // border: '5px solid red'
-            // width: R(100),
-            // height: R(100),
-        },
-        player: {
-            marginLeft: R(130),
-            marginRight: R(100),
+            // border: '5px solid yellow',
         },
         playerImageD: {
             width: R(50),
@@ -38,15 +32,9 @@ const getStyles = (R, player) => {
             width: R(40),
             height: R(40),
         },
-        imageContainer:{
-            marginBottom: R(10),
-            position: 'absolute',
-            top: 0,
-            border: '3px solid red'
-        },
-        playerImage: {
-            width: '100%',
-            height:'100%'
+        imageContainer: {
+            gridColumn: 1,
+            gridRow: 1,
         },
         subTitle:{
             position: 'absolute',
@@ -61,7 +49,6 @@ const getStyles = (R, player) => {
             borderRadius: R(40),
             marginTop: R(3),
             fontSize: R(10),
-            border: '5px solid green'
         },
         statusImage: {
             width: R(15),
@@ -140,12 +127,11 @@ const PlayerComponent = ({player, onPlayerChange, onPlayerClick, initialOpacity}
     const STYLES =  { ... getStyles(R, player) }
 
     return (
-        <div className={'bg-red-200 flex flex-col items-center'} style={STYLES.player}>
+        <div className={'flex flex-col items-center'}>
             <PlayerImage
                 player={player}
                 ciw={18}
                 cih={18}
-                imageStyle={STYLES.playerImage}
                 clickedIcon={player.clickedIcon}
                 onIconClick={() => onPlayerChange(player)}
                 onPlayerClick={() => onPlayerClick(player)}
@@ -163,8 +149,11 @@ const PlayerComponent = ({player, onPlayerChange, onPlayerClick, initialOpacity}
                     )
                 }
                 <div className={'flex'}>
-                    <span>{player.name}1111</span>
-                    <Image name={'vice-captain1.png'} w={16} h={16} ml={4}/>
+
+                    <span>{player.name}</span>
+
+                    {/*<Image name={'vice-captain1.png'} w={16} h={16} ml={4}/>*/}
+
                     {/*{*/}
                     {/*    player.captain && (*/}
                     {/*        <Image name={'captain1.png'} w={16} h={16} ml={4}/>*/}
@@ -175,6 +164,7 @@ const PlayerComponent = ({player, onPlayerChange, onPlayerClick, initialOpacity}
                     {/*        <Image name={'vice-captain1.png'} w={16} h={16} ml={4}/>*/}
                     {/*    )*/}
                     {/*}*/}
+
                 </div>
                 <div className={'relative'}>
                     <SubTitle player={player} initialOpacity={initialOpacity}/>
@@ -205,7 +195,7 @@ export default function SelectedPlayerOnPitch ({
     }, [changed])
 
     return(
-        <div className={`flex relative items-center justify-center ${boxClasses}`} style={{
+        <div className={`grid relative ${boxClasses}`} style={{
             ...STYLES.container,
             ...style
         }}>
@@ -213,7 +203,7 @@ export default function SelectedPlayerOnPitch ({
                 changed ? (
                     <AnimatePresence>
                         <motion.div
-                            className={'flex flex-col items-center justify-center'}
+                            className={''}
                             style={STYLES.imageContainer}
                             variants={SelectedPlayerOnPitchAnimation}
                             custom={{initialOpacity}}
