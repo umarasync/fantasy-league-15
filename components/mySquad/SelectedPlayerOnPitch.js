@@ -4,6 +4,7 @@ import {AnimatePresence, motion} from "framer-motion";
 
 // Components
 import PlayerImage from "components/player/PlayerImage";
+import Div from 'components/html/Div'
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -15,12 +16,19 @@ import { STATUS_SUSPENDED, STATUS_INJURED } from "constants/data/filters";
 
 // Animation
 import SelectedPlayerOnPitchAnimation, {TextUnderPlayerNameAnimation } from "Animations/mySquad/SelectedPlayerOnPitchAnimation";
+import Image from "../html/Image";
 
 // Styles
 const getStyles = (R, player) => {
     return {
         container: {
             // border: '5px solid red'
+            // width: R(100),
+            // height: R(100),
+        },
+        player: {
+            marginLeft: R(130),
+            marginRight: R(100),
         },
         playerImageD: {
             width: R(50),
@@ -34,14 +42,11 @@ const getStyles = (R, player) => {
             marginBottom: R(10),
             position: 'absolute',
             top: 0,
+            border: '3px solid red'
         },
         playerImage: {
             width: '100%',
             height:'100%'
-        },
-        title:{
-            position: 'absolute',
-            top: R(45)
         },
         subTitle:{
             position: 'absolute',
@@ -55,7 +60,8 @@ const getStyles = (R, player) => {
             paddingBottom: R(player ? 3 : 6),
             borderRadius: R(40),
             marginTop: R(3),
-            fontSize: R(10)
+            fontSize: R(10),
+            border: '5px solid green'
         },
         statusImage: {
             width: R(15),
@@ -134,7 +140,7 @@ const PlayerComponent = ({player, onPlayerChange, onPlayerClick, initialOpacity}
     const STYLES =  { ... getStyles(R, player) }
 
     return (
-        <>
+        <div className={'bg-red-200 flex flex-col items-center'} style={STYLES.player}>
             <PlayerImage
                 player={player}
                 ciw={18}
@@ -156,13 +162,26 @@ const PlayerComponent = ({player, onPlayerChange, onPlayerClick, initialOpacity}
                         </div>
                     )
                 }
-                <span>{player.name}</span><br/>
+                <div className={'flex'}>
+                    <span>{player.name}1111</span>
+                    <Image name={'vice-captain1.png'} w={16} h={16} ml={4}/>
+                    {/*{*/}
+                    {/*    player.captain && (*/}
+                    {/*        <Image name={'captain1.png'} w={16} h={16} ml={4}/>*/}
+                    {/*    )*/}
+                    {/*}*/}
+                    {/*{*/}
+                    {/*    player.viceCaptain && (*/}
+                    {/*        <Image name={'vice-captain1.png'} w={16} h={16} ml={4}/>*/}
+                    {/*    )*/}
+                    {/*}*/}
+                </div>
                 <div className={'relative'}>
                     <SubTitle player={player} initialOpacity={initialOpacity}/>
                 </div>
                 <br/>
             </p>
-        </>
+        </div>
     )
 }
 
@@ -186,13 +205,16 @@ export default function SelectedPlayerOnPitch ({
     }, [changed])
 
     return(
-        <div className={`flex relative items-center justify-center ${boxClasses}`} style={{ ...STYLES.container, ...style }}>
+        <div className={`flex relative items-center justify-center ${boxClasses}`} style={{
+            ...STYLES.container,
+            ...style
+        }}>
             {
                 changed ? (
                     <AnimatePresence>
                         <motion.div
                             className={'flex flex-col items-center justify-center'}
-                            style={{...STYLES.imageContainer, ...STYLES.playerImageD}}
+                            style={STYLES.imageContainer}
                             variants={SelectedPlayerOnPitchAnimation}
                             custom={{initialOpacity}}
                             initial="initial"
@@ -213,7 +235,7 @@ export default function SelectedPlayerOnPitch ({
                     <AnimatePresence>
                         <motion.div
                             className={'flex flex-col items-center justify-center'}
-                            style={{...STYLES.imageContainer, ...STYLES.playerImageD}}
+                            style={STYLES.imageContainer}
                             variants={SelectedPlayerOnPitchAnimation}
                             custom={{initialOpacity}}
                             initial="initial"

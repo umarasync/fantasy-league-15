@@ -100,7 +100,8 @@ const BACKGROUNDS = {
 
 const LAYOUT = {
     display: v => v ? { display: v} : {},
-    zIndex: v => v ? { zIndex: v} : {}
+    zIndex: v => v ? { zIndex: v} : {},
+    overFlowXScroll: v => v ? { overflowX: 'scroll'} : {}
 }
 
 const ResponsiveStyle = {

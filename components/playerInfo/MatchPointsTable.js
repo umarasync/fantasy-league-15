@@ -1,6 +1,3 @@
-// Packages
-import {useState} from "react";
-
 // Components
 import Div from "components/html/Div"
 import Text from "components/html/Text";
@@ -9,29 +6,12 @@ import BorderHorizontal from "components/Borders/BorderHorizontal";
 
 // Constants
 import colors from "constants/colors";
-import PLAYER_POINTS from "constants/data/playerPoints";
 
-// Utils
-import R from "utils/getResponsiveValue";
-import {clone} from "utils/helpers";
+const MatchPointsTable = ({
+    player
+}) => {
 
-// Styles
-const getStyles = (R) => {
-    return {
-        container: {
-            overflowX: 'scroll'
-        },
-        borderRow: {
-            position: 'relative'
-        }
-    }
-}
-
-const MatchPointsTable = () => {
-    const PLAYER_POINTS_INITIAL = clone(PLAYER_POINTS)
-    const STYLES = {...getStyles(R)}
-
-    const [employees, setEmployees] = useState([])
+    const { matchPoints } = player.pointsInfo
 
     const renderHeader = () => {
         let headerElement = ['GW', 'OPP', 'PTS', 'MP', 'GS', 'A', 'CS', 'GC', 'OG', 'PS', 'PM']
@@ -82,10 +62,10 @@ const MatchPointsTable = () => {
     }
 
     const renderBody = () => {
-        return  PLAYER_POINTS_INITIAL.matchPoints.map((item, index) => {
+        return matchPoints.length > 0 && matchPoints.map((item, index) => {
             return (
                 <>
-                    <tr style={STYLES.borderRow}>
+                    <tr className={'relative'}>
                         <Div w={'90%'} left={50}  position={'absolute'} >
                             <BorderHorizontal/>
                         </Div>
@@ -115,7 +95,7 @@ const MatchPointsTable = () => {
     }
 
     return (
-        <Div style={STYLES.container} pr={30} mt={24} pl={5} pb={15}>
+        <Div pr={30} mt={24} pl={5} pb={15} overFlowXScroll>
             <table>
                 <thead>
                 <tr>{renderHeader()}</tr>

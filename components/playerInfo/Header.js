@@ -12,29 +12,34 @@ import colors from "constants/colors";
 
 export default function Header ({
     player,
-    onClose
+    onClose,
+    onMakeCaptain
 }) {
 
     const controls = [
         {
             image: 'polygon_red.png',
             heading: 'Sub',
-            subHeading: 'out'
+            subHeading: 'out',
+            action: false
         },
         {
             image: 'money.png',
             heading: 'Transfer',
-            subHeading: 'out'
+            subHeading: 'out',
+            action: false
         },
         {
             image: 'captain.png',
             heading: 'Make',
-            subHeading: 'captain'
+            subHeading: 'captain',
+            action: onMakeCaptain
         },
         {
             image: 'vice_captain.png',
             heading: 'Make',
-            subHeading: 'vice-captain'
+            subHeading: 'vice-captain',
+            action: false
         },
     ]
 
@@ -71,7 +76,8 @@ export default function Header ({
                                 br={12}
                                 ml={index ? 10 : 0}
                                 bg={colors.white}
-                                cursor={'pointer'}
+                                cursor={item.action && 'pointer'}
+                                onClick={item.action}
                                 className={'box-shadow-electric-indigo flex items-center justify-center flex-col'}
                             >
                                 <Image name={item.image} w={24} h={24}/>

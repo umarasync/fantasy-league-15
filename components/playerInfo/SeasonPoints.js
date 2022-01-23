@@ -8,11 +8,14 @@ import BorderHorizontal from "components/Borders/BorderHorizontal";
 import colors from "constants/colors";
 import PLAYER_POINTS from "constants/data/playerPoints";
 
-export default function SeasonPoints () {
+export default function SeasonPoints ({
+    player
+}) {
+    const seasonPoints = player.pointsInfo.seasonPoints
     return (
         <Div pr={30} mt={24} pl={24} pb={24}>
             {
-                PLAYER_POINTS.seasonPoints.map((item, index) => {
+                seasonPoints.length > 0 && seasonPoints.map((item, index) => {
                     return (
                         <Div key={index}>
                             <Div justifyBetween>

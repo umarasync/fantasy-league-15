@@ -10,7 +10,7 @@ import MySquadFooterBar from "components/mySquad/MySquadFooterBar";
 
 // Utils
 import {clone} from "utils/helpers";
-import {resetPlayers, setInitialClickedIcons, TOTAL_POINTS} from "utils/mySquad";
+import {resetPlayers, setPlayersAdditionalData, TOTAL_POINTS} from "utils/mySquad";
 import {handlePlayerTransfer as HPT, DIAMOND_UP_GREEN} from "utils/mySquad";
 
 // Constants
@@ -61,7 +61,7 @@ export default function MySquadGameWeek () {
     }, [activeFilter])
 
     useEffect(() => {
-        const players = setInitialClickedIcons(SELECTED_PLAYERS_INITIAL)
+        const players = setPlayersAdditionalData(SELECTED_PLAYERS_INITIAL)
         setPickedPlayers(players)
         setSavedPlayers(players)
         setShowModal(false)
@@ -70,6 +70,24 @@ export default function MySquadGameWeek () {
     const handleCancel = () => {
         setPickedPlayers(savedPlayers)
         setTransferInProgress(false)
+    }
+    const handleMakeCaptain = (player) => {
+        const $pickedPlayers = [ ...pickedPlayers ]
+        const previousCaptainIndex = $pickedPlayers.findIndex(p => p.captain === true)
+        const captainToBeIndex = $pickedPlayers.findIndex(p => p.id === player.id)
+
+        console.log({
+            previousCaptainIndex,
+            captainToBeIndex
+        })
+
+        if(previousCaptainIndex !== -1) {
+            $pickedPlayers[previousCaptainIndex].captain = false
+        }
+
+        $pickedPlayers[captainToBeIndex].captain = true
+
+        setPickedPlayers($pickedPlayers)
     }
 
     const handleSave = () => {
@@ -106,7 +124,12 @@ export default function MySquadGameWeek () {
                     onCancel={handleCancel}
                     onSave={handleSave}
                 />
-                <PlayerInfoModal show={showModal} onClose={() => setShowModal(false)} player={player}/>
+                <PlayerInfoModal
+                    show={showModal}
+                    onClose={() => setShowModal(false)}
+                    player={player}
+                    onMakeCaptain={handleMakeCaptain}
+                />
             </Div>
         </Layout>
     )

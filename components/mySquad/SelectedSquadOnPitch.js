@@ -41,6 +41,7 @@ const getStyles = (R, transferInProgress) => {
         player10:{
             marginLeft: R(100),
             marginRight: R(100),
+            border: '5px solid yellow'
         },
 
         benchContainer: {
@@ -202,7 +203,7 @@ export default function SelectedSquadOnPitch ({
                     />
                 </motion.div>
             </Div>
-            {/*6*/}
+            {/*4*/}
             <Div center mt={65}>
                 <motion.div variants={Player9Animation} animate={controls}>
                     <SelectedPlayerOnPitch
@@ -244,7 +245,7 @@ export default function SelectedSquadOnPitch ({
                     />
                 </motion.div>
             </Div>
-
+            {/*5*/}
             <Div center mt={90}>
                 <SelectedPlayerOnPitch
                     player={p12}

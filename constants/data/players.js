@@ -303,7 +303,7 @@ export const PLAYERS = DUMMY_PLAYERS.map((player, index) =>  {
     return {
         ...player,
         id: index + 1,
-        playersPointsInfo: PLAYER_POINTS
+        pointsInfo: PLAYER_POINTS
     }
 })
 

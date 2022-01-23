@@ -15,7 +15,7 @@ export const TOTAL_POINTS = 'Total pts'
 export const PRICES = 'Price'
 export const MATCHES = 'Matches'
 
-export const setInitialClickedIcons = (pickedPlayersObject) => {
+export const setPlayersAdditionalData = (pickedPlayersObject) => {
 
     const $pickedPlayersObject = clone(pickedPlayersObject)
 
@@ -83,6 +83,8 @@ export const setInitialClickedIcons = (pickedPlayersObject) => {
         player.animationState = true
         player.activeFilter = TOTAL_POINTS
         player.disableIconClick = false
+        player.captain = false
+        player.viceCaptain = false
         return player
     })
 }
