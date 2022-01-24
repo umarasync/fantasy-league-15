@@ -34,7 +34,7 @@ export default function ConfirmAccount() {
                         text={<>
                             <span>Thanks for signing up!</span><br/>
                             <span>Visit your email (<span className="text-white">{userEmail}</span>) and use the link</span><br/>
-                            <span>we've sent you to activate your account</span>
+                            <span>{`we've sent you to activate your account`}</span>
                         </>}
                         fs={18}
                         lh={26}
