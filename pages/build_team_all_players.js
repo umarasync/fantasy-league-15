@@ -520,7 +520,6 @@ export default function BuildTeamAllPlayer () {
                                         {
                                             playersData.map((player, index) => <PlayerCard
                                                 key={index + 1}
-                                                index={index}
                                                 player={player}
                                                 onSelectPlayer={handlePlayerSelection}
                                             />)

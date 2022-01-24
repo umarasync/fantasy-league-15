@@ -1,12 +1,11 @@
-// Packages
-
 // Components
 import Modal from "components/modals";
 import Div from "components/html/Div"
-import Header from "components/playerInfo/Header"
+import PlayerInfoHeader from "components/playerInfo/PlayerInfoHeader"
 
 // Utils
 import R from "utils/getResponsiveValue";
+import {TRANSFER_ICON} from "utils/mySquadHelper";
 
 // Constants
 import colors from "constants/colors";
@@ -25,13 +24,14 @@ const getStyles = (R) => {
 }
 
 export default function PlayerInfoModal({
-   player,
-   show,
-   onClose,
-                                            onMakeCaptain,
-                                            onMakeViceCaptain
+    player,
+    show,
+    onClose,
+    onMakeCaptain,
+    onMakeViceCaptain
 }) {
     const STYLES = {...getStyles(R)}
+
     return (
         <Modal>
             <div
@@ -40,7 +40,7 @@ export default function PlayerInfoModal({
                     show && (
                         <Div w={482} br={12} bg={colors.white} className={'h-[74%] flex flex-col'}>
                             <Div>
-                                <Header
+                                <PlayerInfoHeader
                                     player={player}
                                     onClose={onClose}
                                     onMakeCaptain={() => onMakeCaptain(player)}
