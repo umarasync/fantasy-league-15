@@ -9,7 +9,7 @@ import Text from "components/html/Text";
 import colors from "constants/colors";
 
 // UTILS
-import {TOTAL_POINTS, PRICES, MATCHES} from "utils/mySquad";
+import {TOTAL_POINTS, PRICES, MATCHES} from "utils/mySquadHelper";
 import R from "utils/getResponsiveValue";
 
 // Styles

@@ -4,12 +4,11 @@ import {AnimatePresence, motion} from "framer-motion";
 
 // Components
 import PlayerImage from "components/player/PlayerImage";
-import Div from 'components/html/Div'
 
 // Utils
 import R from "utils/getResponsiveValue";
 import {nFormatter} from "utils/helpers";
-import {MATCHES, TOTAL_POINTS} from "utils/mySquad";
+import {MATCHES, TOTAL_POINTS, getButtonBGColor} from "utils/mySquadHelper";
 
 // Constants
 import { STATUS_SUSPENDED, STATUS_INJURED } from "constants/data/filters";
@@ -21,9 +20,7 @@ import Image from "../html/Image";
 // Styles
 const getStyles = (R, player) => {
     return {
-        container: {
-            // border: '5px solid yellow'
-        },
+        container: {},
         playerImageD: {
             width: R(50),
             height: R(50),
@@ -117,7 +114,6 @@ const SubTitle = ({player, initialOpacity}) => {
                 {nFormatter(player.price)}
             </motion.span>
         </AnimatePresence>
-
     )
 
 }
@@ -137,7 +133,7 @@ const PlayerComponent = ({player, onPlayerChange, onPlayerClick, initialOpacity}
                 onPlayerClick={() => onPlayerClick(player)}
                 clickedIconStyle={STYLES.clickedIcon}
             />
-            <p className={'items-center relative items-center text-center justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
+            <div className={`items-center relative items-center text-center justify-center cursor-pointer text-white whitespace-nowrap ${getButtonBGColor(player)}`}
                style={STYLES.buttonStyle}
                onClick={() => onPlayerClick(player)}
             >
@@ -167,7 +163,7 @@ const PlayerComponent = ({player, onPlayerChange, onPlayerClick, initialOpacity}
                     <SubTitle player={player} initialOpacity={initialOpacity}/>
                 </div>
                 <br/>
-            </p>
+            </div>
         </div>
     )
 }

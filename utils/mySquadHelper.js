@@ -8,12 +8,14 @@ import {clone} from "utils/helpers";
 import {ELEVEN, ZERO} from "constants/arrayIndexes";
 import {ANIMATE} from "constants/animations";
 
-const TRANSFER_ICON = 'transfer.png'
+export const TRANSFER_ICON = 'transfer.png'
 export const DIAMOND_UP_GREEN = 'diamond_up_green.png'
 export const DIAMOND_DOWN_RED = 'diamond_down_red.png'
 export const TOTAL_POINTS = 'Total pts'
 export const PRICES = 'Price'
 export const MATCHES = 'Matches'
+export const CAPTAIN = 'captain'
+export const VICE_CAPTAIN = 'viceCaptain'
 
 export const setPlayersAdditionalData = (pickedPlayersObject) => {
 
@@ -79,16 +81,20 @@ export const setPlayersAdditionalData = (pickedPlayersObject) => {
     ]
 
     return players.map((player) => {
+
+        player.isSubstitutePlayer = !!player.clickedIcon;
+
         player.opacity = 1
         player.animationState = true
         player.activeFilter = TOTAL_POINTS
         player.disableIconClick = false
         player.captain = false
         player.viceCaptain = false
+        player.isTripleCaptainApplied = false
+        player.benchBoostApplied = false
         return player
     })
 }
-
 
 export const handlePlayerTransfer = ({
     player,
@@ -109,12 +115,12 @@ export const handlePlayerTransfer = ({
 
         const replacedPlayer = {
             ...$pickedPlayers[replacedPlayerIndex],
-            // animationState: !$pickedPlayers[replacedPlayerIndex].animationState,
+            animationState: !$pickedPlayers[replacedPlayerIndex].animationState,
             alreadyTransferred: true
         }
         const addedPlayer = {
             ...$pickedPlayers[addedPlayerIndex],
-            // animationState: !$pickedPlayers[addedPlayerIndex].animationState,
+            animationState: !$pickedPlayers[addedPlayerIndex].animationState,
             alreadyTransferred: true
         }
 
@@ -129,7 +135,6 @@ export const handlePlayerTransfer = ({
 
         return transferredPlayers.map((p, index) => {
             p.opacity = 1;
-            p.animationState = !p.animationState
             p.disableIconClick = !!p.alreadyTransferred;
             if(!p.alreadyTransferred && ![11,12,13,14].includes(index)) {
                 p.clickedIcon = false
@@ -189,8 +194,10 @@ export const resetPlayers = ({players, activeFilter}) => {
 
         if([11,12,13,14].includes(index)) {
             player.clickedIcon = TRANSFER_ICON
+            player.isSubstitutePlayer = true
         }else {
             player.clickedIcon = false
+            player.isSubstitutePlayer = false
         }
 
         player.opacity = 1
@@ -204,4 +211,39 @@ export const resetPlayers = ({players, activeFilter}) => {
     })
 }
 
+export const makeCaptain = ({
+    $pickedPlayers,
+    player,
+    captainType
+}) => {
 
+    const pickedPlayers = [...$pickedPlayers]
+    const previousCaptainIndex = pickedPlayers.findIndex(p => p[captainType] === true)
+    const captainToBeIndex = pickedPlayers.findIndex(p => p.id === player.id)
+
+    if (previousCaptainIndex !== -1) {
+        pickedPlayers[previousCaptainIndex][captainType] = false
+        pickedPlayers[previousCaptainIndex].isTripleCaptainApplied = false
+    }
+
+    pickedPlayers[captainToBeIndex][captainType] = true
+
+    if (captainType === CAPTAIN) {
+        pickedPlayers[captainToBeIndex][VICE_CAPTAIN] = false
+    } else {
+        pickedPlayers[captainToBeIndex][CAPTAIN] = false
+    }
+
+    pickedPlayers[captainToBeIndex].isTripleCaptainApplied = false
+
+    return pickedPlayers
+}
+
+export const getButtonBGColor = (player) => {
+    if (player.isTripleCaptainApplied) {
+        return 'bg-heliotrope-purple'
+    } else if (player.benchBoostApplied) {
+        return 'bg-torquoise-niagara'
+    }
+    return 'primary-button-color'
+}

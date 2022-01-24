@@ -27,7 +27,9 @@ export default function MySquadFooterBar({
     onMakeTransfers,
     onCancel,
     onSave,
-    transferInProgress
+    transferInProgress,
+    tripleCaptainDisabled,
+    benchBoostDisabled
 }) {
 
     const STYLES = {...getStyles(R)}
@@ -46,7 +48,7 @@ export default function MySquadFooterBar({
                                 <Button
                                     title={'Bench boost'}
                                     color={colors.white}
-                                    disabled={false}
+                                    disabled={benchBoostDisabled}
                                     mr={32}
                                     h={50}
                                     w={190}
@@ -58,7 +60,7 @@ export default function MySquadFooterBar({
                                 <Button
                                     title={'Triple captain'}
                                     color={colors.white}
-                                    disabled={false}
+                                    disabled={tripleCaptainDisabled}
                                     h={50}
                                     w={190}
                                     bs={SHADOW_PIGMENT_INDIGO}

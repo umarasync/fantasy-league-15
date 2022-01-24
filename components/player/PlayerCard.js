@@ -65,7 +65,7 @@ export default function PlayerCard ({
             className={'card-box flex items-center justify-between cursor-pointer'} style={STYLES.container}
             onMouseEnter={()=>{setHover(true);}}
             onMouseLeave={()=>{setHover(false)}}
-            onClick={() => onSelectPlayer(player)}
+            onClick={() => onSelectPlayer ? onSelectPlayer(player) : false}
         >
             {/*left side*/}
             <div className={'flex items-center'}>
