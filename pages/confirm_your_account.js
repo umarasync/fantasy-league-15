@@ -1,7 +1,17 @@
+// Packages
 import {useEffect, useState} from "react";
+
 // Components
 import Layout from "components/layout";
+import Image from "components/html/Image"
+import Text from "components/html/Text"
+import Div from "components/html/Div"
 
+// Constants
+import colors from "constants/colors"
+
+// Utils
+import R from "utils/getResponsiveValue";
 
 export default function ConfirmAccount() {
     const [userEmail, setUserEmail] = useState(false)
@@ -11,18 +21,28 @@ export default function ConfirmAccount() {
     
     return (
         <Layout title="Confirm Your Account">
-            <div className="bg-[url('/images/bg_full.png')] bg-[length:100%_100%] h-screen bg-no-repeat pt-[6.2rem]">
+            <Div
+                className="bg-[url('/images/bg_full.png')] bg-[length:100%_100%] bg-no-repeat"
+                style={{minHeight: R()}}
+                pt={62}
+            >
                 <div className="flex flex-col items-center">
-                    <img src="/images/logo_white.png" alt="" className="w-[23rem] h-[5.6rem] mb-[14rem]"/>
-                    <img src="/images/check_red.png" alt="" className="w-[8rem] h-[8rem] mb-[4rem]"/>
-                    <p className="text-white font-[800] leading-[5.4rem] text-[5rem] italic uppercase">confirm your account</p>
-                    <p className="text-[1.8rem] leading-[2.6rem] normal text-center text-regent_grey mt-[2.4rem]">Thanks for signing up!
-                        <br/>
-                        Visit your email (<span className="text-white">{userEmail}</span>) and use the link
-                        <br/>{`we've sent you to activate your account`}
-                    </p>
+                    <Image name={'logo_white.png'} alt={'logo_white'} w={231} h={56} mb={140}/>
+                    <Image name={'check_red.png'} alt={'check_red'} w={80} h={80} mb={40}/>
+                    <Text text={'confirm your account'} fs={50} lh={54} fw={800} fst={'italic'} tt={'uppercase'} color={colors.white} mb={24}/>
+                    <Text
+                        text={<>
+                            <span>Thanks for signing up!</span><br/>
+                            <span>Visit your email (<span className="text-white">{userEmail}</span>) and use the link</span><br/>
+                            <span>we've sent you to activate your account</span>
+                        </>}
+                        fs={18}
+                        lh={26}
+                        color={colors.regent_grey}
+                        textAlign={'center'}
+                    />
                 </div>
-            </div>
+            </Div>
         </Layout>
     )
 }

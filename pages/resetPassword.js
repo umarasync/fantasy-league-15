@@ -10,6 +10,12 @@ import "react-toastify/dist/ReactToastify.css";
 import Layout from "components/layout";
 import Input from "components/inputs/input";
 import Button from "components/html/Button";
+import Image from "components/html/Image"
+import Text from "components/html/Text"
+import Div from "components/html/Div"
+
+// Constants
+import colors from "constants/colors"
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -104,20 +110,21 @@ export default function ResetPassword() {
         draggable
         pauseOnHover
       />
-      <div className="flex flex-col items-center pt-[6.2rem]">
-        <div className="flex flex-col items-center w-[41.2rem]">
-          <img
-            src="/images/logo_blue.png"
-            alt=""
-            className="w-[23rem] h-[5.6rem] mb-[14rem]"
+      <Div className="flex flex-col items-center" pt={62} style={{minHeight: R()}}>
+        <Div className="flex flex-col items-center" w={412}>
+          <Image name={'logo_blue.png'} w={231} h={56} mb={140}/>
+          <Text text={'Reset your password'} fs={32} lh={40} fw={800} fst={'italic'} tt={'uppercase'}
+                color={colors.black_rock} mb={20}/>
+
+          <Text
+              text={<span>Securely access your account by creating <br/>a new sign in password</span>}
+              fs={18}
+              lh={26}
+              color={colors.regent_grey}
+              textAlign={'center'}
+              mb={32}
           />
-          <p className="uppercase italic text-black_rock text-[3.2rem] leading-[4rem] font-[800] mb-[2rem]">
-            Reset your password
-          </p>
-          <p className="text-[1.8rem] leading-[2.6rem] normal text-center text-regent_grey mb-[3.2rem]">
-            Securely access your account by creating <br />a new sign in
-            password
-          </p>
+
           <Input
             name="password"
             id="password"
@@ -141,17 +148,23 @@ export default function ResetPassword() {
             style={{ marginBottom: R(60) }}
           />
           {errorHandler && (
-            <p className="text-center font-[600] text-[1.4rem] leading-[2rem] text-bean_red mb-[3.2rem]">
-              {errorHandler}
-            </p>
+              <Text
+                  text={errorHandler}
+                  fw={600}
+                  fs={14}
+                  textAlign={'center'}
+                  lh={20}
+                  color={colors.bean_red}
+                  mb={32}
+              />
           )}
           <Button
             title={"Next"}
             disabled={disabled}
             onClick={() => !disabled && processResetPassword()}
           />
-        </div>
-      </div>
+        </Div>
+      </Div>
     </Layout>
   );
 }

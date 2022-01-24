@@ -88,6 +88,7 @@ const FLEX = {
 
 const EFFECTS = {
     boxShadow: v => v ? {boxShadow: v} : {},
+    opacity: v => v ? {opacity: v} : {},
 }
 
 const INTERACTIVITY = {

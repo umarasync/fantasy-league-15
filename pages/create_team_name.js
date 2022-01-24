@@ -5,6 +5,10 @@ import {useRouter} from "next/router";
 // Components
 import Layout from "components/layout";
 import Button from "components/html/Button";
+import Div from "components/html/Div"
+
+// Constants
+import colors from "constants/colors"
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -70,7 +74,8 @@ export default function ConfirmAccount() {
 
     return (
         <Layout title="Create Your Team Name">
-            <div className="bg-[url('/images/bg_dark_blue.png')] bg-[length:100%_100%] bg-no-repeat  w-full h-full" style={STYLES.container}>
+            <Div className="bg-[url('/images/bg_dark_blue.png')] bg-[length:100%_100%] bg-no-repeat  w-full"
+                 style={STYLES.container}>
                 <div className="flex flex-col items-center justify-center">
                     <div style={STYLES.content}>
                         <div className="w-full flex items-center justify-center">
@@ -98,7 +103,7 @@ export default function ConfirmAccount() {
                     </div>
 
                 </div>
-            </div>
+            </Div>
         </Layout>
     )
 }

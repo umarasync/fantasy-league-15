@@ -6,7 +6,7 @@ const getStyles = (RS, style) => {
     const {
         w, h, p, pl, pr, pt, pb, m, ml, mr, mt, mb, bs, center, justifyBetween, br,
         btlr, btrr, bblr, bbrr,
-        position, left, right, top, bottom, bg, cursor, display, textCenter, minHeight,
+        position, left, right, top, bottom, bg, cursor, display, textCenter, minHeight, zIndex,
         overFlowXScroll,
     } = style
 
@@ -50,6 +50,7 @@ const getStyles = (RS, style) => {
 
             ...RS.display(display),
             ...RS.overFlowXScroll(overFlowXScroll),
+            ...RS.zIndex(zIndex),
 
             ...RS.textCenter(textCenter),
         }

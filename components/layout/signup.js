@@ -16,6 +16,9 @@ import Button from "components/html/Button";
 import { useRouter } from "next/router";
 import Input from "components/inputs/input";
 import SelectInput from "components/inputs/SelectInput";
+import Text from "components/html/Text"
+import Div from "components/html/Div"
+import Image from "components/html/Image";
 import ResetPasswordModal from "components/modals/ResetPasswordModal";
 import { createUser, loginUser } from "../../redux/api/auth";
 import { RESET_PAGE } from "../../redux/actions/auth";
@@ -26,6 +29,7 @@ import { clone } from "utils/helpers";
 
 // Constants
 import { GENDERS } from "constants/data/user";
+import colors from "constants/colors";
 
 const testEmail = "martine.bakkergmail.com";
 const testPassword = testEmail;
@@ -308,63 +312,32 @@ export default function SignUp(props) {
         pauseOnHover
       />
       <div className="mx-auto bg-white">
-        <div className="grid grid-cols-2 flex h-screen">
-          <div
-            className={`bg-[url('/images/bg-blue.png')] bg-[length:100%_100%] bg-no-repeat sm:block relative`}
-            style={{
-              minHeight: R(),
-            }}
+        <div className="grid grid-cols-2 flex">
+          {/*Left Section*/}
+          <div className={`bg-[url('/images/bg-blue.png')] bg-[length:100%_100%] bg-no-repeat sm:block relative`}
+            style={{ minHeight: R()}}
           >
-            <div className="h-screen relative">
-              <div
-                className="flex flex-col"
-                style={{
-                  paddingLeft: R(80),
-                  paddingRight: R(80),
-                }}
-              >
-                <p
-                  className={`text-white italic font-black uppercase`}
-                  style={{
-                    fontSize: R(50),
-                    lineHeight: R(54, "px"),
-                    marginTop: R(90),
-                  }}
-                >
-                  explore Eredivisie <br />
-                  fantasy league
-                </p>
-                <p
-                  className="text-white opacity-70 normal"
-                  style={{
-                    fontSize: R(18),
-                    lineHeight: R(26, "px"),
-                    marginTop: R(20),
-                    paddingBottom: R(50),
-                  }}
-                >
-                  Be in the role of a Fantasy manager and lead dream team!{" "}
-                  <br />
-                  Absolutely free, absolutely immersive experience.
-                </p>
-              </div>
-            </div>
-            <div className="absolute bottom-0 w-[100%]">
-              <img src="/images/players.png" alt="" className="w-[100%]" />
+            <div className={'flex flex-col justify-between h-full'}>
+              <Div pl={80} pr={80} className="flex flex-col">
+                <Text text={<span>explore Eredivisie <br/> fantasy league</span>} fs={50} fw={900} lh={54} mt={90}
+                      fst={'italic'} tt={'uppercase'} color={colors.white} mb={24}/>
+
+                <Text text={<span> Be in the role of a Fantasy manager and lead dream team! <br/> Absolutely free, absolutely immersive experience.</span>}
+                      fs={18} lh={26}
+                      color={colors.white} className={'opacity-70'} mb={100}/>
+              </Div>
+
+              <Image name={'players.png'} al={'players'} w={'100%'} h={'100%'}/>
             </div>
           </div>
-          <div
-            className={`flex flex-col items-center pt-[6.2rem] ${
-              isLoginPage ? "mb-[21.8rem]" : "mb-[8.8rem]"
-            }`}
-          >
-            <img
-              src="/images/fantasy_15.png"
-              alt=""
-              className="w-[11rem] h-[2.6rem] mb-[4.7rem]"
-            />
-            <div className="flex justify-center relative">
-              <p className="ml-[-5rem] title">SIGN</p>
+
+
+          {/*Right-Section*/}
+          <Div className={`flex flex-col items-center`} style={{minHeight: R()}} pb={30} pt={62}>
+            <Image name={'fantasy_15.png'} alt={''} w={107} h={26} mb={40}/>
+
+            <Div className="flex justify-center relative" mb={20}>
+              <Text fs={32}  lh={40} text={'sign'} tt={'uppercase'} fst={'italic'} fw={800} ml={-50} color={colors.black_rock}/>
 
               {isLoginPage ? (
                 <AnimatePresence>
@@ -376,7 +349,9 @@ export default function SignUp(props) {
                     exit="exit"
                     key={1} // This key thing is important for simultaneous fadein & fadeout
                   >
-                    IN
+                    <Text fs={32} lh={40} text={'IN'} tt={'uppercase'} fst={'italic'} fw={800}
+                          color={colors.black_rock}/>
+
                   </motion.p>
                 </AnimatePresence>
               ) : (
@@ -389,13 +364,14 @@ export default function SignUp(props) {
                     exit="exit"
                     key={2}
                   >
-                    up
+                    <Text fs={32} lh={40} text={'up'} tt={'uppercase'} fst={'italic'} fw={800}
+                          color={colors.black_rock}/>
                   </motion.p>
                 </AnimatePresence>
               )}
-            </div>
+            </Div>
 
-            <div className="flex justify-center relative mb-[5.5rem] w-full">
+            <Div className="flex justify-center relative w-full" mb={55}>
               {isLoginPage ? (
                 <AnimatePresence>
                   <motion.p
@@ -406,7 +382,8 @@ export default function SignUp(props) {
                     exit="exit"
                     key={1} // This key thing is important for simultaneous fadein & fadeout
                   >
-                    Please enter your email and password to sign in
+                    <Text fs={18} lh={26} text={'Please enter your email and password to sign in'}
+                          color={colors.regent_grey}/>
                   </motion.p>
                 </AnimatePresence>
               ) : (
@@ -419,12 +396,14 @@ export default function SignUp(props) {
                     exit="exit"
                     key={2}
                   >
-                    {`Complete a simple form below and click "Next"`}
+                    <Text fs={18} lh={26} text={`Complete a simple form below and click "Next"`}
+                          color={colors.regent_grey}/>
                   </motion.p>
                 </AnimatePresence>
               )}
-            </div>
-            <div className="flex flex-col md:w-[41rem]">
+            </Div>
+
+            <Div className="flex flex-col" w={410}>
               {isLoginPage && (
                 <div>
                   <Input
@@ -447,29 +426,39 @@ export default function SignUp(props) {
                     value={loginPassword}
                     style={{ paddingRight: R(70) }}
                   />
-                  <div className={`${error ? "mb-[3.2rem]" : "mb-[10.5rem]"}`}>
-                    <p
-                      className={`text-mandy text-[1.4rem] font-[600] cursor-pointer`}
-                      onClick={() => setShowModal(true)}
-                    >
-                      Forget password?
-                    </p>
+                  <Div mb={error ? 32 : 105}>
+                    <Text
+                        text={'Forget password?'}
+                        color={colors.mandy}
+                        fs={14}
+                        fw={600}
+                        cursor={'pointer'}
+                        onClick={() => setShowModal(true)}
+                    />
                     <ResetPasswordModal
                       show={showModal}
                       onClose={() => setShowModal(!showModal)}
                     />
-                  </div>
+                  </Div>
                   {error && (
-                    <p className="text-center font-[600] text-[1.4rem] leading-[2rem] text-bean_red mb-[3.2rem]">
-                      Your email or password is incorrect. <br />
-                      Please enter valid credentials to sign in
-                    </p>
+                      <Text
+                          text={<>
+                             Your email or password is incorrect. <br/>
+                          Please enter valid credentials to sign in
+                          </>}
+                          textAlign={'center'}
+                          fs={14}
+                          lh={20}
+                          color={colors.bean_red}
+                          mb={32}
+                          fw={600}
+                      />
                   )}
                 </div>
               )}
 
               {!isLoginPage && (
-                <div className="mb-[3rem]">
+                <Div mb={30}>
                   <Input
                     name="fullName"
                     id="fullName"
@@ -511,13 +500,19 @@ export default function SignUp(props) {
                     onIconClick={() => setIsPasswordType(!isPasswordType)}
                     style={{ paddingRight: R(70) }}
                   />
-                </div>
+                </Div>
               )}
 
               {signUpError && (
-                <p className="text-center font-[600] text-[1.4rem] leading-[2rem] text-bean_red mb-[3.2rem]">
-                  {signUpError}
-                </p>
+                  <Text
+                      text={signUpError}
+                      textAlign={'center'}
+                      fs={14}
+                      lh={20}
+                      color={colors.bean_red}
+                      mb={32}
+                      fw={600}
+                  />
               )}
 
               <Button
@@ -526,22 +521,15 @@ export default function SignUp(props) {
                 disabled={isLoginPage ? loginDisabled : disabled}
                 mb={40}
               />
-              <p className="text-regent_grey text-[1.6rem] font-[400] leading-[2rem] text-center">
-                {isLoginPage
-                  ? "Don’t have an account?"
-                  : "Already have an account?"}
-                <span
-                  className="text-brick_red font-[600] cursor-pointer"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setIsLoginPage(!isLoginPage);
-                  }}
-                >
-                  {isLoginPage ? " Sign Up" : " Sign In"}
-                </span>
-              </p>
-            </div>
-          </div>
+              <Div center>
+                <Text fs={16} lh={20} fw={400} text={isLoginPage ? 'Don’t have an account?' : 'Already have an account?'} color={colors.regent_grey}/>
+                <Text fs={16} lh={20} fw={800} ml={5}
+                      text={isLoginPage ? 'Sign Up' : 'Sign In'} color={colors.mandy} cursor={'pointer'}
+                      onClick={() => { setIsLoginPage(!isLoginPage)}}
+                />
+              </Div>
+            </Div>
+          </Div>
         </div>
       </div>
     </Layout>
