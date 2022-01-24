@@ -29,6 +29,8 @@ export default function MySquadGameWeek () {
     const [showModal, setShowModal] = useState(false);
     const [activeFilter, setActiveFilter] = useState(TOTAL_POINTS)
     const [changeFormation, setChangeFormation] = useState(INITIAL)
+    const CAPTAIN = 'captain'
+    const VICE_CAPTAIN = 'viceCaptain'
 
     const handlePlayerTransfer = (player, arrayIndex) => {
         if(player.clickedIcon === DIAMOND_UP_GREEN) return
@@ -71,21 +73,31 @@ export default function MySquadGameWeek () {
         setPickedPlayers(savedPlayers)
         setTransferInProgress(false)
     }
+
+
     const handleMakeCaptain = (player) => {
+        handleCaptainChange(player, CAPTAIN)
+    }
+
+    const handleMakeViceCaptain = (player) => {
+        handleCaptainChange(player, VICE_CAPTAIN)
+    }
+
+    const handleCaptainChange = (player, v) => {
         const $pickedPlayers = [ ...pickedPlayers ]
-        const previousCaptainIndex = $pickedPlayers.findIndex(p => p.captain === true)
+        const previousCaptainIndex = $pickedPlayers.findIndex(p => p[v] === true)
         const captainToBeIndex = $pickedPlayers.findIndex(p => p.id === player.id)
 
-        console.log({
-            previousCaptainIndex,
-            captainToBeIndex
-        })
-
         if(previousCaptainIndex !== -1) {
-            $pickedPlayers[previousCaptainIndex].captain = false
+            $pickedPlayers[previousCaptainIndex][v] = false
         }
 
-        $pickedPlayers[captainToBeIndex].captain = true
+        $pickedPlayers[captainToBeIndex][v] = true
+        if(v === CAPTAIN) {
+            $pickedPlayers[captainToBeIndex][VICE_CAPTAIN] = false
+        }else {
+            $pickedPlayers[captainToBeIndex][CAPTAIN] = false
+        }
 
         setPickedPlayers($pickedPlayers)
     }
@@ -129,6 +141,7 @@ export default function MySquadGameWeek () {
                     onClose={() => setShowModal(false)}
                     player={player}
                     onMakeCaptain={handleMakeCaptain}
+                    onMakeViceCaptain={handleMakeViceCaptain}
                 />
             </Div>
         </Layout>

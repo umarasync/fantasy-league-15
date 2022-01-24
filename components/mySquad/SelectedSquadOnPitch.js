@@ -20,12 +20,26 @@ import {ANIMATE, INITIAL} from "constants/animations";
 const getStyles = (R) => {
     return {
         commonPlayersStyle: {
-            marginLeft: R(20),
-            marginRight: R(20)
+            // marginLeft: R(20),
+            // marginRight: R(20)
+            // paddingLeft: R(10),
+            // paddingRight: R(10),
+            minWidth: R(120)
         },
         commonPlayersStyle1: {
-            marginLeft: R(12),
-            marginRight: R(12)
+            // marginLeft: R(12),
+            // marginRight: R(12)
+            paddingLeft: R(10),
+            paddingRight: R(10),
+            minWidth: R(100)
+        },
+        container: {
+            display: 'flex',
+            flexFlow: 'row',
+            justifyContent: 'center'
+        },
+        commonWidth: {
+
         }
 
     }
@@ -74,7 +88,7 @@ export default function SelectedSquadOnPitch ({
     return(
         <div style={{paddingTop: R(22)}}>
             {/*1*/}
-            <Div center>
+            <Div style={STYLES.container}>
                 <SelectedPlayerOnPitch
                     player={p1}
                     changed={p1.animationState}
@@ -86,8 +100,10 @@ export default function SelectedSquadOnPitch ({
                     }}
                 />
             </Div>
+
+
             {/*2*/}
-            <Div center mt={24}>
+            <Div style={STYLES.container} mt={24}>
                 <SelectedPlayerOnPitch
                     player={p2}
                     changed={p2.animationState}
@@ -120,7 +136,7 @@ export default function SelectedSquadOnPitch ({
                     />
             </Div>
             {/*3*/}
-            <Div center mt={24}>
+            <Div style={STYLES.container} mt={24}>
                 <motion.div variants={Player5Animation} animate={controls}>
                     <SelectedPlayerOnPitch
                         player={p5}
@@ -171,7 +187,7 @@ export default function SelectedSquadOnPitch ({
                 </motion.div>
             </Div>
             {/*4*/}
-            <Div center mt={24}>
+            <Div style={STYLES.container} mt={24}>
                 <motion.div variants={Player9Animation} animate={controls}>
                     <SelectedPlayerOnPitch
                         player={p9}
@@ -212,7 +228,7 @@ export default function SelectedSquadOnPitch ({
                 </motion.div>
             </Div>
             {/*5*/}
-            <Div center mt={50}>
+            <Div style={STYLES.container} mt={50}>
                 <SelectedPlayerOnPitch
                     player={p12}
                     changed={p12.animationState}

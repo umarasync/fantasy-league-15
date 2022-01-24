@@ -109,12 +109,12 @@ export const handlePlayerTransfer = ({
 
         const replacedPlayer = {
             ...$pickedPlayers[replacedPlayerIndex],
-            animationState: !$pickedPlayers[replacedPlayerIndex].animationState,
+            // animationState: !$pickedPlayers[replacedPlayerIndex].animationState,
             alreadyTransferred: true
         }
         const addedPlayer = {
             ...$pickedPlayers[addedPlayerIndex],
-            animationState: !$pickedPlayers[addedPlayerIndex].animationState,
+            // animationState: !$pickedPlayers[addedPlayerIndex].animationState,
             alreadyTransferred: true
         }
 
@@ -129,6 +129,7 @@ export const handlePlayerTransfer = ({
 
         return transferredPlayers.map((p, index) => {
             p.opacity = 1;
+            p.animationState = !p.animationState
             p.disableIconClick = !!p.alreadyTransferred;
             if(!p.alreadyTransferred && ![11,12,13,14].includes(index)) {
                 p.clickedIcon = false

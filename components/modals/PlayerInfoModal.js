@@ -29,6 +29,7 @@ export default function PlayerInfoModal({
    show,
    onClose,
                                             onMakeCaptain,
+                                            onMakeViceCaptain
 }) {
     const STYLES = {...getStyles(R)}
     return (
@@ -43,6 +44,7 @@ export default function PlayerInfoModal({
                                     player={player}
                                     onClose={onClose}
                                     onMakeCaptain={() => onMakeCaptain(player)}
+                                    onMakeViceCaptain={() => onMakeViceCaptain(player)}
                                 />
                             </Div>
                             <Div style={STYLES.pointsBox}><PointsBoard player={player}/></Div>

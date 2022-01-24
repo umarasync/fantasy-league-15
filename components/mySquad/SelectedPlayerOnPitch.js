@@ -22,7 +22,7 @@ import Image from "../html/Image";
 const getStyles = (R, player) => {
     return {
         container: {
-            // border: '5px solid yellow',
+            // border: '5px solid yellow'
         },
         playerImageD: {
             width: R(50),
@@ -148,24 +148,21 @@ const PlayerComponent = ({player, onPlayerChange, onPlayerClick, initialOpacity}
                         </div>
                     )
                 }
+
                 <div className={'flex'}>
-
                     <span>{player.name}</span>
-
-                    {/*<Image name={'vice-captain1.png'} w={16} h={16} ml={4}/>*/}
-
-                    {/*{*/}
-                    {/*    player.captain && (*/}
-                    {/*        <Image name={'captain1.png'} w={16} h={16} ml={4}/>*/}
-                    {/*    )*/}
-                    {/*}*/}
-                    {/*{*/}
-                    {/*    player.viceCaptain && (*/}
-                    {/*        <Image name={'vice-captain1.png'} w={16} h={16} ml={4}/>*/}
-                    {/*    )*/}
-                    {/*}*/}
-
+                    {
+                        player.captain && (
+                            <Image name={'captain1.png'} w={16} h={16} ml={4}/>
+                        )
+                    }
+                    {
+                        player.viceCaptain && (
+                            <Image name={'vice-captain1.png'} w={16} h={16} ml={4}/>
+                        )
+                    }
                 </div>
+
                 <div className={'relative'}>
                     <SubTitle player={player} initialOpacity={initialOpacity}/>
                 </div>

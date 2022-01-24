@@ -13,7 +13,8 @@ import colors from "constants/colors";
 export default function Header ({
     player,
     onClose,
-    onMakeCaptain
+    onMakeCaptain,
+                                    onMakeViceCaptain
 }) {
 
     const controls = [
@@ -39,7 +40,7 @@ export default function Header ({
             image: 'vice_captain.png',
             heading: 'Make',
             subHeading: 'vice-captain',
-            action: false
+            action: onMakeViceCaptain
         },
     ]
 
