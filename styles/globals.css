@@ -5,82 +5,89 @@
 @tailwind utilities;
 
 @layer base {
-    html {
-        font-size: 10px !important;
-        /*font-size: 62.5% !important;*/
-    }
-    select {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;       /* Remove default arrow */
-    }
+  html {
+    font-size: 10px !important;
+    /*font-size: 62.5% !important;*/
+  }
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; /* Remove default arrow */
+  }
 
-    input{
-        border:none;
-    }
+  input {
+    border: none;
+  }
 
-    input:focus, textarea:focus
-    {
-        border: 1px solid #000000;
-        box-shadow: 0 0 3px #1670BE;
-        outline: none;
-    }
+  input:focus,
+  textarea:focus {
+    border: 1px solid #000000;
+    box-shadow: 0 0 3px #1670be;
+    outline: none;
+  }
 }
 
 @layer utilities {
-    .input-focused {
-        @apply leading-[1.6rem] absolute bg-white left-[2.5rem] top-[-0.7rem] px-[0.5rem] text-[1.2rem]
-    }
-    input::placeholder {
-        @apply font-[300]
-    }
-    .title{
-        @apply mb-[2rem] italic text-[3.2rem] leading-[4rem] font-[800] text-black_rock uppercase
-    }
-    .in-up {
-        @apply w-[8rem] text-left box-border right-[-8.6rem] absolute title
-    }
-    .signup-heading {
-        @apply mb-[3.2rem] text-regent_grey text-[1.8rem]
-    }
-
+  .input-focused {
+    @apply leading-[1.6rem] absolute bg-white left-[2.5rem] top-[-0.7rem] px-[0.5rem] text-[1.2rem];
+  }
+  input::placeholder {
+    @apply font-[300];
+  }
+  .title {
+    @apply mb-[2rem] italic text-[3.2rem] leading-[4rem] font-[800] text-black_rock uppercase;
+  }
+  .in-up {
+    @apply w-[8rem] text-left box-border right-[-8.6rem] absolute title;
+  }
+  .signup-heading {
+    @apply mb-[3.2rem] text-regent_grey text-[1.8rem];
+  }
 }
-.select-options:hover{
-    background-color: red;
+.select-options:hover {
+  background-color: red;
 }
-input.disable-input-outline[type="text"]:focus{
-    -webkit-box-shadow: none;
-    box-shadow: none;
+input.disable-input-outline[type="text"]:focus {
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
 
 .primary-button-color {
-    background: linear-gradient(180deg, #EE6384 0%, #D9335B 100%);
+  background: linear-gradient(180deg, #ee6384 0%, #d9335b 100%);
 }
 
 .card-box:hover {
-    background: linear-gradient(180deg, #EE6384 0%, #D9335B 100%);
+  background: linear-gradient(180deg, #ee6384 0%, #d9335b 100%);
 }
 
-
 .bg-blue-gradient {
-    background: linear-gradient(90deg, rgba(27, 24, 83, 0) 0%, #1B1853 100%);
+  background: linear-gradient(90deg, rgba(27, 24, 83, 0) 0%, #1b1853 100%);
 }
 
 .grey-faded-1 {
-    border: 1px solid transparent;
-    border-image: linear-gradient(360deg, rgba(102, 100, 137, 0) -0.15%, #666489 54.62%, rgba(102, 100, 137, 0) 100%);
-    border-image-slice: 1;
-    /*will have no affect*/
-    border-radius: 1px;
+  border: 1px solid transparent;
+  border-image: linear-gradient(
+    360deg,
+    rgba(102, 100, 137, 0) -0.15%,
+    #666489 54.62%,
+    rgba(102, 100, 137, 0) 100%
+  );
+  border-image-slice: 1;
+  /*will have no affect*/
+  border-radius: 1px;
 }
 
-
 .grey-faded-2 {
-    border: 1px solid transparent;
-    border-image: linear-gradient(360deg, rgba(220, 227, 236, 0) -0.15%, #DCE3EC 54.62%, rgba(220, 227, 236, 0) 100%);
-    border-image-slice: 1;
-    /*will have no affect*/
-    border-radius: 1px;
+  border: 1px solid transparent;
+  border-image: linear-gradient(
+    360deg,
+    rgba(220, 227, 236, 0) -0.15%,
+    #dce3ec 54.62%,
+    rgba(220, 227, 236, 0) 100%
+  );
+  border-image-slice: 1;
+  /*will have no affect*/
+  border-radius: 1px;
 }
 
 .border-mystic {
@@ -89,37 +96,35 @@ input.disable-input-outline[type="text"]:focus{
     border-image-slice: 1;
 }
 
-
-
 ::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .footer-blue-gradient {
-    background: linear-gradient(180deg, #2E2B63 0%, #252252 100%);
-    box-shadow: 0 10px 50px rgba(8, 6, 41, 0.2);
+  background: linear-gradient(180deg, #2e2b63 0%, #252252 100%);
+  box-shadow: 0 10px 50px rgba(8, 6, 41, 0.2);
 }
 
 .bg-turquoise-niagara {
-    background: linear-gradient(180deg, #3CE0BD 0%, #06A684 100%);
+  background: linear-gradient(180deg, #3ce0bd 0%, #06a684 100%);
 }
 
 .bg-hibiscus-purple {
-    background: linear-gradient(180deg, #C343FF 0%, #6D0D9A 100%);
+  background: linear-gradient(180deg, #c343ff 0%, #6d0d9a 100%);
 }
 
 .bg-coastline_blue-congress_blue {
-    background: linear-gradient(180deg, #449AC3 0%, #004785 100%);
+  background: linear-gradient(180deg, #449ac3 0%, #004785 100%);
 }
 
-.box-shadow-electric-indigo{
-    box-shadow: 0px 4px 0px 0px #E8E8E833, 4px 4px 40px 0px #0000000D;
+.box-shadow-electric-indigo {
+  box-shadow: 0px 4px 0px 0px #e8e8e833, 4px 4px 40px 0px #0000000d;
 }
 
 .white-shadowed-background {
-    background: #FFFFFF;
-    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
-    border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
 }
 
 .text-froly-cerise_red {
@@ -130,6 +135,12 @@ input.disable-input-outline[type="text"]:focus{
 
 /****** Custom CSS ****/
 .Toastify__toast-body {
-    font-size: 15px !important;
-    font-weight: 700 !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+}
+
+.react-datepicker {
+  zoom: 1.3 !important;
+  font-size: 1rem !important;
+  border-radius: 0.5rem !important;
 }

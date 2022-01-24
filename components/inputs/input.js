@@ -32,6 +32,7 @@ export default function Input ({
     placeholder,
     onChange = () => false,
     onFocus = () => false,
+    onClick = () => false,
     type='text',
     icon,
     style,
@@ -78,6 +79,7 @@ export default function Input ({
             id={id}
             onFocus={handleOnFocus}
             onBlur={onBlur}
+            onClick={onClick}
             onChange={handleOnChange}
             onKeyDown={onKeyDown}
             value={value}

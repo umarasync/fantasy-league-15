@@ -6,10 +6,10 @@ export const GENDERS = [
     },
     {
         label: 'Male',
-        value: 'male'
+        value: 'MALE'
     },
     {
         label: 'Female',
-        value: 'female'
+        value: 'FEMALE'
     }
 ]

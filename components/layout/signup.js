@@ -1,10 +1,14 @@
 // Packages
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import getYear from "date-fns/getYear";
+import getMonth from "date-fns/getYear";
 
 // Components
 import Layout from "components/layout";
@@ -14,6 +18,7 @@ import Input from "components/inputs/input";
 import SelectInput from "components/inputs/SelectInput";
 import ResetPasswordModal from "components/modals/ResetPasswordModal";
 import { createUser, loginUser } from "../../redux/api/auth";
+import { RESET_PAGE } from "../../redux/actions/auth";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -80,6 +85,94 @@ export default function SignUp(props) {
     },
   };
 
+  const Datepicker = () => {
+    const range = (start, end) => {
+      return new Array(end - start).fill().map((d, i) => i + start);
+    };
+    const years = range(1990, getYear(new Date()));
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const CustomInputPicker = React.forwardRef(({ value, onClick }, ref) => (
+      <Input
+        value={value}
+        name="dateOfBirth"
+        id="dateOfBirth"
+        placeholder="Date of birth"
+        // onChange={(v) => setDateOfBirth(v)}
+        onClick={onClick}
+        innerRef={ref}
+      />
+    ));
+    CustomInputPicker.displayName = "DatePickerInput";
+    return (
+      <DatePicker
+        renderCustomHeader={({
+          date,
+          changeYear,
+          changeMonth,
+          decreaseMonth,
+          increaseMonth,
+          prevMonthButtonDisabled,
+          nextMonthButtonDisabled,
+        }) => (
+          <div
+            style={{
+              margin: 10,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
+              {"<"}
+            </button>
+            <select
+              value={getYear(date)}
+              onChange={({ target: { value } }) => changeYear(value)}
+            >
+              {years.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+
+            <select
+              value={months[getMonth(date)]}
+              onChange={({ target: { value } }) =>
+                changeMonth(months.indexOf(value))
+              }
+            >
+              {months.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+
+            <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
+              {">"}
+            </button>
+          </div>
+        )}
+        selected={dateOfBirth}
+        onChange={(date) => setDateOfBirth(date)}
+        customInput={<CustomInputPicker />}
+      />
+    );
+  };
+
   /*** Sign Up Flow:Starts ****/
   const validateSignUp = () => {
     if (
@@ -114,7 +207,7 @@ export default function SignUp(props) {
       setSignUpError(false);
       //store user email
       localStorage.setItem("email", email);
-      toast.success(successSignUp, {
+      toast.success("Signed Up successfully!", {
         onClose: () => router.push("/confirm_your_account"),
       });
     } else if (errorSignUp) {
@@ -152,12 +245,17 @@ export default function SignUp(props) {
     //Login Query API response
     if (successLogin) {
       setError(false);
-      toast.success(successLogin, {
+      toast.success("Login successfull! Redirecting...", {
         onClose: () => router.push("/select_club"),
       });
     } else if (errorLogin) {
       setError(errorLogin);
-      toast.error(errorLogin);
+      toast.error(errorLogin, {
+        onClose: () =>
+          dispatch({
+            type: RESET_PAGE,
+          }),
+      });
     }
   }, [successLogin, errorLogin]);
   /*** Sign Up Flow:Ends ****/
@@ -399,13 +497,8 @@ export default function SignUp(props) {
                       skipFirstOption={true}
                       onOptionChange={(option) => setSelectedGender(option)}
                     />
-                    <Input
-                      value={dateOfBirth}
-                      name="dateOfBirth"
-                      id="dateOfBirth"
-                      placeholder="Date of birth"
-                      onChange={(v) => setDateOfBirth(v)}
-                    />
+
+                    <Datepicker />
                   </div>
                   <Input
                     value={password}
