@@ -69,7 +69,7 @@ export default function ConfirmAccount() {
 
     return (
         <Layout title="Team Created">
-            <div className="bg-[url('/images/bg_full.png')] bg-[length:100%_100%] bg-no-repeat  w-full h-full" style={STYLES.container}>
+            <div className="bg-[url('/images/bg_full.png')] bg-[length:100%_100%] bg-no-repeat  w-full" style={STYLES.container}>
                 <div className="flex flex-col items-center justify-center">
                     <div style={STYLES.content}>
                         <div className="w-full flex flex-col items-center justify-center">

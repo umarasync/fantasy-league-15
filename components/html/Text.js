@@ -5,7 +5,7 @@ import RS from "utils/responsiveStyle"
 const getStyles = (RS, style) => {
     const {
         w, h, p, pl, pr, pt, pb, m, ml, mr, mt, mb, fs, lh, fw, fst, tt, br, bs, bg, cursor,
-        textCenter, textAlign, center, color, z, nowrap
+        textCenter, textAlign, center, color, z, nowrap, opacity
     } = style
 
     return {
@@ -39,6 +39,7 @@ const getStyles = (RS, style) => {
             ...RS.borderRadius(br),
 
             ...RS.boxShadow(bs),
+            ...RS.opacity(opacity),
 
             ...RS.cursor(cursor),
 
