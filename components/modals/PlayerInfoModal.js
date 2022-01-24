@@ -1,5 +1,4 @@
 // Packages
-import {useRouter} from "next/router";
 
 // Components
 import Modal from "components/modals";
@@ -11,47 +10,48 @@ import R from "utils/getResponsiveValue";
 
 // Constants
 import colors from "constants/colors";
-
-const player = {
-    "id": 1,
-    "image": "player1.png",
-    "clubImage": "club_fc.png",
-    "clubName": "FC GRONINGEN",
-    "status": "fit",
-    "name": "R. Nelson",
-    "nextMatch": {"club": "GRO", "vs": "BEN", "matchType": "H"},
-    "price": 6400000,
-    "formattedPrice": "€6.4m",
-    "position": "MID",
-    "points": 14,
-    "most_transferred": 2,
-    "picked": 12,
-    "pickedAsCaptain": 6,
-    "recommended": true,
-    "penaltyTaker": false,
-    "chosen": true
-}
+import PointsBoard from "components/playerInfo/PointsBoard";
 
 // Styles
 const getStyles = (R) => {
-    return {}
+    return {
+        pointsBox: {
+            overflowY: 'scroll',
+            overflowX: 'hidden',
+            marginTop: R(65),
+            flexGrow: 1
+        }
+    }
 }
 
 export default function PlayerInfoModal({
+   player,
    show,
-   onClose
+   onClose,
+                                            onMakeCaptain,
+                                            onMakeViceCaptain
 }) {
     const STYLES = {...getStyles(R)}
-
-    const router = useRouter()
-
     return (
         <Modal>
             <div
-                className={`${!show && 'hidden'} fixed z-10 overflow-auto top-0 left-0 w-full h-full bg-backdrop flex items-center justify-center`}>
-                <Div w={482} br={12} bg={colors.white} className={'h-[74%]'}>
-                     <Header player={player} onClose={onClose}/>
-                </Div>
+                className={`${!show && 'hidden'} fixed z-50 overflow-auto top-0 left-0 w-full h-full bg-backdrop flex items-center justify-center`}>
+                {
+                    show && (
+                        <Div w={482} br={12} bg={colors.white} className={'h-[74%] flex flex-col'}>
+                            <Div>
+                                <Header
+                                    player={player}
+                                    onClose={onClose}
+                                    onMakeCaptain={() => onMakeCaptain(player)}
+                                    onMakeViceCaptain={() => onMakeViceCaptain(player)}
+                                />
+                            </Div>
+                            <Div style={STYLES.pointsBox}><PointsBoard player={player}/></Div>
+                        </Div>
+                    )
+                }
+
             </div>
         </Modal>
     )

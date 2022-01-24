@@ -540,6 +540,7 @@ export default function BuildTeamAllPlayer () {
                         continueDisabled={continueDisabled}
                         onAutoPick={onAutoPick}
                         onContinueClick={() => {
+                            // console.log(JSON.stringify(pickedPlayers))
                             router.push('/create_team_name')
                         }}
                         onResetClick={handleResetClick}

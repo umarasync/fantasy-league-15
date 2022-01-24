@@ -4,7 +4,8 @@ import RS from "utils/responsiveStyle"
 // Styles
 const getStyles = (RS, style) => {
     const {
-        w, h, p, pl, pr, pt, pb, m, ml, mr, mt, mb, fs, lh, fw, fst, tt, br, bs, bg, cursor, center, color, z, nowrap
+        w, h, p, pl, pr, pt, pb, m, ml, mr, mt, mb, fs, lh, fw, fst, tt, br, bs, bg, cursor,
+        textCenter, textAlign, center, color, z, nowrap
     } = style
 
     return {
@@ -16,6 +17,8 @@ const getStyles = (RS, style) => {
             ...RS.color(color),
             ...RS.lineHeight(lh),
             ...RS.noWrap(nowrap),
+            ...RS.textCenter(textCenter),
+            ...RS.textAlign(textAlign),
 
             ...RS.width(w),
             ...RS.height(h),
@@ -54,6 +57,6 @@ export default function Text(props) {
     const { text, style, className, onClick } = props
 
     return (
-        <p className={className} style={{...STYLES.text, ...style}} onClick={() => onClick ? onClick() : false}>{text}</p>
+        <p {...props} className={className} style={{...STYLES.text, ...style}} onClick={() => onClick ? onClick() : false}>{text}</p>
     )
 }

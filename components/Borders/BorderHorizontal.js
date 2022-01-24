@@ -5,6 +5,6 @@ export default function BorderHorizontal({
    style
 }) {
     return (
-        <p className="grey-faded-3 text-white" style={{height: R(1), ...style }}/>
+        <p className="border-mystic text-white" style={{height: R(1), ...style }}/>
     )
 }

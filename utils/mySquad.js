@@ -6,7 +6,7 @@ import {clone} from "utils/helpers";
 
 // Constants
 import {ELEVEN, ZERO} from "constants/arrayIndexes";
-import {ANIMATE} from "constants/animationStates";
+import {ANIMATE} from "constants/animations";
 
 const TRANSFER_ICON = 'transfer.png'
 export const DIAMOND_UP_GREEN = 'diamond_up_green.png'
@@ -15,7 +15,7 @@ export const TOTAL_POINTS = 'Total pts'
 export const PRICES = 'Price'
 export const MATCHES = 'Matches'
 
-export const setInitialClickedIcons = (pickedPlayersObject) => {
+export const setPlayersAdditionalData = (pickedPlayersObject) => {
 
     const $pickedPlayersObject = clone(pickedPlayersObject)
 
@@ -83,6 +83,8 @@ export const setInitialClickedIcons = (pickedPlayersObject) => {
         player.animationState = true
         player.activeFilter = TOTAL_POINTS
         player.disableIconClick = false
+        player.captain = false
+        player.viceCaptain = false
         return player
     })
 }
@@ -107,12 +109,12 @@ export const handlePlayerTransfer = ({
 
         const replacedPlayer = {
             ...$pickedPlayers[replacedPlayerIndex],
-            animationState: !$pickedPlayers[replacedPlayerIndex].animationState,
+            // animationState: !$pickedPlayers[replacedPlayerIndex].animationState,
             alreadyTransferred: true
         }
         const addedPlayer = {
             ...$pickedPlayers[addedPlayerIndex],
-            animationState: !$pickedPlayers[addedPlayerIndex].animationState,
+            // animationState: !$pickedPlayers[addedPlayerIndex].animationState,
             alreadyTransferred: true
         }
 
@@ -127,6 +129,7 @@ export const handlePlayerTransfer = ({
 
         return transferredPlayers.map((p, index) => {
             p.opacity = 1;
+            p.animationState = !p.animationState
             p.disableIconClick = !!p.alreadyTransferred;
             if(!p.alreadyTransferred && ![11,12,13,14].includes(index)) {
                 p.clickedIcon = false
