@@ -20,15 +20,9 @@ import {ANIMATE, INITIAL} from "constants/animations";
 const getStyles = (R) => {
     return {
         commonPlayersStyle: {
-            // marginLeft: R(20),
-            // marginRight: R(20)
-            // paddingLeft: R(10),
-            // paddingRight: R(10),
             minWidth: R(120)
         },
         commonPlayersStyle1: {
-            // marginLeft: R(12),
-            // marginRight: R(12)
             paddingLeft: R(10),
             paddingRight: R(10),
             minWidth: R(100)
@@ -46,10 +40,12 @@ const getStyles = (R) => {
 }
 
 export default function SelectedSquadOnPitch ({
-   pickedPlayers,
-   onPlayerChange,
-   onPlayerClick,
-   changeFormation
+    pickedPlayers,
+    onPlayerChange,
+    onPlayerClick,
+    changeFormation,
+    tripleCaptainApplied,
+    benchBoostApplied
 }){
 
     const STYLES =  { ... getStyles(R) }
@@ -69,21 +65,29 @@ export default function SelectedSquadOnPitch ({
 
     if(!pickedPlayers.length) return null
 
-    const p1 = pickedPlayers[ZERO]
-    const p2 = pickedPlayers[ONE]
-    const p3 = pickedPlayers[TWO]
-    const p4 = pickedPlayers[THREE]
-    const p5 = pickedPlayers[FOUR]
-    const p6 = pickedPlayers[FIVE]
-    const p7 = pickedPlayers[SIX]
-    const p8 = pickedPlayers[SEVEN]
-    const p9 = pickedPlayers[EIGHT]
-    const p10 = pickedPlayers[NINE]
-    const p11 = pickedPlayers[TEN]
-    const p12 = pickedPlayers[ELEVEN]
-    const p13 = pickedPlayers[TWELVE]
-    const p14 = pickedPlayers[THIRTEEN]
-    const p15 = pickedPlayers[FOURTEEN]
+    const buildPlayer = (index) => {
+        return {
+            ...pickedPlayers[index],
+            tripleCaptainApplied,
+            benchBoostApplied
+        }
+    }
+
+    const p1 = buildPlayer(ZERO)
+    const p2 = buildPlayer(ONE)
+    const p3 = buildPlayer(TWO)
+    const p4 = buildPlayer(THREE)
+    const p5 = buildPlayer(FOUR)
+    const p6 = buildPlayer(FIVE)
+    const p7 = buildPlayer(SIX)
+    const p8 = buildPlayer(SEVEN)
+    const p9 = buildPlayer(EIGHT)
+    const p10 = buildPlayer(NINE)
+    const p11 = buildPlayer(TEN)
+    const p12 = buildPlayer(ELEVEN)
+    const p13 = buildPlayer(TWELVE)
+    const p14 = buildPlayer(THIRTEEN)
+    const p15 = buildPlayer(FOURTEEN)
 
     return(
         <div style={{paddingTop: R(22)}}>
@@ -100,8 +104,6 @@ export default function SelectedSquadOnPitch ({
                     }}
                 />
             </Div>
-
-
             {/*2*/}
             <Div style={STYLES.container} mt={24}>
                 <SelectedPlayerOnPitch

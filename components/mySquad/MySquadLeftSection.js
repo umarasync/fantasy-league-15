@@ -47,8 +47,11 @@ export default function MySquadLeftSection({
      transferInProgress,
      changeFormation,
      handleFilterButtonClick,
-     onPlayerClick
- }) {
+     onPlayerClick,
+     tripleCaptainApplied,
+     benchBoostApplied
+
+}) {
 
     const STYLES =  { ... getStyles(R) }
 
@@ -73,6 +76,8 @@ export default function MySquadLeftSection({
                                     pickedPlayers={pickedPlayers}
                                     onPlayerChange={onPlayerChange}
                                     onPlayerClick={onPlayerClick}
+                                    tripleCaptainApplied={tripleCaptainApplied}
+                                    benchBoostApplied={benchBoostApplied}
                                 />
                             ): null
                         }

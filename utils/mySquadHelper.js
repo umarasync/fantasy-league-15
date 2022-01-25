@@ -23,13 +23,9 @@ export const setPlayersAdditionalData = (pickedPlayersObject) => {
 
     // Set icon for GKs
     const GKs = $pickedPlayersObject[POSITION_GK].map((player, index) => {
-
         if(index === $pickedPlayersObject[POSITION_GK].length - 1){
             player.clickedIcon = TRANSFER_ICON
-        }else{
-            player.clickedIcon = false
-        }
-
+        }else{ player.clickedIcon = false }
         return player
     })
 
@@ -80,7 +76,7 @@ export const setPlayersAdditionalData = (pickedPlayersObject) => {
         MIDs[4],
     ]
 
-    return players.map((player) => {
+    return players.map((player, index) => {
 
         player.isSubstitutePlayer = !!player.clickedIcon;
 
@@ -90,10 +86,24 @@ export const setPlayersAdditionalData = (pickedPlayersObject) => {
         player.disableIconClick = false
         player.captain = false
         player.viceCaptain = false
-        player.isTripleCaptainApplied = false
-        player.benchBoostApplied = false
+
+        // making a captain and vice captain, eventually it will come from backend
+        if (index === 5) {player.captain = true}
+        if(index === 6) {player.viceCaptain = true}
+
         return player
     })
+}
+
+const readyPlayerBeforeTransfer = (p1, p2) => {
+    return {
+        ...p1,
+        animationState: !p1.animationState,
+        alreadyTransferred: true,
+        captain: p2.captain,
+        viceCaptain: p2.viceCaptain,
+        isSubstitutePlayer: p2.isSubstitutePlayer
+    }
 }
 
 export const handlePlayerTransfer = ({
@@ -101,51 +111,45 @@ export const handlePlayerTransfer = ({
     arrayIndex,
     pickedPlayers,
     setChangeFormation,
-    setTransferInProgress,
+    setTransferInProgress
 }) => {
 
-    const $pickedPlayers = clone(pickedPlayers)
+    const pp = clone(pickedPlayers)
     setTransferInProgress(true)
 
     // Transfer Player
     if(player.clickedIcon === DIAMOND_DOWN_RED) {
 
-        const replacedPlayerIndex = $pickedPlayers.findIndex(p => p.id === player.id)
-        const addedPlayerIndex = $pickedPlayers.findIndex(p => p.latestToBeAdded)
+        // Replaced-Player-Index
+        const rpIndex = pp.findIndex(p => p.id === player.id)
+        // Added-Player-Index
+        const apIndex = pp.findIndex(p => p.latestToBeAdded)
 
-        const replacedPlayer = {
-            ...$pickedPlayers[replacedPlayerIndex],
-            animationState: !$pickedPlayers[replacedPlayerIndex].animationState,
-            alreadyTransferred: true
-        }
-        const addedPlayer = {
-            ...$pickedPlayers[addedPlayerIndex],
-            animationState: !$pickedPlayers[addedPlayerIndex].animationState,
-            alreadyTransferred: true
-        }
+        const replacedPlayer = readyPlayerBeforeTransfer(pp[rpIndex], pp[apIndex])
+        const addedPlayer = readyPlayerBeforeTransfer(pp[apIndex], pp[rpIndex])
 
-        const transferredPlayers = [...$pickedPlayers]
+        const transferredPlayers = [...pp]
 
-        transferredPlayers[replacedPlayerIndex] = addedPlayer
-        transferredPlayers[addedPlayerIndex] = replacedPlayer
+        transferredPlayers[rpIndex] = addedPlayer
+        transferredPlayers[apIndex] = replacedPlayer
 
-        if([4,5,6,7,8,9,10].includes(arrayIndex)) {
-            setChangeFormation(ANIMATE)
-        }
+        if([4,5,6,7,8,9,10].includes(arrayIndex)) { setChangeFormation(ANIMATE) }
 
         return transferredPlayers.map((p, index) => {
             p.opacity = 1;
             p.disableIconClick = !!p.alreadyTransferred;
+
             if(!p.alreadyTransferred && ![11,12,13,14].includes(index)) {
                 p.clickedIcon = false
             }
+
             return p
         })
     }
 
     // For goal keeper transfer
     if(arrayIndex === ELEVEN) {
-       return $pickedPlayers.map((p, index) => {
+       return pp.map((p, index) => {
             if(arrayIndex === ELEVEN && [ZERO, ELEVEN].includes(index)){
                 if(index === ELEVEN) {
                     p.clickedIcon = DIAMOND_UP_GREEN
@@ -164,7 +168,7 @@ export const handlePlayerTransfer = ({
         })
     }else {
         // For other players transfer
-        return $pickedPlayers.map((p, index) => {
+        return pp.map((p, index) => {
             if([0, 11, 12, 13, 14].includes(index) && (p.id !== player.id)){
                 p.opacity = 0.5
                 p.disableIconClick = true
@@ -178,7 +182,6 @@ export const handlePlayerTransfer = ({
                     p.latestToBeAdded = false
                     p.disableIconClick = false
                     p.alreadyTransferred = false
-
                     p.animationState = true
                 }
                 p.opacity = 1
@@ -211,38 +214,41 @@ export const resetPlayers = ({players, activeFilter}) => {
     })
 }
 
+const readyCaptainBeforeChange = (p1, p2) => {
+    return {
+        ...p1,
+        captain: p2.captain,
+        viceCaptain: p2.viceCaptain
+    }
+}
+
 export const makeCaptain = ({
     $pickedPlayers,
     player,
     captainType
 }) => {
 
-    const pickedPlayers = [...$pickedPlayers]
-    const previousCaptainIndex = pickedPlayers.findIndex(p => p[captainType] === true)
-    const captainToBeIndex = pickedPlayers.findIndex(p => p.id === player.id)
+    const pp = [...$pickedPlayers]
+    // Previous Captain or Vice Captain Index
+    const pIndex = pp.findIndex(p => p[captainType] === true)
+    // Next Captain or Vice Captain Index
+    const nIndex = pp.findIndex(p => p.id === player.id)
 
-    if (previousCaptainIndex !== -1) {
-        pickedPlayers[previousCaptainIndex][captainType] = false
-        pickedPlayers[previousCaptainIndex].isTripleCaptainApplied = false
-    }
+    const previousCaptain = readyCaptainBeforeChange(pp[pIndex], pp[nIndex])
+    const newCaptain = readyCaptainBeforeChange(pp[nIndex], pp[pIndex])
 
-    pickedPlayers[captainToBeIndex][captainType] = true
+    const changedPlayers = [...pp]
 
-    if (captainType === CAPTAIN) {
-        pickedPlayers[captainToBeIndex][VICE_CAPTAIN] = false
-    } else {
-        pickedPlayers[captainToBeIndex][CAPTAIN] = false
-    }
+    changedPlayers[pIndex] = previousCaptain
+    changedPlayers[nIndex] = newCaptain
 
-    pickedPlayers[captainToBeIndex].isTripleCaptainApplied = false
-
-    return pickedPlayers
+    return changedPlayers
 }
 
 export const getButtonBGColor = (player) => {
-    if (player.isTripleCaptainApplied) {
+    if (player.captain && player.tripleCaptainApplied) {
         return 'bg-heliotrope-purple'
-    } else if (player.benchBoostApplied) {
+    } else if (player.isSubstitutePlayer && player.benchBoostApplied) {
         return 'bg-torquoise-niagara'
     }
     return 'primary-button-color'
