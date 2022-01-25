@@ -44,12 +44,15 @@ export default function MySquadGameWeek () {
     // Triple-Captain
     const [showTripleCaptainModal, setShowTripleCaptainModal] = useState(false);
     const [tripleCaptainDisabled, setTripleCaptainDisabled] = useState(true);
+    const [tripleCaptainApplied, setTripleCaptainApplied] = useState(false);
     const [tripleCaptainPlayer, setTripleCaptainPlayer] = useState([])
 
     // Bench-Boost
     const [showBenchBoostModal, setShowBenchBoostModal] = useState(false);
-    const [benchBoostDisabled, setBenchBoostDisabled] = useState(false);
+    const [benchBoostDisabled, setBenchBoostDisabled] = useState(true);
+    const [benchBoostApplied, setBenchBoostApplied] = useState(false);
     const [benchBoostPlayers, setBenchBoostPlayers] = useState([]);
+
 
     //Player-Transfer
     const handlePlayerTransfer = (player, arrayIndex) => {
@@ -59,7 +62,8 @@ export default function MySquadGameWeek () {
             arrayIndex,
             pickedPlayers,
             setChangeFormation,
-            setTransferInProgress
+            setTransferInProgress,
+            tripleCaptainApplied
         })
         setPickedPlayers(players)
     }
@@ -113,9 +117,10 @@ export default function MySquadGameWeek () {
             {
                 $pickedPlayers: pickedPlayers,
                 player,
-                captainType
+                captainType,
             })
         setPickedPlayers($pickedPlayers)
+        setSavedPlayers($pickedPlayers)
         setShowPlayerInfoModal(false)
     }
 
@@ -128,51 +133,62 @@ export default function MySquadGameWeek () {
     }
 
     const handleTripleCaptainConfirmed = () => {
-        const $pickedPlayers = pickedPlayers.map(p => {
-            if (p.captain) {
-                p.isTripleCaptainApplied = true
-            }
-            return p
-        })
-        setPickedPlayers($pickedPlayers)
+        setTripleCaptainApplied(true)
         setShowTripleCaptainModal(false)
     }
 
+    useEffect(() => {
+            if(!tripleCaptainApplied) return
+            handleMakeCaptain(pickedPlayers.find(p => p.captain === true))
+    }, [tripleCaptainApplied])
+
     const handleTripleCaptainDisable = () => {
-        const captain = pickedPlayers.find(p => p.captain === true)
-        if (captain === undefined || captain.isTripleCaptainApplied) {
+        if(tripleCaptainApplied){
             setTripleCaptainDisabled(true)
-        } else {
+        }else {
             setTripleCaptainDisabled(false)
         }
     }
 
     // Bench-Boost
     const handleBenchBoostModal = () => {
-        const notBoostedPlayers = pickedPlayers.filter(p => p.isSubstitutePlayer && !p.benchBoostApplied)
-        setBenchBoostPlayers([...notBoostedPlayers])
+        // const notBoostedPlayers = pickedPlayers.filter(p => p.isSubstitutePlayer && !p.benchBoostApplied)
+        const substitutePlayer = pickedPlayers.filter(p => p.isSubstitutePlayer)
+        setBenchBoostPlayers([...substitutePlayer])
         setShowBenchBoostModal(true)
     }
 
     const handleBenchBoostConfirmed = () => {
-        const $pickedPlayers = pickedPlayers.map(p => {
-            if (p.isSubstitutePlayer) {
-                p.benchBoostApplied = true
-            }
-            return p
-        })
-
-        setPickedPlayers($pickedPlayers)
+        setBenchBoostDisabled(true)
+        setBenchBoostApplied(true)
         setShowBenchBoostModal(false)
+
+
+        // const $pickedPlayers = pickedPlayers.map(p => {
+        //     if (p.isSubstitutePlayer) {
+        //         p.benchBoostApplied = true
+        //     }
+        //     return p
+        // })
+        //
+        // setPickedPlayers($pickedPlayers)
+        // setShowBenchBoostModal(false)
     }
 
     const handleBenchBoostDisable = () => {
-        const notBoostedPlayers = pickedPlayers.filter(p => p.isSubstitutePlayer && !p.benchBoostApplied)
-        if (notBoostedPlayers.length > 0) {
-            setBenchBoostDisabled(false)
-        } else {
+
+        if (benchBoostApplied) {
             setBenchBoostDisabled(true)
+        } else {
+            setBenchBoostDisabled(false)
         }
+
+        // const notBoostedPlayers = pickedPlayers.filter(p => p.isSubstitutePlayer && !p.benchBoostApplied)
+        // if (notBoostedPlayers.length > 0) {
+        //     setBenchBoostDisabled(false)
+        // } else {
+        //     setBenchBoostDisabled(true)
+        // }
     }
 
     // Picked-Players-Change
@@ -189,6 +205,8 @@ export default function MySquadGameWeek () {
                         <MySquadLeftSection
                             transferInProgress={transferInProgress}
                             handleFilterButtonClick={(v) => setActiveFilter(v)}
+                            tripleCaptainApplied={tripleCaptainApplied}
+                            benchBoostApplied={benchBoostApplied}
                             pickedPlayers={pickedPlayers}
                             onPlayerChange={handlePlayerTransfer}
                             changeFormation={changeFormation}
@@ -213,25 +231,25 @@ export default function MySquadGameWeek () {
                     onSave={handleSave}
                 />
                 {/*Modals*/}
-                {/*<PlayerInfoModal*/}
-                {/*    show={showPlayerInfoModal}*/}
-                {/*    onClose={() => setShowPlayerInfoModal(false)}*/}
-                {/*    player={playerInfoPlayer}*/}
-                {/*    onMakeCaptain={handleMakeCaptain}*/}
-                {/*    onMakeViceCaptain={handleMakeViceCaptain}*/}
-                {/*/>*/}
-                {/*<TripleCaptainModal*/}
-                {/*    show={showTripleCaptainModal}*/}
-                {/*    onCancel={() => setShowTripleCaptainModal(false)}*/}
-                {/*    player={tripleCaptainPlayer}*/}
-                {/*    onConfirmed={handleTripleCaptainConfirmed}*/}
-                {/*/>*/}
-                {/*<BenchBoostModal*/}
-                {/*    show={showBenchBoostModal}*/}
-                {/*    onCancel={() => setShowBenchBoostModal(false)}*/}
-                {/*    players={benchBoostPlayers}*/}
-                {/*    onConfirmed={handleBenchBoostConfirmed}*/}
-                {/*/>*/}
+                <PlayerInfoModal
+                    show={showPlayerInfoModal}
+                    onClose={() => setShowPlayerInfoModal(false)}
+                    player={playerInfoPlayer}
+                    onMakeCaptain={handleMakeCaptain}
+                    onMakeViceCaptain={handleMakeViceCaptain}
+                />
+                <TripleCaptainModal
+                    show={showTripleCaptainModal}
+                    onCancel={() => setShowTripleCaptainModal(false)}
+                    player={tripleCaptainPlayer}
+                    onConfirmed={handleTripleCaptainConfirmed}
+                />
+                <BenchBoostModal
+                    show={showBenchBoostModal}
+                    onCancel={() => setShowBenchBoostModal(false)}
+                    players={benchBoostPlayers}
+                    onConfirmed={handleBenchBoostConfirmed}
+                />
             </Div>
         </Layout>
     )
