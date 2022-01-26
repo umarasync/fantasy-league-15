@@ -131,10 +131,10 @@ export const handleAutoPick = ({
 }
 
 export const updatePlayersDataAfterSelectionOrDeselection = (players, player, value) => {
-    const playersI = clone(players)
-    const playerIndex = playersI.findIndex(p => p.id === player.id)
-    playersI[playerIndex].chosen = value
-    return playersI
+    const $players = clone(players)
+    const playerIndex = $players.findIndex(p => p.id === player.id)
+    $players[playerIndex].chosen = value
+    return $players
 }
 
 
@@ -214,16 +214,16 @@ export const playerDeselectionHandler = ({
     // Continue=Button
     setContinueDisabled,
 }) => {
-    const pickedPlayersI = {...pickedPlayers}
+    const $pickedPlayers = {...pickedPlayers}
 
-    const player = pickedPlayersI[position][i]
+    const player = $pickedPlayers[position][i]
 
     setRemainingBudget(remainingBudget + player.price)
     setTotalChosenPlayers(totalChosenPlayers - 1)
     setContinueDisabled(true)
-    pickedPlayersI[position][i] = false
+    $pickedPlayers[position][i] = false
 
-    setPickedPlayers(pickedPlayersI)
+    setPickedPlayers($pickedPlayers)
 
     setPlayersDataInitial(updatePlayersDataAfterSelectionOrDeselection(playersDataInitial, player, false))
 }
@@ -245,4 +245,55 @@ export const sortingHandler = ({
     }
 
     return playersDataI
+}
+
+
+export const getAllSelectedPlayersIDs = (players) => {
+
+    const gkIds = players[POSITION_GK].map(p => p.id)
+    const defIds = players[POSITION_DEF].map(p => p.id)
+    const midIds = players[POSITION_MID].map(p => p.id)
+    const fwdIds = players[POSITION_FWD].map(p => p.id)
+
+    return [
+        ...gkIds,
+        ...defIds,
+        ...midIds,
+        ...fwdIds
+    ]
+}
+
+export const initialSettings = ({
+    pickedPlayers,
+    setPickedPlayers,
+    setPlayersData,
+    playersDataInitial,
+    setPlayersDataInitial,
+    setIsTransferWindow,
+    setShowFooterBar
+}) => {
+    let playersData = []
+
+    if (pickedPlayers) {
+        setIsTransferWindow(true)
+        const allPlayerIds = getAllSelectedPlayersIDs(pickedPlayers)
+        playersData = playersDataInitial.map(p => {
+            p.chosen = !!allPlayerIds.includes(p.id);
+            p.disablePlayerCard = true
+            return p
+        })
+        setPlayersData(playersData)
+        setPlayersDataInitial(playersData)
+        setPickedPlayers(pickedPlayers)
+    } else {
+        playersData = playersDataInitial.map(p => {
+            p.chosen = false
+            p.disablePlayerCard = false
+            return p
+        })
+        setPlayersData(playersData)
+        setPlayersDataInitial(playersData)
+    }
+
+    setShowFooterBar(true)
 }

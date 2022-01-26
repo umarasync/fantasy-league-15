@@ -69,8 +69,8 @@ export default function FooterBar({
     onAutoPick,
     autoPickDisabled,
     continueDisabled,
-                                      onResetClick,
-                                      onContinueClick
+    onResetClick,
+    onContinueClick
   }){
 
     const STYLES =  { ... getStyles(R) }

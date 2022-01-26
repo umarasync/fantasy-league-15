@@ -76,7 +76,8 @@ const getStyles = (R) => {
 export default function AllPlayersOnField ({
    pickedPlayers,
    autoPickDisabled,
-   onDeselectPlayer
+   onDeselectPlayer,
+                                               isTransferWindow
 }){
 
 
@@ -96,6 +97,7 @@ export default function AllPlayersOnField ({
                 <PlayerOnPitch
                     player={pickedPlayers[POSITION_GK][ZERO]}
                     autoPickDisabled={autoPickDisabled}
+                    isTransferWindow={isTransferWindow}
                     placeholderText={'Add goalkeeper'}
                     style={STYLES.player1}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_GK, ZERO)}}
@@ -103,6 +105,7 @@ export default function AllPlayersOnField ({
                 <PlayerOnPitch
                     player={pickedPlayers[POSITION_GK][ONE]}
                     autoPickDisabled={autoPickDisabled}
+                    isTransferWindow={isTransferWindow}
                     placeholderText={'Add goalkeeper'}
                     style={STYLES.player2}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_GK, ONE)}}
@@ -114,6 +117,7 @@ export default function AllPlayersOnField ({
                 <PlayerOnPitch
                     player={pickedPlayers[POSITION_DEF][ZERO]}
                     autoPickDisabled={autoPickDisabled}
+                    isTransferWindow={isTransferWindow}
                     placeholderText={'Add defender'}
                     style={STYLES.player3}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_DEF, ZERO)}}
@@ -121,6 +125,7 @@ export default function AllPlayersOnField ({
                 <PlayerOnPitch
                     player={pickedPlayers[POSITION_DEF][ONE]}
                     autoPickDisabled={autoPickDisabled}
+                    isTransferWindow={isTransferWindow}
                     placeholderText={'Add defender'}
                     style={STYLES.player4}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_DEF, ONE)}}
@@ -129,6 +134,7 @@ export default function AllPlayersOnField ({
                 <PlayerOnPitch
                     player={pickedPlayers[POSITION_DEF][TWO]}
                     autoPickDisabled={autoPickDisabled}
+                    isTransferWindow={isTransferWindow}
                     placeholderText={'Add defender'}
                     style={STYLES.player5}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_DEF, TWO)}}
@@ -140,6 +146,7 @@ export default function AllPlayersOnField ({
                 <PlayerOnPitch
                     player={pickedPlayers[POSITION_DEF][THREE]}
                     autoPickDisabled={autoPickDisabled}
+                    isTransferWindow={isTransferWindow}
                     placeholderText={'Add defender'}
                     style={STYLES.player6}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_DEF, THREE)}}
@@ -147,6 +154,7 @@ export default function AllPlayersOnField ({
                 <PlayerOnPitch
                     player={pickedPlayers[POSITION_DEF][FOUR]}
                     autoPickDisabled={autoPickDisabled}
+                    isTransferWindow={isTransferWindow}
                     placeholderText={'Add defender'}
                     style={STYLES.player7}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_DEF, FOUR)}}
@@ -157,6 +165,7 @@ export default function AllPlayersOnField ({
                 <PlayerOnPitch
                     player={pickedPlayers[POSITION_MID][ZERO]}
                     autoPickDisabled={autoPickDisabled}
+                    isTransferWindow={isTransferWindow}
                     placeholderText={'Add midfielder'}
                     style={STYLES.player3}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_MID, ZERO)}}
@@ -164,6 +173,7 @@ export default function AllPlayersOnField ({
                 <PlayerOnPitch
                     player={pickedPlayers[POSITION_MID][ONE]}
                     autoPickDisabled={autoPickDisabled}
+                    isTransferWindow={isTransferWindow}
                     placeholderText={'Add midfielder'}
                     style={STYLES.player4}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_MID, ONE)}}
@@ -171,6 +181,7 @@ export default function AllPlayersOnField ({
                 <PlayerOnPitch
                     player={pickedPlayers[POSITION_MID][TWO]}
                     autoPickDisabled={autoPickDisabled}
+                    isTransferWindow={isTransferWindow}
                     placeholderText={'Add midfielder'}
                     style={STYLES.player5}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_MID, TWO)}}
@@ -181,6 +192,7 @@ export default function AllPlayersOnField ({
                 <PlayerOnPitch
                     player={pickedPlayers[POSITION_MID][THREE]}
                     autoPickDisabled={autoPickDisabled}
+                    isTransferWindow={isTransferWindow}
                     placeholderText={'Add midfielder'}
                     style={STYLES.player6}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_MID, THREE)}}
@@ -188,6 +200,7 @@ export default function AllPlayersOnField ({
                 <PlayerOnPitch
                     player={pickedPlayers[POSITION_MID][FOUR]}
                     autoPickDisabled={autoPickDisabled}
+                    isTransferWindow={isTransferWindow}
                     placeholderText={'Add midfielder'}
                     style={STYLES.player7}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_MID, FOUR)}}
@@ -198,6 +211,7 @@ export default function AllPlayersOnField ({
                 <PlayerOnPitch
                     player={pickedPlayers[POSITION_FWD][ZERO]}
                     autoPickDisabled={autoPickDisabled}
+                    isTransferWindow={isTransferWindow}
                     placeholderText={'Add forward'}
                     style={STYLES.player13}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_FWD, ZERO)}}
@@ -205,6 +219,7 @@ export default function AllPlayersOnField ({
                 <PlayerOnPitch
                     player={pickedPlayers[POSITION_FWD][ONE]}
                     autoPickDisabled={autoPickDisabled}
+                    isTransferWindow={isTransferWindow}
                     placeholderText={'Add forward'}
                     style={STYLES.player14}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_FWD, ONE)}}
@@ -212,6 +227,7 @@ export default function AllPlayersOnField ({
                 <PlayerOnPitch
                     player={pickedPlayers[POSITION_FWD][TWO]}
                     autoPickDisabled={autoPickDisabled}
+                    isTransferWindow={isTransferWindow}
                     placeholderText={'Add forward'}
                     style={STYLES.player15}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_FWD, TWO)}}

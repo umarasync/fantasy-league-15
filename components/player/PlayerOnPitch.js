@@ -65,7 +65,8 @@ export default function PlayerOnPitch ({
     style,
     boxClasses,
     placeholderText,
-    onDeselectPlayer
+    onDeselectPlayer,
+    isTransferWindow
 }) {
 
     const STYLES =  { ... getStyles(R, player) }
@@ -98,66 +99,130 @@ export default function PlayerOnPitch ({
         }
     }, [player])
 
+const PlayerComponent = ({
+    player,
+    isTransferWindow
+}) => {
+    if(player) {
+        return (
+            <AnimatePresence>
+                <motion.div
+                    className={'flex flex-col items-center justify-center'}
+                    style={{...STYLES.imageContainer, ...STYLES.playerImageD}}
+                    variants={fadeInOutAnimation}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    key={1}
+                >
+                    <PlayerImage
+                        player={player}
+                        imageStyle={STYLES.playerImage}
+                        ciw={18}
+                        cih={18}
+                        clickedIcon={'close1.png'}
+                        onIconClick={onDeselectPlayer}
+                    />
+                    <p className={'items-center relative items-center text-center  justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
+                       style={STYLES.buttonStyle}
+                    >
+                        {
+                            player.status === STATUS_INJURED || player.status === STATUS_SUSPENDED && (
+                                <div className={'flex items-center justify-center'} style={STYLES.statusImage}>
+                                    <img src={`/images/${player.statusImage}`} alt="" width={10} height={10}/>
+                                </div>
+                            )
+                        }
+                        
+                        <span>{player.name}</span><br/>
+                        <span>{nFormatter(player.price)}</span><br/>
+                    </p>
+                </motion.div>
+            </AnimatePresence>
+        )
+    }else {
+        return (
+            <AnimatePresence>
+                <motion.div
+                    className={'flex flex-col items-center justify-center'}
+                    style={{...STYLES.imageContainer, ...STYLES.placeHolderD}}
+                    variants={fadeInOutAnimation}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    key={2}
+                >
+                    <img src="/images/player_empty.png" alt="" width='100%' height='100%'/>
+                    <p className={'items-center  justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
+                       style={STYLES.buttonStyle}
+                    >
+                        <span>{placeholderText}</span><br/>
+                    </p>
+                </motion.div>
+            </AnimatePresence>
+        )
+    }
+}
 
     return(
         <div className={`flex relative ${boxClasses}`} style={{ ...STYLES.container, ...style }}>
-                {
-                    player ? (
-                            <AnimatePresence>
-                                <motion.div
-                                    className={'flex flex-col items-center justify-center'}
-                                    style={{...STYLES.imageContainer, ...STYLES.playerImageD}}
-                                    variants={fadeInOutAnimation}
-                                    initial="initial"
-                                    animate="animate"
-                                    exit="exit"
-                                    key={1}
-                                >
-                                    <PlayerImage
-                                        player={player}
-                                        imageStyle={STYLES.playerImage}
-                                        ciw={18}
-                                        cih={18}
-                                        clickedIcon={'close1.png'}
-                                        onIconClick={onDeselectPlayer}
-                                    />
-                                    <p className={'items-center relative items-center text-center  justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
-                                       style={STYLES.buttonStyle}
-                                    >
-                                        {
-                                            player.status === STATUS_INJURED || player.status === STATUS_SUSPENDED && (
-                                                <div className={'flex items-center justify-center'} style={STYLES.statusImage}>
-                                                    <img src={`/images/${player.statusImage}`} alt="" width={10} height={10}/>
-                                                </div>
-                                            )
-                                        }
-                                        <span>{player.name}</span><br/>
-                                        <span>{nFormatter(player.price)}</span><br/>
-                                    </p>
-                                </motion.div>
-                            </AnimatePresence>
 
-                    ): (
-                            <AnimatePresence>
-                                <motion.div
-                                    className={'flex flex-col items-center justify-center'}
-                                    style={{...STYLES.imageContainer, ...STYLES.placeHolderD}}
-                                    variants={fadeInOutAnimation}
-                                    initial="initial"
-                                    animate="animate"
-                                    exit="exit"
-                                    key={2}
-                                >
-                                        <img src="/images/player_empty.png" alt="" width='100%' height='100%'/>
-                                        <p className={'items-center  justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
-                                           style={STYLES.buttonStyle}
-                                        >
-                                            <span>{placeholderText}</span><br/>
-                                        </p>
-                                </motion.div>
-                            </AnimatePresence>
-                    )
-                }
+            {
+                player? (
+                    <AnimatePresence>
+                        <motion.div
+                            className={'flex flex-col items-center justify-center'}
+                            style={{...STYLES.imageContainer, ...STYLES.playerImageD}}
+                            variants={fadeInOutAnimation}
+                            initial="initial"
+                            animate="animate"
+                            exit="exit"
+                            key={1}
+                        >
+                            <PlayerImage
+                                player={player}
+                                imageStyle={STYLES.playerImage}
+                                ciw={18}
+                                cih={18}
+                                clickedIcon={'close1.png'}
+                                onIconClick={onDeselectPlayer}
+                            />
+                            <p className={'items-center relative items-center text-center  justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
+                               style={STYLES.buttonStyle}
+                            >
+                                {
+                                    player.status === STATUS_INJURED || player.status === STATUS_SUSPENDED && (
+                                        <div className={'flex items-center justify-center'} style={STYLES.statusImage}>
+                                            <img src={`/images/${player.statusImage}`} alt="" width={10} height={10}/>
+                                        </div>
+                                    )
+                                }
+                                <span>{player.name}</span><br/>
+                                <span>{nFormatter(player.price)}</span><br/>
+                            </p>
+                        </motion.div>
+                    </AnimatePresence>
+                ): (
+                    <AnimatePresence>
+                        <motion.div
+                            className={'flex flex-col items-center justify-center'}
+                            style={{...STYLES.imageContainer, ...STYLES.placeHolderD}}
+                            variants={fadeInOutAnimation}
+                            initial="initial"
+                            animate="animate"
+                            exit="exit"
+                            key={2}
+                        >
+                            <img src="/images/player_empty.png" alt="" width='100%' height='100%'/>
+                            <p className={'items-center  justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
+                               style={STYLES.buttonStyle}
+                            >
+                                <span>{placeholderText}</span><br/>
+                            </p>
+                        </motion.div>
+                    </AnimatePresence>
+                )
+            }
 
         </div>
     )

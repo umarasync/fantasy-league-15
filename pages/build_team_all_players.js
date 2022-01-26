@@ -15,7 +15,7 @@ import {
     handleAutoPick,
     playerSelectionHandler,
     playerDeselectionHandler,
-    sortingHandler
+    sortingHandler, getAllSelectedPlayersIDs, initialSettings
 } from "utils/buildYourTeamHelper";
 import filtersHandler from "utils/buildYourTeamFiltersHelper";
 
@@ -66,12 +66,14 @@ export default function BuildTeamAllPlayer () {
     const [showAllFilters, setShowAllFilters] = useState(false)
     const [autoPickDisabled, setAutoPickDisabled] = useState(false)
     const [continueDisabled, setContinueDisabled] = useState(true)
+    const [isTransferWindow, setIsTransferWindow] = useState(false)
+    const [showFooterBar, setShowFooterBar] = useState(false)
     const [totalBudget, setTotalBudget] = useState(TOTAL_BUDGET)
     const [remainingBudget, setRemainingBudget] = useState(TOTAL_BUDGET)
 
     // Players States
     const [playersData, setPlayersData] = useState([])
-    const [playersDataInitial, setPlayersDataInitial] = useState(PLAYERS_INITIAL)
+    const [playersDataInitial, setPlayersDataInitial] = useState(PLAYERS_INITIAL) // contains all players
 
     // Positions States
     const [activePosition, setActivePosition] = useState(POSITION_ALL)
@@ -182,6 +184,10 @@ export default function BuildTeamAllPlayer () {
         })
     }
 
+    const handlePlayerTransfer = () => {
+        console.log('3=============')
+    }
+
     useEffect(() => {
         if(totalChosenPlayers === 0) {
             setAutoPickDisabled(false)
@@ -228,26 +234,40 @@ export default function BuildTeamAllPlayer () {
 
     const handleContinueClick = () => {
         // TODO:LOCAL_STORAGE_FOR_TESTING:START
-        localStorage.setItem("pickedPlayers", JSON.stringify(pickedPlayers))
+        localStorage.setItem("buildTeamData", JSON.stringify({
+            pickedPlayers,
+            remainingBudget,
+            totalChosenPlayers,
+        }))
         // TODO:LOCAL_STORAGE_FOR_TESTING:ENDS
 
         router.push('/create_team_name')
     }
 
-
-    // useEffect(() => {
-    //     console.log('router =========', router)
-    // }, [])
+    // Did-Mount
+    useEffect(() => {
+        const $pickedPlayers = JSON.parse(localStorage.getItem('pickedPlayers'))
+        initialSettings({
+            pickedPlayers: $pickedPlayers,
+            setPickedPlayers,
+            setPlayersData,
+            playersDataInitial,
+            setPlayersDataInitial,
+            setIsTransferWindow,
+            setShowFooterBar
+        })
+    }, [])
 
     return (
         <Layout title="Build Team All Player">
             <div className="mx-auto flex bg-white">
                     {/*Left-Section*/}
-                    <div className="w-[57%]"><
-                        BuildTeamLeftSection
+                    <div className="w-[57%]">
+                        <BuildTeamLeftSection
+                            isTransferWindow={isTransferWindow}
                             pickedPlayers={pickedPlayers}
                             autoPickDisabled={autoPickDisabled}
-                            onDeselectPlayer={handlePlayerDeselection}
+                            onDeselectPlayer={ isTransferWindow ? handlePlayerTransfer : handlePlayerDeselection }
                         />
                     </div>
                     {/*Right-Section*/}
@@ -295,16 +315,21 @@ export default function BuildTeamAllPlayer () {
                             onSearch={onSearch}
                         />
                     </div>
-                    <FooterBar
-                        totalChosenPlayers={totalChosenPlayers}
-                        remainingBudget={remainingBudget}
-                        resetDisabled={resetDisabled}
-                        autoPickDisabled={autoPickDisabled}
-                        continueDisabled={continueDisabled}
-                        onAutoPick={onAutoPick}
-                        onContinueClick={handleContinueClick}
-                        onResetClick={handleResetClick}
-                    />
+                    {
+                        showFooterBar && (
+                            <FooterBar
+                                totalChosenPlayers={totalChosenPlayers}
+                                remainingBudget={remainingBudget}
+                                resetDisabled={resetDisabled}
+                                autoPickDisabled={autoPickDisabled}
+                                continueDisabled={continueDisabled}
+                                onAutoPick={onAutoPick}
+                                onContinueClick={handleContinueClick}
+                                onResetClick={handleResetClick}
+                            />
+                        )
+                    }
+
             </div>
         </Layout>
     )

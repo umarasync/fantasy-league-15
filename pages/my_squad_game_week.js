@@ -25,7 +25,6 @@ import {
 import {handlePlayerTransfer as HPT, DIAMOND_UP_GREEN} from "utils/mySquadHelper";
 
 // Constants
-import SELECTED_PLAYERS from "constants/data/selectedPlayers";
 import {INITIAL} from "constants/animations";
 
 export default function MySquadGameWeek () {
@@ -180,6 +179,15 @@ export default function MySquadGameWeek () {
         }
     }
 
+    const handleMakeTransfer = () => {
+        router.push({
+            pathname: '/build_team_all_players',
+            query: {
+                fromMakeTransfer: true
+            }
+        })
+    }
+
     // Picked-Players-Change
     useEffect(() => {
         handleTripleCaptainDisable()
@@ -218,7 +226,7 @@ export default function MySquadGameWeek () {
                     transferInProgress={transferInProgress}
                     onBenchBoost={handleBenchBoostModal}
                     onTripleCaptain={handleShowTripleCaptainModal}
-                    onMakeTransfers={()=>false}
+                    onMakeTransfers={handleMakeTransfer}
                     tripleCaptainDisabled={tripleCaptainDisabled}
                     benchBoostDisabled={benchBoostDisabled}
                     onCancel={handleCancel}

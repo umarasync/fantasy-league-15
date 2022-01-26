@@ -1,3 +1,4 @@
+// Constants
 import {
     ALL_PRICES,
     ALL_STATUSES, ALL_TEAMS,
@@ -6,7 +7,6 @@ import {
     POTENTIAL_PENALTY_TAKERS,
     RECOMMENDED_PLAYERS
 } from "constants/data/filters";
-
 
 const filtersHandler = ({
     player,
