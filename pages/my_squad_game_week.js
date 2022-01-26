@@ -180,8 +180,6 @@ export default function MySquadGameWeek () {
         }
     }
 
-
-
     // Picked-Players-Change
     useEffect(() => {
         handleTripleCaptainDisable()
@@ -192,7 +190,6 @@ export default function MySquadGameWeek () {
     if (pickedPlayers.length === 0) {
         return null
     }
-    console.log('2=========')
 
     return (
         <Layout title="Build Team All Player">

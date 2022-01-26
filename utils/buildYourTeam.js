@@ -135,3 +135,95 @@ export const updatePlayersDataAfterSelectionOrDeselection = (players, player, va
     playersI[playerIndex].chosen = value
     return playersI
 }
+
+
+export const playerSelectionHandler = ({
+    // Player
+    player,
+    // Players-Data-Initial
+    playersDataInitial,
+    setPlayersDataInitial,
+    // Total-Chosen-Players
+    totalChosenPlayers,
+    setTotalChosenPlayers,
+    // Picked-Players
+    pickedPlayers,
+    setPickedPlayers,
+    // Remaining-Budget
+    remainingBudget,
+    setRemainingBudget,
+}) => {
+    if (totalChosenPlayers === 15) return
+
+    const playerPositionI = player.position
+
+    const pickedPlayersI = {...pickedPlayers}
+
+    const pickedPlayersArray = pickedPlayersI[playerPositionI]
+
+    if (
+        (playerPositionI === POSITION_GK && pickedPlayersI[POSITION_GK].length < 2) ||
+        (playerPositionI === POSITION_FWD && pickedPlayersI[POSITION_FWD].length < 3) ||
+        (playerPositionI === POSITION_MID && pickedPlayersI[POSITION_MID].length < 5) ||
+        (playerPositionI === POSITION_DEF && pickedPlayersI[POSITION_DEF].length < 5)
+    ) {
+
+        if (pickedPlayersArray.length === 0 || (pickedPlayersArray.length > 0 && !pickedPlayersArray.some(p => p.id === player.id))) {
+            setRemainingBudget(remainingBudget - player.price)
+            setTotalChosenPlayers(totalChosenPlayers + 1)
+            pickedPlayersArray.push(player)
+
+            setPlayersDataInitial(updatePlayersDataAfterSelectionOrDeselection(playersDataInitial, player, true))
+
+        }
+
+    } else if (!pickedPlayersArray.some(p => p.id === player.id)) {
+
+        const indexOfEmptyPosition = pickedPlayersArray.findIndex(x => x === false)
+
+        if (indexOfEmptyPosition === -1) return
+
+        pickedPlayersArray[indexOfEmptyPosition] = player
+
+        setRemainingBudget(remainingBudget - player.price)
+        setTotalChosenPlayers(totalChosenPlayers + 1)
+
+        setPlayersDataInitial(updatePlayersDataAfterSelectionOrDeselection(playersDataInitial, player, true))
+    }
+
+    setPickedPlayers({...pickedPlayersI})
+}
+
+export const playerDeselectionHandler = ({
+    // Position
+    position,
+    i,
+    // Picked-Players
+    pickedPlayers,
+    setPickedPlayers,
+    // Remaining-Budget
+    remainingBudget,
+    setRemainingBudget,
+    // Total-Chosen-Players
+    totalChosenPlayers,
+    setTotalChosenPlayers,
+    // Players-Data-Initial
+    playersDataInitial,
+    setPlayersDataInitial,
+    // Continue=Button
+    setContinueDisabled,
+}) => {
+    const pickedPlayersI = {...pickedPlayers}
+
+    const player = pickedPlayersI[position][i]
+
+    setRemainingBudget(remainingBudget + player.price)
+    setTotalChosenPlayers(totalChosenPlayers - 1)
+    setContinueDisabled(true)
+    pickedPlayersI[position][i] = false
+
+    setPickedPlayers(pickedPlayersI)
+
+    setPlayersDataInitial(updatePlayersDataAfterSelectionOrDeselection(playersDataInitial, player, false))
+}
+
