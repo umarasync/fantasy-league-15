@@ -231,25 +231,25 @@ export default function MySquadGameWeek () {
                     onSave={handleSave}
                 />
                 {/*Modals*/}
-                {/*<PlayerInfoModal*/}
-                {/*    show={showPlayerInfoModal}*/}
-                {/*    onClose={() => setShowPlayerInfoModal(false)}*/}
-                {/*    player={playerInfoPlayer}*/}
-                {/*    onMakeCaptain={handleMakeCaptain}*/}
-                {/*    onMakeViceCaptain={handleMakeViceCaptain}*/}
-                {/*/>*/}
-                {/*<TripleCaptainModal*/}
-                {/*    show={showTripleCaptainModal}*/}
-                {/*    onCancel={() => setShowTripleCaptainModal(false)}*/}
-                {/*    player={tripleCaptainPlayer}*/}
-                {/*    onConfirmed={handleTripleCaptainConfirmed}*/}
-                {/*/>*/}
-                {/*<BenchBoostModal*/}
-                {/*    show={showBenchBoostModal}*/}
-                {/*    onCancel={() => setShowBenchBoostModal(false)}*/}
-                {/*    players={benchBoostPlayers}*/}
-                {/*    onConfirmed={handleBenchBoostConfirmed}*/}
-                {/*/>*/}
+                <PlayerInfoModal
+                    show={showPlayerInfoModal}
+                    onClose={() => setShowPlayerInfoModal(false)}
+                    player={playerInfoPlayer}
+                    onMakeCaptain={handleMakeCaptain}
+                    onMakeViceCaptain={handleMakeViceCaptain}
+                />
+                <TripleCaptainModal
+                    show={showTripleCaptainModal}
+                    onCancel={() => setShowTripleCaptainModal(false)}
+                    player={tripleCaptainPlayer}
+                    onConfirmed={handleTripleCaptainConfirmed}
+                />
+                <BenchBoostModal
+                    show={showBenchBoostModal}
+                    onCancel={() => setShowBenchBoostModal(false)}
+                    players={benchBoostPlayers}
+                    onConfirmed={handleBenchBoostConfirmed}
+                />
             </Div>
         </Layout>
     )
