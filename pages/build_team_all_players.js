@@ -1,36 +1,23 @@
 // Packages
 import {useEffect, useState} from "react";
-import {AnimatePresence,motion} from "framer-motion";
 import {useRouter} from "next/router";
 
 // Components
 import Layout from "components/layout/index";
 import FooterBar from "components/footer/FooterBar";
-import SearchBar from "components/search/SearchBar";
-import Username from "components/user/Username";
-import FilterIcon from "components/filter/FilterIcon";
-import FilterButtons from "components/filter/FilterButtons";
-import PlayerCard from "components/player/PlayerCard";
 import BuildTeamLeftSection from "components/buildTeam/BuildTeamLeftSection";
-import BuildYourTeamFilters from "components/filter/BuildYourTeamFilters";
-import SelectInput from "components/inputs/SelectInput";
-import NoResultFound from "components/misc/NoResultFound";
+import BuildTeamRightSection from "components/buildTeam/BuildTeamRightSection";
 
 // Utils
 import R from "utils/getResponsiveValue";
 import {clone} from "utils/helpers";
 import {
     handleAutoPick,
-    handleMultiSelectionDropDowns,
     playerSelectionHandler,
     playerDeselectionHandler,
     sortingHandler
 } from "utils/buildYourTeamHelper";
 import filtersHandler from "utils/buildYourTeamFiltersHelper";
-
-// Animation
-import {PlayersCardAnimation, PlayersCardAnimation1} from "Animations/PlayersCardAnimations";
-import ShowAllFiltersAnimation from "Animations/buildYourTeam/ShowAllFiltersAnimation"
 
 // Constants
 import {
@@ -38,25 +25,14 @@ import {
     POSITION_ALL,
     // CLUBS
     CLUBS,
-    ALL_TEAMS,
     // PRICES
     PRICES,
-    ALL_PRICES,
     // STATUES
     STATUSES,
-    ALL_STATUSES,
     // RECOMMENDATIONS
     RECOMMENDATIONS,
-    RECOMMENDED_PLAYERS,
-    POTENTIAL_PENALTY_TAKERS,
-    MOST_PICKED_PLAYERS,
-    MOST_PICKED_AS_CAPTAIN,
     // SORTING
     SORTING_OPTIONS,
-    TOTAL_POINTS,
-    PRICE_FROM_HIGH_TO_LOW,
-    PRICE_FROM_LOW_TO_HIGH,
-    MOST_TRANSFERRED, POSITION_GK, POSITION_FWD, POSITION_MID, POSITION_DEF
 } from "constants/data/filters";
 
 import {
@@ -66,22 +42,7 @@ import {
 
 import  { PLAYERS } from "constants/data/players"
 
-// Styles
-const getStyles = (R) => {
-    return {
-        allFiltersBox: {
-            paddingBottom: R(20),
-            paddingTop: R(15)
-        },
-        noResultFound: {
-            top: R(600)
-        }
-    }
-}
-
 export default function BuildTeamAllPlayer () {
-
-    const STYLES = {...getStyles(R)}
 
     const router= useRouter()
 
@@ -155,7 +116,6 @@ export default function BuildTeamAllPlayer () {
 
     }
 
-
     // Filters-And-Sorting
     const runFiltersOnPlayersData = () => {
 
@@ -191,27 +151,6 @@ export default function BuildTeamAllPlayer () {
             runFiltersOnPlayersData()
             initialOpacityHandler()
     }, [clubs, playersDataInitial, statuses, selectedRecommendation, selectedPrice, activePosition, selectedSortingOption, playersDataInitial])
-
-
-    const areFiltersApplied = () => {
-        return selectedClubs.length === 0 ||
-            selectedClubs[0].value !== ALL_TEAMS ||
-            selectedStatuses.length === 0 ||
-            selectedStatuses[0].value !== ALL_STATUSES ||
-            selectedPrice.value !== ALL_PRICES ||
-            selectedRecommendation.value !== RECOMMENDED_PLAYERS;
-
-    }
-
-    const getPlayersContainerHeight = () => {
-        if(areFiltersApplied() && !playersData.length){
-            return  'hide'
-        }else if(showAllFilters) {
-            return 'half'
-        }else {
-            return 'full'
-        }
-    }
 
     const handlePlayerSelection = (player) => {
         return playerSelectionHandler({player,
@@ -303,6 +242,7 @@ export default function BuildTeamAllPlayer () {
     return (
         <Layout title="Build Team All Player">
             <div className="mx-auto flex bg-white">
+                    {/*Left-Section*/}
                     <div className="w-[57%]"><
                         BuildTeamLeftSection
                             pickedPlayers={pickedPlayers}
@@ -310,146 +250,50 @@ export default function BuildTeamAllPlayer () {
                             onDeselectPlayer={handlePlayerDeselection}
                         />
                     </div>
-
-                    {/*Right Section*/}
+                    {/*Right-Section*/}
                     <div className="w-[43%] flex justify-center" style={{minHeight: R()}}>
-                        <div className={'relative'} style={{width: R(488), paddingTop: R(35)}}>
-                            {/*username*/}
-                            <div className={'flex flex-row-reverse'} style={{marginBottom: R(46)}}>
-                                <Username username={'martine.bakker'} />
-                            </div>
-
-                            {/*search*/}
-                            <div className={'flex'} style={{marginBottom: R(20)}}>
-                                <div className={'w-full'}>
-                                    <SearchBar onSearch={onSearch}/>
-                                </div>
-                                <div style={{marginLeft: R(8)}}/>
-                                <FilterIcon
-                                    showAllFilters={showAllFilters}
-                                    onClick={() => setShowAllFilters(!showAllFilters)}
-                                />
-                            </div>
-
-                            {/*filter buttons*/}
-                            <div style={{
-                                marginBottom: R(24)
-                            }}>
-                                <FilterButtons
-                                    activePosition={activePosition}
-                                    onClick={(activePosition) =>
-                                        setActivePosition(activePosition)}
-                                />
-                            </div>
-                            {/*all filters*/}
-                            {
-                                showAllFilters ? (
-                                    <AnimatePresence>
-                                        <motion.div
-                                            variants={ShowAllFiltersAnimation}
-                                            initial="initial"
-                                            animate="animate"
-                                            exit="exit"
-                                            custom={{initialOpacity}}
-                                            className={'absolute w-full'}
-                                            style={STYLES.allFiltersBox}
-                                        >
-                                            <BuildYourTeamFilters
-                                                // Teams Filter
-                                                clubs={clubs}
-                                                selectedClubs={selectedClubs}
-                                                onClubSelected={(option) => handleMultiSelectionDropDowns(option, {
-                                                    firstOption: ALL_TEAMS,
-                                                    initialState: CLUBS_INITIAL,
-                                                    state: clubs,
-                                                    setSelectedOptions: setSelectedClubs,
-                                                    setOptions: setClubs
-                                                })}
-
-                                                // Statuses Filter
-                                                statuses={statuses}
-                                                selectedStatuses={selectedStatuses}
-                                                onStatusSelected={(option) => handleMultiSelectionDropDowns(option, {
-                                                    firstOption: ALL_STATUSES,
-                                                    initialState: STATUSES_INITIAL,
-                                                    state: statuses,
-                                                    setSelectedOptions: setSelectedStatuses,
-                                                    setOptions: setStatuses
-                                                })}
-
-                                                // Prices Filter
-                                                prices={prices}
-                                                selectedPrice={selectedPrice}
-                                                onPriceSelected={(price) => setSelectedPrice(price)}
-
-                                                // Recommendation Filter
-                                                recommendations={recommendations}
-                                                selectedRecommendation={selectedRecommendation}
-                                                onRecommendationSelected={(r) => setSelectedRecommendation(r)}
-
-                                                // Reset Filters
-                                                onResetFilterClicked={handleResetFilter}
-
-                                            />
-                                        </motion.div>
-                                    </AnimatePresence>
-                                ): <AnimatePresence/>
-                            }
-
-                            {
-                                areFiltersApplied() && !playersData.length && (
-                                    <div className={'absolute w-full'} style={STYLES.noResultFound}>
-                                        <NoResultFound/>
-                                    </div>
-                                )
-                            }
-
-                            <motion.div
-                                variants={PlayersCardAnimation}
-                                animate={showAllFilters ? 'slideDown' : 'slideUp'}
-                            >
-
-                                <motion.div
-                                    variants={PlayersCardAnimation1}
-                                    animate={getPlayersContainerHeight()}
-                                >
-                                    <div style={{marginBottom: R(16)}}>
-                                        {
-                                            areFiltersApplied() && !playersData.length ? null : (
-
-                                                <SelectInput
-                                                    options={sortingOptions}
-                                                    selectedOption={selectedSortingOption}
-                                                    onOptionChange={(s) => setSelectedSortingOption(s)}
-                                                    parentContainerStyle={{
-                                                        zIndex: 288888,
-                                                    }}
-                                                    hideLabel
-                                                    dropDownOfInlineStyle
-                                                />
-
-                                            )
-                                        }
-                                    </div>
-
-                                    <div style={{
-                                        height: '100%',
-                                        paddingBottom: getPlayersContainerHeight() === 'hide' ? 0 : 150,
-                                        overflow: 'scroll'}}
-                                    >
-                                        {
-                                            playersData.map((player, index) => <PlayerCard
-                                                key={index + 1}
-                                                player={player}
-                                                onSelectPlayer={handlePlayerSelection}
-                                            />)
-                                        }
-                                    </div>
-
-                                </motion.div>
-                            </motion.div>
-
-                        </div>
+                        <BuildTeamRightSection
+                            // Filters
+                            showAllFilters={showAllFilters}
+                            setShowAllFilters={setShowAllFilters}
+                            // Positions
+                            activePosition={activePosition}
+                            setActivePosition={setActivePosition}
+                            // Initial-Opacity
+                            initialOpacity={initialOpacity}
+                            // Clubs
+                            selectedClubs={selectedClubs}
+                            clubs={clubs}
+                            setClubs={setClubs}
+                            setSelectedClubs={setSelectedClubs}
+                            clubsInitial={CLUBS_INITIAL}
+                            // Statuses
+                            selectedStatuses={selectedStatuses}
+                            statuses={statuses}
+                            setStatuses={setStatuses}
+                            setSelectedStatuses={setSelectedStatuses}
+                            statusesInitial={STATUSES_INITIAL}
+                            // Prices
+                            prices={prices}
+                            selectedPrice={selectedPrice}
+                            setSelectedPrice={setSelectedPrice}
+                            // Recommendations
+                            recommendations={recommendations}
+                            selectedRecommendation={selectedRecommendation}
+                            setSelectedRecommendation={setSelectedRecommendation}
+                            // Players-Data
+                            playersData={playersData}
+                            // Reset-Filter-Button
+                            handleResetFilter={handleResetFilter}
+                            // Sorting
+                            sortingOptions={sortingOptions}
+                            selectedSortingOption={selectedSortingOption}
+                            setSelectedSortingOption={setSelectedSortingOption}
+                            // Player-Selection
+                            handlePlayerSelection={handlePlayerSelection}
+                            // Search
+                            onSearch={onSearch}
+                        />
                     </div>
                     <FooterBar
                         totalChosenPlayers={totalChosenPlayers}
