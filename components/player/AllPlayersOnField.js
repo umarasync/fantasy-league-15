@@ -1,238 +1,279 @@
+// Packages
+import {useAnimation} from "framer-motion";
+
 // Components
 import PlayerOnPitch from "components/player/PlayerOnPitch";
+import Div from "components/html/Div";
 
 // Utils
 import R from "utils/getResponsiveValue";
 
 // Constants
+import {
+    ZERO,
+    ONE,
+    TWO,
+    THREE,
+    FOUR,
+    FIVE,
+    SIX,
+    SEVEN,
+    EIGHT,
+    NINE,
+    TEN,
+    ELEVEN,
+    TWELVE,
+    THIRTEEN,
+    FOURTEEN
+} from "constants/arrayIndexes";
 import {POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID} from "constants/data/filters";
 
 // Styles
 const getStyles = (R) => {
     return {
-        player1: {
-            justifyContent: 'end',
-            width: '50%',
-            height: R(110),
-            paddingRight: R(37),
-            marginTop: R(15),
-        },
-        player2: {
-            justifyContent: 'start',
-            width: '50%',
-            height: R(110),
-            paddingLeft: R(40),
-            marginTop: R(15),
-        },
-        player3:{
-            width: '33%',
-            height: R(50),
-            justifyContent: 'center',
-            paddingLeft: R(42),
-        },
-        player4:{
-            width: '33%',
-            height: R(50),
+        container: {
+            display: 'flex',
+            flexFlow: 'row',
             justifyContent: 'center'
         },
-        player5:{
-            width: '33%',
-            height: R(50),
-            justifyContent: 'center',
-            paddingRight: R(32)
+        commonStyle: {
+            height: R(110)
         },
-        player6: {
-            justifyContent: 'end',
-            width: '50%',
-            height: R(117),
-            paddingRight: R(65),
+        p1: {
+            minWidth: R(120),
         },
-        player7: {
-            justifyContent: 'start',
-            width: '50%',
-            height: R(117),
-            paddingLeft: R(75),
+        p3: {
+            minWidth: R(175),
         },
-        player13:{
-            width: '33%',
-            height: R(50),
-            justifyContent: 'end',
-            paddingLeft: R(30),
+        p6: {
+            minWidth: R(190),
         },
-        player14:{
-            width: '33%',
-            height: R(50),
-            justifyContent: 'center'
+        p7: {
+            marginTop: R(-50),
+            minWidth: R(190),
         },
-        player15:{
-            width: '33%',
-            height: R(50),
-            justifyContent: 'start',
-            paddingRight: R(30)
-        }
+        p4: {
+            marginTop: R(-50),
+            minWidth: R(175),
+        },
+        p5: {
+            minWidth: R(115),
+        },
     }
 }
 
-export default function AllPlayersOnField ({
-   pickedPlayers,
-   autoPickDisabled,
-   onDeselectPlayer,
-                                               isTransferWindow
-}){
+export default function AllPlayersOnField({
+  pickedPlayers,
+  onDeselectPlayer,
+  isTransferWindow
+}) {
 
+    console.log('pickedplayers', pickedPlayers)
 
-    const STYLES =  { ... getStyles(R) }
+    const STYLES = {...getStyles(R)}
 
-    const ZERO = 0
-    const ONE = 1
-    const TWO = 2
-    const THREE = 3
-    const FOUR = 4
+    const controls = useAnimation()
 
-    return(
+    const buildPlayer = (position, index) => {
+        return {
+            ...pickedPlayers[position][index],
+            isTransferWindow
+        }
+    }
+
+    const p1 = buildPlayer(POSITION_GK, ZERO)
+    const p2 = buildPlayer(POSITION_GK, ONE)
+    const p3 = buildPlayer(POSITION_DEF, ZERO)
+    const p4 = buildPlayer(POSITION_DEF, ONE)
+    const p5 = buildPlayer(POSITION_DEF, TWO)
+    const p6 = buildPlayer(POSITION_DEF, THREE)
+    const p7 = buildPlayer(POSITION_DEF, FOUR)
+    const p8 = buildPlayer(POSITION_MID, ZERO)
+    const p9 = buildPlayer(POSITION_MID, ONE)
+    const p10 = buildPlayer(POSITION_MID, TWO)
+    const p11 = buildPlayer(POSITION_MID, THREE)
+    const p12 = buildPlayer(POSITION_MID, FOUR)
+    const p13 = buildPlayer(POSITION_FWD, ZERO)
+    const p14 = buildPlayer(POSITION_FWD, ONE)
+    const p15 = buildPlayer(POSITION_FWD, TWO)
+
+    return (
         <div style={{paddingTop: R(27)}}>
             {/*1*/}
-            <div className={'flex justify-center'}>
-
+            <Div style={STYLES.container}>
                 <PlayerOnPitch
-                    player={pickedPlayers[POSITION_GK][ZERO]}
-                    autoPickDisabled={autoPickDisabled}
-                    isTransferWindow={isTransferWindow}
+                    player={p1}
                     placeholderText={'Add goalkeeper'}
-                    style={STYLES.player1}
+                    style={{
+                        ...STYLES.commonStyle,
+                        ...STYLES.p1,
+                        opacity: p1.opacity
+                    }}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_GK, ZERO)}}
                 />
                 <PlayerOnPitch
-                    player={pickedPlayers[POSITION_GK][ONE]}
-                    autoPickDisabled={autoPickDisabled}
-                    isTransferWindow={isTransferWindow}
+                    player={p2}
                     placeholderText={'Add goalkeeper'}
-                    style={STYLES.player2}
-                    onDeselectPlayer={() => {onDeselectPlayer(POSITION_GK, ONE)}}
+                    style={{
+                        ...STYLES.commonStyle,
+                        ...STYLES.p1,
+                        opacity: p2.opacity
+                    }}
+                    onDeselectPlayer={() => {
+                        onDeselectPlayer(POSITION_GK, ONE)
+                    }}
                 />
-            </div>
-
+            </Div>
             {/*2*/}
-            <div className={'flex justify-between'}>
+            <Div style={STYLES.container}>
+
                 <PlayerOnPitch
-                    player={pickedPlayers[POSITION_DEF][ZERO]}
-                    autoPickDisabled={autoPickDisabled}
-                    isTransferWindow={isTransferWindow}
+                    player={p3}
                     placeholderText={'Add defender'}
-                    style={STYLES.player3}
+                    style={{
+                        ...STYLES.commonStyle,
+                        ...STYLES.p3,
+                        opacity: p3.opacity
+                    }}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_DEF, ZERO)}}
                 />
                 <PlayerOnPitch
-                    player={pickedPlayers[POSITION_DEF][ONE]}
-                    autoPickDisabled={autoPickDisabled}
-                    isTransferWindow={isTransferWindow}
+                    player={p4}
                     placeholderText={'Add defender'}
-                    style={STYLES.player4}
+                    style={{
+                        ...STYLES.commonStyle,
+                        ...STYLES.p3,
+                        opacity: p4.opacity
+                    }}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_DEF, ONE)}}
-
                 />
                 <PlayerOnPitch
-                    player={pickedPlayers[POSITION_DEF][TWO]}
-                    autoPickDisabled={autoPickDisabled}
-                    isTransferWindow={isTransferWindow}
+                    player={p5}
                     placeholderText={'Add defender'}
-                    style={STYLES.player5}
+                    style={{
+                        ...STYLES.commonStyle,
+                        ...STYLES.p3,
+                        opacity: p5.opacity
+                    }}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_DEF, TWO)}}
-
                 />
-            </div>
+            </Div>
             {/*3*/}
-            <div className={'flex justify-center'}>
+            <Div style={STYLES.container}>
                 <PlayerOnPitch
-                    player={pickedPlayers[POSITION_DEF][THREE]}
-                    autoPickDisabled={autoPickDisabled}
-                    isTransferWindow={isTransferWindow}
+                    player={p6}
                     placeholderText={'Add defender'}
-                    style={STYLES.player6}
+                    style={{
+                        ...STYLES.commonStyle,
+                        ...STYLES.p4,
+                        opacity: p6.opacity
+                    }}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_DEF, THREE)}}
                 />
                 <PlayerOnPitch
-                    player={pickedPlayers[POSITION_DEF][FOUR]}
-                    autoPickDisabled={autoPickDisabled}
-                    isTransferWindow={isTransferWindow}
+                    player={p7}
                     placeholderText={'Add defender'}
-                    style={STYLES.player7}
+                    style={{
+                        ...STYLES.commonStyle,
+                        ...STYLES.p4,
+                        opacity: p7.opacity
+                    }}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_DEF, FOUR)}}
                 />
-            </div>
+            </Div>
             {/*4*/}
-            <div className={'flex justify-between'}>
+            <Div style={STYLES.container}>
                 <PlayerOnPitch
-                    player={pickedPlayers[POSITION_MID][ZERO]}
-                    autoPickDisabled={autoPickDisabled}
-                    isTransferWindow={isTransferWindow}
+                    player={p8}
                     placeholderText={'Add midfielder'}
-                    style={STYLES.player3}
+                    style={{
+                        ...STYLES.commonStyle,
+                        ...STYLES.p6,
+                        opacity: p8.opacity
+                    }}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_MID, ZERO)}}
                 />
                 <PlayerOnPitch
-                    player={pickedPlayers[POSITION_MID][ONE]}
-                    autoPickDisabled={autoPickDisabled}
-                    isTransferWindow={isTransferWindow}
+                    player={p9}
                     placeholderText={'Add midfielder'}
-                    style={STYLES.player4}
+                    style={{
+                        ...STYLES.commonStyle,
+                        ...STYLES.p6,
+                        opacity: p9.opacity
+                    }}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_MID, ONE)}}
                 />
                 <PlayerOnPitch
-                    player={pickedPlayers[POSITION_MID][TWO]}
-                    autoPickDisabled={autoPickDisabled}
-                    isTransferWindow={isTransferWindow}
+                    player={p10}
                     placeholderText={'Add midfielder'}
-                    style={STYLES.player5}
+                    style={{
+                        ...STYLES.commonStyle,
+                        ...STYLES.p6,
+                        opacity: p10.opacity
+                    }}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_MID, TWO)}}
                 />
-            </div>
+            </Div>
             {/*5*/}
-            <div className={'flex justify-center'}>
+            <Div style={STYLES.container}>
                 <PlayerOnPitch
-                    player={pickedPlayers[POSITION_MID][THREE]}
-                    autoPickDisabled={autoPickDisabled}
-                    isTransferWindow={isTransferWindow}
+                    player={p11}
                     placeholderText={'Add midfielder'}
-                    style={STYLES.player6}
+                    style={{
+                        ...STYLES.commonStyle,
+                        ...STYLES.p7,
+                        opacity: p11.opacity
+                    }}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_MID, THREE)}}
                 />
                 <PlayerOnPitch
-                    player={pickedPlayers[POSITION_MID][FOUR]}
-                    autoPickDisabled={autoPickDisabled}
-                    isTransferWindow={isTransferWindow}
+                    player={p12}
                     placeholderText={'Add midfielder'}
-                    style={STYLES.player7}
+                    style={{
+                        ...STYLES.commonStyle,
+                        ...STYLES.p7,
+                        opacity: p12.opacity
+                    }}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_MID, FOUR)}}
                 />
-            </div>
+            </Div>
             {/*6*/}
-            <div className={'flex justify-between'}>
+            <Div style={STYLES.container} mt={1}>
                 <PlayerOnPitch
-                    player={pickedPlayers[POSITION_FWD][ZERO]}
-                    autoPickDisabled={autoPickDisabled}
-                    isTransferWindow={isTransferWindow}
+                    player={p13}
                     placeholderText={'Add forward'}
-                    style={STYLES.player13}
-                    onDeselectPlayer={() => {onDeselectPlayer(POSITION_FWD, ZERO)}}
+                    style={{
+                        ...STYLES.commonStyle,
+                        ...STYLES.p5,
+                        opacity: p13.opacity
+                    }}
+                    onDeselectPlayer={() => {
+                        onDeselectPlayer(POSITION_FWD, ZERO)
+                    }}
                 />
                 <PlayerOnPitch
-                    player={pickedPlayers[POSITION_FWD][ONE]}
-                    autoPickDisabled={autoPickDisabled}
-                    isTransferWindow={isTransferWindow}
+                    player={p14}
                     placeholderText={'Add forward'}
-                    style={STYLES.player14}
-                    onDeselectPlayer={() => {onDeselectPlayer(POSITION_FWD, ONE)}}
+                    style={{
+                        ...STYLES.commonStyle,
+                        ...STYLES.p5,
+                        opacity: p14.opacity
+                    }}
+                    onDeselectPlayer={() => {
+                        onDeselectPlayer(POSITION_FWD, ONE)
+                    }}
                 />
                 <PlayerOnPitch
-                    player={pickedPlayers[POSITION_FWD][TWO]}
-                    autoPickDisabled={autoPickDisabled}
-                    isTransferWindow={isTransferWindow}
+                    player={p15}
                     placeholderText={'Add forward'}
-                    style={STYLES.player15}
+                    style={{
+                        ...STYLES.commonStyle,
+                        ...STYLES.p5,
+                        opacity: p15.opacity
+                    }}
                     onDeselectPlayer={() => {onDeselectPlayer(POSITION_FWD, TWO)}}
                 />
-            </div>
+            </Div>
         </div>
     )
 }
