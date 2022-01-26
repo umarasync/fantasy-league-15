@@ -1,32 +1,23 @@
 // Packages
 import {useEffect, useState} from "react";
-import {AnimatePresence,motion} from "framer-motion";
 import {useRouter} from "next/router";
 
 // Components
 import Layout from "components/layout/index";
 import FooterBar from "components/footer/FooterBar";
-import SearchBar from "components/search/SearchBar";
-import Username from "components/user/Username";
-import FilterIcon from "components/filter/FilterIcon";
-import FilterButtons from "components/filter/FilterButtons";
-import PlayerCard from "components/player/PlayerCard";
 import BuildTeamLeftSection from "components/buildTeam/BuildTeamLeftSection";
-import BuildYourTeamFilters from "components/filter/BuildYourTeamFilters";
-import SelectInput from "components/inputs/SelectInput";
-import NoResultFound from "components/misc/NoResultFound";
+import BuildTeamRightSection from "components/buildTeam/BuildTeamRightSection";
 
 // Utils
 import R from "utils/getResponsiveValue";
 import {clone} from "utils/helpers";
 import {
     handleAutoPick,
-    handleMultiSelectionDropDowns,
-    updatePlayersDataAfterSelectionOrDeselection
-} from "utils/buildYourTeam";
-
-// Animation
-import {PlayersCardAnimation, PlayersCardAnimation1} from "Animations/PlayersCardAnimations";
+    playerSelectionHandler,
+    playerDeselectionHandler,
+    sortingHandler
+} from "utils/buildYourTeamHelper";
+import filtersHandler from "utils/buildYourTeamFiltersHelper";
 
 // Constants
 import {
@@ -34,25 +25,14 @@ import {
     POSITION_ALL,
     // CLUBS
     CLUBS,
-    ALL_TEAMS,
     // PRICES
     PRICES,
-    ALL_PRICES,
     // STATUES
     STATUSES,
-    ALL_STATUSES,
     // RECOMMENDATIONS
     RECOMMENDATIONS,
-    RECOMMENDED_PLAYERS,
-    POTENTIAL_PENALTY_TAKERS,
-    MOST_PICKED_PLAYERS,
-    MOST_PICKED_AS_CAPTAIN,
     // SORTING
     SORTING_OPTIONS,
-    TOTAL_POINTS,
-    PRICE_FROM_HIGH_TO_LOW,
-    PRICE_FROM_LOW_TO_HIGH,
-    MOST_TRANSFERRED, POSITION_GK, POSITION_FWD, POSITION_MID, POSITION_DEF
 } from "constants/data/filters";
 
 import {
@@ -61,19 +41,6 @@ import {
 } from "constants/data/players";
 
 import  { PLAYERS } from "constants/data/players"
-
-// Styles
-const getStyles = (R) => {
-    return {
-        allFiltersBox: {
-            paddingBottom: R(20),
-            paddingTop: R(15)
-        },
-        noResultFound: {
-            top: R(600)
-        }
-    }
-}
 
 export default function BuildTeamAllPlayer () {
 
@@ -86,7 +53,6 @@ export default function BuildTeamAllPlayer () {
     const STATUSES_INITIAL = clone(STATUSES)
     const RECOMMENDATIONS_INITIAL = clone(RECOMMENDATIONS)
     const SORTING_OPTIONS_INITIAL = clone(SORTING_OPTIONS)
-    const ALL_PLAYERS_INDEXES_INITIAL = clone(ALL_PLAYERS_INDEXES)
     const SELECTED_PLAYERS_INITIAL = clone(SELECTED_PLAYERS)
     const TOTAL_BUDGET = 100000000;
     // const TOTAL_BUDGET = 1000000;
@@ -130,30 +96,7 @@ export default function BuildTeamAllPlayer () {
     const [sortingOptions, setSortingOptions] = useState([...SORTING_OPTIONS_INITIAL])
     const [selectedSortingOption, setSelectedSortingOption] = useState(SORTING_OPTIONS_INITIAL[0])
 
-    const STYLES =  { ... getStyles(R, showAllFilters) }
-
-    // showAllFiltersAnimation: Starts
     const [initialOpacity, setInitialOpacity] = useState(1)
-    const duration = 0.6
-    const showAllFiltersAnimation = {
-        initial: {
-            opacity: initialOpacity,
-        },
-        animate: {
-            opacity: 1,
-            transition: {
-                duration: duration,
-            },
-        },
-        exit: {
-            opacity: 0,
-            transition: {
-                duration: duration,
-            },
-        },
-    };
-
-    //showAllFiltersAnimation:Ends
 
     const onSearch = () => false
 
@@ -173,165 +116,70 @@ export default function BuildTeamAllPlayer () {
 
     }
 
-
-    const runRecommendationsFilter = (player) => {
-
-        if(
-            (selectedRecommendation.value === RECOMMENDED_PLAYERS) && (player.recommended) ||
-            (selectedRecommendation.value === POTENTIAL_PENALTY_TAKERS) && (player.penaltyTaker) ||
-            (selectedRecommendation.value === MOST_PICKED_PLAYERS) && (player.picked > 0) ||
-            (selectedRecommendation.value === MOST_PICKED_AS_CAPTAIN) && (player.pickedAsCaptain > 0)
-        ){
-            return true
-        }
-    }
-
-    const runStatusFilter = (player) => {
-        if(selectedStatuses.length > 0 &&
-            (selectedStatuses[0].value === ALL_STATUSES || selectedStatuses.some( status => status.value === player.status ))){
-            return runRecommendationsFilter(player)
-        }
-    }
-
-    const runPriceFilter = (player) => {
-        if(
-            selectedPrice.value === ALL_PRICES ||
-            ((selectedPrice.value.to === null) && player.price > selectedPrice.value.from) ||
-            (player.price > selectedPrice.value.from && player.price < selectedPrice.value.to)) {
-            return runStatusFilter(player)
-        }
-    }
-
-    const runTeamFilter = (player) => {
-        if(selectedClubs.length > 0 &&
-            (selectedClubs[0].value === ALL_TEAMS || selectedClubs.some( club => club.value === player.clubName ))){
-            return runPriceFilter(player)
-        }
-    }
-
-    const runPositionFilter = (player) => {
-        if(player.position === activePosition || activePosition === POSITION_ALL){
-            return runTeamFilter(player)
-        }
-    }
-
-    const startFiltering = (player) => runPositionFilter(player)
-
-    const areFiltersApplied = () => {
-        if(selectedClubs.length === 0 ||
-            selectedClubs[0].value !== ALL_TEAMS ||
-            selectedStatuses.length === 0 ||
-            selectedStatuses[0].value !== ALL_STATUSES ||
-            selectedPrice.value !== ALL_PRICES ||
-            selectedRecommendation.value !== RECOMMENDED_PLAYERS
-        ) {
-            return true
-        }
-
-        return false
-    }
-
+    // Filters-And-Sorting
     const runFiltersOnPlayersData = () => {
 
-        let playersDataI = [ ...playersDataInitial ]
+        let $playersData = [ ...playersDataInitial ]
 
-        playersDataI = playersDataI.filter(player => {
-            return startFiltering(player)
+        $playersData = $playersData.filter(player => {
+            return filtersHandler({
+                player,
+                activePosition,
+                selectedClubs,
+                selectedPrice,
+                selectedStatuses,
+                selectedRecommendation
+            })
         })
 
-        // Sorting
-        if(selectedSortingOption.value === PRICE_FROM_HIGH_TO_LOW){
-            playersDataI = playersDataI.sort((a, b) => a.price < b.price ? 1 : -1)
-        } else if(selectedSortingOption.value === PRICE_FROM_LOW_TO_HIGH){
-            playersDataI = playersDataI.sort((a, b) => a.price > b.price ? 1 : -1)
-        } else if(selectedSortingOption.value === TOTAL_POINTS){
-            playersDataI = playersDataI.sort((a, b) => a.points < b.points ? 1 : -1)
-        }else if(selectedSortingOption.value === MOST_TRANSFERRED) {
-            playersDataI = playersDataI.sort((a, b) => a.most_transferred < b.most_transferred ? 1 : -1)
+        $playersData = sortingHandler({
+            playersData: $playersData,
+            selectedSortingOption
+        })
+
+        setPlayersData([...$playersData])
+    }
+
+    // Initialize-Opacity
+    const initialOpacityHandler = () => {
+        if (initialOpacity) {
+            setInitialOpacity(0)
         }
-
-
-        setPlayersData([...playersDataI])
     }
 
     useEffect(() => {
             runFiltersOnPlayersData()
-            // For animation
-            if(initialOpacity) {
-                setInitialOpacity(0)
-            }
+            initialOpacityHandler()
     }, [clubs, playersDataInitial, statuses, selectedRecommendation, selectedPrice, activePosition, selectedSortingOption, playersDataInitial])
 
-
-    const getPlayersContainerHeight = () => {
-        if(areFiltersApplied() && !playersData.length){
-            return  'hide'
-        }else if(showAllFilters) {
-            return 'half'
-        }else {
-            return 'full'
-        }
+    const handlePlayerSelection = (player) => {
+        return playerSelectionHandler({player,
+            playersDataInitial,
+            setPlayersDataInitial,
+            totalChosenPlayers,
+            setTotalChosenPlayers,
+            pickedPlayers,
+            setPickedPlayers,
+            remainingBudget,
+            setRemainingBudget
+        })
     }
-
-    const handlePlayerSelection = (playerI) => {
-
-        if(totalChosenPlayers === 15) return
-
-        const playerPositionI = playerI.position
-
-        const pickedPlayersI = { ...pickedPlayers }
-        const pickedPlayersArray = pickedPlayersI[playerPositionI]
-
-        if(
-            (playerPositionI === POSITION_GK && pickedPlayersI[POSITION_GK].length < 2) ||
-            (playerPositionI === POSITION_FWD && pickedPlayersI[POSITION_FWD].length < 3) ||
-            (playerPositionI === POSITION_MID && pickedPlayersI[POSITION_MID].length < 5) ||
-            (playerPositionI === POSITION_DEF && pickedPlayersI[POSITION_DEF].length < 5)
-        ) {
-
-            if(pickedPlayersArray.length === 0 || (pickedPlayersArray.length > 0 && !pickedPlayersArray.some(p => p.id === playerI.id))) {
-                setRemainingBudget(remainingBudget - playerI.price)
-                setTotalChosenPlayers(totalChosenPlayers + 1)
-                pickedPlayersArray.push(playerI)
-
-                setPlayersDataInitial(updatePlayersDataAfterSelectionOrDeselection(playersDataInitial, playerI, true))
-
-            }
-
-        } else if (!pickedPlayersArray.some(p => p.id === playerI.id)) {
-
-            const indexOfEmptyPosition = pickedPlayersArray.findIndex(x => x === false)
-
-            if(indexOfEmptyPosition === -1) return
-
-            pickedPlayersArray[indexOfEmptyPosition] = playerI
-
-            setRemainingBudget(remainingBudget - playerI.price)
-            setTotalChosenPlayers(totalChosenPlayers + 1)
-
-            setPlayersDataInitial(updatePlayersDataAfterSelectionOrDeselection(playersDataInitial, playerI, true))
-        }
-
-        setPickedPlayers({...pickedPlayersI})
-    }
-
 
 
     const handlePlayerDeselection = (position, i) => {
-
-        const pickedPlayersI = { ...pickedPlayers }
-
-        const playerI = pickedPlayersI[position][i]
-
-        setRemainingBudget(remainingBudget + playerI.price)
-        setTotalChosenPlayers(totalChosenPlayers -1)
-        setContinueDisabled(true)
-        pickedPlayersI[position][i] = false
-
-        setPickedPlayers(pickedPlayersI)
-
-        setPlayersDataInitial(updatePlayersDataAfterSelectionOrDeselection(playersDataInitial, playerI, false))
-
+        return playerDeselectionHandler({
+            position,
+            i,
+            pickedPlayers,
+            setPickedPlayers,
+            remainingBudget,
+            setRemainingBudget,
+            totalChosenPlayers,
+            setTotalChosenPlayers,
+            playersDataInitial,
+            setPlayersDataInitial,
+            setContinueDisabled
+        })
     }
 
     useEffect(() => {
@@ -378,11 +226,23 @@ export default function BuildTeamAllPlayer () {
         setPlayersDataInitial(PLAYERS_INITIAL)
     }
 
+    const handleContinueClick = () => {
+        // TODO:LOCAL_STORAGE_FOR_TESTING:START
+        localStorage.setItem("pickedPlayers", JSON.stringify(pickedPlayers))
+        // TODO:LOCAL_STORAGE_FOR_TESTING:ENDS
 
+        router.push('/create_team_name')
+    }
+
+
+    // useEffect(() => {
+    //     console.log('router =========', router)
+    // }, [])
 
     return (
         <Layout title="Build Team All Player">
             <div className="mx-auto flex bg-white">
+                    {/*Left-Section*/}
                     <div className="w-[57%]"><
                         BuildTeamLeftSection
                             pickedPlayers={pickedPlayers}
@@ -390,146 +250,50 @@ export default function BuildTeamAllPlayer () {
                             onDeselectPlayer={handlePlayerDeselection}
                         />
                     </div>
-
-                    {/*Right Section*/}
+                    {/*Right-Section*/}
                     <div className="w-[43%] flex justify-center" style={{minHeight: R()}}>
-                        <div className={'relative'} style={{width: R(488), paddingTop: R(35)}}>
-                            {/*username*/}
-                            <div className={'flex flex-row-reverse'} style={{marginBottom: R(46)}}>
-                                <Username username={'martine.bakker'} />
-                            </div>
-
-                            {/*search*/}
-                            <div className={'flex'} style={{marginBottom: R(20)}}>
-                                <div className={'w-full'}>
-                                    <SearchBar onSearch={onSearch}/>
-                                </div>
-                                <div style={{marginLeft: R(8)}}/>
-                                <FilterIcon
-                                    showAllFilters={showAllFilters}
-                                    onClick={() => setShowAllFilters(!showAllFilters)}
-                                />
-                            </div>
-
-                            {/*filter buttons*/}
-                            <div style={{
-                                marginBottom: R(24)
-                            }}>
-                                <FilterButtons
-                                    activePosition={activePosition}
-                                    onClick={(activePosition) =>
-                                        setActivePosition(activePosition)}
-                                />
-                            </div>
-                            {/*all filters*/}
-                            {
-                                showAllFilters ? (
-                                    <AnimatePresence>
-                                        <motion.div
-                                            variants={showAllFiltersAnimation}
-                                            initial="initial"
-                                            animate="animate"
-                                            exit="exit"
-                                            className={'absolute w-full'}
-                                            style={STYLES.allFiltersBox}
-                                        >
-                                            <BuildYourTeamFilters
-
-                                                // Teams Filter
-                                                clubs={clubs}
-                                                selectedClubs={selectedClubs}
-                                                onClubSelected={(option) => handleMultiSelectionDropDowns(option, {
-                                                    firstOption: ALL_TEAMS,
-                                                    initialState: CLUBS_INITIAL,
-                                                    state: clubs,
-                                                    setSelectedOptions: setSelectedClubs,
-                                                    setOptions: setClubs
-                                                })}
-
-                                                // Statuses Filter
-                                                statuses={statuses}
-                                                selectedStatuses={selectedStatuses}
-                                                onStatusSelected={(option) => handleMultiSelectionDropDowns(option, {
-                                                    firstOption: ALL_STATUSES,
-                                                    initialState: STATUSES_INITIAL,
-                                                    state: statuses,
-                                                    setSelectedOptions: setSelectedStatuses,
-                                                    setOptions: setStatuses
-                                                })}
-
-                                                // Prices Filter
-                                                prices={prices}
-                                                selectedPrice={selectedPrice}
-                                                onPriceSelected={(price) => setSelectedPrice(price)}
-
-                                                // Recommendation Filter
-                                                recommendations={recommendations}
-                                                selectedRecommendation={selectedRecommendation}
-                                                onRecommendationSelected={(r) => setSelectedRecommendation(r)}
-
-                                                // Reset Filters
-                                                onResetFilterClicked={handleResetFilter}
-
-                                            />
-                                        </motion.div>
-                                    </AnimatePresence>
-                                ): <AnimatePresence/>
-                            }
-
-                            {
-                                areFiltersApplied() && !playersData.length && (
-                                    <div className={'absolute w-full'} style={STYLES.noResultFound}>
-                                        <NoResultFound/>
-                                    </div>
-                                )
-                            }
-
-                            <motion.div
-                                variants={PlayersCardAnimation}
-                                animate={showAllFilters ? 'slideDown' : 'slideUp'}
-                            >
-
-                                <motion.div
-                                    variants={PlayersCardAnimation1}
-                                    animate={getPlayersContainerHeight()}
-                                >
-                                    <div style={{marginBottom: R(16)}}>
-                                        {
-                                            areFiltersApplied() && !playersData.length ? null : (
-
-                                                <SelectInput
-                                                    options={sortingOptions}
-                                                    selectedOption={selectedSortingOption}
-                                                    onOptionChange={(s) => setSelectedSortingOption(s)}
-                                                    parentContainerStyle={{
-                                                        zIndex: 288888,
-                                                    }}
-                                                    hideLabel
-                                                    dropDownOfInlineStyle
-                                                />
-
-                                            )
-                                        }
-                                    </div>
-
-                                    <div style={{
-                                        height: '100%',
-                                        paddingBottom: getPlayersContainerHeight() === 'hide' ? 0 : 150,
-                                        overflow: 'scroll'}}
-                                    >
-                                        {
-                                            playersData.map((player, index) => <PlayerCard
-                                                key={index + 1}
-                                                player={player}
-                                                onSelectPlayer={handlePlayerSelection}
-                                            />)
-                                        }
-                                    </div>
-
-                                </motion.div>
-                            </motion.div>
-
-                        </div>
+                        <BuildTeamRightSection
+                            // Filters
+                            showAllFilters={showAllFilters}
+                            setShowAllFilters={setShowAllFilters}
+                            // Positions
+                            activePosition={activePosition}
+                            setActivePosition={setActivePosition}
+                            // Initial-Opacity
+                            initialOpacity={initialOpacity}
+                            // Clubs
+                            selectedClubs={selectedClubs}
+                            clubs={clubs}
+                            setClubs={setClubs}
+                            setSelectedClubs={setSelectedClubs}
+                            clubsInitial={CLUBS_INITIAL}
+                            // Statuses
+                            selectedStatuses={selectedStatuses}
+                            statuses={statuses}
+                            setStatuses={setStatuses}
+                            setSelectedStatuses={setSelectedStatuses}
+                            statusesInitial={STATUSES_INITIAL}
+                            // Prices
+                            prices={prices}
+                            selectedPrice={selectedPrice}
+                            setSelectedPrice={setSelectedPrice}
+                            // Recommendations
+                            recommendations={recommendations}
+                            selectedRecommendation={selectedRecommendation}
+                            setSelectedRecommendation={setSelectedRecommendation}
+                            // Players-Data
+                            playersData={playersData}
+                            // Reset-Filter-Button
+                            handleResetFilter={handleResetFilter}
+                            // Sorting
+                            sortingOptions={sortingOptions}
+                            selectedSortingOption={selectedSortingOption}
+                            setSelectedSortingOption={setSelectedSortingOption}
+                            // Player-Selection
+                            handlePlayerSelection={handlePlayerSelection}
+                            // Search
+                            onSearch={onSearch}
+                        />
                     </div>
                     <FooterBar
                         totalChosenPlayers={totalChosenPlayers}
@@ -538,10 +302,7 @@ export default function BuildTeamAllPlayer () {
                         autoPickDisabled={autoPickDisabled}
                         continueDisabled={continueDisabled}
                         onAutoPick={onAutoPick}
-                        onContinueClick={() => {
-                            // console.log(JSON.stringify(pickedPlayers))
-                            router.push('/create_team_name')
-                        }}
+                        onContinueClick={handleContinueClick}
                         onResetClick={handleResetClick}
                     />
             </div>
