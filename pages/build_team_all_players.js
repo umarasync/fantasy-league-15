@@ -280,6 +280,7 @@ export default function BuildTeamAllPlayer () {
         const playerPositionI = playerI.position
 
         const pickedPlayersI = { ...pickedPlayers }
+
         const pickedPlayersArray = pickedPlayersI[playerPositionI]
 
         if(
@@ -378,6 +379,13 @@ export default function BuildTeamAllPlayer () {
         setPlayersDataInitial(PLAYERS_INITIAL)
     }
 
+    const handleContinueClick = () => {
+        // TODO:LOCAL_STORAGE_FOR_TESTING:START
+        localStorage.setItem("pickedPlayers", JSON.stringify(pickedPlayers))
+        // TODO:LOCAL_STORAGE_FOR_TESTING:ENDS
+
+        router.push('/create_team_name')
+    }
 
 
     return (
@@ -538,10 +546,7 @@ export default function BuildTeamAllPlayer () {
                         autoPickDisabled={autoPickDisabled}
                         continueDisabled={continueDisabled}
                         onAutoPick={onAutoPick}
-                        onContinueClick={() => {
-                            // console.log(JSON.stringify(pickedPlayers))
-                            router.push('/create_team_name')
-                        }}
+                        onContinueClick={handleContinueClick}
                         onResetClick={handleResetClick}
                     />
             </div>

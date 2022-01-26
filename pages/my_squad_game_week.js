@@ -1,5 +1,6 @@
 // Packages
 import {useEffect, useState} from "react";
+import {useRouter} from "next/router";
 
 // Components
 import Layout from "components/layout/index";
@@ -29,7 +30,7 @@ import {INITIAL} from "constants/animations";
 
 export default function MySquadGameWeek () {
 
-    const SELECTED_PLAYERS_INITIAL = clone(SELECTED_PLAYERS)
+    const router = useRouter()
 
     const [pickedPlayers, setPickedPlayers] = useState([])
     const [savedPlayers, setSavedPlayers] = useState([])
@@ -89,7 +90,15 @@ export default function MySquadGameWeek () {
 
     // Did-Mount
     useEffect(() => {
-        const players = setPlayersAdditionalData(SELECTED_PLAYERS_INITIAL)
+        // TODO:LOCAL_STORAGE_FOR_TESTING:START
+        const $pickedPlayers = JSON.parse(localStorage.getItem("pickedPlayers"))
+        // TODO:LOCAL_STORAGE_FOR_TESTING:ENDS
+
+        if (!$pickedPlayers) {
+            return router.push('/build_team_all_players')
+        }
+
+        const players = setPlayersAdditionalData($pickedPlayers)
         setPickedPlayers(players)
         setSavedPlayers(players)
         setShowPlayerInfoModal(false)
@@ -152,7 +161,6 @@ export default function MySquadGameWeek () {
 
     // Bench-Boost
     const handleBenchBoostModal = () => {
-        // const notBoostedPlayers = pickedPlayers.filter(p => p.isSubstitutePlayer && !p.benchBoostApplied)
         const substitutePlayer = pickedPlayers.filter(p => p.isSubstitutePlayer)
         setBenchBoostPlayers([...substitutePlayer])
         setShowBenchBoostModal(true)
@@ -162,40 +170,29 @@ export default function MySquadGameWeek () {
         setBenchBoostDisabled(true)
         setBenchBoostApplied(true)
         setShowBenchBoostModal(false)
-
-
-        // const $pickedPlayers = pickedPlayers.map(p => {
-        //     if (p.isSubstitutePlayer) {
-        //         p.benchBoostApplied = true
-        //     }
-        //     return p
-        // })
-        //
-        // setPickedPlayers($pickedPlayers)
-        // setShowBenchBoostModal(false)
     }
 
     const handleBenchBoostDisable = () => {
-
         if (benchBoostApplied) {
             setBenchBoostDisabled(true)
         } else {
             setBenchBoostDisabled(false)
         }
-
-        // const notBoostedPlayers = pickedPlayers.filter(p => p.isSubstitutePlayer && !p.benchBoostApplied)
-        // if (notBoostedPlayers.length > 0) {
-        //     setBenchBoostDisabled(false)
-        // } else {
-        //     setBenchBoostDisabled(true)
-        // }
     }
+
+
 
     // Picked-Players-Change
     useEffect(() => {
         handleTripleCaptainDisable()
         handleBenchBoostDisable()
     }, [pickedPlayers])
+
+
+    if (pickedPlayers.length === 0) {
+        return null
+    }
+    console.log('2=========')
 
     return (
         <Layout title="Build Team All Player">

@@ -62,9 +62,8 @@ export default function ConfirmAccount() {
 
     const STYLES =  { ... getStyles(R) }
 
-
     const handleOnClick = () => {
-        router.push('/build_team_all_players')
+        router.push('/my_squad_game_week')
     }
 
     return (
