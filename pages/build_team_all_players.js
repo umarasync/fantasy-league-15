@@ -22,10 +22,10 @@ import {clone} from "utils/helpers";
 import {
     handleAutoPick,
     handleMultiSelectionDropDowns,
-    updatePlayersDataAfterSelectionOrDeselection,
     playerSelectionHandler,
-    playerDeselectionHandler
-} from "utils/buildYourTeam";
+    playerDeselectionHandler,
+    sortingHandler
+} from "utils/buildYourTeamHelper";
 
 // Animation
 import {PlayersCardAnimation, PlayersCardAnimation1} from "Animations/PlayersCardAnimations";
@@ -198,53 +198,45 @@ export default function BuildTeamAllPlayer () {
 
     const startFiltering = (player) => runPositionFilter(player)
 
-    const areFiltersApplied = () => {
-        if(selectedClubs.length === 0 ||
-            selectedClubs[0].value !== ALL_TEAMS ||
-            selectedStatuses.length === 0 ||
-            selectedStatuses[0].value !== ALL_STATUSES ||
-            selectedPrice.value !== ALL_PRICES ||
-            selectedRecommendation.value !== RECOMMENDED_PLAYERS
-        ) {
-            return true
-        }
-
-        return false
-    }
-
+    // Filters-And-Sorting
     const runFiltersOnPlayersData = () => {
 
-        let playersDataI = [ ...playersDataInitial ]
+        let $playersData = [ ...playersDataInitial ]
 
-        playersDataI = playersDataI.filter(player => {
+        $playersData = $playersData.filter(player => {
             return startFiltering(player)
         })
 
-        // Sorting
-        if(selectedSortingOption.value === PRICE_FROM_HIGH_TO_LOW){
-            playersDataI = playersDataI.sort((a, b) => a.price < b.price ? 1 : -1)
-        } else if(selectedSortingOption.value === PRICE_FROM_LOW_TO_HIGH){
-            playersDataI = playersDataI.sort((a, b) => a.price > b.price ? 1 : -1)
-        } else if(selectedSortingOption.value === TOTAL_POINTS){
-            playersDataI = playersDataI.sort((a, b) => a.points < b.points ? 1 : -1)
-        }else if(selectedSortingOption.value === MOST_TRANSFERRED) {
-            playersDataI = playersDataI.sort((a, b) => a.most_transferred < b.most_transferred ? 1 : -1)
-        }
+        $playersData = sortingHandler({
+            playersData: $playersData,
+            selectedSortingOption
+        })
 
-
-        setPlayersData([...playersDataI])
+        setPlayersData([...$playersData])
     }
 
+    // Initialize-Opacity
     const initialOpacityHandler = () => {
         if (initialOpacity) {
             setInitialOpacity(0)
         }
     }
+
     useEffect(() => {
             runFiltersOnPlayersData()
             initialOpacityHandler()
     }, [clubs, playersDataInitial, statuses, selectedRecommendation, selectedPrice, activePosition, selectedSortingOption, playersDataInitial])
 
+
+    const areFiltersApplied = () => {
+        return selectedClubs.length === 0 ||
+            selectedClubs[0].value !== ALL_TEAMS ||
+            selectedStatuses.length === 0 ||
+            selectedStatuses[0].value !== ALL_STATUSES ||
+            selectedPrice.value !== ALL_PRICES ||
+            selectedRecommendation.value !== RECOMMENDED_PLAYERS;
+
+    }
 
     const getPlayersContainerHeight = () => {
         if(areFiltersApplied() && !playersData.length){

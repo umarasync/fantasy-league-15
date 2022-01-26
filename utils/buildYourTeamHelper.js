@@ -1,14 +1,15 @@
 // Constants
 import {
+    MOST_TRANSFERRED,
     POSITION_DEF,
     POSITION_FWD,
     POSITION_GK,
-    POSITION_MID
+    POSITION_MID, PRICE_FROM_HIGH_TO_LOW, PRICE_FROM_LOW_TO_HIGH, TOTAL_POINTS
 } from "constants/data/filters";
 import {SELECTED_PLAYERS} from "constants/data/players";
 
 // Utils
-import {clone, nFormatter, shuffle} from "utils/helpers";
+import {clone, shuffle} from "utils/helpers";
 
 export const resetMultiSelectsDataState = (option, data) => {
 
@@ -227,3 +228,21 @@ export const playerDeselectionHandler = ({
     setPlayersDataInitial(updatePlayersDataAfterSelectionOrDeselection(playersDataInitial, player, false))
 }
 
+export const sortingHandler = ({
+   playersData,
+   selectedSortingOption
+}) => {
+    let playersDataI = [...playersData]
+
+    if (selectedSortingOption.value === PRICE_FROM_HIGH_TO_LOW) {
+        playersDataI = playersDataI.sort((a, b) => a.price < b.price ? 1 : -1)
+    } else if (selectedSortingOption.value === PRICE_FROM_LOW_TO_HIGH) {
+        playersDataI = playersDataI.sort((a, b) => a.price > b.price ? 1 : -1)
+    } else if (selectedSortingOption.value === TOTAL_POINTS) {
+        playersDataI = playersDataI.sort((a, b) => a.points < b.points ? 1 : -1)
+    } else if (selectedSortingOption.value === MOST_TRANSFERRED) {
+        playersDataI = playersDataI.sort((a, b) => a.most_transferred < b.most_transferred ? 1 : -1)
+    }
+
+    return playersDataI
+}
