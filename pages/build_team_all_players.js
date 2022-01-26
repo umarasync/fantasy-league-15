@@ -26,6 +26,7 @@ import {
     playerDeselectionHandler,
     sortingHandler
 } from "utils/buildYourTeamHelper";
+import filtersHandler from "utils/buildYourTeamFiltersHelper";
 
 // Animation
 import {PlayersCardAnimation, PlayersCardAnimation1} from "Animations/PlayersCardAnimations";
@@ -155,56 +156,20 @@ export default function BuildTeamAllPlayer () {
     }
 
 
-    const runRecommendationsFilter = (player) => {
-
-        if(
-            (selectedRecommendation.value === RECOMMENDED_PLAYERS) && (player.recommended) ||
-            (selectedRecommendation.value === POTENTIAL_PENALTY_TAKERS) && (player.penaltyTaker) ||
-            (selectedRecommendation.value === MOST_PICKED_PLAYERS) && (player.picked > 0) ||
-            (selectedRecommendation.value === MOST_PICKED_AS_CAPTAIN) && (player.pickedAsCaptain > 0)
-        ){
-            return true
-        }
-    }
-
-    const runStatusFilter = (player) => {
-        if(selectedStatuses.length > 0 &&
-            (selectedStatuses[0].value === ALL_STATUSES || selectedStatuses.some( status => status.value === player.status ))){
-            return runRecommendationsFilter(player)
-        }
-    }
-
-    const runPriceFilter = (player) => {
-        if(
-            selectedPrice.value === ALL_PRICES ||
-            ((selectedPrice.value.to === null) && player.price > selectedPrice.value.from) ||
-            (player.price > selectedPrice.value.from && player.price < selectedPrice.value.to)) {
-            return runStatusFilter(player)
-        }
-    }
-
-    const runTeamFilter = (player) => {
-        if(selectedClubs.length > 0 &&
-            (selectedClubs[0].value === ALL_TEAMS || selectedClubs.some( club => club.value === player.clubName ))){
-            return runPriceFilter(player)
-        }
-    }
-
-    const runPositionFilter = (player) => {
-        if(player.position === activePosition || activePosition === POSITION_ALL){
-            return runTeamFilter(player)
-        }
-    }
-
-    const startFiltering = (player) => runPositionFilter(player)
-
     // Filters-And-Sorting
     const runFiltersOnPlayersData = () => {
 
         let $playersData = [ ...playersDataInitial ]
 
         $playersData = $playersData.filter(player => {
-            return startFiltering(player)
+            return filtersHandler({
+                player,
+                activePosition,
+                selectedClubs,
+                selectedPrice,
+                selectedStatuses,
+                selectedRecommendation
+            })
         })
 
         $playersData = sortingHandler({
