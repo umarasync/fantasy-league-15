@@ -39,11 +39,10 @@ const getStyles = (R) => {
     }
 }
 export default function BuildTeamLeftSection({
-     pickedPlayers,
-     autoPickDisabled,
-     onDeselectPlayer,
-                                                 isTransferWindow
-
+    pickedPlayers,
+    autoPickDisabled,
+    onDeselectPlayer,
+    isTransferWindow
 }) {
 
     const STYLES =  { ... getStyles(R) }

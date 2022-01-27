@@ -264,8 +264,9 @@ export const getAllSelectedPlayersIDs = (players) => {
 }
 
 export const initialSettings = ({
-    pickedPlayers,
+    teamData,
     setPickedPlayers,
+    setRemainingBudget,
     setPlayersData,
     playersDataInitial,
     setPlayersDataInitial,
@@ -274,18 +275,23 @@ export const initialSettings = ({
 }) => {
     let playersData = []
 
-    if (pickedPlayers) {
+    // If team is already selected and user is in transfer window
+    if (teamData) {
+        const {pickedPlayers, remainingBudget} = teamData
         setIsTransferWindow(true)
         const allPlayerIds = getAllSelectedPlayersIDs(pickedPlayers)
         playersData = playersDataInitial.map(p => {
             p.chosen = !!allPlayerIds.includes(p.id);
             p.disablePlayerCard = true
+            p.animateState = false
             return p
         })
         setPlayersData(playersData)
         setPlayersDataInitial(playersData)
         setPickedPlayers(pickedPlayers)
+        setRemainingBudget(remainingBudget)
     } else {
+        // if user is going to build a team
         playersData = playersDataInitial.map(p => {
             p.chosen = false
             p.disablePlayerCard = false
@@ -296,4 +302,31 @@ export const initialSettings = ({
     }
 
     setShowFooterBar(true)
+}
+
+
+export const playerTransferHandler = ({
+    // Position
+    position,
+    i,
+    // Picked-Players
+    pickedPlayers,
+    setPickedPlayers,
+    // Remaining-Budget
+    remainingBudget,
+    setRemainingBudget,
+    // Players-Data-Initial
+    playersDataInitial,
+    setPlayersDataInitial,
+    // Continue=Button
+    setContinueDisabled,
+}) => {
+    const $pickedPlayers = {...pickedPlayers}
+    const player = $pickedPlayers[position][i]
+    setRemainingBudget(remainingBudget + player.price)
+    setContinueDisabled(true)
+    $pickedPlayers[position][i].animateState = !$pickedPlayers[position][i].animateState
+
+    setPickedPlayers($pickedPlayers)
+
 }

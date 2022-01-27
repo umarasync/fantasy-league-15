@@ -15,7 +15,7 @@ import {
     handleAutoPick,
     playerSelectionHandler,
     playerDeselectionHandler,
-    sortingHandler, getAllSelectedPlayersIDs, initialSettings
+    sortingHandler, getAllSelectedPlayersIDs, initialSettings, playerTransferHandler
 } from "utils/buildYourTeamHelper";
 import filtersHandler from "utils/buildYourTeamFiltersHelper";
 
@@ -184,8 +184,20 @@ export default function BuildTeamAllPlayer () {
         })
     }
 
-    const handlePlayerTransfer = () => {
-        console.log('3=============')
+    const handlePlayerTransfer = (position, i) => {
+        return playerTransferHandler(
+            {
+                position,
+                i,
+                pickedPlayers,
+                setPickedPlayers,
+                remainingBudget,
+                setRemainingBudget,
+                playersDataInitial,
+                setPlayersDataInitial,
+                setContinueDisabled
+            }
+        )
     }
 
     useEffect(() => {
@@ -234,7 +246,7 @@ export default function BuildTeamAllPlayer () {
 
     const handleContinueClick = () => {
         // TODO:LOCAL_STORAGE_FOR_TESTING:START
-        localStorage.setItem("buildTeamData", JSON.stringify({
+        localStorage.setItem("teamData", JSON.stringify({
             pickedPlayers,
             remainingBudget,
             totalChosenPlayers,
@@ -246,10 +258,11 @@ export default function BuildTeamAllPlayer () {
 
     // Did-Mount
     useEffect(() => {
-        const $pickedPlayers = JSON.parse(localStorage.getItem('pickedPlayers'))
+        const teamData = JSON.parse(localStorage.getItem('teamData'))
         initialSettings({
-            pickedPlayers: $pickedPlayers,
+            teamData,
             setPickedPlayers,
+            setRemainingBudget,
             setPlayersData,
             playersDataInitial,
             setPlayersDataInitial,

@@ -68,11 +68,7 @@ export default function AllPlayersOnField({
   isTransferWindow
 }) {
 
-    console.log('pickedplayers', pickedPlayers)
-
     const STYLES = {...getStyles(R)}
-
-    const controls = useAnimation()
 
     const buildPlayer = (position, index) => {
         return {

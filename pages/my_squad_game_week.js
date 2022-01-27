@@ -90,14 +90,14 @@ export default function MySquadGameWeek () {
     // Did-Mount
     useEffect(() => {
         // TODO:LOCAL_STORAGE_FOR_TESTING:START
-        const $pickedPlayers = JSON.parse(localStorage.getItem("pickedPlayers"))
+        const teamData = JSON.parse(localStorage.getItem('teamData'))
         // TODO:LOCAL_STORAGE_FOR_TESTING:ENDS
 
-        if (!$pickedPlayers) {
+        if (!teamData) {
             return router.push('/build_team_all_players')
         }
 
-        const players = setPlayersAdditionalData($pickedPlayers)
+        const players = setPlayersAdditionalData(teamData.pickedPlayers)
         setPickedPlayers(players)
         setSavedPlayers(players)
         setShowPlayerInfoModal(false)
