@@ -10,12 +10,13 @@ import BuildTeamRightSection from "components/buildTeam/BuildTeamRightSection";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import {clone} from "utils/helpers";
+import {clone, isEmpty} from "utils/helpers";
 import {
     handleAutoPick,
     playerSelectionHandler,
     playerDeselectionHandler,
-    sortingHandler, getAllSelectedPlayersIDs, initialSettings, playerTransferHandler
+    sortingHandler, initialSettingsForTransferWindows, playerTransferDeselectHandler,
+    playerTransferSelectionHandler, initialSettingsForBuildYourTeam
 } from "utils/buildYourTeamHelper";
 import filtersHandler from "utils/buildYourTeamFiltersHelper";
 
@@ -57,7 +58,7 @@ export default function BuildTeamAllPlayer () {
     const TOTAL_BUDGET = 100000000;
     // const TOTAL_BUDGET = 1000000;
 
-    // Fields States
+    // Picked-Players
     const [pickedPlayers, setPickedPlayers] = useState(SELECTED_PLAYERS_INITIAL)
 
     // Footer Bar States
@@ -66,8 +67,6 @@ export default function BuildTeamAllPlayer () {
     const [showAllFilters, setShowAllFilters] = useState(false)
     const [autoPickDisabled, setAutoPickDisabled] = useState(false)
     const [continueDisabled, setContinueDisabled] = useState(true)
-    const [isTransferWindow, setIsTransferWindow] = useState(false)
-    const [showFooterBar, setShowFooterBar] = useState(false)
     const [totalBudget, setTotalBudget] = useState(TOTAL_BUDGET)
     const [remainingBudget, setRemainingBudget] = useState(TOTAL_BUDGET)
 
@@ -98,10 +97,59 @@ export default function BuildTeamAllPlayer () {
     const [sortingOptions, setSortingOptions] = useState([...SORTING_OPTIONS_INITIAL])
     const [selectedSortingOption, setSelectedSortingOption] = useState(SORTING_OPTIONS_INITIAL[0])
 
+    // States-for-Player-Transfer
+    const [isOneFreeTransferWindow, setIsOneFreeTransferWindow] = useState(false)
+    const [showFooterBar, setShowFooterBar] = useState(false)
+    const [transferInProgress, setTransferInProgress] = useState(false)
+    const [currentTransferredToBePlayer, setCurrentTransferredToBePlayer] = useState({})
+    const [noOfFreeTransfersLeft, setNoOfFreeTransfersLeft] = useState(1)
+    const [additionalTransferredPlayers, setAdditionalTransferredPlayers] = useState(0)
+    const [transferResetDisabled, setTransferResetDisabled] = useState(true)
+    const [transferConfirmDisabled, setTransferConfirmDisabled] = useState(true)
+
+    // Opacity-State
     const [initialOpacity, setInitialOpacity] = useState(1)
 
+    // Initial Settings for Build Your Team & Transfer windows
+    const initiateInitialSettings = () => {
+        const teamData = JSON.parse(localStorage.getItem('teamData'))
+        if (teamData) {
+            return initialSettingsForTransferWindows({
+                // Team Data
+                teamData,
+                // Picked Players
+                setPickedPlayers,
+                // Budget
+                setRemainingBudget,
+                // Players-Data
+                setPlayersData,
+                playersDataInitial,
+                setPlayersDataInitial,
+                // Transfer Window
+                setIsOneFreeTransferWindow,
+                setTransferInProgress,
+                setCurrentTransferredToBePlayer,
+                setNoOfFreeTransfersLeft,
+                setAdditionalTransferredPlayers,
+                setTransferResetDisabled,
+                setTransferConfirmDisabled,
+                // Footer
+                setShowFooterBar,
+            })
+        }
+
+        return initialSettingsForBuildYourTeam({
+            setPlayersData,
+            playersDataInitial,
+            setPlayersDataInitial,
+            setShowFooterBar
+        })
+    }
+
+    // OnSearch
     const onSearch = () => false
 
+    // Reset-Filters
     const handleResetFilter = () => {
 
         setClubs([...CLUBS_INITIAL])
@@ -115,7 +163,6 @@ export default function BuildTeamAllPlayer () {
 
         setRecommendations([...RECOMMENDATIONS_INITIAL])
         setSelectedRecommendation(RECOMMENDATIONS_INITIAL[0])
-
     }
 
     // Filters-And-Sorting
@@ -154,6 +201,8 @@ export default function BuildTeamAllPlayer () {
             initialOpacityHandler()
     }, [clubs, playersDataInitial, statuses, selectedRecommendation, selectedPrice, activePosition, selectedSortingOption, playersDataInitial])
 
+
+    // Player-Selection
     const handlePlayerSelection = (player) => {
         return playerSelectionHandler({player,
             playersDataInitial,
@@ -167,7 +216,7 @@ export default function BuildTeamAllPlayer () {
         })
     }
 
-
+    // Player-Deselection
     const handlePlayerDeselection = (position, i) => {
         return playerDeselectionHandler({
             position,
@@ -184,11 +233,13 @@ export default function BuildTeamAllPlayer () {
         })
     }
 
-    const handlePlayerTransfer = (position, i) => {
-        return playerTransferHandler(
+    // Player-Transfer-Player-Deselection
+    const executeTransferPlayerDeselect = () => {
+        setTransferInProgress(true)
+        return playerTransferDeselectHandler(
             {
-                position,
-                i,
+                position: currentTransferredToBePlayer.position,
+                i: currentTransferredToBePlayer.index,
                 pickedPlayers,
                 setPickedPlayers,
                 remainingBudget,
@@ -198,6 +249,50 @@ export default function BuildTeamAllPlayer () {
                 setContinueDisabled
             }
         )
+    }
+
+    useEffect(() => {
+        if(isEmpty(currentTransferredToBePlayer) || currentTransferredToBePlayer.position === null || transferInProgress) return
+        executeTransferPlayerDeselect()
+    }, [currentTransferredToBePlayer])
+
+    const handleTransferPlayerDeselect = (position, i) => {
+        setCurrentTransferredToBePlayer({position: position, index: i})
+    }
+
+    // Player-Transfer-Player-Selection
+    const handleTransferPlayerSelection = (player) => {
+        playerTransferSelectionHandler({
+            player,
+            // Players-Data
+            playersDataInitial,
+            setPlayersDataInitial,
+            // Picked-Players
+            pickedPlayers,
+            setPickedPlayers,
+            // Remaining-Budget
+            remainingBudget,
+            setRemainingBudget,
+            // Transfer
+            setTransferInProgress,
+            noOfFreeTransfersLeft,
+            setNoOfFreeTransfersLeft,
+            additionalTransferredPlayers,
+            setAdditionalTransferredPlayers,
+            // Buttons
+            setTransferResetDisabled,
+            setTransferConfirmDisabled,
+        })
+    }
+
+    // Player-Transfer-Reset
+    const onTransferResetClick = () => {
+        initiateInitialSettings()
+    }
+
+    // Player-Transfer-Confirm
+    const onTransferConfirmClick = () => {
+
     }
 
     useEffect(() => {
@@ -244,31 +339,30 @@ export default function BuildTeamAllPlayer () {
         setPlayersDataInitial(PLAYERS_INITIAL)
     }
 
-    const handleContinueClick = () => {
+    const sendToServer = () => {
         // TODO:LOCAL_STORAGE_FOR_TESTING:START
         localStorage.setItem("teamData", JSON.stringify({
             pickedPlayers,
             remainingBudget,
             totalChosenPlayers,
+            // Only for transfer windows
+            noOfFreeTransfersLeft,
+            additionalTransferredPlayers
+
         }))
         // TODO:LOCAL_STORAGE_FOR_TESTING:ENDS
+    }
 
+    const handleContinueClick = () => {
+        sendToServer()
         router.push('/create_team_name')
     }
 
+
+
     // Did-Mount
     useEffect(() => {
-        const teamData = JSON.parse(localStorage.getItem('teamData'))
-        initialSettings({
-            teamData,
-            setPickedPlayers,
-            setRemainingBudget,
-            setPlayersData,
-            playersDataInitial,
-            setPlayersDataInitial,
-            setIsTransferWindow,
-            setShowFooterBar
-        })
+        initiateInitialSettings()
     }, [])
 
     return (
@@ -277,10 +371,10 @@ export default function BuildTeamAllPlayer () {
                     {/*Left-Section*/}
                     <div className="w-[57%]">
                         <BuildTeamLeftSection
-                            isTransferWindow={isTransferWindow}
+                            isOneFreeTransferWindow={isOneFreeTransferWindow}
                             pickedPlayers={pickedPlayers}
                             autoPickDisabled={autoPickDisabled}
-                            onDeselectPlayer={ isTransferWindow ? handlePlayerTransfer : handlePlayerDeselection }
+                            onDeselectPlayer={ isOneFreeTransferWindow ? handleTransferPlayerDeselect : handlePlayerDeselection }
                         />
                     </div>
                     {/*Right-Section*/}
@@ -323,7 +417,7 @@ export default function BuildTeamAllPlayer () {
                             selectedSortingOption={selectedSortingOption}
                             setSelectedSortingOption={setSelectedSortingOption}
                             // Player-Selection
-                            handlePlayerSelection={handlePlayerSelection}
+                            handlePlayerSelection={ isOneFreeTransferWindow ? handleTransferPlayerSelection : handlePlayerSelection}
                             // Search
                             onSearch={onSearch}
                         />
@@ -339,6 +433,14 @@ export default function BuildTeamAllPlayer () {
                                 onAutoPick={onAutoPick}
                                 onContinueClick={handleContinueClick}
                                 onResetClick={handleResetClick}
+                                // Transfer-Window
+                                isOneFreeTransferWindow={isOneFreeTransferWindow}
+                                noOfFreeTransfersLeft={noOfFreeTransfersLeft}
+                                transferResetDisabled={transferResetDisabled}
+                                transferConfirmDisabled={transferConfirmDisabled}
+                                onTransferResetClick={onTransferResetClick}
+                                onTransferConfirmClick={onTransferConfirmClick}
+                                additionalTransferredPlayers={additionalTransferredPlayers}
                             />
                         )
                     }

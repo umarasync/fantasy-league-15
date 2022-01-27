@@ -9,7 +9,6 @@ import Button from "components/html/Button";
 import colors from "constants/colors";
 import {SHADOW_DARK_INDIGO} from "constants/boxShadow";
 
-
 export default function PointsBoostModalContent({
     title,
     heading,

@@ -3,21 +3,19 @@ import {useEffect, useState} from "react";
 import {AnimatePresence, motion} from "framer-motion";
 
 // Components
-import Image from "components/html/Image";
+import PlayerOnPitchText from "components/player/PlayerOnPitchText";
+import PlayerBoxForTransfer from "components/player/PlayerBoxForTransfer";
+import PlayerPlaceholder from "components/player/PlayerPlaceholder";
 
 // Utils
 import R from "utils/getResponsiveValue";
 import PlayerImage from "components/player/PlayerImage";
-import {nFormatter} from "utils/helpers";
-
-// Constants
-import { STATUS_SUSPENDED, STATUS_INJURED } from "constants/data/filters";
 
 // Animations
-import {PlayerOnPitchAnimation, PlayerOnPitchTransferAnimation} from "Animations/buildYourTeam/PlayerOnPitchAnimation";
+import {PlayerOnPitchAnimation} from "Animations/buildYourTeam/PlayerOnPitchAnimation";
 
 // Styles
-const getStyles = (R, playerExist) => {
+const getStyles = (R) => {
   return {
       container: {},
       imageContainer: {
@@ -29,24 +27,6 @@ const getStyles = (R, playerExist) => {
           left: 0,
           right: 0
       },
-      buttonStyle: {
-          paddingLeft: R(playerExist ? 18 : 8),
-          paddingRight: R(playerExist ? 18 : 8),
-          paddingTop: R(playerExist ? 3 : 6),
-          paddingBottom: R(playerExist ? 3 : 6),
-          borderRadius: R(40),
-          marginTop: R(3),
-          fontSize: R(10),
-      },
-      statusImage: {
-          width: R(15),
-          height: R(15),
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          borderRadius: R(20),
-          background: 'white'
-      },
       clickedIcon: {
           width: R(16),
           height: R(16)
@@ -57,55 +37,17 @@ const getStyles = (R, playerExist) => {
 const PlayerComponent = ({
      player,
      onDeselectPlayer,
-     clickedIcon = 'close1.png',
  }) => {
-    const playerExist = player.id
-    const STYLES = {...getStyles(R, playerExist)}
-
     return (
         <div className={'flex flex-col items-center'}>
             <PlayerImage
                 player={player}
                 ciw={18}
                 cih={18}
-                clickedIcon={clickedIcon}
+                clickedIcon={'close1.png'}
                 onIconClick={onDeselectPlayer}
             />
-            <p className={'items-center relative items-center text-center justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
-               style={STYLES.buttonStyle}
-            >
-                {
-                    player.status === STATUS_INJURED || player.status === STATUS_SUSPENDED && (
-                        <div className={'flex items-center justify-center'}
-                             style={STYLES.statusImage}>
-                            <img src={`/images/${player.statusImage}`} alt="" width={10}
-                                 height={10}/>
-                        </div>
-                    )
-                }
-
-                <span>{player.name}</span><br/>
-                <span>{nFormatter(player.price)}</span><br/>
-            </p>
-        </div>
-    )
-}
-
-const PlayerPlaceholder = ({
-    player,
-    placeholderText
-}) => {
-    const playerExist = player.id
-    const STYLES = {...getStyles(R, playerExist)}
-
-    return (
-        <div className={'flex flex-col items-center'}>
-            <Image name={'player_empty.png'} w={40} h={40} alt={''}/>
-            <p className={'items-center  justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
-               style={STYLES.buttonStyle}
-            >
-                <span>{placeholderText}</span><br/>
-            </p>
+            <PlayerOnPitchText player={player} mt={4}/>
         </div>
     )
 }
@@ -129,9 +71,8 @@ export default function PlayerOnPitch ({
         }
     }, [player])
 
-
     // For Transfer Window Flow
-    if(player.isTransferWindow) {
+    if(player.isOneFreeTransferWindow) {
         return (
             <div className={`grid relative ${boxClasses}`} style={{...STYLES.container, ...style}}>
                 {
@@ -152,19 +93,11 @@ export default function PlayerOnPitch ({
                         </AnimatePresence>
                     ) : (
                         <AnimatePresence>
-                            <motion.div
-                                className={'flex flex-col items-center'}
-                                style={STYLES.imageContainer}
-                                variants={PlayerOnPitchTransferAnimation}
-                                initial="initial"
-                                animate="animate"
-                                exit="exit"
-                                custom={{initialOpacity}}
-                                key={2}
-                            >
-                                <PlayerComponent player={player} onDeselectPlayer={false} clickedIcon={'transfer1.png'}/>
-                            </motion.div>
+                            <div style={STYLES.imageContainer}>
+                                    <PlayerBoxForTransfer player={player} initialOpacity={initialOpacity}/>
+                            </div>
                         </AnimatePresence>
+
                     )
                 }
 
@@ -202,7 +135,7 @@ export default function PlayerOnPitch ({
                                 custom={{initialOpacity}}
                                 key={2}
                             >
-                                <PlayerPlaceholder player={player} placeholderText={placeholderText}/>
+                                <PlayerPlaceholder placeholderText={placeholderText}/>
                             </motion.div>
                         </AnimatePresence>
                     )

@@ -42,7 +42,7 @@ export default function BuildTeamLeftSection({
     pickedPlayers,
     autoPickDisabled,
     onDeselectPlayer,
-    isTransferWindow
+    isOneFreeTransferWindow
 }) {
 
     const STYLES =  { ... getStyles(R) }
@@ -55,7 +55,11 @@ export default function BuildTeamLeftSection({
             </div>
 
             <div className="mt-[5rem] flex flex-col items-center" style={STYLES.textContainer}>
-                <p className="uppercase font-[900] italic text-white" style = {STYLES.heading}>make your selection</p>
+                <p className="uppercase font-[900] italic text-white" style = {STYLES.heading}>
+                    {
+                        isOneFreeTransferWindow ? 'Transfers': 'make your selection'
+                    }
+                </p>
                 <p className="font-[300] text-center text-lavender_grey" style={STYLES.subHeading}>
                     Select a maximum of 3 players from a single team <br/>{`or 'Auto Pick' if you're short of time.`}
                 </p>
@@ -68,7 +72,7 @@ export default function BuildTeamLeftSection({
                             pickedPlayers={pickedPlayers}
                             autoPickDisabled={autoPickDisabled}
                             onDeselectPlayer={onDeselectPlayer}
-                            isTransferWindow={isTransferWindow}
+                            isOneFreeTransferWindow={isOneFreeTransferWindow}
                         />
                     </div>
                 </div>

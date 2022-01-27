@@ -65,7 +65,7 @@ const getStyles = (R) => {
 export default function AllPlayersOnField({
   pickedPlayers,
   onDeselectPlayer,
-  isTransferWindow
+  isOneFreeTransferWindow
 }) {
 
     const STYLES = {...getStyles(R)}
@@ -73,7 +73,7 @@ export default function AllPlayersOnField({
     const buildPlayer = (position, index) => {
         return {
             ...pickedPlayers[position][index],
-            isTransferWindow
+            isOneFreeTransferWindow
         }
     }
 

@@ -7,12 +7,12 @@ import R from "utils/getResponsiveValue";
 
 // Constants
 import colors from "constants/colors";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 // Styles
 const getStyles = (R, props) => {
 
-    const {chosen } = props
+    const { chosen } = props
 
     const { disablePlayerCard } = props.player
 
@@ -58,7 +58,7 @@ const getStyles = (R, props) => {
 
 export default function PlayerCard (props){
 
-    const [hover, setHover] = useState(false);
+    const [hover, setHover] = useState(null);
     const {player, onSelectPlayer} = props
     const chosen = player.chosen || hover
 
@@ -80,6 +80,9 @@ export default function PlayerCard (props){
         }
     }
 
+    useEffect(() => {
+        setHover(false)
+    }, [player])
     return (
         <div
             className={'card-box flex items-center justify-between'} style={STYLES.container}
