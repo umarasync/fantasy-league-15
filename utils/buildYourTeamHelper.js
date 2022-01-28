@@ -281,6 +281,7 @@ export const initialSettingsForTransferWindows = ({
     setAdditionalTransferredPlayers,
     setTransferResetDisabled,
     setTransferConfirmDisabled,
+    setTransferredPlayers,
     // Footer
     setShowFooterBar,
 }) => {
@@ -293,7 +294,7 @@ export const initialSettingsForTransferWindows = ({
         p.chosen = !!allPlayerIds.includes(p.id);
         p.disablePlayerCard = true
         p.animateState = false
-        p.readyToBeTransferred = false
+        p.readyToBeTransferOut = false
         return p
     })
 
@@ -310,6 +311,7 @@ export const initialSettingsForTransferWindows = ({
     setAdditionalTransferredPlayers(0)
     setTransferResetDisabled(true)
     setTransferConfirmDisabled(true)
+    setTransferredPlayers([])
     setShowFooterBar(true)
 }
 
@@ -355,7 +357,7 @@ export const playerTransferDeselectHandler = ({
     setContinueDisabled(true)
 
     $pickedPlayers[position][i].animateState = !$pickedPlayers[position][i].animateState
-    $pickedPlayers[position][i].readyToBeTransferred = true
+    $pickedPlayers[position][i].readyToBeTransferOut = true
 
     setPickedPlayers($pickedPlayers)
 
@@ -398,6 +400,8 @@ export const playerTransferSelectionHandler = ({
     setNoOfFreeTransfersLeft,
     additionalTransferredPlayers,
     setAdditionalTransferredPlayers,
+    transferredPlayers,
+    setTransferredPlayers,
     // Buttons
     setTransferResetDisabled,
     setTransferConfirmDisabled,
@@ -405,8 +409,8 @@ export const playerTransferSelectionHandler = ({
     const pp = {...pickedPlayers}
     const position = player.position
 
-    // Transferred To Be Player index
-    const tpIndex = pp[position].findIndex(p => p.readyToBeTransferred)
+    // readyToBeTransferOut Player
+    const toIndex = pp[position].findIndex(p => p.readyToBeTransferOut)
 
     setRemainingBudget(remainingBudget - player.price)
 
@@ -416,9 +420,18 @@ export const playerTransferSelectionHandler = ({
         setAdditionalTransferredPlayers(additionalTransferredPlayers + 1)
     }
 
-    pp[position][tpIndex] = {
+    setTransferredPlayers([
+        ...transferredPlayers,
+        {
+            'transferOut': { ...pp[position][toIndex] },
+            'transferIn': { ...player },
+        }
+    ])
+
+    pp[position][toIndex] = {
         ...player,
-        animateState: false
+        animateState: false,
+        chosen: true
     }
 
     setPickedPlayers(pp)

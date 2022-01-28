@@ -15,7 +15,7 @@ import {CLUB_FC, POSITION_MID, STATUS_FIT} from "constants/data/filters";
 // Utils
 import R from "utils/getResponsiveValue";
 import {nFormatter} from "utils/helpers";
-import TransferInAndOutPlayer from "./TransferInAndOutPlayer";
+import TransferInAndOutPlayer from "components/transferWindow/TransferInAndOutPlayer";
 
 const player = {
     id: 1,
@@ -40,33 +40,30 @@ const player = {
 }
 
 // Styles
-const getStyles = (R) => {
+const getStyles = () => {
     return {
         transferredSummaryBox: {
             overflowY: 'scroll',
             overflowX: 'hidden',
             flexGrow: 1,
-            // border: '3px solid green'
-        },
-        playersBox: {
-
         }
     }
 }
 
 export default function TransferWindowModal({
     title = 'Summary',
-    heading = 'You are about to transfer',
-    subHeading = '2 player',
-    players,
+    transferredPlayers,
     show,
     onCancel,
     onConfirmed,
     remainingBudget,
     additionalTransferredPlayers
 }) {
+
     const STYLES = {...getStyles(R)}
     const noOfFreeTransfers = 1
+    const heading = 'You are about to transfer'
+    const subHeading = `${transferredPlayers.length} player`
 
     return (
         <Modal>
@@ -128,15 +125,19 @@ export default function TransferWindowModal({
                                             <Text text={'transfer out'} fs={22} lh={26} fw={800} fst={'italic'} tt={'uppercase'}/>
                                         </Div>
                                         {/*Row*/}
-                                        <TransferInAndOutPlayer
-                                            transferInPlayer={player}
-                                            transferOutPlayer={player}
-                                        />
-                                        <TransferInAndOutPlayer
-                                            transferInPlayer={player}
-                                            transferOutPlayer={player}
-                                            mt={50}
-                                        />
+                                        {
+                                            transferredPlayers.map((item, index) => {
+                                                return (
+                                                    <TransferInAndOutPlayer
+                                                        key={index}
+                                                        transferInPlayer={item.transferIn}
+                                                        transferOutPlayer={item.transferOut}
+                                                        mt={index ? 50 : 0}
+                                                    />
+                                                )
+                                            })
+                                        }
+
                                     </Div>
                                 </Div>
                             </Div>

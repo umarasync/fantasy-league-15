@@ -7,6 +7,9 @@ import Text from "components/html/Text";
 // Constants
 import colors from "constants/colors";
 
+// Utils
+import {nFormatter} from "utils/helpers";
+
 export default function TransferOut({
     player
 }) {
@@ -27,15 +30,15 @@ export default function TransferOut({
                     fs={18}
                     lh={22}
                     fw={600}
-                    text={'O. Willson'}
+                    text={player.name}
                     color={colors.black_rock}
                     mb={6}
                 />
                 <Text
                     text={
                         <>
-                            <Text inline text={`AZ`}/>
-                            <Text inline text={` vs GRO`} color={colors.regent_grey}/>
+                            <Text inline text={player.nextMatch.club}/>
+                            <Text inline text={` vs ${player.nextMatch.vs}`} color={colors.regent_grey}/>
                         </>
                     }
                     fs={18}
@@ -48,7 +51,7 @@ export default function TransferOut({
                     fs={18}
                     lh={22}
                     fw={600}
-                    text={'€8.0m'}
+                    text={nFormatter(player.price)}
                     color={colors.black_rock}
                     mb={6}
                 />
@@ -56,7 +59,7 @@ export default function TransferOut({
                     fs={18}
                     lh={22}
                     fw={400}
-                    text={'DEF'}
+                    text={player.position}
                     color={colors.regent_grey}
                     mb={6}
                 />

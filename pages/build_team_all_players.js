@@ -106,6 +106,7 @@ export default function BuildTeamAllPlayer () {
     const [additionalTransferredPlayers, setAdditionalTransferredPlayers] = useState(0)
     const [transferResetDisabled, setTransferResetDisabled] = useState(true)
     const [transferConfirmDisabled, setTransferConfirmDisabled] = useState(true)
+    const [transferredPlayers, setTransferredPlayers] = useState([])
 
     const [showTransferWindowModal, setShowTransferWindowModal] = useState(false)
 
@@ -135,6 +136,7 @@ export default function BuildTeamAllPlayer () {
                 setAdditionalTransferredPlayers,
                 setTransferResetDisabled,
                 setTransferConfirmDisabled,
+                setTransferredPlayers,
                 // Footer
                 setShowFooterBar,
             })
@@ -281,6 +283,8 @@ export default function BuildTeamAllPlayer () {
             setNoOfFreeTransfersLeft,
             additionalTransferredPlayers,
             setAdditionalTransferredPlayers,
+            transferredPlayers,
+            setTransferredPlayers,
             // Buttons
             setTransferResetDisabled,
             setTransferConfirmDisabled,
@@ -295,6 +299,11 @@ export default function BuildTeamAllPlayer () {
     // Player-Transfer-Confirm
     const onTransferConfirmClick = () => {
         setShowTransferWindowModal(true)
+    }
+
+    const onTransferModalConfirmed = () => {
+        sendToServer()
+        router.push('/my_squad_game_week')
     }
 
     useEffect(() => {
@@ -359,8 +368,6 @@ export default function BuildTeamAllPlayer () {
         sendToServer()
         router.push('/create_team_name')
     }
-
-
 
     // Did-Mount
     useEffect(() => {
@@ -449,9 +456,9 @@ export default function BuildTeamAllPlayer () {
 
                     <TransferWindowModal
                         show={showTransferWindowModal}
-                        players={[]}
+                        transferredPlayers={transferredPlayers}
                         onCancel={() => setShowTransferWindowModal(false)}
-                        onConfirmed={() => false}
+                        onConfirmed={onTransferModalConfirmed}
 
                         // Additional Data
                         remainingBudget={remainingBudget}

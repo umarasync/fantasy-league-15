@@ -12,7 +12,8 @@ import {useEffect, useState} from "react";
 // Styles
 const getStyles = (R, props) => {
 
-    const { chosen } = props
+    const { chosen, hover } = props
+    const selected = chosen || hover
 
     const { disablePlayerCard } = props.player
 
@@ -23,9 +24,9 @@ const getStyles = (R, props) => {
             borderRadius: R(15),
             marginBottom: R(8),
             boxShadow: '4px 4px 10px -5px rgba(0, 0, 0, 0.05)',
-            color: chosen ? colors.white : colors.black_rock,
-            background: chosen ? 'linear-gradient(180deg, #EE6384 0%, #D9335B 100%)' : colors.white,
-            opacity: disablePlayerCard && !chosen ? 0.5 : 1,
+            color: selected ? colors.white : colors.black_rock,
+            background: selected ? 'linear-gradient(180deg, #EE6384 0%, #D9335B 100%)' : colors.white,
+            opacity: disablePlayerCard && !selected ? 0.5 : 1,
             cursor: disablePlayerCard ? 'auto': 'pointer'
         },
         infoImage: {
@@ -51,7 +52,7 @@ const getStyles = (R, props) => {
             marginRight: R(34),
             fontSize: R(22),
             fontWeight: '600',
-            color: chosen? colors.white : colors.brink_pink
+            color: selected? colors.white : colors.brink_pink
         }
     }
 }
@@ -60,9 +61,9 @@ export default function PlayerCard (props){
 
     const [hover, setHover] = useState(null);
     const {player, onSelectPlayer} = props
-    const chosen = player.chosen || hover
+    const [chosen, setChosen] = useState(false)
 
-    const STYLES =  { ...getStyles(R, { ...props, chosen}) }
+    const STYLES =  { ...getStyles(R, { ...props, chosen, hover}) }
 
     const onMouseEnter = () => {
         if(player.disablePlayerCard) return
@@ -82,7 +83,9 @@ export default function PlayerCard (props){
 
     useEffect(() => {
         setHover(false)
-    }, [player])
+        setChosen(player.chosen)
+    }, [player.chosen])
+
     return (
         <div
             className={'card-box flex items-center justify-between'} style={STYLES.container}
