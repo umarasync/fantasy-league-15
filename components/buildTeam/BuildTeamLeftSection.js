@@ -1,3 +1,6 @@
+// Packages
+import {useRouter} from "next/router";
+
 // Components
 import AllPlayersOnField from "components/player/AllPlayersOnField";
 import Div from "components/html/Div";
@@ -50,6 +53,13 @@ export default function BuildTeamLeftSection({
     onDeselectPlayer,
     isOneFreeTransferWindow
 }) {
+    const router = useRouter()
+
+    // TODO:DUMMY
+    const removeTeamDataFromLocalStorage = () => {
+        localStorage.removeItem('teamData')
+        router.reload('/build_team_all_players')
+    }
 
     const STYLES =  { ... getStyles(R) }
 
@@ -61,7 +71,7 @@ export default function BuildTeamLeftSection({
             </div>
 
             <div className="flex flex-col items-center" style={STYLES.textContainer}>
-                <p className="uppercase font-[900] italic text-white" style = {STYLES.heading}>
+                <p className="uppercase font-[900] italic text-white cursor-pointer" style = {STYLES.heading} onClick={removeTeamDataFromLocalStorage}>
                     {
                         isOneFreeTransferWindow ? 'Transfers': 'make your selection'
                     }

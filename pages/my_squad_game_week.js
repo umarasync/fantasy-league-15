@@ -13,7 +13,7 @@ import TripleCaptainModal from "components/playerInfo/TripleCaptainModal";
 import BenchBoostModal from "components/playerInfo/BenchBoostModal";
 
 // Utils
-import {clone, isEmpty} from "utils/helpers";
+import {isEmpty} from "utils/helpers";
 import {
     resetPlayers,
     setPlayersAdditionalData,
@@ -180,12 +180,7 @@ export default function MySquadGameWeek () {
     }
 
     const handleMakeTransfer = () => {
-        router.push({
-            pathname: '/build_team_all_players',
-            query: {
-                fromMakeTransfer: true
-            }
-        })
+        router.push('/build_team_all_players')
     }
 
     // Picked-Players-Change
