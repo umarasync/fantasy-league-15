@@ -1,10 +1,27 @@
 // Utils
-import R from "utils/getResponsiveValue";
+import RS from "utils/responsiveStyle";
 
-export default function Border({
-    style
-}) {
+// Styles
+const getStyles = (RS, style) => {
+    const {
+        w, h
+    } = style
+
+    return {
+        border: {
+            ...RS.width(w ? w : 1),
+            ...RS.height(h ? h : 60),
+        }
+    }
+}
+
+export default function Border(props) {
+
+    const {style} = props
+
+    const STYLES = {...getStyles(RS, {...props})}
+
     return (
-        <p className="grey-faded-2 text-white" style={{height: R(60), ...style }}/>
+        <p className="grey-faded-2 text-white" style={{...STYLES.border, ...style}}/>
     )
 }

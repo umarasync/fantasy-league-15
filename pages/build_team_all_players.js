@@ -7,6 +7,7 @@ import Layout from "components/layout/index";
 import FooterBar from "components/footer/FooterBar";
 import BuildTeamLeftSection from "components/buildTeam/BuildTeamLeftSection";
 import BuildTeamRightSection from "components/buildTeam/BuildTeamRightSection";
+import TransferWindowModal from "components/transferWindow/TransferWindowModal";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -40,7 +41,6 @@ import {
     ALL_PLAYERS_INDEXES,
     SELECTED_PLAYERS
 } from "constants/data/players";
-
 import  { PLAYERS } from "constants/data/players"
 
 export default function BuildTeamAllPlayer () {
@@ -106,6 +106,8 @@ export default function BuildTeamAllPlayer () {
     const [additionalTransferredPlayers, setAdditionalTransferredPlayers] = useState(0)
     const [transferResetDisabled, setTransferResetDisabled] = useState(true)
     const [transferConfirmDisabled, setTransferConfirmDisabled] = useState(true)
+
+    const [showTransferWindowModal, setShowTransferWindowModal] = useState(false)
 
     // Opacity-State
     const [initialOpacity, setInitialOpacity] = useState(1)
@@ -292,7 +294,7 @@ export default function BuildTeamAllPlayer () {
 
     // Player-Transfer-Confirm
     const onTransferConfirmClick = () => {
-
+        setShowTransferWindowModal(true)
     }
 
     useEffect(() => {
@@ -445,6 +447,16 @@ export default function BuildTeamAllPlayer () {
                         )
                     }
 
+                    <TransferWindowModal
+                        show={showTransferWindowModal}
+                        players={[]}
+                        onCancel={() => setShowTransferWindowModal(false)}
+                        onConfirmed={() => false}
+
+                        // Additional Data
+                        remainingBudget={remainingBudget}
+                        additionalTransferredPlayers={additionalTransferredPlayers}
+                    />
             </div>
         </Layout>
     )

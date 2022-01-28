@@ -208,7 +208,7 @@ export default function BuildTeamRightSection({
                                     selectedOption={selectedSortingOption}
                                     onOptionChange={(s) => setSelectedSortingOption(s)}
                                     parentContainerStyle={{
-                                        zIndex: 288888,
+                                        zIndex: 1,
                                     }}
                                     hideLabel
                                     dropDownOfInlineStyle

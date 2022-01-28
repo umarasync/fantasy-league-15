@@ -7,8 +7,11 @@ import Text from "components/html/Text";
 // Utils
 import R from "utils/getResponsiveValue";
 
-// Colors
+// Constants
 import colors from "constants/colors";
+import {POINTS_PER_ADDITIONAL_TRANSFER} from "constants/universal";
+
+// Utils
 import {nFormatter} from "utils/helpers";
 
 // Styles
@@ -96,7 +99,7 @@ export default function FooterBar({
 
     const getText = () => {
         if (isOneFreeTransferWindow && additionalTransferredPlayers) {
-            return `-${additionalTransferredPlayers * 4} pts`
+            return `-${additionalTransferredPlayers * POINTS_PER_ADDITIONAL_TRANSFER} pts`
         }else if(isOneFreeTransferWindow){
             return `${noOfFreeTransfersLeft} FREE`
         }
