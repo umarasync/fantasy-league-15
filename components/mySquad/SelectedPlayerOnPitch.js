@@ -128,6 +128,7 @@ const PlayerComponent = ({player, onPlayerChange, onPlayerClick, initialOpacity}
                 player={player}
                 ciw={18}
                 cih={18}
+                cursor={'pointer'}
                 clickedIcon={player.clickedIcon}
                 onIconClick={() => onPlayerChange(player)}
                 onPlayerClick={() => onPlayerClick(player)}

@@ -1,8 +1,16 @@
+// Packages
+import {useRouter} from "next/router";
+
 // Components
 import AllPlayersOnField from "components/player/AllPlayersOnField";
+import Div from "components/html/Div";
+import Text from "components/html/Text";
 
 // Utils
 import R from "utils/getResponsiveValue";
+
+// Constants
+import colors from "constants/colors";
 
 // Styles
 const getStyles = (R) => {
@@ -25,6 +33,7 @@ const getStyles = (R) => {
         },
         textContainer:{
             paddingRight: R(50),
+            marginTop: R(50)
         },
         subHeading: {
             fontSize: R(18),
@@ -39,11 +48,18 @@ const getStyles = (R) => {
     }
 }
 export default function BuildTeamLeftSection({
-     pickedPlayers,
-     autoPickDisabled,
-     onDeselectPlayer
-
+    pickedPlayers,
+    autoPickDisabled,
+    onDeselectPlayer,
+    isOneFreeTransferWindow
 }) {
+    const router = useRouter()
+
+    // TODO:DUMMY
+    const removeTeamDataFromLocalStorage = () => {
+        localStorage.removeItem('teamData')
+        router.reload('/build_team_all_players')
+    }
 
     const STYLES =  { ... getStyles(R) }
 
@@ -54,8 +70,21 @@ export default function BuildTeamLeftSection({
                 <img src="/images/logo_white.png" alt="" width="100%" height="100%"/>
             </div>
 
-            <div className="mt-[5rem] flex flex-col items-center" style={STYLES.textContainer}>
-                <p className="uppercase font-[900] italic text-white" style = {STYLES.heading}>make your selection</p>
+            <div className="flex flex-col items-center" style={STYLES.textContainer}>
+                <p className="uppercase font-[900] italic text-white cursor-pointer" style = {STYLES.heading} onClick={removeTeamDataFromLocalStorage}>
+                    {
+                        isOneFreeTransferWindow ? 'Transfers': 'make your selection'
+                    }
+                </p>
+                {
+                    isOneFreeTransferWindow && (
+                        <Div mt={8} className={'flex items-center justify-center'}>
+                            <Text text={`Transfer deadline:`} inline fs={18} lh={26} color={colors.lavender_grey} nowrap/>
+                            <Text text={`10 Nov, 18:45`} inline ml={3} fs={18} lh={26} color={colors.hibiscus} nowrap />
+                        </Div>
+                    )
+                }
+
                 <p className="font-[300] text-center text-lavender_grey" style={STYLES.subHeading}>
                     Select a maximum of 3 players from a single team <br/>{`or 'Auto Pick' if you're short of time.`}
                 </p>
@@ -68,6 +97,7 @@ export default function BuildTeamLeftSection({
                             pickedPlayers={pickedPlayers}
                             autoPickDisabled={autoPickDisabled}
                             onDeselectPlayer={onDeselectPlayer}
+                            isOneFreeTransferWindow={isOneFreeTransferWindow}
                         />
                     </div>
                 </div>

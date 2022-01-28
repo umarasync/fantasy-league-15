@@ -7,20 +7,27 @@ import R from "utils/getResponsiveValue";
 
 // Constants
 import colors from "constants/colors";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 // Styles
-const getStyles = (R, chosen) => {
+const getStyles = (R, props) => {
+
+    const { chosen, hover } = props
+    const selected = chosen || hover
+
+    const { disablePlayerCard } = props.player
+
     return {
         container: {
             height: R(94),
             border: '0.1px solid whitesmoke',
             borderRadius: R(15),
             marginBottom: R(8),
-            // boxShadow: 'rgba(99, 99, 99, 0.2) 4px 4px 40px -10px'
             boxShadow: '4px 4px 10px -5px rgba(0, 0, 0, 0.05)',
-            color: chosen ? colors.white : colors.black_rock,
-            background: chosen ? 'linear-gradient(180deg, #EE6384 0%, #D9335B 100%)' : colors.white,
+            color: selected ? colors.white : colors.black_rock,
+            background: selected ? 'linear-gradient(180deg, #EE6384 0%, #D9335B 100%)' : colors.white,
+            opacity: disablePlayerCard && !selected ? 0.5 : 1,
+            cursor: disablePlayerCard ? 'auto': 'pointer'
         },
         infoImage: {
             width: R(20),
@@ -45,27 +52,46 @@ const getStyles = (R, chosen) => {
             marginRight: R(34),
             fontSize: R(22),
             fontWeight: '600',
-            color: chosen? colors.white : colors.brink_pink
+            color: selected? colors.white : colors.brink_pink
         }
     }
 }
 
-export default function PlayerCard ({
-    player,
-    onSelectPlayer
-}){
+export default function PlayerCard (props){
 
-    const [hover, setHover] = useState(false);
-    const chosen = player.chosen || hover
+    const [hover, setHover] = useState(null);
+    const {player, onSelectPlayer} = props
+    const [chosen, setChosen] = useState(false)
 
-    const STYLES =  { ... getStyles(R, chosen) }
+    const STYLES =  { ...getStyles(R, { ...props, chosen, hover}) }
+
+    const onMouseEnter = () => {
+        if(player.disablePlayerCard) return
+        setHover(true);
+    }
+
+    const onMouseLeave = () => {
+        if (player.disablePlayerCard) return
+        setHover(false);
+    }
+
+    const handleOnClick = () => {
+        if(onSelectPlayer && !player.disablePlayerCard) {
+            onSelectPlayer(player)
+        }
+    }
+
+    useEffect(() => {
+        setHover(false)
+        setChosen(player.chosen)
+    }, [player.chosen])
 
     return (
         <div
-            className={'card-box flex items-center justify-between cursor-pointer'} style={STYLES.container}
-            onMouseEnter={()=>{setHover(true);}}
-            onMouseLeave={()=>{setHover(false)}}
-            onClick={() => onSelectPlayer ? onSelectPlayer(player) : false}
+            className={'card-box flex items-center justify-between'} style={STYLES.container}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            onClick={handleOnClick}
         >
             {/*left side*/}
             <div className={'flex items-center'}>

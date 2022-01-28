@@ -58,8 +58,6 @@ export const PLAYERS_INITIAL = [
         pickedAsCaptain: 6,
         recommended: true,
         penaltyTaker: false,
-
-        chosen: false,
     },
     {
         id: 2,
@@ -84,8 +82,6 @@ export const PLAYERS_INITIAL = [
         pickedAsCaptain: 0,
         recommended: true,
         penaltyTaker: true,
-
-        chosen: false,
     },
     {
         id: 3,
@@ -109,8 +105,6 @@ export const PLAYERS_INITIAL = [
         pickedAsCaptain: 3,
         recommended: true,
         penaltyTaker: true,
-
-        chosen: false,
     },
     {
         id: 4,
@@ -134,8 +128,6 @@ export const PLAYERS_INITIAL = [
         pickedAsCaptain: 4,
         recommended: true,
         penaltyTaker: false,
-
-        chosen: false,
     },
     {
         id: 5,
@@ -160,8 +152,6 @@ export const PLAYERS_INITIAL = [
         pickedAsCaptain: 0,
         recommended: true,
         penaltyTaker: false,
-
-        chosen: false,
     },
     {
         id: 6,
@@ -185,8 +175,6 @@ export const PLAYERS_INITIAL = [
         pickedAsCaptain: 9,
         recommended: true,
         penaltyTaker: false,
-
-        chosen: false,
     },
     {
         id: 7,
@@ -211,8 +199,6 @@ export const PLAYERS_INITIAL = [
         pickedAsCaptain: 0,
         recommended: true,
         penaltyTaker: false,
-
-        chosen: false,
     },
     {
         id: 8,
@@ -236,8 +222,6 @@ export const PLAYERS_INITIAL = [
         pickedAsCaptain: 0,
         recommended: true,
         penaltyTaker: false,
-
-        chosen: false,
     },
     {
         id: 9,
@@ -261,8 +245,6 @@ export const PLAYERS_INITIAL = [
         pickedAsCaptain: 18,
         recommended: true,
         penaltyTaker: false,
-
-        chosen: false,
     },
     {
         id: 10,
@@ -286,9 +268,6 @@ export const PLAYERS_INITIAL = [
         pickedAsCaptain: 0,
         recommended: true,
         penaltyTaker: false,
-
-        // For FE use only
-        chosen: false,
     },
 ]
 

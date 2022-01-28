@@ -13,7 +13,7 @@ import TripleCaptainModal from "components/playerInfo/TripleCaptainModal";
 import BenchBoostModal from "components/playerInfo/BenchBoostModal";
 
 // Utils
-import {clone, isEmpty} from "utils/helpers";
+import {isEmpty} from "utils/helpers";
 import {
     resetPlayers,
     setPlayersAdditionalData,
@@ -25,7 +25,6 @@ import {
 import {handlePlayerTransfer as HPT, DIAMOND_UP_GREEN} from "utils/mySquadHelper";
 
 // Constants
-import SELECTED_PLAYERS from "constants/data/selectedPlayers";
 import {INITIAL} from "constants/animations";
 
 export default function MySquadGameWeek () {
@@ -91,14 +90,14 @@ export default function MySquadGameWeek () {
     // Did-Mount
     useEffect(() => {
         // TODO:LOCAL_STORAGE_FOR_TESTING:START
-        const $pickedPlayers = JSON.parse(localStorage.getItem("pickedPlayers"))
+        const teamData = JSON.parse(localStorage.getItem('teamData'))
         // TODO:LOCAL_STORAGE_FOR_TESTING:ENDS
 
-        if (!$pickedPlayers) {
+        if (!teamData) {
             return router.push('/build_team_all_players')
         }
 
-        const players = setPlayersAdditionalData($pickedPlayers)
+        const players = setPlayersAdditionalData(teamData.pickedPlayers)
         setPickedPlayers(players)
         setSavedPlayers(players)
         setShowPlayerInfoModal(false)
@@ -180,6 +179,10 @@ export default function MySquadGameWeek () {
         }
     }
 
+    const handleMakeTransfer = () => {
+        router.push('/build_team_all_players')
+    }
+
     // Picked-Players-Change
     useEffect(() => {
         handleTripleCaptainDisable()
@@ -218,7 +221,7 @@ export default function MySquadGameWeek () {
                     transferInProgress={transferInProgress}
                     onBenchBoost={handleBenchBoostModal}
                     onTripleCaptain={handleShowTripleCaptainModal}
-                    onMakeTransfers={()=>false}
+                    onMakeTransfers={handleMakeTransfer}
                     tripleCaptainDisabled={tripleCaptainDisabled}
                     benchBoostDisabled={benchBoostDisabled}
                     onCancel={handleCancel}

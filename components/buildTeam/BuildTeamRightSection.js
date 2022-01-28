@@ -87,7 +87,6 @@ export default function BuildTeamRightSection({
             selectedStatuses[0].value !== ALL_STATUSES ||
             selectedPrice.value !== ALL_PRICES ||
             selectedRecommendation.value !== RECOMMENDED_PLAYERS;
-
     }
 
     const getPlayersContainerHeight = () => {
@@ -204,18 +203,16 @@ export default function BuildTeamRightSection({
                     <div style={{marginBottom: R(16)}}>
                         {
                             areFiltersApplied() && !playersData.length ? null : (
-
                                 <SelectInput
                                     options={sortingOptions}
                                     selectedOption={selectedSortingOption}
                                     onOptionChange={(s) => setSelectedSortingOption(s)}
                                     parentContainerStyle={{
-                                        zIndex: 288888,
+                                        zIndex: 1,
                                     }}
                                     hideLabel
                                     dropDownOfInlineStyle
                                 />
-
                             )
                         }
                     </div>
@@ -228,7 +225,7 @@ export default function BuildTeamRightSection({
                     >
                         {
                             playersData.map((player, index) => <PlayerCard
-                                key={index + 1}
+                                key={index}
                                 player={player}
                                 onSelectPlayer={handlePlayerSelection}
                             />)

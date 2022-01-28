@@ -130,11 +130,11 @@ export const handleAutoPick = ({
     }
 }
 
-export const updatePlayersDataAfterSelectionOrDeselection = (players, player, value) => {
-    const playersI = clone(players)
-    const playerIndex = playersI.findIndex(p => p.id === player.id)
-    playersI[playerIndex].chosen = value
-    return playersI
+const updatePlayersDataAfterSelectionOrDeselection = (players, player, value) => {
+    const $players = clone(players)
+    const playerIndex = $players.findIndex(p => p.id === player.id)
+    $players[playerIndex].chosen = value
+    return $players
 }
 
 
@@ -214,16 +214,16 @@ export const playerDeselectionHandler = ({
     // Continue=Button
     setContinueDisabled,
 }) => {
-    const pickedPlayersI = {...pickedPlayers}
+    const $pickedPlayers = {...pickedPlayers}
 
-    const player = pickedPlayersI[position][i]
+    const player = $pickedPlayers[position][i]
 
     setRemainingBudget(remainingBudget + player.price)
     setTotalChosenPlayers(totalChosenPlayers - 1)
     setContinueDisabled(true)
-    pickedPlayersI[position][i] = false
+    $pickedPlayers[position][i] = false
 
-    setPickedPlayers(pickedPlayersI)
+    setPickedPlayers($pickedPlayers)
 
     setPlayersDataInitial(updatePlayersDataAfterSelectionOrDeselection(playersDataInitial, player, false))
 }
@@ -245,4 +245,212 @@ export const sortingHandler = ({
     }
 
     return playersDataI
+}
+
+
+const getAllSelectedPlayersIDs = (players) => {
+
+    const gkIds = players[POSITION_GK].map(p => p.id)
+    const defIds = players[POSITION_DEF].map(p => p.id)
+    const midIds = players[POSITION_MID].map(p => p.id)
+    const fwdIds = players[POSITION_FWD].map(p => p.id)
+
+    return [
+        ...gkIds,
+        ...defIds,
+        ...midIds,
+        ...fwdIds
+    ]
+}
+
+export const initialSettingsForTransferWindows = ({
+    teamData,
+    // Picked Players
+    setPickedPlayers,
+    // Budget
+    setRemainingBudget,
+    // Players-Data
+    setPlayersData,
+    playersDataInitial,
+    setPlayersDataInitial,
+    // Transfer Window
+    setIsOneFreeTransferWindow,
+    setTransferInProgress,
+    setCurrentTransferredToBePlayer,
+    setNoOfFreeTransfersLeft,
+    setAdditionalTransferredPlayers,
+    setTransferResetDisabled,
+    setTransferConfirmDisabled,
+    setTransferredPlayers,
+    // Footer
+    setShowFooterBar,
+}) => {
+    let playersData = []
+    const {pickedPlayers, remainingBudget} = teamData
+    setIsOneFreeTransferWindow(true)
+    const allPlayerIds = getAllSelectedPlayersIDs(pickedPlayers)
+
+    playersData = playersDataInitial.map(p => {
+        p.chosen = !!allPlayerIds.includes(p.id);
+        p.disablePlayerCard = true
+        p.animateState = false
+        p.readyToBeTransferOut = false
+        return p
+    })
+
+    setPlayersData(playersData)
+    setPlayersDataInitial(playersData)
+    setPickedPlayers(pickedPlayers)
+    setRemainingBudget(remainingBudget)
+    setTransferInProgress(false)
+    setCurrentTransferredToBePlayer({
+        position: null,
+        index: null
+    })
+    setNoOfFreeTransfersLeft(1)
+    setAdditionalTransferredPlayers(0)
+    setTransferResetDisabled(true)
+    setTransferConfirmDisabled(true)
+    setTransferredPlayers([])
+    setShowFooterBar(true)
+}
+
+export const initialSettingsForBuildYourTeam = ({
+  setPlayersData,
+  playersDataInitial,
+  setPlayersDataInitial,
+  setShowFooterBar
+}) => {
+    let playersData = []
+    playersData = playersDataInitial.map(p => {
+        p.chosen = false
+        p.disablePlayerCard = false
+        return p
+    })
+    setPlayersData(playersData)
+    setPlayersDataInitial(playersData)
+    setShowFooterBar(true)
+}
+
+// Player-Transfer Deselection
+export const playerTransferDeselectHandler = ({
+    // Position
+    position,
+    i,
+    // Picked-Players
+    pickedPlayers,
+    setPickedPlayers,
+    // Remaining-Budget
+    remainingBudget,
+    setRemainingBudget,
+    // Players-Data-Initial
+    playersDataInitial,
+    setPlayersDataInitial,
+    // Continue=Button
+    setContinueDisabled,
+}) => {
+    const $pickedPlayers = {...pickedPlayers}
+    const player = $pickedPlayers[position][i]
+
+    const $remainingBudget = remainingBudget + player.price
+    setRemainingBudget($remainingBudget)
+    setContinueDisabled(true)
+
+    $pickedPlayers[position][i].animateState = !$pickedPlayers[position][i].animateState
+    $pickedPlayers[position][i].readyToBeTransferOut = true
+
+    setPickedPlayers($pickedPlayers)
+
+    setPlayersDataInitial(updatePlayersDataAfterTransferDeselectionClicked({playersDataInitial, player, remainingBudget: $remainingBudget}))
+}
+
+const updatePlayersDataAfterTransferDeselectionClicked = ({playersDataInitial, player, remainingBudget}) => {
+    const $players = playersDataInitial.map((p) => {
+        if(p.position === player.position && p.price <= remainingBudget && !p.chosen){
+            p.disablePlayerCard = false
+        }
+        return p
+    })
+
+    // Make currently deselected player also disable in list
+    const playerIndex = $players.findIndex(p => p.id === player.id)
+    const $player = $players[playerIndex]
+    $player.chosen = false
+    $player.disablePlayerCard = true
+
+    return $players
+}
+
+// Player-Transfer Selection
+export const playerTransferSelectionHandler = ({
+    // Player
+    player,
+    // Players-Data-Initial
+    playersDataInitial,
+    setPlayersDataInitial,
+    // Picked-Players
+    pickedPlayers,
+    setPickedPlayers,
+    // Remaining-Budget
+    remainingBudget,
+    setRemainingBudget,
+    // Transfer
+    setTransferInProgress,
+    noOfFreeTransfersLeft,
+    setNoOfFreeTransfersLeft,
+    additionalTransferredPlayers,
+    setAdditionalTransferredPlayers,
+    transferredPlayers,
+    setTransferredPlayers,
+    // Buttons
+    setTransferResetDisabled,
+    setTransferConfirmDisabled,
+}) => {
+    const pp = {...pickedPlayers}
+    const position = player.position
+
+    // readyToBeTransferOut Player
+    const toIndex = pp[position].findIndex(p => p.readyToBeTransferOut)
+
+    setRemainingBudget(remainingBudget - player.price)
+
+    if(noOfFreeTransfersLeft){
+        setNoOfFreeTransfersLeft(noOfFreeTransfersLeft - 1)
+    }else {
+        setAdditionalTransferredPlayers(additionalTransferredPlayers + 1)
+    }
+
+    setTransferredPlayers([
+        ...transferredPlayers,
+        {
+            'transferOut': { ...pp[position][toIndex] },
+            'transferIn': { ...player },
+        }
+    ])
+
+    pp[position][toIndex] = {
+        ...player,
+        animateState: false,
+        chosen: true
+    }
+
+    setPickedPlayers(pp)
+    setTransferInProgress(false)
+    setTransferResetDisabled(false)
+    setTransferConfirmDisabled(false)
+
+    setPlayersDataInitial(updatePlayersDataAfterTransferSelectionDone({
+        playersDataInitial,
+        player
+    }))
+}
+
+const updatePlayersDataAfterTransferSelectionDone = ({playersDataInitial, player}) => {
+    return playersDataInitial.map((p) => {
+        if(p.id === player.id) {
+            p.chosen = true
+        }
+        p.disablePlayerCard = true
+        return p
+    })
 }

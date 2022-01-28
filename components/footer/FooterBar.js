@@ -2,11 +2,16 @@
 import Button from "components/html/Button";
 import Border from "components/Borders/Border";
 import Div from "components/html/Div";
+import Text from "components/html/Text";
+
 // Utils
 import R from "utils/getResponsiveValue";
 
-// Colors
+// Constants
 import colors from "constants/colors";
+import {POINTS_PER_ADDITIONAL_TRANSFER} from "constants/universal";
+
+// Utils
 import {nFormatter} from "utils/helpers";
 
 // Styles
@@ -21,11 +26,6 @@ const getStyles = (R) => {
             fontSize: R(18),
             marginRight: R(14),
             lineHeight: R(26, 'px')
-        },
-        totalPlayers: {
-            fontSize: R(28),
-            marginRight: R(32),
-            lineHeight: R(32, 'px')
         },
         RBText: {
             fontSize: R(18),
@@ -62,6 +62,19 @@ const getStyles = (R) => {
         }
     }
 }
+
+const getText = ({
+ isOneFreeTransferWindow,
+ additionalTransferredPlayers,
+ totalChosenPlayers
+}) => {
+    if(isOneFreeTransferWindow) {
+
+    }else {
+        return `${totalChosenPlayers} / 15`
+    }
+}
+
 export default function FooterBar({
     totalChosenPlayers,
     remainingBudget,
@@ -69,11 +82,31 @@ export default function FooterBar({
     onAutoPick,
     autoPickDisabled,
     continueDisabled,
-                                      onResetClick,
-                                      onContinueClick
+    onResetClick,
+    onContinueClick,
+
+    // Transfer-Window
+    isOneFreeTransferWindow,
+    noOfFreeTransfersLeft,
+    transferResetDisabled,
+    transferConfirmDisabled,
+    onTransferResetClick,
+    onTransferConfirmClick,
+    additionalTransferredPlayers
   }){
 
     const STYLES =  { ... getStyles(R) }
+
+    const getText = () => {
+        if (isOneFreeTransferWindow && additionalTransferredPlayers) {
+            return `-${additionalTransferredPlayers * POINTS_PER_ADDITIONAL_TRANSFER} pts`
+        }else if(isOneFreeTransferWindow){
+            return `${noOfFreeTransfersLeft} FREE`
+        }
+        else {
+            return `${totalChosenPlayers} / 15`
+        }
+    }
 
     return(
         <div
@@ -83,10 +116,22 @@ export default function FooterBar({
             <div className={'flex items-center justify-between w-full'}>
                 {/*Left Section*/}
                 <div className={'flex items-center'}>
-                    <p className={'text-lavender_grey normal'} style={STYLES.playersText}>Players</p>
-                    <p className={'italic text-white font-[800]'} style={STYLES.totalPlayers}>
-                        {totalChosenPlayers} / 15
+                    <p className={'text-lavender_grey normal'} style={STYLES.playersText}>
+                        {
+                            isOneFreeTransferWindow ? 'Transfers' : 'Players'
+                        }
                     </p>
+                    <Text
+                        text={getText()}
+                        fs={28}
+                        lh={32}
+                        fw={800}
+                        fst={'italic'}
+                        tt={'uppercase'}
+                        color={additionalTransferredPlayers ? colors.bean_red : colors.white}
+                        mr={32}
+                    />
+
                     <Border/>
                     <p className={'text-lavender_grey normal'} style={STYLES.RBText}>Remaining budget</p>
                     <div className={'relative'}>
@@ -113,36 +158,70 @@ export default function FooterBar({
 
                 {/*Right Section*/}
                 <Div center>
-                    <Button
-                        title={'auto pick'}
-                        color={colors.black_rock}
-                        disabled={autoPickDisabled}
-                        mr={16}
-                        h={50}
-                        w={190}
-                        bs={'unset'}
-                        bg={colors.white}
-                        onClick={onAutoPick}
-                    />
-                    <Button
-                        title={'reset'}
-                        disabled={resetDisabled}
-                        mr={40}
-                        bs={'unset'}
-                        h={50}
-                        w={190}
-                        bg={colors.rhino}
-                        onClick={onResetClick}
-                    />
-                    <Button
-                        onClick={onContinueClick}
-                        title={'continue'}
-                        h={50}
-                        w={163}
-                        color={colors.white}
-                        disabled={continueDisabled}
-                        style={STYLES.continueBtn}
-                    />
+                    {
+                        !isOneFreeTransferWindow && (
+                            <Button
+                                title={'auto pick'}
+                                color={colors.black_rock}
+                                disabled={autoPickDisabled}
+                                mr={16}
+                                h={50}
+                                w={190}
+                                bs={'unset'}
+                                bg={colors.white}
+                                onClick={onAutoPick}
+                            />
+                        )
+                    }
+
+                    {
+                        isOneFreeTransferWindow ? (
+                            <Button
+                                title={'reset'}
+                                disabled={transferResetDisabled}
+                                mr={40}
+                                bs={'unset'}
+                                h={50}
+                                w={190}
+                                bg={colors.rhino}
+                                onClick={onTransferResetClick}
+                            />
+                        ): (
+                            <Button
+                                title={'reset'}
+                                disabled={resetDisabled}
+                                mr={40}
+                                bs={'unset'}
+                                h={50}
+                                w={190}
+                                bg={colors.rhino}
+                                onClick={onResetClick}
+                            />
+                        )
+                    }
+                    {
+                        isOneFreeTransferWindow ? (
+                            <Button
+                                onClick={onTransferConfirmClick}
+                                title={'confirm'}
+                                h={50}
+                                w={163}
+                                color={colors.white}
+                                disabled={transferConfirmDisabled}
+                                style={STYLES.continueBtn}
+                            />
+                        ): (
+                            <Button
+                                onClick={onContinueClick}
+                                title={'continue'}
+                                h={50}
+                                w={163}
+                                color={colors.white}
+                                disabled={continueDisabled}
+                                style={STYLES.continueBtn}
+                            />
+                        )
+                    }
                 </Div>
             </div>
 
