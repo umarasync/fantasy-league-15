@@ -1,32 +1,33 @@
-import colors from "../../constants/colors";
-import R from "../../utils/getResponsiveValue";
+// Constants
+import colors from "constants/colors";
+
+// Utils
+import R from "utils/getResponsiveValue";
 
 export const finishedMatchDetailsAnimation = () => {
-    const duration = 0.5
+    const transition = {duration: 0.6}
+
     return {
         initial: {
             opacity: 0,
-            height: 0
+            maxHeight: 0,
+            transition,
         },
         animate: {
             opacity: 1,
-            height: 100,
-            transition: {
-                duration: duration,
-            },
+            maxHeight: 2000,
+            transition,
         },
         exit: {
             opacity: 0,
-            height: 0,
-            transition: {
-                duration: duration,
-            },
+            maxHeight: 0,
+            transition,
         },
     }
 };
 
 
-const duration = 0.4
+const duration = 0.5
 
 export const tabsAnimation = () => {
     const transition = {duration: duration}
@@ -56,16 +57,29 @@ export const tabsBorderAnimation = () => {
     };
 }
 
+export const contentContainerAnimation = () => {
+    const transition = {duration: duration}
+    return {
+        changeHeight: ({height}) => {
+            return {
+                height,
+                transition
+            }
+        }
+    }
+}
 
 export const highlightsTabContentAnimation = () => {
     const transition = {duration: duration}
     return {
         moveLeft: {
             marginLeft: '-110%',
+            // maxHeight: 0,
             transition
         },
         moveRight: {
             marginLeft: 0,
+            // maxHeight: 2000,
             transition
         }
     };
@@ -76,10 +90,12 @@ export const statisticsPointsTabContentAnimation = () => {
     return {
         moveLeft: {
             marginLeft: 0,
+            // maxHeight: 2000,
             transition
         },
         moveRight: {
             marginLeft: '110%',
+            // maxHeight: 0,
             transition
         }
     };

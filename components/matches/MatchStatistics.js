@@ -6,16 +6,34 @@ import Image from "components/html/Image";
 // Constants
 import colors from "constants/colors";
 
+// Utils
+import R from "utils/getResponsiveValue";
+
+// Styles
+const getStyles = (R) => {
+    return {
+        container: {
+            marginTop: R(24),
+            width:'100%',
+            paddingBottom: R(40)
+        }
+
+    }
+}
+
 export default function MatchHighlights({
-    match
+    match,
+    containerRef
 }) {
+
+    const STYLES = {...getStyles(R)}
 
     const {matchDetails} = match
 
     const {statistics} = matchDetails
 
     return (
-        <Div w={'100%'} mt={24} className={'flex items-center justify-center'}>
+        <div ref={containerRef} className={'flex items-center justify-center'} style={STYLES.container}>
             <table>
                 <thead>
                     <th>
@@ -49,6 +67,6 @@ export default function MatchHighlights({
                     }
                 </tbody>
             </table>
-        </Div>
+        </div>
     )
 }

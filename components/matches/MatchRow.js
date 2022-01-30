@@ -1,5 +1,6 @@
 // Packages
-import {useState} from "react";
+import {useRef, useState} from "react";
+import {motion, AnimatePresence} from "framer-motion";
 
 // Components
 import TeamName from "components/mySquad/TeamName";
@@ -14,6 +15,9 @@ import ClubImageAnimation from "Animations/mySquad/ClubImageAnimation";
 
 // Utils
 import R from "utils/getResponsiveValue";
+
+// Animations
+import {finishedMatchDetailsAnimation} from "Animations/matches/FinishedMatchDetailsAnimation";
 
 // Styles
 const getStyles = (R) => {
@@ -32,6 +36,12 @@ const getStyles = (R) => {
             width: R(50),
             height: R(50)
         },
+        matchDetails: {
+            // width: '100%',
+            // position: 'absolute',
+            // background: 'green',
+            // visibility: 'hidden'
+        }
     }
 }
 
@@ -44,13 +54,28 @@ export default function MatchRow({
 }) {
     const STYLES = {...getStyles(R)}
     const [showMatchDetails, setShowMatchDetails] = useState()
+    const [matchBoxMarginBottom, setMatchBoxMarginBottom] = useState(1)
+    const matchDetailsRef = useRef()
 
     const handleShowMatchDetails = () => {
+
+        // const matchBox = matchDetailsRef.current.getBoundingClientRect()
+        // if(matchBoxMarginBottom > 1){
+        //     setMatchBoxMarginBottom(1)
+        // }else {
+        //     setMatchBoxMarginBottom(matchBox.height)
+        // }
+
         setShowMatchDetails(!showMatchDetails)
     }
 
     return (
-        <Div>
+        <motion.div
+            // variants={finishedMatchDetailsAnimation()}
+            // initial={'initial'}
+            // animate={'animate'}
+            // exit={'exit'}
+        >
             <Div className={'flex items-center cursor-pointer'} onClick={handleShowMatchDetails}>
                 <div className={'w-[54%]'}>
                     <Div className={'flex justify-end items-center relative'} pr={100}>
@@ -115,10 +140,13 @@ export default function MatchRow({
                     </div>
                 </div>
             </Div>
-            <MatchDetails
-                match={match}
-                showMatchDetails={showMatchDetails}
-            />
-        </Div>
+            <div ref={matchDetailsRef}>
+                <MatchDetails
+                    match={match}
+                    showMatchDetails={showMatchDetails}
+                />
+            </div>
+
+        </motion.div>
     )
 }

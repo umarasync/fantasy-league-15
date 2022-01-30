@@ -5,28 +5,43 @@ import Image from "components/html/Image";
 
 // Constants
 import colors from "constants/colors";
-import BorderHorizontal from "../Borders/BorderHorizontal";
+import BorderHorizontal from "components/Borders/BorderHorizontal";
 
+// Utils
+import R from "utils/getResponsiveValue";
+
+// Styles
+const getStyles = (R) => {
+    return {
+        container: {
+            width: '100%'
+        }
+
+    }
+}
 export default function MatchHighlights({
-     match
+     match,
+     containerRef
  }) {
+
+    const STYLES = {...getStyles(R)}
 
     const {matchDetails} = match
     const { highlights } = matchDetails
     return (
-        <Div w={'100%'}>
+        <div ref={containerRef} style={STYLES.container} className={'test1'}>
             {/*Row*/}
             {
                 highlights.map((item, index) => {
                     return (
                         <Div key={index}
-                             mt={24}
+                             pt={24}
                         >
                             <Div center>
                                 <Text text={item.heading} fs={18} lh={26} mb={12} color={colors.regent_grey}/>
                             </Div>
 
-                            <Div className={'flex'} mb={24}>
+                            <Div className={'flex'} pb={24}>
                                 <Div w={'51%'}>
                                     <Div className={'flex justify-end'}>
                                         <Div className={'flex flex-col items-end'}>
@@ -69,16 +84,11 @@ export default function MatchHighlights({
                                 </Div>
                             </Div>
 
-                            {
-                                index !== highlights.length - 1 && (
-                                    <BorderHorizontal opacity={0.5}/>
-                                )
-                            }
-
+                            {index !== highlights.length - 1 && (<BorderHorizontal opacity={0.5}/>)}
                         </Div>
                     )
                 })
             }
-        </Div>
+        </div>
     )
 }

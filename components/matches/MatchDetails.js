@@ -1,35 +1,35 @@
+// Packages
+import {useEffect, useRef, useState} from "react";
+import {motion, AnimatePresence, useAnimation} from "framer-motion";
+
 // Components
-import {motion, AnimatePresence} from "framer-motion";
 import Div from "components/html/Div";
 import FinishedMatchDetailsHead from "components/matches/FinishedMatchDetailsHead";
 import FinishedMatchDetailsTabs from "components/matches/FinishedMatchDetailsTabs";
 import MatchHighlights from "components/matches/MatchHighlights";
+import MatchStatistics from "components/matches/MatchStatistics";
 
 // Utils
 import R from "utils/getResponsiveValue";
-
-// Constants
-import colors from "constants/colors";
-import {useRef, useState} from "react";
 
 // Constants
 import {ONE, ZERO} from "constants/arrayIndexes";
 
 // Animation
 import {
+    finishedMatchDetailsAnimation,
     highlightsTabContentAnimation,
-    statisticsPointsTabContentAnimation
+    statisticsPointsTabContentAnimation,
+    contentContainerAnimation,
 } from "Animations/matches/FinishedMatchDetailsAnimation";
-import MatchStatistics from "./MatchStatistics";
 
 // Styles
 const getStyles = (R) => {
     return {
-
         contentContainer: {
             display: 'grid',
             width: '100%',
-            overflow: 'hidden'
+            overflow: 'hidden',
         },
         content: {
             gridColumn: 1,
@@ -50,30 +50,41 @@ export default function MatchDetails({
     const STYLES = {...getStyles(R)}
     const { matchDetails } = match
 
+    const controls = useAnimation()
+
     const [selectedTab, setSelectedTab] = useState(ZERO)
     const [borderWidth, setBorderWidth] = useState(0)
-    const [hideHighlightsBox, setHideHighlightsBox] = useState(false)
-    const [hideStatBox, setHideStatBox] = useState(false)
+    const [containerHeight, setContainerHeight] = useState(0)
 
+    // Tabs & Content Refs
     const highlightsTabRef = useRef(null)
     const statisticsTabRef = useRef(null)
+    const highlightsContentRef = useRef(null)
+    const statisticsContentRef = useRef(null)
 
     const handleHighlightsClick = (tabNumber) => {
         setBorderWidth(highlightsTabRef.current.getBoundingClientRect().width)
         setSelectedTab(tabNumber)
+        setContainerHeight(highlightsContentRef.current.getBoundingClientRect().height)
+
     }
 
     const handleStatisticsClick = (tabNumber) => {
         setBorderWidth(statisticsTabRef.current.getBoundingClientRect().width)
         setSelectedTab(tabNumber)
+        setContainerHeight(statisticsContentRef.current.getBoundingClientRect().height)
     }
+
+    useEffect(() => {
+        if (!containerHeight) return
+        controls.start('changeHeight')
+    }, [containerHeight])
 
     return (
         showMatchDetails ? (
             <AnimatePresence>
                 <motion.div
-                    // variants={matchDetailsAnimation()}
-                    variants={''}
+                    variants={finishedMatchDetailsAnimation()}
                     initial={'initial'}
                     animate={'animate'}
                     exit={'exit'}
@@ -93,39 +104,35 @@ export default function MatchDetails({
                         onStatisticsClick={handleStatisticsClick}
                     />
                     {/*Content*/}
-                    <div style={STYLES.contentContainer}>
+                    <motion.div
+                        variants={contentContainerAnimation()}
+                        animate={controls}
+                        custom={{height: containerHeight}}
+                        style={STYLES.contentContainer}
+                    >
                         <motion.div
                             variants={highlightsTabContentAnimation()}
                             animate={selectedTab === ZERO ? 'moveRight' : 'moveLeft'}
-                            style={{ ...STYLES.content, display: hideHighlightsBox ? 'none' : 'block'}}
-                            onAnimationStart={() => {
-                                if (selectedTab === ONE) {
-                                    setHideStatBox(false)
-                                }
-                            }}
-                            onAnimationComplete={() => {
-                                if (selectedTab === ZERO) {
-                                    setHideStatBox(true)
-                                }
-                            }}
+                            style={STYLES.content}
                         >
-                            <MatchHighlights selectedTab={selectedTab} match={match}/>
+                            <MatchHighlights
+                                selectedTab={selectedTab}
+                                match={match}
+                                containerRef={highlightsContentRef}
+                            />
                         </motion.div>
 
                         <motion.div
                             variants={statisticsPointsTabContentAnimation()}
                             animate={selectedTab === ZERO ? 'moveRight' : 'moveLeft'}
-                            style={{
-                                ...STYLES.content,
-                                ...STYLES.statistics,
-                                display: hideStatBox ? 'none' : 'block'
-                            }}
-                            onAnimationStart={() => {if (selectedTab === ZERO) {setHideHighlightsBox(false)}}}
-                            onAnimationComplete={() => {if (selectedTab === ONE) {setHideHighlightsBox(true)}}}
+                            style={{ ...STYLES.content, ...STYLES.statistics}}
                         >
-                            <MatchStatistics selectedTab={selectedTab} match={match} />
+                            <MatchStatistics
+                                selectedTab={selectedTab} match={match}
+                                containerRef={statisticsContentRef}
+                            />
                         </motion.div>
-                    </div>
+                    </motion.div>
                     {/*Footer*/}
                     <Div h={30} mt={-25} w={'100%'} className={'bg-mystic-alabaster-reverse'}/>
                 </motion.div>

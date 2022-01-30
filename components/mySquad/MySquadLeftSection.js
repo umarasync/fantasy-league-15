@@ -56,7 +56,7 @@ export default function MySquadLeftSection({
     const STYLES =  { ... getStyles(R) }
 
     return (
-        <div className="bg-[url('/images/bg_my_squad.png')] bg-[length:100%_100%] bg-no-repeat  w-full h-full"
+        <div className="bg-[url('/images/bg_my_squad.png')] bg-[length:100%_100%] bg-no-repeat w-full h-full"
              style={STYLES.container}>
             <div className="" style={STYLES.logo}>
                 <img src="/images/logo_white.png" alt="" width="100%" height="100%"/>
