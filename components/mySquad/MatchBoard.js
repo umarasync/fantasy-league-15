@@ -240,7 +240,6 @@ export default function MatchBoard () {
             <Div position={'relative'} style={STYLES.scrollBox}>
                 <Div className={'flex justify-center'}>
                     <div style={{...STYLES.scrollContainer}}
-                        // className={'flex justify-between'}
                          ref={scrollContainerRef}
                     >
                         {

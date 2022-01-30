@@ -76,7 +76,7 @@ export default function PointsBoard({
         <Div>
             <PlayerPoints player={player}/>
             <Div mt={24} ml={24} mr={24} br={12}  pt={24} pb={24}>
-
+                {/*Tabs*/}
                 <PointsTabs
                     borderWidth={borderWidth}
                     selectedTab={selectedTab}
@@ -85,7 +85,7 @@ export default function PointsBoard({
                     onMatchTabClick={handleMatchTabClick}
                     onSeasonTabClick={handleSeasonTabClick}
                 />
-
+                {/*Content*/}
                 <div style={STYLES.pointsBox}>
                     <motion.div
                         variants={matchPointsTabContentAnimation()}

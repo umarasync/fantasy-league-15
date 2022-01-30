@@ -6,6 +6,7 @@ import {clone, shuffle} from "utils/helpers";
 
 // Data
 import {PLAYERS} from "constants/data/players";
+import {finishedMatchDetails} from "constants/data/matchDetails";
 
 // Functions for test data
 const getSomePreviousDate = days => dayjs().subtract(days, 'days').format('YYYY-MM-DD')
@@ -108,6 +109,7 @@ const CLUBS_GROUP_2= [
     },
 ]
 
+
 const matchesDates = (data) => {
 
     const { date, finished} = data
@@ -120,6 +122,7 @@ const matchesDates = (data) => {
                     id: 1,
                     time: `${date}T${shuffle(TIMES)[0]}`,
                     finished,
+                    matchDetails: finishedMatchDetails,
                     club1: shuffle(CLUBS_GROUP_1)[0],
                     club2: shuffle(CLUBS_GROUP_2)[0]
                 },
@@ -127,6 +130,7 @@ const matchesDates = (data) => {
                     id: 2,
                     time: `${date}T${shuffle(TIMES)[0]}`,
                     finished,
+                    matchDetails: finishedMatchDetails,
                     club1: shuffle(CLUBS_GROUP_1)[0],
                     club2: shuffle(CLUBS_GROUP_2)[0]
                 }
@@ -139,6 +143,7 @@ const matchesDates = (data) => {
                     id: 1,
                     time: `${date}T${shuffle(TIMES)[0]}`,
                     finished,
+                    matchDetails: finishedMatchDetails,
                     club1: shuffle(CLUBS_GROUP_1)[0],
                     club2: shuffle(CLUBS_GROUP_2)[0]
                 },
@@ -146,6 +151,7 @@ const matchesDates = (data) => {
                     id: 1,
                     time: `${date}T${shuffle(TIMES)[0]}`,
                     finished,
+                    matchDetails: finishedMatchDetails,
                     club1: shuffle(CLUBS_GROUP_1)[0],
                     club2: shuffle(CLUBS_GROUP_2)[0]
                 },

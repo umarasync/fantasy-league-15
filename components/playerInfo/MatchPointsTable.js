@@ -13,17 +13,6 @@ const MatchPointsTable = ({
 
     const { matchPoints } = player.pointsInfo
 
-    const renderHeader = () => {
-        let headerElement = ['GW', 'OPP', 'PTS', 'MP', 'GS', 'A', 'CS', 'GC', 'OG', 'PS', 'PM']
-        return headerElement.map((title, index) => {
-            return (
-                <th key={index}>
-                     <TH title={title} index={index}/>
-                </th>
-            )
-        })
-    }
-
     const TH = ({title, index}) => {
         return (
             <>
@@ -59,6 +48,17 @@ const MatchPointsTable = ({
                 />
             </>
         )
+    }
+
+    const renderHeader = () => {
+        let headerElement = ['GW', 'OPP', 'PTS', 'MP', 'GS', 'A', 'CS', 'GC', 'OG', 'PS', 'PM']
+        return headerElement.map((title, index) => {
+            return (
+                <th key={index}>
+                    <TH title={title} index={index}/>
+                </th>
+            )
+        })
     }
 
     const renderBody = () => {

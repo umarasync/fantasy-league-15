@@ -109,6 +109,14 @@ input.disable-input-outline[type="text"]:focus {
   background: linear-gradient(180deg, #3ce0bd 0%, #06a684 100%);
 }
 
+.bg-mystic-alabaster {
+  background: linear-gradient(180deg, #E9EDF2 -25.53%, rgba(249, 249, 249, 0) 100%);
+}
+
+.bg-mystic-alabaster-reverse {
+  background: linear-gradient(360deg, #E9EDF2 -25.53%, rgba(249, 249, 249, 0) 100%);
+}
+
 .bg-hibiscus-purple {
   background: linear-gradient(180deg, #c343ff 0%, #6d0d9a 100%);
 }
