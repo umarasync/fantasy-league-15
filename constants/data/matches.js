@@ -6,7 +6,7 @@ import {clone, shuffle} from "utils/helpers";
 
 // Data
 import {PLAYERS} from "constants/data/players";
-import {finishedMatchDetails} from "constants/data/matchDetails";
+import {finishedMatchDetails, upcomingMatchDetails} from "constants/data/matchDetails";
 
 // Functions for test data
 const getSomePreviousDate = days => dayjs().subtract(days, 'days').format('YYYY-MM-DD')
@@ -112,7 +112,7 @@ const CLUBS_GROUP_2= [
 
 const matchesDates = (data) => {
 
-    const { date, finished} = data
+    const { date, finished, matchDetails} = data
 
     return [
         {
@@ -122,7 +122,7 @@ const matchesDates = (data) => {
                     id: 1,
                     time: `${date}T${shuffle(TIMES)[0]}`,
                     finished,
-                    matchDetails: finishedMatchDetails,
+                    matchDetails: matchDetails,
                     club1: shuffle(CLUBS_GROUP_1)[0],
                     club2: shuffle(CLUBS_GROUP_2)[0]
                 },
@@ -130,7 +130,7 @@ const matchesDates = (data) => {
                     id: 2,
                     time: `${date}T${shuffle(TIMES)[0]}`,
                     finished,
-                    matchDetails: finishedMatchDetails,
+                    matchDetails: matchDetails,
                     club1: shuffle(CLUBS_GROUP_1)[0],
                     club2: shuffle(CLUBS_GROUP_2)[0]
                 }
@@ -143,7 +143,7 @@ const matchesDates = (data) => {
                     id: 1,
                     time: `${date}T${shuffle(TIMES)[0]}`,
                     finished,
-                    matchDetails: finishedMatchDetails,
+                    matchDetails: matchDetails,
                     club1: shuffle(CLUBS_GROUP_1)[0],
                     club2: shuffle(CLUBS_GROUP_2)[0]
                 },
@@ -151,7 +151,7 @@ const matchesDates = (data) => {
                     id: 1,
                     time: `${date}T${shuffle(TIMES)[0]}`,
                     finished,
-                    matchDetails: finishedMatchDetails,
+                    matchDetails: matchDetails,
                     club1: shuffle(CLUBS_GROUP_1)[0],
                     club2: shuffle(CLUBS_GROUP_2)[0]
                 },
@@ -169,7 +169,8 @@ const PREVIOUS_GAME_WEEKS = [9,8,7,6,5,4,3,2,1].map((week,index) => {
         matchesDates: matchesDates({
             date: previousDate,
             finished: true,
-            clubImage: 'club_zwo.png'
+            clubImage: 'club_zwo.png',
+            matchDetails: finishedMatchDetails
         })
     }
 }).reverse()
@@ -181,7 +182,8 @@ const CURRENT_GAME_WEEK = {
     matchesDates: matchesDates({
         date:  getTodayDate(),
         finished: false,
-        clubImage: 'club_ajax.png'
+        clubImage: 'club_ajax.png',
+        matchDetails: upcomingMatchDetails()
     })
 }
 
@@ -194,7 +196,8 @@ const NEXT_GAME_WEEKS = [11,12,13,14,15,16,17,18].map((week, index) => {
         matchesDates: matchesDates({
             date:  nextDate,
             finished: false,
-            clubImage: 'club_sc.png'
+            clubImage: 'club_sc.png',
+            matchDetails: upcomingMatchDetails()
         })
     }
 })

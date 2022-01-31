@@ -38,7 +38,6 @@ export default function  MatchDate({
     const STYLES =  { ...getStyles(R) }
 
     return (
-
         <div className={'relative w-full'} style={STYLES.matchDateBox}>
             {
                 tabChanged ? (

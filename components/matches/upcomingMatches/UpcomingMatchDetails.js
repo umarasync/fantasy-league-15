@@ -1,13 +1,12 @@
 // Packages
 import {useEffect, useRef, useState} from "react";
 import {motion, AnimatePresence, useAnimation} from "framer-motion";
+import UpcomingMatchDetailsTabs from "components/matches/upcomingMatches/UpcomingMatchDetailsTabs";
+import LastMatchUps from "components/matches/upcomingMatches/LastMatchUps";
+import HeadToHead from "components/matches/upcomingMatches/HeadToHead";
 
 // Components
 import Div from "components/html/Div";
-import FinishedMatchDetailsHead from "components/matches/FinishedMatchDetailsHead";
-import FinishedMatchDetailsTabs from "components/matches/FinishedMatchDetailsTabs";
-import MatchHighlights from "components/matches/MatchHighlights";
-import MatchStatistics from "components/matches/MatchStatistics";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -17,11 +16,11 @@ import {ONE, ZERO} from "constants/arrayIndexes";
 
 // Animation
 import {
-    finishedMatchDetailsAnimation,
-    highlightsTabContentAnimation,
-    statisticsPointsTabContentAnimation,
+    upcomingMatchDetailsAnimation,
     contentContainerAnimation,
-} from "Animations/matches/FinishedMatchDetailsAnimation";
+    lastMatchUpsTabContentAnimation,
+    headToHeadTabContentAnimation
+} from "Animations/matches/UpcomingMatchDetailsAnimation";
 
 // Styles
 const getStyles = (R) => {
@@ -42,7 +41,7 @@ const getStyles = (R) => {
     }
 }
 
-export default function MatchDetails({
+export default function UpcomingMatchDetails({
     match,
     showMatchDetails,
 }) {
@@ -59,20 +58,20 @@ export default function MatchDetails({
     // Tabs & Content Refs
     const highlightsTabRef = useRef(null)
     const statisticsTabRef = useRef(null)
-    const highlightsContentRef = useRef(null)
-    const statisticsContentRef = useRef(null)
+    const lastMatchUpContentRef = useRef(null)
+    const headToHeadContentRef = useRef(null)
 
     const handleHighlightsClick = (tabNumber) => {
         setBorderWidth(highlightsTabRef.current.getBoundingClientRect().width)
         setSelectedTab(tabNumber)
-        setContainerHeight(highlightsContentRef.current.getBoundingClientRect().height)
+        setContainerHeight(lastMatchUpContentRef.current.getBoundingClientRect().height)
 
     }
 
     const handleStatisticsClick = (tabNumber) => {
         setBorderWidth(statisticsTabRef.current.getBoundingClientRect().width)
         setSelectedTab(tabNumber)
-        setContainerHeight(statisticsContentRef.current.getBoundingClientRect().height)
+        setContainerHeight(headToHeadContentRef.current.getBoundingClientRect().height)
     }
 
     useEffect(() => {
@@ -84,18 +83,15 @@ export default function MatchDetails({
         showMatchDetails ? (
             <AnimatePresence>
                 <motion.div
-                    variants={finishedMatchDetailsAnimation()}
+                    variants={upcomingMatchDetailsAnimation()}
                     initial={'initial'}
                     animate={'animate'}
                     exit={'exit'}
                     className={'flex flex-col items-center'}
                 >
-                    {/*Head*/}
-                    <Div w={'100%'} mb={40} mt={25} pt={24} className={'bg-mystic-alabaster'}>
-                        <FinishedMatchDetailsHead matchDetails={matchDetails}/>
-                    </Div>
+
                     {/*Tabs*/}
-                    <FinishedMatchDetailsTabs
+                    <UpcomingMatchDetailsTabs
                         borderWidth={borderWidth}
                         selectedTab={selectedTab}
                         highlightsTabRef={highlightsTabRef}
@@ -111,25 +107,26 @@ export default function MatchDetails({
                         style={STYLES.contentContainer}
                     >
                         <motion.div
-                            variants={highlightsTabContentAnimation()}
+                            variants={lastMatchUpsTabContentAnimation()}
                             animate={selectedTab === ZERO ? 'moveRight' : 'moveLeft'}
                             style={STYLES.content}
                         >
-                            <MatchHighlights
+                            <LastMatchUps
                                 selectedTab={selectedTab}
                                 match={match}
-                                containerRef={highlightsContentRef}
+                                containerRef={lastMatchUpContentRef}
                             />
                         </motion.div>
 
                         <motion.div
-                            variants={statisticsPointsTabContentAnimation()}
+                            variants={headToHeadTabContentAnimation()}
                             animate={selectedTab === ZERO ? 'moveRight' : 'moveLeft'}
                             style={{ ...STYLES.content, ...STYLES.statistics}}
                         >
-                            <MatchStatistics
-                                selectedTab={selectedTab} match={match}
-                                containerRef={statisticsContentRef}
+                            <HeadToHead
+                                selectedTab={selectedTab}
+                                match={match}
+                                containerRef={headToHeadContentRef}
                             />
                         </motion.div>
                     </motion.div>

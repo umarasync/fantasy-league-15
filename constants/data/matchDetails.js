@@ -1,5 +1,6 @@
-
-import {PLAYERS} from "./players";
+// Constants
+import {PLAYERS} from "constants/data/players";
+import {CLUBS} from "constants/data/filters";
 
 /***** Finished-Match-Details *******/
 const getAwardedPlayers = () => {
@@ -172,4 +173,51 @@ export const finishedMatchDetails = {
         }
     ],
     statistics: getStatistics()
+}
+
+
+/***** Upcoming-Match-Details *******/
+const getLastMatchUp = () => {
+    return {
+        date: 'Monday 12 October 2021',
+        team1: {
+            ...CLUBS[3],
+            goals: 2
+        },
+        team2: {
+            ...CLUBS[4],
+            goals: 4
+        }
+    }
+}
+const getLastMatchUpsData = () => {
+    return [1,2,3,4].map((match) => {
+        return getLastMatchUp()
+    })
+}
+
+const getHeadToHeadData = () => {
+    return {
+        totalMatchPlayed: 59,
+        draws: 16,
+        team1: {
+            ...CLUBS[3],
+            totalWins: 30,
+            home: 8,
+            away: 22,
+        },
+        team2: {
+            ...CLUBS[4],
+            totalWins: 13,
+            home: 12,
+            away: 1,
+        }
+    }
+}
+
+export const upcomingMatchDetails = () => {
+    return {
+        lastMatchUps: getLastMatchUpsData(),
+        headToHead: getHeadToHeadData()
+    }
 }

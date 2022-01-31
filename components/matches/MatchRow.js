@@ -1,6 +1,5 @@
 // Packages
-import {useRef, useState} from "react";
-import {motion, AnimatePresence} from "framer-motion";
+import {useEffect, useRef, useState} from "react";
 
 // Components
 import TeamName from "components/mySquad/TeamName";
@@ -8,16 +7,14 @@ import CardImage from "components/selectClub/CardImage";
 import GoalAndMatchTime from "components/mySquad/GoalAndMatchTime";
 import FT from "components/mySquad/FT";
 import Div from "components/html/Div";
-import MatchDetails from "components/matches/MatchDetails";
+import FinishedMatchDetails from "components/matches/finishedMatches/FinishedMatchDetails";
 
 // Animations
 import ClubImageAnimation from "Animations/mySquad/ClubImageAnimation";
 
 // Utils
 import R from "utils/getResponsiveValue";
-
-// Animations
-import {finishedMatchDetailsAnimation} from "Animations/matches/FinishedMatchDetailsAnimation";
+import UpcomingMatchDetails from "./upcomingMatches/UpcomingMatchDetails";
 
 // Styles
 const getStyles = (R) => {
@@ -35,12 +32,6 @@ const getStyles = (R) => {
         teamImage: {
             width: R(50),
             height: R(50)
-        },
-        matchDetails: {
-            // width: '100%',
-            // position: 'absolute',
-            // background: 'green',
-            // visibility: 'hidden'
         }
     }
 }
@@ -53,33 +44,21 @@ export default function MatchRow({
     initialOpacity,
 }) {
     const STYLES = {...getStyles(R)}
-    const [showMatchDetails, setShowMatchDetails] = useState()
-    const [matchBoxMarginBottom, setMatchBoxMarginBottom] = useState(1)
-    const matchDetailsRef = useRef()
+    const [showMatchDetails, setShowMatchDetails] = useState(false)
 
     const handleShowMatchDetails = () => {
-
-        // const matchBox = matchDetailsRef.current.getBoundingClientRect()
-        // if(matchBoxMarginBottom > 1){
-        //     setMatchBoxMarginBottom(1)
-        // }else {
-        //     setMatchBoxMarginBottom(matchBox.height)
-        // }
-
         setShowMatchDetails(!showMatchDetails)
     }
 
-    return (
-        <motion.div
-            // variants={finishedMatchDetailsAnimation()}
-            // initial={'initial'}
-            // animate={'animate'}
-            // exit={'exit'}
-        >
-            <Div className={'flex items-center cursor-pointer'} onClick={handleShowMatchDetails}>
-                <div className={'w-[54%]'}>
-                    <Div className={'flex justify-end items-center relative'} pr={100}>
+    useEffect(() => {
+        setShowMatchDetails(false)
+    }, [tabChanged])
 
+    return (
+        <div>
+            <Div className={'flex items-center cursor-pointer'} onClick={handleShowMatchDetails}>
+                <div className={'w-[54.5%]'}>
+                    <Div className={'flex justify-end items-center relative'} pr={100}>
                         <TeamName
                             tabChanged={tabChanged}
                             match={match}
@@ -117,7 +96,7 @@ export default function MatchRow({
 
                     </Div>
                 </div>
-                <div className={'w-[46%]'}>
+                <div className={'w-[45.5%]'}>
                     <div className={'flex items-center relative'}>
                         <div style={STYLES.teamImage}>
                             <CardImage
@@ -140,13 +119,22 @@ export default function MatchRow({
                     </div>
                 </div>
             </Div>
-            <div ref={matchDetailsRef}>
-                <MatchDetails
-                    match={match}
-                    showMatchDetails={showMatchDetails}
-                />
+            {/*Match Details*/}
+            <div>
+                {
+                    match.finished ? (
+                        <FinishedMatchDetails
+                            match={match}
+                            showMatchDetails={showMatchDetails}
+                        />
+                    ): (
+                        <UpcomingMatchDetails
+                            match={match}
+                            showMatchDetails={showMatchDetails}
+                        />
+                    )
+                }
             </div>
-
-        </motion.div>
+        </div>
     )
 }
