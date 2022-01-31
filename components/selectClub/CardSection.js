@@ -1,44 +1,44 @@
-
 // Components
 import SelectClubCard from "components/selectClub/SelectClubCard";
 
 // Constants
 import cardsStyle from "styles/cardsStyle";
 
-export default function CardSection({
-    firstCard,
-    secondCard,
-    thirdCard,
-    fourthCard,
-    fifthCard,
-
-    nextFirstCard,
-    nextSecondCard,
-    nextThirdCard,
-    nextFourthCard,
-    nextFifthCard,
-
-    changeCard,
-}){
-    return (
-        <>
-            <SelectClubCard
-                image = {
-                    {
-                        ...cardsStyle[0].image,
-                        name: firstCard.image.name,
-                        nextName: nextFirstCard.image.name}
-                }
-                heading = {{...cardsStyle[0].heading, title: firstCard.heading.title, nextTitle: nextFirstCard.heading.title}}
-                subHeading = {{...cardsStyle[0].subHeading, title: firstCard.subHeading.title, nextTitle: nextFirstCard.subHeading.title}}
-                containerStyle={cardsStyle[0].containerStyle}
-                bgImage={cardsStyle[0].bgImage}
-                itemsCenter={cardsStyle[0].itemsCenter}
-                boxPaddingTop={cardsStyle[0].boxPaddingTop}
-
-                changeCard={changeCard}
-            />
-            <SelectClubCard
+export default function CardSection({ cardData, changeCard }) {
+  return (
+    <>
+      {cardData && cardData.length > 0
+        ? cardData?.map((Card, i) => {
+            return (
+              <>
+                <SelectClubCard
+                  image={
+                    i == 2 //2 means the center selected team
+                      ? { ...cardsStyle[2].image, name: Card.logo }
+                      : { ...cardsStyle[0].image, name: Card.logo }
+                  }
+                  heading={
+                    i == 2 //2 means the center selected team
+                      ? { ...cardsStyle[2].heading, title: Card.name }
+                      : { ...cardsStyle[0].heading, title: Card.name }
+                  }
+                  subHeading={
+                    i == 2 //2 means the center selected team
+                      ? { ...cardsStyle[2].subHeading, title: Card.venue }
+                      : { ...cardsStyle[0].subHeading, title: Card.venue }
+                  }
+                  key={i}
+                  containerStyle={ i == 2 ? cardsStyle[2].containerStyle : cardsStyle[1].containerStyle}
+                  bgImage={ i == 2 ? cardsStyle[2].bgImage : cardsStyle[1].bgImage}
+                  itemsCenter={ i == 2 ? cardsStyle[2].itemsCenter : cardsStyle[1].itemsCenter}
+                  boxPaddingTop={ i == 2 ? cardsStyle[2].boxPaddingTop : cardsStyle[1].boxPaddingTop}
+                />
+                ;
+              </>
+            );
+          })
+        : ""}
+      {/* <SelectClubCard
                 image = {{...cardsStyle[1].image, name: secondCard.image.name, nextName: nextSecondCard.image.name}}
                 heading = {{...cardsStyle[1].heading, title: secondCard.heading.title, nextTitle: nextSecondCard.heading.title}}
                 subHeading = {{...cardsStyle[1].subHeading, title: secondCard.subHeading.title, nextTitle: nextSecondCard.subHeading.title}}
@@ -81,8 +81,7 @@ export default function CardSection({
                 boxPaddingTop={cardsStyle[4].boxPaddingTop}
 
                 changeCard={changeCard}
-            />
-        </>
-    )
-
+            /> */}
+    </>
+  );
 }

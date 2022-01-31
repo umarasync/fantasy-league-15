@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Modal from "components/modals";
 import Input from "components/inputs/input";
 import Button from "components/html/Button";
-import { resetPasswordRequest } from "../../redux/api/auth";
+import { resetPasswordRequest } from "../../redux/Auth/api";
 
 export default function ResetPasswordModal({ show, onClose }) {
   const router = useRouter();

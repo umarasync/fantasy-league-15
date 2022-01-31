@@ -60,7 +60,7 @@ export default  function SelectClubCard({
             <CardImage
                 changeCard={changeCard}
                 fadeInOutAnimation={fadeInOutAnimation}
-                image={image}
+                image={image.name}
                 containerStyle={{
                     width: R(image.width),
                     height: R(image.height),

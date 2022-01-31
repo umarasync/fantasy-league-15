@@ -20,8 +20,8 @@ import Text from "components/html/Text"
 import Div from "components/html/Div"
 import Image from "components/html/Image";
 import ResetPasswordModal from "components/modals/ResetPasswordModal";
-import { createUser, loginUser } from "../../redux/api/auth";
-import { RESET_PAGE } from "../../redux/actions/auth";
+import { createUser, loginUser } from "../../redux/Auth/api";
+import { RESET_PAGE } from "../../redux/Auth/actions";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -38,6 +38,7 @@ export default function SignUp(props) {
   const router = useRouter();
   const dispatch = useDispatch();
 
+  
   const successSignUp = useSelector(({ auth }) => auth.signUpSuccess);
   const errorSignUp = useSelector(({ auth }) => auth.signUpError);
 

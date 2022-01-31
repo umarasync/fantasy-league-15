@@ -11,7 +11,7 @@ import {
   RESET_PASSWORD_FAILED,
   RESET_PASSWORD_SUCCESS,
   RESET_PAGE,
-} from "../actions/auth";
+} from "./actions";
 
 export const loginUser = (data) => {
   return async (dispatch) => {

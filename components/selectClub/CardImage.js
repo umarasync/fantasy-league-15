@@ -21,7 +21,9 @@ export default function CardImage ({
                             className="absolute"
                             style={{
                                 width: R(image.width),
-                                height: R(image.height)
+                                height: R(image.height),
+                                maxWidth:150,
+                                maxHeight:150,
                             }}
                             variants={fadeInOutAnimation}
                             custom={custom}
@@ -31,7 +33,7 @@ export default function CardImage ({
                             key={1}
                         >
                             <img
-                                src={`/images/${image.name}`}
+                                src={`${image}`}
                                 alt=""
                                 className="text-center w-full h-full"
                             />
@@ -43,7 +45,9 @@ export default function CardImage ({
                             className="absolute"
                             style={{
                                 width: R(image.width),
-                                height: R(image.height)
+                                height: R(image.height),
+                                maxWidth:150,
+                                maxHeight:150,
                             }}
                             variants={fadeInOutAnimation}
                             initial="initial"
@@ -53,7 +57,7 @@ export default function CardImage ({
                             key={2}
                         >
                             <img
-                                src={`/images/${image.name}`}
+                                src={`${image}`}
                                 alt=""
                                 className="text-center w-full h-full"
                             />
