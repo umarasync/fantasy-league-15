@@ -2,6 +2,7 @@
 import {AnimatePresence, motion} from "framer-motion";
 import dayjs from "dayjs";
 
+import Goals from "components/matches/Goals";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -16,11 +17,6 @@ import MatchTimeAnimation from "Animations/mySquad/MatchTimeAnimation";
 // Styles
 const getStyles = (R) => {
     return {
-        goals: {
-            fontWeight:'600',
-            fontSize: R(24),
-            lineHeight: R(28, 'px')
-        },
         goalsBox: {
             position: 'absolute',
             top: R(-20),
@@ -40,31 +36,6 @@ const getStyles = (R) => {
     }
 }
 
-const GoalComponent = ({match}) => {
-
-    const STYLES =  { ...getStyles(R) }
-
-    return (
-        <div className={'flex'}>
-            <p
-                style={{
-                    ...STYLES.goals,
-                    color: match.club1.goals > match.club2.goals ? colors.mandy : colors.black_rock
-                }}>
-                {match.club1.goals}
-            </p>
-            <p style={{...STYLES.goals}}>:</p>
-            <p
-                style={{
-                    ...STYLES.goals,
-                    color: match.club2.goals > match.club1.goals ? colors.mandy : colors.black_rock
-                }}>
-                {match.club2.goals}
-            </p>
-        </div>
-
-    )
-}
 
 const GoalAndMatchTime = (props) => {
     const {
@@ -89,7 +60,7 @@ const GoalAndMatchTime = (props) => {
                         style={STYLES.goalsBox}
                         key={1}
                     >
-                        <GoalComponent {...props}/>
+                        <Goals team1Goals={match.club1.goals} team2Goals={match.club2.goals}/>
                     </motion.div>
                 </AnimatePresence>
             )
@@ -105,7 +76,7 @@ const GoalAndMatchTime = (props) => {
                         style={STYLES.goalsBox}
                         key={2}
                     >
-                        <GoalComponent {...props}/>
+                        <Goals team1Goals={match.club1.goals} team2Goals={match.club2.goals}/>
                     </motion.div>
                 </AnimatePresence>
             )
