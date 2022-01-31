@@ -29,17 +29,17 @@ const getGoalsData = () => {
         team1Players: [
             {
                 name: 'Jorbe Vertessen',
-                dummyText: "12’, 54’"
+                value: "12’, 54’"
             },
             {
                 name: 'Eran Zahavi',
-                dummyText: "45+3’"
+                value: "45+3’"
             }
         ],
         team2Players: [
             {
                 name: 'Paradise Vlut',
-                dummyText: "(AG) 8’"
+                value: "(AG) 8’"
             },
         ],
     }
@@ -51,7 +51,7 @@ const getMissesData = () => {
         team2Players: [
             {
                 name: 'Peter Verkhove',
-                dummyText: "(P) 3’"
+                value: "(P) 3’"
             },
         ],
     }
@@ -62,13 +62,13 @@ const getSavesData = () => {
         team1Players: [
             {
                 name: 'Bryan Jansen',
-                dummyText: "(6)"
+                value: "(6)"
             },
         ],
         team2Players: [
             {
                 name: 'Koen Baker',
-                dummyText: "(4)"
+                value: "(4)"
             },
         ],
     }
@@ -79,7 +79,7 @@ const getAssistsData = () => {
         team1Players: [
             {
                 name: 'Jorbe Vertessen',
-                dummyText: "(2)"
+                value: "(2)"
             },
         ],
         team2Players: [],
@@ -91,13 +91,13 @@ const getYellowCardData = () => {
         team1Players: [
             {
                 name: 'Jorbe Vertessen',
-                dummyText: '90+5”'
+                value: '90+5”'
             },
         ],
         team2Players: [
             {
                 name: 'Paradise Vlut',
-                dummyText: "8’"
+                value: "8’"
             },
         ],
     }
@@ -109,7 +109,7 @@ const getRedCardData = () => {
         team2Players: [
             {
                 name: 'Paradise Vlut',
-                dummyText: "42’"
+                value: "42’"
             },
         ],
     }

@@ -188,10 +188,6 @@ export default function MatchBoard () {
         }
     }, [matches, initialRenderDone])
 
-    // useEffect(() => {
-    //     setTabChanged(!tabChanged)
-    // }, [nextActiveTabContent])
-
     useEffect(() => {
         const $matches = INITIAL_MATCHES.map((match, index) => {
             const todayDate = dayjs().format('YYYY-MM-D')

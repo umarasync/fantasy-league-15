@@ -78,6 +78,16 @@ export default function UpcomingMatchDetails({
         controls.start('changeHeight')
     }, [containerHeight])
 
+    const resetStates = () => {
+        setSelectedTab(ZERO)
+        setContainerHeight(0)
+        setBorderWidth(0)
+    }
+
+    useEffect(() => {
+        resetStates()
+    }, [showMatchDetails])
+
     return (
         showMatchDetails ? (
             <AnimatePresence>

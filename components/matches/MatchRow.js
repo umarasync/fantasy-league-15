@@ -16,6 +16,9 @@ import ClubImageAnimation from "Animations/mySquad/ClubImageAnimation";
 import R from "utils/getResponsiveValue";
 import UpcomingMatchDetails from "./upcomingMatches/UpcomingMatchDetails";
 
+// Constants
+import {ZERO} from "constants/arrayIndexes";
+
 // Styles
 const getStyles = (R) => {
     return {
@@ -125,11 +128,13 @@ export default function MatchRow({
                     match.finished ? (
                         <FinishedMatchDetails
                             match={match}
+                            tabChanged={tabChanged}
                             showMatchDetails={showMatchDetails}
                         />
                     ): (
                         <UpcomingMatchDetails
                             match={match}
+                            tabChanged={tabChanged}
                             showMatchDetails={showMatchDetails}
                         />
                     )
