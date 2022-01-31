@@ -22,7 +22,7 @@ export default function HeadToHead({
     return (
         <div ref={containerRef}>
             <Div className={'flex'} pt={24} pb={35}>
-                <Div w={'54%'} className={'flex justify-end'}>
+                <Div w={'57.5%'} className={'flex justify-end'}>
                     <Div className={'flex flex-col'}>
                        <Div className={'flex items-center justify-end'} mb={28}>
                             <Text text={team1.label} fs={18} lh={22} fw={600} color={colors.black_rock} mr={12}/>
@@ -58,7 +58,7 @@ export default function HeadToHead({
                         </Div>
                     </Div>
                 </Div>
-                <Div w={'46%'}>
+                <Div w={'42.5%'}>
                     <Div className={'flex flex-col'}>
                         <Div className={'flex items-center'} mb={28}>
                             <Image name={team2.image} alt={'team_logo'} w={40} h={40}/>
