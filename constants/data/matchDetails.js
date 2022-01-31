@@ -152,14 +152,14 @@ export const finishedMatchDetails = {
             data: getMissesData()
         },
         {
-            heading: 'Saves',
-            image: 'saves.png',
-            data: getSavesData()
-        },
-        {
             heading: 'Assists',
             image: 'assists.png',
             data: getAssistsData()
+        },
+        {
+            heading: 'Saves',
+            image: 'saves.png',
+            data: getSavesData()
         },
         {
             heading: 'Yellow cards',
@@ -181,11 +181,11 @@ const getLastMatchUp = () => {
     return {
         date: 'Monday 12 October 2021',
         team1: {
-            ...CLUBS[3],
+            ...CLUBS[5],
             goals: 2
         },
         team2: {
-            ...CLUBS[4],
+            ...CLUBS[6],
             goals: 4
         }
     }
@@ -201,13 +201,13 @@ const getHeadToHeadData = () => {
         totalMatchPlayed: 59,
         draws: 16,
         team1: {
-            ...CLUBS[3],
+            ...CLUBS[5],
             totalWins: 30,
             home: 8,
             away: 22,
         },
         team2: {
-            ...CLUBS[4],
+            ...CLUBS[6],
             totalWins: 13,
             home: 12,
             away: 1,

@@ -57,7 +57,7 @@ export default function MatchRow({
     return (
         <div>
             <Div className={'flex items-center cursor-pointer'} onClick={handleShowMatchDetails}>
-                <div className={'w-[54.5%]'}>
+                <div className={'w-[54%]'}>
                     <Div className={'flex justify-end items-center relative'} pr={100}>
                         <TeamName
                             tabChanged={tabChanged}
@@ -96,7 +96,7 @@ export default function MatchRow({
 
                     </Div>
                 </div>
-                <div className={'w-[45.5%]'}>
+                <div className={'w-[46%]'}>
                     <div className={'flex items-center relative'}>
                         <div style={STYLES.teamImage}>
                             <CardImage

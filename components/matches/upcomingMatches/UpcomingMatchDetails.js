@@ -47,7 +47,6 @@ export default function UpcomingMatchDetails({
 }) {
 
     const STYLES = {...getStyles(R)}
-    const { matchDetails } = match
 
     const controls = useAnimation()
 

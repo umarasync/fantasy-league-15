@@ -29,14 +29,12 @@ export default function MatchHighlights({
     const {matchDetails} = match
     const { highlights } = matchDetails
     return (
-        <div ref={containerRef} style={STYLES.container} className={'test1'}>
+        <div ref={containerRef} style={STYLES.container}>
             {/*Row*/}
             {
                 highlights.map((item, index) => {
                     return (
-                        <Div key={index}
-                             pt={24}
-                        >
+                        <Div key={index} pt={24}>
                             <Div center>
                                 <Text text={item.heading} fs={18} lh={26} mb={12} color={colors.regent_grey}/>
                             </Div>

@@ -47,10 +47,10 @@ const getStyles = (R, props) => {
     }
 }
 export default function TeamName({
-     index,
-     parentIndex,
-     initialOpacity,
-     fromSecondClub,
+    index,
+    parentIndex,
+    initialOpacity,
+    fromSecondClub,
     match,
     club,
     teamStyle,

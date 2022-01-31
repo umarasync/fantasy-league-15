@@ -60,7 +60,7 @@ export default function UpcomingMatchDetailsTabs({
     const STYLES = {...getStyles(R)}
 
     return (
-        <Div w={'100%'} mb={40} mt={25} pt={24} className={'bg-mystic-alabaster'}>
+        <Div w={'100%'} mt={25} pt={24} className={'bg-mystic-alabaster'}>
             <Div center>
                 <Div ml={30} mr={30} className={'flex items-center justify-between'} style={STYLES.tabsBox}
                      position={'relative'}>

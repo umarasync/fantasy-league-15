@@ -74,12 +74,10 @@ export const lastMatchUpsTabContentAnimation = () => {
     return {
         moveLeft: {
             marginLeft: '-110%',
-            // maxHeight: 0,
             transition
         },
         moveRight: {
             marginLeft: 0,
-            // maxHeight: 2000,
             transition
         }
     };
@@ -90,12 +88,10 @@ export const headToHeadTabContentAnimation = () => {
     return {
         moveLeft: {
             marginLeft: 0,
-            // maxHeight: 2000,
             transition
         },
         moveRight: {
             marginLeft: '110%',
-            // maxHeight: 0,
             transition
         }
     };

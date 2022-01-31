@@ -2,53 +2,62 @@
 import Div from "components/html/Div";
 import Text from "components/html/Text";
 import Image from "components/html/Image";
+import BorderHorizontal from "components/Borders/BorderHorizontal";
+import Goals from "components/matches/Goals";
 
 // Constants
 import colors from "constants/colors";
-
-// Utils
-import R from "utils/getResponsiveValue";
-
-// Styles
-const getStyles = (R) => {
-    return {
-        container: {
-            marginTop: R(24),
-            width:'100%',
-            paddingBottom: R(40)
-        }
-
-    }
-}
 
 export default function LastMatchUps({
     match,
     containerRef
 }) {
 
-    const STYLES = {...getStyles(R)}
-
     const {matchDetails} = match
 
     const {lastMatchUps} = matchDetails
 
     return (
-        <div ref={containerRef} className={'flex items-center justify-center'} style={STYLES.container}>
-            <table>
-                <tbody>
-                    {
-                        lastMatchUps.map((item,index) => {
-                           return (
-                               <tr key={index} className={`text-center`}>
-                                   <td><Text text={item.team1.label} fs={18} lh={22} color={colors.black_rock} /></td>
-                                   <td className={'flex items-center justify-center'}><Text text={'2:2'} w={106} fs={18} lh={26} color={colors.black_rock} fw={600}/></td>
-                                   <td><Text text={item.team2.label} fs={18} lh={22} color={colors.black_rock} /></td>
-                               </tr>
-                           )
-                        })
-                    }
-                </tbody>
-            </table>
+        <div ref={containerRef}>
+            <Div pb={20}>
+                {
+                    lastMatchUps.map((item, index) => {
+                        return (
+                            <Div key={index} pt={24}>
+                                <Text text={item.date} fs={16} color={colors.regent_grey} textAlign={'center'}/>
+                                <Div className={`flex`} pb={24} mt={12}>
+                                    <Div w={'54.5%'}>
+                                        <Div className={'flex items-center justify-end'}>
+                                            <Div className={'flex items-center'}>
+                                                <Text text={item.team1.label} fs={18} lh={22} mr={12}
+                                                      color={colors.black_rock}/>
+                                                <Image name={item.team1.image} w={40} h={40}/>
+                                            </Div>
+                                            <Div center w={106}>
+                                                <Goals
+                                                    team1Goals={item.team1.goals}
+                                                    team2Goals={item.team2.goals}
+                                                    fs={18}
+                                                    lh={26}
+                                                />
+                                            </Div>
+                                        </Div>
+                                    </Div>
+                                    <Div w={'45.5%'} className={''}>
+                                        <Div className={'flex items-center'}>
+                                            <Image name={item.team2.image} w={40} h={40}/>
+                                            <Text text={item.team2.label} fs={18} lh={22} ml={12}
+                                                  color={colors.black_rock}/>
+                                        </Div>
+                                    </Div>
+                                </Div>
+                                {index !== lastMatchUps.length - 1 && (<BorderHorizontal opacity={0.5}/>)}
+                            </Div>
+
+                        )
+                    })
+                }
+            </Div>
         </div>
     )
 }
