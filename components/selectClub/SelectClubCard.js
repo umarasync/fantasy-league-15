@@ -11,6 +11,7 @@ export default  function SelectClubCard({
     image,
     heading,
     subHeading,
+    containerClasses,
     containerStyle,
     bgImage,
     itemsCenter,
@@ -49,7 +50,11 @@ export default  function SelectClubCard({
 
     return (
         <div
-            className={`flex ${ itemsCenter && 'items-center'} relative ${containerStyle}`}
+            className={`flex ${ itemsCenter && 'items-center'} relative ${containerClasses}`}
+            style={{
+                width: R(containerStyle.width),
+                height: R(containerStyle.height)
+            }}
         >
         <div
             className={`flex absolute w-full flex-col items-center`}

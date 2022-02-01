@@ -18,6 +18,7 @@ const SIZING = {
     width: v => v ? {width: R(v)} : {},
     height: v => v ? {height: R(v)} : {},
     minHeight: v => v ? {minHeight: R(v)} : {},
+    maxHeight: v => v ? {maxHeight: R(v)} : {},
 }
 
 

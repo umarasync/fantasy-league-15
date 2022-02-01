@@ -17,28 +17,6 @@ import R from "utils/getResponsiveValue";
 import {nFormatter} from "utils/helpers";
 import TransferInAndOutPlayer from "components/transferWindow/TransferInAndOutPlayer";
 
-const player = {
-    id: 1,
-    image: 'player1.png',
-    clubImage: 'club_fc.png',
-    clubName: CLUB_FC,
-    status: STATUS_FIT,
-    name: 'R. Nelson',
-    nextMatch: {
-        club: 'GRO',
-        vs: 'BEN',
-        matchType: 'H'
-    },
-    position: POSITION_MID,
-    points: 14,
-    most_transferred: 2,
-
-    picked: 12,
-    pickedAsCaptain: 6,
-    recommended: true,
-    penaltyTaker: false,
-}
-
 // Styles
 const getStyles = () => {
     return {
