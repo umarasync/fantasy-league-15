@@ -58,23 +58,41 @@ export default function InfoBoard() {
         setShowJoinLeagueModal(true)
     }
 
-    const handleCreateLeague = (leagueName) => {
-        setShowLeagueCreationModal(false)
-        setShowInviteYourFriendsModal(true)
+    const createOrJoinPrivateLeague = ({
+        leagueName,
+        totalMembers,
+        points
+    }) => {
         setPrivateLeagues([
             ...privateLeagues,
             {
                 id: uuidv4(),
                 image: 'private_league.png',
                 name: leagueName,
-                totalMembers: 1,
-                points: 2
+                totalMembers: totalMembers,
+                points: points
             }
         ])
+    }
+
+    const handleCreateLeague = (leagueName) => {
+        setShowLeagueCreationModal(false)
+        setShowInviteYourFriendsModal(true)
+        createOrJoinPrivateLeague({
+            leagueName,
+            totalMembers: 5,
+            points: 2
+        })
     };
 
     const handleJoinLeague = (inviteCode) => {
-        console.log('1==========', inviteCode)
+        setShowJoinLeagueModal(false)
+        // Search League from DB for "inviteCode"
+        createOrJoinPrivateLeague({
+            leagueName: 'International',
+            totalMembers: 113,
+            points: 108
+        })
     }
 
     return (
