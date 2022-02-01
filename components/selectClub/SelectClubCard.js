@@ -79,7 +79,7 @@ export default  function SelectClubCard({
         <img
             src={`/images/${bgImage}`}
             alt=""
-            className="w-[100%]"
+            className="w-[100%] h-[100%]"
         />
     </div>
     )}
