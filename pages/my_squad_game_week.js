@@ -211,9 +211,9 @@ export default function MySquadGameWeek () {
                         />
                     </Div>
                     {/*Right-Section*/}
-                    <div className="w-[38%] flex justify-center" style={{height: 'max-content'}}>
+                    <Div className="w-[38%] flex justify-center">
                         <InfoBoard/>
-                    </div>
+                    </Div>
                 </div>
 
                 {/*Footer-Bar*/}
