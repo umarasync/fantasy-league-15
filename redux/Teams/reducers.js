@@ -1,6 +1,8 @@
 import {
   GET_ALL_TEAMS_SUCCESS,
   GET_ALL_TEAMS_FAILED,
+  UPDATE_TEAM_TO_PROFILE_SUCCESS,
+  UPDATE_TEAM_TO_PROFILE_FAILED,
   RESET_PAGE,
 } from "./actions";
 
@@ -9,6 +11,8 @@ function teamsReducer(
     loading: false,
     getAllTeamsSuccess: "",
     getAllTeamsError: "",
+    updateTeamToProfileSuccess:"",
+    updateTeamToProfileError:"",
   },
   action
 ) {
@@ -25,11 +29,25 @@ function teamsReducer(
         loading: false,
         getAllTeamsError: action.payload,
       };
+    case UPDATE_TEAM_TO_PROFILE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        updateTeamToProfileSuccess: action.payload,
+      };
+    case UPDATE_TEAM_TO_PROFILE_FAILED:
+      return {
+        ...state,
+        loading: false,
+        updateTeamToProfileError: action.payload,
+      };
     case RESET_PAGE:
       return {
         loading: false,
         getAllTeamsSuccess: "",
         getAllTeamsError: "",
+        updateTeamToProfileSuccess:"",
+        updateTeamToProfileError:"",
       };
     default:
       return state;

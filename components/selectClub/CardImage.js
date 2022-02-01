@@ -31,7 +31,7 @@ export default function CardImage ({
                             key={1}
                         >
                             <img
-                                src={`/images/${image.name}`}
+                                src={`${image.name}`}
                                 alt=""
                                 className="text-center w-full h-full"
                             />
@@ -53,7 +53,7 @@ export default function CardImage ({
                             key={2}
                         >
                             <img
-                                src={`/images/${image.name}`}
+                                src={`${image.name}`}
                                 alt=""
                                 className="text-center w-full h-full"
                             />
