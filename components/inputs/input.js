@@ -1,24 +1,43 @@
 // Packages
 import {useState} from "react";
 
+// Components
+import Div from "components/html/Div";
+import Image from "components/html/Image";
+
 // Utils
 import R from "utils/getResponsiveValue";
+import RS from "utils/responsiveStyle";
 
 // Constants
 import colors from 'constants/colors'
 
 // Styles
-const getStyles = (R) => {
+const getStyles = (R, RS, style) => {
+    const {
+        h = 70, p, pl = 24, pr = 24, pt, pb, m, ml, mr, mt, mb = 32, br = 12, fs = 18
+    } = style
     return {
         input: {
-            marginBottom: R(32),
-            borderRadius: R(12),
-            paddingLeft: R(24),
-            paddingRight: R(24),
+            ...RS.height(h),
+
+            ...RS.fontSize(fs),
+
+            ...RS.padding(p),
+            ...RS.paddingLeft(pl),
+            ...RS.paddingRight(pr),
+            ...RS.paddingTop(pt),
+            ...RS.paddingBottom(pb),
+            ...RS.margin(m),
+            ...RS.marginLeft(ml),
+            ...RS.marginRight(mr),
+            ...RS.marginTop(mt),
+            ...RS.marginBottom(mb),
+
+            ...RS.borderRadius(br),
+
             border: '1px solid',
             borderColor: colors.link_water,
-            height: R(70),
-            fontSize: R(18),
         },
         icon: {
             top: R(28),
@@ -26,23 +45,24 @@ const getStyles = (R) => {
         }
     }
 }
-export default function Input ({
-    name,
-    id,
-    placeholder,
-    onChange = () => false,
-    onFocus = () => false,
-    onClick = () => false,
-    type='text',
-    icon,
-    style,
-    onIconClick = () => false,
-    classes,
-    value,
-    onKeyDown = () => false
-}) {
+export default function Input (props) {
 
-    const STYLES =  { ... getStyles(R) }
+    const STYLES = {...getStyles(R, RS, {...props})}
+    const {
+        name,
+        id,
+        placeholder,
+        onChange = (v) => false,
+        onFocus = (v) => false,
+        onClick = (v) => false,
+        type = 'text',
+        icon,
+        style,
+        onIconClick = (v) => false,
+        classes,
+        value,
+        onKeyDown = (v) => false,
+    } = props
 
     const [focused, setFocused] = useState(false)
     const handleOnFocus = () => {
@@ -64,12 +84,14 @@ export default function Input ({
         { value && !focused && <p className="input-focused text-regent_grey">{placeholder}</p> }
         {
             icon && (
-                <img src={`/images/${icon}`}
-                     onClick={handleOnIconClick}
-                     alt=""
-                     className="cursor-pointer absolute"
-                     style={STYLES.icon}
-                />
+                <Div position={'absolute'} cursor={'pointer'} style={STYLES.icon} onClick={handleOnIconClick}>
+                    <Image
+                        name={icon}
+                        h={24}
+                        w={24}
+                        alt={'icon'}
+                    />
+                </Div>
             )}
 
         <input

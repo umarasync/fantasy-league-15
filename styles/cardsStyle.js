@@ -17,7 +17,12 @@ const cardsStyle = [
             leading: 16,
             mt: 30
         },
-        containerStyle: "w-[11.11%]",
+        // containerClasses: "w-[11.11%]",
+        containerClasses: "",
+        containerStyle: {
+          width: 161,
+          height: 147,
+        },
         bgImage : "card_blue_small_left.png",
         itemsCenter: true,
         boxPaddingTop: false,
@@ -40,7 +45,12 @@ const cardsStyle = [
             leading: 22,
             mt: 50
         },
-        containerStyle: 'w-[20.76%]',
+        // containerClasses: 'w-[20.76%]',
+        containerClasses: '',
+        containerStyle: {
+            width: 299,
+            height: 231,
+        },
         bgImage: 'card_blue.png',
         itemsCenter: true,
         boxPaddingTop: false,
@@ -63,7 +73,12 @@ const cardsStyle = [
             leading: 26,
             mt: 70
         },
-        containerStyle: 'w-[28.33%] items-start',
+        // containerClasses: 'w-[28.33%] items-start',
+        containerClasses: 'items-start',
+        containerStyle: {
+            width: 408,
+            height: 359,
+        },
         bgImage: 'card_white.png',
         itemsCenter: false,
         boxPaddingTop: 17.5
@@ -86,7 +101,12 @@ const cardsStyle = [
             leading: 22,
             mt: 50
         },
-        containerStyle: 'w-[20.76%]',
+        // containerClasses: 'w-[20.76%]',
+        containerClasses: '',
+        containerStyle: {
+            width: 299,
+            height: 231,
+        },
         bgImage: 'card_blue.png',
         itemsCenter: true,
         boxPaddingTop: false,
@@ -109,7 +129,12 @@ const cardsStyle = [
             leading: 16,
             mt: 30
         },
-        containerStyle: 'w-[11.11%]',
+        // containerClasses: 'w-[11.11%]',
+        containerClasses: '',
+        containerStyle: {
+            width: 161,
+            height: 147,
+        },
         bgImage: 'card_blue_small_right.png',
         itemsCenter: true,
         boxPaddingTop: false,

@@ -11,12 +11,13 @@ import colors from "constants/colors";
 // Styles
 const getStyles = (R, RS, style) => {
 
-    const { disabled,mb, mr, ml, inline } = style
+    const { disabled,mt, mb, mr, ml, inline } = style
 
 
     return {
         button: {
             ...RS.width(!inline && '100%'),
+            ...RS.marginTop(mt),
             ...RS.marginBottom(mb),
             ...RS.marginRight(mr),
             ...RS.marginLeft(ml),

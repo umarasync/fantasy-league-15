@@ -4,7 +4,7 @@ import RS from "utils/responsiveStyle";
 // Styles
 const getStyles = (RS, style) => {
     const {
-        w, h, p, pl, pr, pt, pb, m, ml, mr, mt, mb, bs, center, justifyBetween, br,
+        w, h, maxH, p, pl, pr, pt, pb, m, ml, mr, mt, mb, bs, center, justifyBetween, br,
         btlr, btrr, bblr, bbrr,
         position, left, right, top, bottom, bg, cursor, display, textCenter, minHeight, zIndex,
         overFlowXScroll
@@ -15,6 +15,7 @@ const getStyles = (RS, style) => {
             ...RS.width(w),
             ...RS.height(h),
             ...RS.minHeight(minHeight),
+            ...RS.maxHeight(maxH),
 
             ...RS.padding(p),
             ...RS.paddingLeft(pl),
