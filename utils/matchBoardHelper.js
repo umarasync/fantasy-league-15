@@ -1,5 +1,8 @@
-import {clone} from "./helpers";
+// Packages
 import dayjs from "dayjs";
+
+// Utils
+import {clone} from "utils/helpers";
 
 // Constants
 export const MAKE_TRANSFERS = 'make transfers'
@@ -82,7 +85,9 @@ export const tabClickHandler = ({
     tabChanged,
     setTabChanged,
     setActiveTabContent,
+    animationInProgress,
 }) => {
+    if(animationInProgress) return
     let currentActive = matches.findIndex((match) => match.active)
     const $matches = matches.map((item, index) => {
         item.active = item.id === match.id;
@@ -99,7 +104,7 @@ export const tabClickHandler = ({
 
 export const controlsHandler = ({
     animationInProgress,
-    isNext = false,
+    isNext,
     matches,
     // These props are necessary for tabClickHandler function
     setMatches,

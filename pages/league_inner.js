@@ -12,6 +12,7 @@ import R from "utils/getResponsiveValue";
 
 // Constants
 import colors from "constants/colors";
+import LeagueBoard from "../components/leaguesAndRanking/leagueInner/LeagueBoard";
 
 export default function LeagueInner() {
     return (
@@ -31,8 +32,7 @@ export default function LeagueInner() {
                 </Div>
 
                 <LeagueHeader mb={32}/>
-
-
+                <LeagueBoard/>
             </Div>
         </Layout>
     )

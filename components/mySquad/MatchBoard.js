@@ -112,7 +112,7 @@ export default function MatchBoard () {
             setActiveTabContent,
         })
     }
-    const handleControls = (isNext) => {
+    const handleControls = (isNext = false) => {
         controlsHandler({
             animationInProgress,
             isNext,
