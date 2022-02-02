@@ -82,7 +82,7 @@ export default function SelectClub() {
               title: Teams.name,
             },
             subHeading: {
-              title: Teams.venue,
+              title: Teams.area,
             },
           };
         })
