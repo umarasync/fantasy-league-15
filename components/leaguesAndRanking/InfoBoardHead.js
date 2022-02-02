@@ -15,7 +15,7 @@ export default function InfoBoardHead() {
         <>
             {/*username*/}
             <div className={'flex flex-row-reverse'}>
-                <Username username={'martine.bakker'} iconStyle={{width: R(16.2), height: R(16.2)}}/>
+                <Username username={'martine.bakker'} iConW={16.2} iconH={16.2}/>
             </div>
             <Div mt={45}>
                 <Text text={'gameweek 10'} fs={34} fw={900} fst={'italic'} tt={'uppercase'} lh={38}
