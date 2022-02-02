@@ -20,8 +20,8 @@ import Text from "components/html/Text"
 import Div from "components/html/Div"
 import Image from "components/html/Image";
 import ResetPasswordModal from "components/modals/ResetPasswordModal";
-import { createUser, loginUser } from "../../redux/Auth/api";
-import { RESET_PAGE } from "../../redux/Auth/actions";
+import { createUser, loginUser } from "redux/Auth/api";
+import { RESET_PAGE } from "redux/Auth/actions";
 
 // Utils
 import R from "utils/getResponsiveValue";

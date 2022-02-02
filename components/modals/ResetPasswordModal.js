@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Modal from "components/modals";
 import Input from "components/inputs/input";
 import Button from "components/html/Button";
-import { resetPasswordRequest } from "../../redux/Auth/api";
+import { resetPasswordRequest } from "redux/Auth/api";
 
 export default function ResetPasswordModal({ show, onClose }) {
   const router = useRouter();
@@ -29,9 +29,13 @@ export default function ResetPasswordModal({ show, onClose }) {
     //Mutation API response
     if (successRequest) {
         setDisabled(true);
-      toast.success("Password reset request sent to your email!");
+        onClose
+        toast.success("Password reset request sent to your email!", {
+          onClose: () => router.push("/"),
+        });
     } else if (errorRequest) {
       toast.error(errorRequest);
+      onClose
     }
   }, [successRequest, errorRequest]);
 

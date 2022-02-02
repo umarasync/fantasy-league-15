@@ -1,7 +1,7 @@
 // Packages
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
-import { emailConfirmation } from "../redux/api/auth";
+import { emailConfirmation } from "redux/Auth/api";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
