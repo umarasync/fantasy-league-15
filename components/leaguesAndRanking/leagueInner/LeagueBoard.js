@@ -21,10 +21,16 @@ import {clone} from "utils/helpers";
 import R from "utils/getResponsiveValue";
 import MatchBoardContent from "components/mySquad/MatchBoardContent";
 
-import {getActiveRect, setInitialSettings, controlsHandler} from "utils/leagueBoardHelper";
+import {
+    getActiveRect,
+    setInitialSettings,
+    controlsHandler,
+    scrollHandler,
+    tabClickHandler
+} from "utils/leagueBoardHelper";
 
 // Animations
-import {subHeadingAnimation} from "Animations/leaguesAndRanking/LeagueAndRankingAnimation";
+import {subHeadingAnimation, scrollAnimation} from "Animations/leaguesAndRanking/LeagueAndRankingAnimation";
 import {ZERO} from "../../../constants/arrayIndexes";
 import BorderHorizontal from "../../Borders/BorderHorizontal";
 
@@ -38,8 +44,12 @@ const getStyles = (R) => {
             marginLeft: R(31),
             marginRight: R(31),
         },
+        scrollBox: {
+            whiteSpace: 'nowrap',
+        },
         scrollContainer: {
             width: R(1080),
+            paddingLeft: R(10)
         },
         subHeading: {
             color: colors.regent_grey,
@@ -47,23 +57,6 @@ const getStyles = (R) => {
             lineHeight: R(32, 'px'),
             fontWeight: 'bold'
         },
-
-        // Old Styles
-        scrollBox: {
-            whiteSpace: 'nowrap',
-        },
-
-        borderStyle: {
-            height: R(2),
-            position: 'absolute',
-            background: colors.mandy,
-            marginTop: R(20),
-        },
-        calendarIcon: {
-            position: 'absolute',
-            top: R(15),
-            left: R(23)
-        }
     }
 }
 
@@ -73,40 +66,40 @@ export default function LeagueBoard () {
 
     const INITIAL_GAME_WEEKS_RANKINGS = clone(getLeaguesGameWeeksRanking())
     const [activeTab, setActiveTab] = useState({})
+    const [animationInProgress, setAnimationInProgress] = useState(false)
     const [leaguesGameWeeksRanking, setLeaguesGameWeeksRanking] = useState([])
     const scrollContainerRef = useRef()
     const controls = useAnimation()
     const [borderData, setBorderData] = useState({})
+    const [moved, setMoved] = useState(0)
     const elementsRef = useRef(INITIAL_GAME_WEEKS_RANKINGS.map(() => createRef()));
+    const scrollBoxOriginPoint = R(40)
 
     const handleTabClick = (lgwr) => {
-
-        const $leaguesGameWeeksRanking =  clone(leaguesGameWeeksRanking)
-
-        let previousActiveIndex = $leaguesGameWeeksRanking.findIndex((item) => item.active)
-        let nextActiveIndex = $leaguesGameWeeksRanking.findIndex((item) => item.id === lgwr.id)
-
-        $leaguesGameWeeksRanking[previousActiveIndex].active = false
-        $leaguesGameWeeksRanking[nextActiveIndex].active = true
-        setActiveTab($leaguesGameWeeksRanking[nextActiveIndex])
-        setLeaguesGameWeeksRanking($leaguesGameWeeksRanking)
-
-        // Handles-Border-Width
-
-        // if(nextActiveIndex > 5) return //TODO:imp UNCOMMENT
-
-        const el = elementsRef.current[lgwr.id]
-        const { activeRect, activeLeft } = getActiveRect({
-            itemRef: el,
-            scrollContainerRef
-        })
-        setBorderData({
-            width: activeRect.width,
-            leftOffset: activeLeft
+        tabClickHandler({
+            // League and ranking
+            lgwr,
+            leaguesGameWeeksRanking,
+            setLeaguesGameWeeksRanking,
+            // active tab
+            setActiveTab,
+            // scroll container
+            scrollContainerRef,
+            scrollBoxOriginPoint,
+            // moved
+            moved,
+            setMoved,
+            // border
+            setBorderData,
+            // animation
+            animationInProgress,
+            // refs
+            elementsRef
         })
     }
 
     const handleControls = (isNext = false) => {
+        if(animationInProgress) return
         const nextLGRW = controlsHandler({
             isNext,
             leaguesGameWeeksRanking,
@@ -118,15 +111,9 @@ export default function LeagueBoard () {
         handleTabClick(nextLGRW)
     }
 
-    // const setBorderHeightDynamically = () => {
-    //     console.log(elementsRef[0])
-    //     if (!elementsRef[0]) return
-    //     const firstElRect = elementsRef[0].current.getBoundingClientRect()
-    //     setBorderData(firstElRect.width)
-    // }
-
     useEffect(() => {
         controls.start('changeTextColor')
+        controls.start('scroll')
     }, [activeTab])
 
     useEffect(() => {
@@ -135,7 +122,6 @@ export default function LeagueBoard () {
             setLeaguesGameWeeksRanking,
             setActiveTab
         })
-        // setBorderHeightDynamically()
     }, [])
 
     return (
@@ -160,7 +146,12 @@ export default function LeagueBoard () {
                                 leaguesGameWeeksRanking.length > 0 && leaguesGameWeeksRanking.map((lgwr, index) => {
                                     return (
                                         lgwr.date ? (
-                                            <div
+                                            <motion.div
+                                                variants={scrollAnimation}
+                                                animate={controls}
+                                                custom={{
+                                                    moved
+                                                }}
                                                 className={'flex flex-col items-center justify-center'}
                                                 style={STYLES.item}
                                                 ref={elementsRef.current[lgwr.id]}
@@ -182,9 +173,15 @@ export default function LeagueBoard () {
                                                 >
                                                     {dayjs(lgwr.date).format('DD MMM')}
                                                 </motion.p>
-                                            </div>
+                                            </motion.div>
                                         ) : (
-                                            <div
+
+                                            <motion.div
+                                                variants={scrollAnimation}
+                                                animate={controls}
+                                                custom={{
+                                                    moved
+                                                }}
                                                 className={'flex items-center justify-center'}
                                                 style={STYLES.item}
                                                 ref={elementsRef.current[lgwr.id]}
@@ -199,23 +196,27 @@ export default function LeagueBoard () {
                                                 >
                                                     {lgwr.week}
                                                 </motion.p>
-                                            </div>
+                                            </motion.div>
                                         )
                                     )
                                 })
                             }
                         </Div>
-                        <LeagueBoardBorder borderData={borderData}/>
+                        <LeagueBoardBorder
+                            borderData={borderData}
+                            setAnimationInProgress={setAnimationInProgress}
+                        />
                     </div>
                 </Div>
 
                 <Div mt={20}><BorderHorizontal opacity={0.5}/></Div>
                 <LeagueBoardControls onPrevious={handleControls} onNext={() => handleControls(true)} />
-
             </Div>
 
             {/*Content*/}
-            <Div/>
+            <Div center pt={200}>
+                <p>{activeTab.week}</p>
+            </Div>
         </Div>
     )
 

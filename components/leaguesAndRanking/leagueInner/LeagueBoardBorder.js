@@ -34,6 +34,7 @@ const getStyles = (R) => {
 
 export default function LeagueBoardBorder({
     borderData,
+    setAnimationInProgress
 }) {
     const STYLES = {...getStyles(R)}
 
@@ -42,6 +43,14 @@ export default function LeagueBoardBorder({
     useEffect(() => {
         controls.start('moveBorder')
     }, [borderData])
+
+    const onAnimationComplete = (definition) => {
+        if (definition === 'moveBorder') {
+            setAnimationInProgress(false)
+            setTimeout(() => {
+            }, 300)
+        }
+    }
 
     return (
        <Div className={'relative'} bg={'blue'}>
@@ -52,7 +61,13 @@ export default function LeagueBoardBorder({
                    <motion.div
                        variants={tabsBorderAnimation()}
                        animate={controls}
-                       custom={{leftOffset: borderData.leftOffset}}
+                       custom={{
+                           leftOffset: borderData.leftOffset,
+                           width: borderData.width
+                       }}
+                       onAnimationStart={() => setAnimationInProgress(true)}
+                       onAnimationComplete={(definition) => onAnimationComplete(definition)}
+
                        style={{
                            ...STYLES.border,
                            width: borderData.width
