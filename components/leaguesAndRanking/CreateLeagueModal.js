@@ -53,7 +53,7 @@ export default function CreateLeagueModal({
                             tt={'uppercase'}
                             color={colors.black_rock}
                         />
-                        <Image name={'close.png'} w={40} h={40} onClick={onClose} cursor={'pointer'} alt={'close.png'}/>
+                        <Image src={'/images/close.png'} w={40} h={40} onClick={onClose} cursor={'pointer'} alt={'close.png'}/>
                     </Div>
                     <Text
                         text={`Invite your friends and compete with them in a private league.`}

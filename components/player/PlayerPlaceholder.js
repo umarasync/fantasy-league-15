@@ -7,7 +7,7 @@ const PlayerPlaceholder = ({
 }) => {
     return (
         <div className={'flex flex-col items-center'}>
-            <Image name={'player_empty.png'} w={40} h={40} alt={''}/>
+            <Image src={`/images/player_empty.png`} w={40} h={40} alt={''}/>
             <Div
                 pr={10}
                 mt={4}

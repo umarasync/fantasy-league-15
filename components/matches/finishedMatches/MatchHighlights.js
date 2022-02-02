@@ -57,7 +57,7 @@ export default function MatchHighlights({
                                             }
 
                                         </Div>
-                                        <Image name={item.image} w={24} h={24} ml={60}/>
+                                        <Image src={`/images/${item.image}`} w={24} h={24} ml={60}/>
                                     </Div>
                                 </Div>
                                 <Div w={'49%'}>

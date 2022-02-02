@@ -27,8 +27,8 @@ export default function ConfirmAccount() {
                 pt={62}
             >
                 <div className="flex flex-col items-center">
-                    <Image name={'logo_white.png'} alt={'logo_white'} w={231} h={56} mb={140}/>
-                    <Image name={'check_red.png'} alt={'check_red'} w={80} h={80} mb={40}/>
+                    <Image src={'/images/logo_white.png'} alt={'logo_white'} w={231} h={56} mb={140}/>
+                    <Image src={'/images/check_red.png'} alt={'check_red'} w={80} h={80} mb={40}/>
                     <Text text={'confirm your account'} fs={50} lh={54} fw={800} fst={'italic'} tt={'uppercase'} color={colors.white} mb={24}/>
                     <Text
                         text={<>

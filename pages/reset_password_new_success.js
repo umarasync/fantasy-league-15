@@ -24,8 +24,8 @@ export default function ResetPasswordSuccess() {
                 style={{minHeight: R()}}
             >
                 <div className="flex flex-col items-center">
-                    <Image name={'logo_white.png'} alt={'logo_white'} w={231} h={56} mb={140}/>
-                    <Image name={'check_red.png'} alt={'check_red'} w={80} h={80} mb={40}/>
+                    <Image src={'/images/logo_white.png'} alt={'logo_white'} w={231} h={56} mb={140}/>
+                    <Image src={'/images/check_red.png'} alt={'check_red'} w={80} h={80} mb={40}/>
                     <Text
                         text={<span>You’ve successfully <br/>created new password!</span>}
                         fs={32} lh={40} fw={800} fst={'italic'} tt={'uppercase'}

@@ -77,7 +77,7 @@ export default function MatchRow({
                                 fadeInOutAnimation={ClubImageAnimation}
                                 custom={{initialOpacity}}
                                 changeCard={tabChanged}
-                                image={{...STYLES.teamImage, name: match.club1.logo}}
+                                image={{...STYLES.teamImage, name: `/images/${match.club1.logo}`}}
                             />
                         </div>
                         <div className={'relative'}>
@@ -106,7 +106,7 @@ export default function MatchRow({
                                 fadeInOutAnimation={ClubImageAnimation}
                                 custom={{initialOpacity}}
                                 changeCard={tabChanged}
-                                image={{...STYLES.teamImage, name: match.club2.logo}}
+                                image={{...STYLES.teamImage, name: `/images/${match.club2.logo}`}}
                             />
                         </div>
                         <TeamName

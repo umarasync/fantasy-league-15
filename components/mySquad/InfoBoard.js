@@ -106,7 +106,7 @@ export default function InfoBoard() {
                     {/*Header*/}
                     <Div className={'flex items-center justify-between'} pb={24}>
                         <Text text={'leagues and ranking'} fs={22} fw={900} fst={'italic'} tt={'uppercase'} lh={26}/>
-                        <Image w={24} h={24} name={'info_grey.png'}/>
+                        <Image w={24} h={24} src={'/images/info_grey.png'}/>
                     </Div>
                     {/*Body*/}
                     <div style={STYLES.leaguesBody}>
@@ -127,7 +127,7 @@ export default function InfoBoard() {
                         <Div className={'flex items-center justify-between'} pt={16} mb={16}>
                             <Text
                                 text={'Private leagues'} fs={22} fw={900} fst={'italic'} tt={'uppercase'} lh={26}/>
-                            <Image w={24} h={24} name={'info_grey.png'}/>
+                            <Image w={24} h={24} src={'/images/info_grey.png'}/>
                         </Div>
                         {
                             privateLeagues.length > 0 ? (

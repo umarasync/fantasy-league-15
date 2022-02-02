@@ -150,12 +150,12 @@ const PlayerComponent = ({player, onPlayerChange, onPlayerClick, initialOpacity}
                     <span>{player.name}</span>
                     {
                         player.captain && (
-                            <Image name={'captain1.png'} w={16} h={16} ml={4}/>
+                            <Image src={'/images/captain1.png'} w={16} h={16} ml={4}/>
                         )
                     }
                     {
                         player.viceCaptain && (
-                            <Image name={'vice-captain1.png'} w={16} h={16} ml={4}/>
+                            <Image src={'/images/vice-captain1.png'} w={16} h={16} ml={4}/>
                         )
                     }
                 </div>

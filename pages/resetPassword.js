@@ -112,7 +112,7 @@ export default function ResetPassword() {
       />
       <Div className="flex flex-col items-center" pt={62} style={{minHeight: R()}}>
         <Div className="flex flex-col items-center" w={412}>
-          <Image name={'logo_blue.png'} w={231} h={56} mb={140}/>
+          <Image src={'/images/logo_blue.png'} w={231} h={56} mb={140}/>
           <Text text={'Reset your password'} fs={32} lh={40} fw={800} fst={'italic'} tt={'uppercase'}
                 color={colors.black_rock} mb={20}/>
 

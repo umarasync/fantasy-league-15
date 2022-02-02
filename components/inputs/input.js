@@ -86,7 +86,7 @@ export default function Input (props) {
             icon && (
                 <Div position={'absolute'} cursor={'pointer'} style={STYLES.icon} onClick={handleOnIconClick}>
                     <Image
-                        name={icon}
+                        src={`/images/${icon}`}
                         h={24}
                         w={24}
                         alt={'icon'}

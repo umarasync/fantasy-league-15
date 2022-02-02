@@ -195,7 +195,7 @@ export default function MySquadGameWeek () {
     }
 
     return (
-        <Layout title="Build Team All Player">
+        <Layout title="My Squad">
             <Div className="mx-auto relative bg-white">
                 <div className={'flex'}>
                     <Div className="w-[62%]">

@@ -31,7 +31,7 @@ export default function LastMatchUps({
                                             <Div className={'flex items-center'}>
                                                 <Text text={item.team1.label} fs={18} lh={22} mr={12}
                                                       color={colors.black_rock}/>
-                                                <Image name={item.team1.image} w={40} h={40}/>
+                                                <Image src={`/images/${item.team1.image}`} w={40} h={40}/>
                                             </Div>
                                             <Div center w={106}>
                                                 <Goals
@@ -45,7 +45,7 @@ export default function LastMatchUps({
                                     </Div>
                                     <Div w={'45.5%'} className={''}>
                                         <Div className={'flex items-center'}>
-                                            <Image name={item.team2.image} w={40} h={40}/>
+                                            <Image src={`/images/${item.team2.image}`} w={40} h={40}/>
                                             <Text text={item.team2.label} fs={18} lh={22} ml={12}
                                                   color={colors.black_rock}/>
                                         </Div>

@@ -16,7 +16,7 @@ export default function TransferIn({
     return (
         <>
             <Div className={'flex items-center'} mb={24}>
-                <Image name={'info_grey.png'} h={20} w={20} mr={35}/>
+                <Image src={'/images/info_grey.png'} h={20} w={20} mr={35}/>
                 <PlayerImage
                     w={70}
                     h={70}

@@ -26,7 +26,7 @@ export default function PlayerInfoHeader ({
                 right={24}
                 onClick={onClose}
             >
-                <Image alt={'close'} name={'close2.png'}/>
+                <Image alt={'close'} src={'/images/close2.png'}/>
             </Div>
 
             {/*header*/}

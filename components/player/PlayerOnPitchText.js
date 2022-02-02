@@ -33,7 +33,7 @@ export default function PlayerOnPitchText({player, mt}) {
                         bg={colors.white}
                         className={'flex items-center justify-center'}
                     >
-                        <Image name={player.statusImage} w={10} h={10} alt={''}/>
+                        <Image src={`/images/${player.statusImage}`} w={10} h={10} alt={''}/>
                     </Div>
                 )
             }

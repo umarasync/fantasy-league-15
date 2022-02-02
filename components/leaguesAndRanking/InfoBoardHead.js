@@ -1,5 +1,5 @@
 // Components
-import Username from "components/user/Username";
+    import Username from "components/user/Username";
 import Div from "components/html/Div";
 import Text from "components/html/Text";
 

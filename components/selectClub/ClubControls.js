@@ -18,7 +18,7 @@ export default function clubControls({
                 />
                 <Div className="flex justify-center" mt={40}>
                     <Image
-                        name={'left_arrow_select_club.png'}
+                        src={'/images/left_arrow_select_club.png'}
                         w={60}
                         h={60}
                         alt={''}
@@ -27,7 +27,7 @@ export default function clubControls({
                         onClick={() => onControlsClick(true)}
                     />
                     <Image
-                        name={'right_arrow_select_club.png'}
+                        src={'images/right_arrow_select_club.png'}
                         w={60}
                         h={60}
                         alt={''}

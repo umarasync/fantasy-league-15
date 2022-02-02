@@ -25,7 +25,7 @@ export default function PlayerInfoControls({
             onClick={action}
             className={'box-shadow-electric-indigo flex items-center justify-center flex-col'}
         >
-            <Image name={icon} w={24} h={24}/>
+            <Image src={`/images/${icon}`} w={24} h={24}/>
             <Text text={heading} fs={14} lh={16} mt={10} color={colors.regent_grey}/>
             <Text text={subHeading} fs={14} lh={16} color={colors.regent_grey}/>
         </Div>

@@ -22,7 +22,7 @@ export default function SeasonPoints ({
                                 <Div center>
                                     {
                                         item.icon && (
-                                            <Image alt={'icon'} mr={4} pt={4} name={item.icon} w={18} h={18}/>
+                                            <Image alt={'icon'} mr={4} pt={4} src={`/images/${item.icon}`} w={18} h={18}/>
                                         )
                                     }
 

@@ -23,7 +23,7 @@ export default function TransferOut({
                     cih={26}
                     player={player}
                 />
-                <Image name={'info_grey.png'} alt={'info_grey'} h={20} w={20} ml={35}/>
+                <Image src={'/images/info_grey.png'} alt={'info_grey'} h={20} w={20} ml={35}/>
             </Div>
             <Div className={'flex flex-col'}>
                 <Text
