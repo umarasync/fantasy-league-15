@@ -1,38 +1,20 @@
 // Components
 import Text from "components/html/Text";
 import Image from "components/html/Image";
+import Div from "components/html/Div";
 
 // Constants
 import colors from "constants/colors";
 
-// Utils
-import R from "utils/getResponsiveValue";
-
-// Styles
-const getStyles = (R) => {
-    return {
-        // username: {
-        //     color: colors.regent_grey,
-        //     fontSize: R(14),
-        //     marginRight: R(5)
-        // },
-        person: {
-            width: R(18.2),
-            height: R(18.2)
-        }
-    }
-}
-
 export default function Username({
     username,
-    iConW = 18.2,
-    iconH = 18.2
+    iConW = 18,
+    iconH = 18,
+    iconSrc = '/images/person.png'
  }) {
 
-    const STYLES =  { ... getStyles(R) }
-
     return (
-        <div className={'flex'}>
+        <Div className={'inline-flex items-center justify-center'}>
             <Text
                 text={username}
                 fs={14}
@@ -41,10 +23,10 @@ export default function Username({
                 color={colors.regent_grey}
             />
             <Image
-                src={'/images/person.png'}
+                src={iconSrc}
                 w={iConW}
                 h={iconH}
             />
-        </div>
+        </Div>
     )
 }

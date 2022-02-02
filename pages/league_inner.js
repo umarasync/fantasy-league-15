@@ -2,9 +2,16 @@
 import Layout from "components/layout";
 import Div from "components/html/Div";
 import Image from "components/html/Image";
+import Text from "components/html/Text";
+import Button from "components/html/Button";
+import Username from "components/user/Username";
+import LeagueHeader from "components/leaguesAndRanking/leagueInner/LeagueHeader";
 
 // Utils
 import R from "utils/getResponsiveValue";
+
+// Constants
+import colors from "constants/colors";
 
 export default function LeagueInner() {
     return (
@@ -14,10 +21,18 @@ export default function LeagueInner() {
                 bg-[length:100%_100%] bg-no-repeat w-full relative"
                 style={{minHeight: R()}}
                 pt={34}
+                pb={66}
+                pl={81}
+                pr={81}
             >
-                <Div>
-                    <Image src={'/images/logo_white.png'} w={164} h={40}/>
+                <Div className={'flex items-center justify-between'} mb={50}>
+                    <Image src={'/images/logo_white.png'} w={164} h={40} alt={'logo_white'}/>
+                    <Username username={'martine.bakker'} iconSrc={'/images/user_white.png'}/>
                 </Div>
+
+                <LeagueHeader mb={32}/>
+
+
             </Div>
         </Layout>
     )
