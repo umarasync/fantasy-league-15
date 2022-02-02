@@ -18,6 +18,7 @@ export const getAllTeams = () => {
               id
               name
               venue
+              area
               logo
             }
           }
