@@ -18,6 +18,16 @@ import {MATCHES} from "constants/data/matches";
 import {clone} from "utils/helpers";
 import R from "utils/getResponsiveValue";
 import MatchBoardContent from "components/mySquad/MatchBoardContent";
+import {
+    controlsHandler,
+    scrollRenderer,
+    tabClickHandler,
+    MAKE_TRANSFERS,
+    setInitialSettings
+} from "utils/matchBoardHelper";
+
+// Animations
+import {scrollAnimation, borderAnimation, subHeadingAnimation} from "Animations/matchBoard/MatchBoardAnimation";
 
 // Styles
 const getStyles = (R) => {
@@ -79,46 +89,9 @@ export default function MatchBoard () {
     const [tabChanged, setTabChanged] = useState(false)
     const [borderWidth, setBorderWidth] = useState(0)
     const [activeTabContent, setActiveTabContent] = useState({})
-    const MAKE_TRANSFERS = 'make transfers'
-
     const elementsRef = useRef(INITIAL_MATCHES.map(() => createRef()));
-
     const scrollBoxOriginPointForBorder = R(517.421)
     const scrollBoxOriginPoint = R(417)
-
-    const duration = 0.7
-
-    const scrollAnimation = {
-        scroll: ({match}) => {
-            return {
-                x: -moved,
-                opacity: match.active || match.lastActive ? 1 : 0.5,
-                transition: {
-                    duration: duration,
-                },
-            }
-        },
-    };
-
-    const borderAnimation = {
-        borderWidth: {
-            width: borderWidth,
-            transition: {
-                duration: duration
-            }
-        }
-    };
-
-    const subHeadingAnimation = {
-        changeTextColor: (match) => {
-            return {
-                color: match.active ? colors.black_rock : colors.regent_grey,
-                transition: {
-                    duration: duration
-                }
-            }
-        }
-    };
 
     useEffect(() => {
         if(initialRenderDone){
@@ -128,79 +101,51 @@ export default function MatchBoard () {
         }
     }, [moved])
 
-    const getActiveRect = (itemRef) => {
-        if(!itemRef.current) return;
-        const scrollRect = scrollContainerRef.current.getBoundingClientRect()
-        const activeRect = itemRef.current.getBoundingClientRect()
-        return {
-            activeRect,
-            activeLeft: activeRect.left - scrollRect.left,
-            activeRight: activeRect.right - scrollRect.right,
-        };
-    }
-
-    const handleScroll = () => {
-        const { activeLeft, activeRect, activeRight} = getActiveRect(activeRef)
-        setBorderWidth(activeRect.width)
-        let movedPixels = 0;
-        if(activeLeft > scrollBoxOriginPoint) {
-            movedPixels = activeLeft - scrollBoxOriginPoint
-        }else {
-            movedPixels = -1 * (scrollBoxOriginPoint - activeLeft)
-        }
-        setMoved(moved + movedPixels)
-    }
-
     const handleTabClick = (match) => {
-        let currentActive = matches.findIndex((match) => match.active)
-        const $matches = matches.map((item, index) => {
-            item.active = item.id === match.id;
-            if(item.active) {
-                setActiveTabContent({...item})
-                setTabChanged(!tabChanged)
-            }
-            item.lastActive = index === currentActive
-            return item
+        tabClickHandler({
+            match,
+            animationInProgress,
+            matches,
+            setMatches,
+            tabChanged,
+            setTabChanged,
+            setActiveTabContent,
         })
-        setMatches($matches)
     }
-
     const handleControls = (isNext = false) => {
-        if(animationInProgress) return;
-        const $matches = clone(matches)
-        let objIndex = $matches.findIndex((match) => match.active)
-        let nextIndex = isNext ? objIndex + 1 : objIndex - 1
-        if(nextIndex === $matches.length || nextIndex === -1) return
-        handleTabClick($matches[nextIndex])
+        controlsHandler({
+            animationInProgress,
+            isNext,
+            matches,
+            setMatches,
+            tabChanged,
+            setTabChanged,
+            setActiveTabContent,
+        })
     }
 
     useEffect(() => {
-        const activeObj = matches.filter(match => match.active)
         setInitialRenderDone(true)
         if(initialRenderDone){
          setTimeout(() => {
-             if(getActiveRect(activeRef)){
-                 const { activeRect } = getActiveRect(activeRef)
-                 setBorderWidth(activeRect.width)
-                 handleScroll()
-             }
+                scrollRenderer({
+                    activeRef,
+                    scrollContainerRef,
+                    scrollBoxOriginPoint,
+                    moved,
+                    setMoved,
+                    setBorderWidth,
+                })
          }, 50)
         }
     }, [matches, initialRenderDone])
 
     useEffect(() => {
-        const $matches = INITIAL_MATCHES.map((match, index) => {
-            const todayDate = dayjs().format('YYYY-MM-D')
-
-            if(dayjs(match.date).isSame(todayDate)) {
-                match.date = MAKE_TRANSFERS
-                match.active = true
-                setActiveTabContent({...match})
-            }
-            return match
+        setInitialSettings({
+            initialMatches: INITIAL_MATCHES,
+            setActiveTabContent,
+            setMatches
         })
-
-        setMatches($matches)
     }, [])
 
     const onAnimationComplete = (definition) => {
@@ -244,7 +189,10 @@ export default function MatchBoard () {
                                     <motion.div
                                         variants={scrollAnimation}
                                         animate={controls}
-                                        custom={{match}}
+                                        custom={{
+                                            match,
+                                            moved
+                                        }}
                                         key={match.id}
                                         className={'flex flex-col items-center'}
                                         style={{...STYLES.item}}
@@ -291,6 +239,7 @@ export default function MatchBoard () {
                 <motion.div
                     variants={borderAnimation}
                     animate={borderAnimationControls}
+                    custom={{borderWidth}}
                     onAnimationStart={() => setAnimationInProgress(true)}
                     onAnimationComplete={(definition) => onAnimationComplete(definition)}
                     style={{

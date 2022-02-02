@@ -29,6 +29,7 @@
     "redux-devtools-extension": "^2.13.9",
     "redux-promise-middleware": "^6.1.2",
     "redux-thunk": "^2.4.1",
+    "use-dynamic-refs": "^1.0.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
