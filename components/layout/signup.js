@@ -328,14 +328,14 @@ export default function SignUp(props) {
                       color={colors.white} className={'opacity-70'} mb={100}/>
               </Div>
 
-              <Image name={'players.png'} al={'players'} w={'100%'} h={'100%'}/>
+              <Image src={'/images/players.png'} al={'players'} w={'100%'} h={'100%'}/>
             </div>
           </div>
 
 
           {/*Right-Section*/}
           <Div className={`flex flex-col items-center`} style={{minHeight: R()}} pb={30} pt={62}>
-            <Image name={'fantasy_15.png'} alt={''} w={107} h={26} mb={40}/>
+            <Image src={'/images/fantasy_15.png'} alt={''} w={107} h={26} mb={40}/>
 
             <Div className="flex justify-center relative" mb={20}>
               <Text fs={32}  lh={40} text={'sign'} tt={'uppercase'} fst={'italic'} fw={800} ml={-50} color={colors.black_rock}/>

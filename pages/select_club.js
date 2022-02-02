@@ -177,7 +177,12 @@ export default function SelectClub() {
         pt={34}
       >
         <div className="absolute" style={STYLES.image}>
-          <Image name={"logo_white.png"} alt={""} w={164} h={40} />
+          <Image
+              src={`/images/logo_white.png`}
+              alt={""}
+              w={164}
+              h={40}
+          />
         </div>
         <div className="flex flex-col items-center">
           <Text

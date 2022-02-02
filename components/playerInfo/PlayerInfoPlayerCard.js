@@ -25,7 +25,7 @@ export default function PlayerInfoPlayerCard({
         >
             {/*left side*/}
             <div className={'flex items-center'}>
-                <Image alt={'info'} name={'info_grey.png'} w={20} h={20} ml={20} mr={17}/>
+                <Image alt={'info'} src={'/images/info_grey.png'} w={20} h={20} ml={20} mr={17}/>
                 <Border/>
                 <PlayerImage player={player} ml={16} mr={16} w={70} h={70}/>
                 <div>

@@ -74,7 +74,7 @@ const MatchPointsTable = ({
                         <td><TD title={item.gw}/></td>
                         <td>
                             <Div className={'flex items-center justify-center'} ml={24}>
-                                <Image name={item.opp.clubImage} w={18} pt={3} alt={'club image'} h={18}/>
+                                <Image src={`/images/${item.opp.clubImage}`} w={18} pt={3} alt={'club image'} h={18}/>
                                 <TD title={`${item.opp.clubName} (${item.opp.matchType}) ${item.opp.matchResult}`} ml={4}/>
                             </Div>
                         </td>

@@ -227,7 +227,7 @@ export default function MatchBoard () {
                 <Div position={'relative'} cursor={'pointer'}>
                     <Button title={'Sync to calendar'} h={50} pr={24} pl={55} pt={15} pb={15}/>
                     <div style={STYLES.calendarIcon}>
-                        <Image w={20} h={20} name={'calendar.png'}/>
+                        <Image w={20} h={20} src={'/images/calendar.png'}/>
                     </div>
                 </Div>
             </Div>
@@ -281,10 +281,10 @@ export default function MatchBoard () {
                 </Div>
 
                 <Div position='absolute' top={1} left={40}>
-                    <Image w={60} h={60} name={'arrow-prev.png'} cursor={'pointer'} onClick={() => handleControls()}/>
+                    <Image w={60} h={60} src={'/images/arrow-prev.png'} cursor={'pointer'} onClick={() => handleControls()}/>
                 </Div>
                 <Div position='absolute' top={1} right={40}>
-                    <Image w={60} h={60} name={'arrow-next.png'} cursor={'pointer'}
+                    <Image w={60} h={60} src={'/images/arrow-next.png'} cursor={'pointer'}
                            onClick={() => handleControls(true)}/>
                 </Div>
 

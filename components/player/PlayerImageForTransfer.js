@@ -51,14 +51,14 @@ export default function PlayerImageForTransfer(props) {
 
     return (
         <Div w={w} h={h} style={STYLES.image}>
-            <Image onClick={onPlayerClick} name={player.image} cursor={'pointer'}/>
+            <Image onClick={onPlayerClick} src={`/images/${player.image}`} cursor={'pointer'}/>
             {
                 clickedIcon && (
                     <Div h={16} w={16} position={'absolute'} left={0} top={0}
                          cursor={!player.disableIconClick ? 'pointer' : 'auto'}
                          onClick={() => !player.disableIconClick && onIconClick ? onIconClick() : false}
                     >
-                        <Image name={clickedIcon}/>
+                        <Image src={`/images/${clickedIcon}`}/>
                     </Div>
 
                 )
@@ -67,7 +67,7 @@ export default function PlayerImageForTransfer(props) {
             {
                 !hideClubImage && (
                     <Div position='absolute' bottom={0} right={0}>
-                        <Image w={ciw} h={cih} onClick={onPlayerClick} name={player.clubImage}/>
+                        <Image w={ciw} h={cih} onClick={onPlayerClick} src={`/images/${player.clubImage}`}/>
                     </Div>
                 )
             }
