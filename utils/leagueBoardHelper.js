@@ -5,11 +5,11 @@ import {clone} from "utils/helpers";
 export const setInitialSettings = ({
    initialGameWeeksRankings,
    setLeaguesGameWeeksRanking,
-   setActiveTabContent,
+   setActiveTab,
 }) => {
     const $initialGameWeeksRankings = clone(initialGameWeeksRankings)
     $initialGameWeeksRankings[0].active = true
-    setActiveTabContent($initialGameWeeksRankings[0])
+    setActiveTab({...$initialGameWeeksRankings[0]})
     setLeaguesGameWeeksRanking([...$initialGameWeeksRankings])
 }
 
@@ -28,27 +28,16 @@ export const getActiveRect = ({
 
 
 export const controlsHandler = ({
-                                    animationInProgress,
-                                    isNext,
-                                    leaguesGameWeeksRanking,
-                                }) => {
-    // if (animationInProgress) return;
+    animationInProgress,
+    isNext,
+    leaguesGameWeeksRanking,
+    setLeaguesGameWeeksRanking,
+}) => {
+    if (animationInProgress) return;
     const $leaguesGameWeeksRanking = clone(leaguesGameWeeksRanking)
     let objIndex = $leaguesGameWeeksRanking.findIndex((lgwr) => lgwr.active)
     let nextIndex = isNext ? objIndex + 1 : objIndex - 1
     if (nextIndex === $leaguesGameWeeksRanking.length || nextIndex === -1) return false
 
-    $leaguesGameWeeksRanking[objIndex].active = false
-    $leaguesGameWeeksRanking[nextIndex].active = true
-
-    return $leaguesGameWeeksRanking
-
-    // tabClickHandler({
-    //     matches,
-    //     match: $leaguesGameWeeksRanking[nextIndex],
-    //     setMatches,
-    //     tabChanged,
-    //     setTabChanged,
-    //     setActiveTabContent,
-    // })
+    return $leaguesGameWeeksRanking[nextIndex]
 }

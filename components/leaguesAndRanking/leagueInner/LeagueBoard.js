@@ -20,16 +20,11 @@ import getLeaguesGameWeeksRanking from "constants/data/leaguesGameWeeks";
 import {clone} from "utils/helpers";
 import R from "utils/getResponsiveValue";
 import MatchBoardContent from "components/mySquad/MatchBoardContent";
-import {
-    controlsHandler,
-    scrollRenderer,
-    tabClickHandler,
-    MAKE_TRANSFERS
-} from "utils/matchBoardHelper";
-import {getActiveRect, setInitialSettings} from "utils/leagueBoardHelper";
+
+import {getActiveRect, setInitialSettings, controlsHandler} from "utils/leagueBoardHelper";
 
 // Animations
-import {scrollAnimation, borderAnimation, subHeadingAnimation} from "Animations/matchBoard/MatchBoardAnimation";
+import {subHeadingAnimation} from "Animations/leaguesAndRanking/LeagueAndRankingAnimation";
 import {ZERO} from "../../../constants/arrayIndexes";
 import BorderHorizontal from "../../Borders/BorderHorizontal";
 
@@ -46,16 +41,18 @@ const getStyles = (R) => {
         scrollContainer: {
             width: R(1080),
         },
+        subHeading: {
+            color: colors.regent_grey,
+            fontSize: R(28),
+            lineHeight: R(32, 'px'),
+            fontWeight: 'bold'
+        },
 
         // Old Styles
         scrollBox: {
             whiteSpace: 'nowrap',
         },
-        subHeading: {
-            color: colors.regent_grey,
-            fontSize: R(28),
-            lineHeight: R(32, 'px')
-        },
+
         borderStyle: {
             height: R(2),
             position: 'absolute',
@@ -75,26 +72,29 @@ export default function LeagueBoard () {
     const STYLES =  { ...getStyles(R) }
 
     const INITIAL_GAME_WEEKS_RANKINGS = clone(getLeaguesGameWeeksRanking())
-    const [activeTab, setActiveTab] = useState(INITIAL_GAME_WEEKS_RANKINGS[0])
+    const [activeTab, setActiveTab] = useState({})
     const [leaguesGameWeeksRanking, setLeaguesGameWeeksRanking] = useState([])
-
-
-
     const scrollContainerRef = useRef()
-
-
-    const [moved, setMoved] = useState(0)
-    const [initialRenderDone, setInitialRenderDone] = useState(false)
-    const [animationInProgress, setAnimationInProgress] = useState(false)
-    const [tabChanged, setTabChanged] = useState(false)
-
+    const controls = useAnimation()
     const [borderData, setBorderData] = useState({})
-
-    const [activeTabContent, setActiveTabContent] = useState({})
-    let activeRef = useRef()
     const elementsRef = useRef(INITIAL_GAME_WEEKS_RANKINGS.map(() => createRef()));
 
     const handleTabClick = (lgwr) => {
+
+        const $leaguesGameWeeksRanking =  clone(leaguesGameWeeksRanking)
+
+        let previousActiveIndex = $leaguesGameWeeksRanking.findIndex((item) => item.active)
+        let nextActiveIndex = $leaguesGameWeeksRanking.findIndex((item) => item.id === lgwr.id)
+
+        $leaguesGameWeeksRanking[previousActiveIndex].active = false
+        $leaguesGameWeeksRanking[nextActiveIndex].active = true
+        setActiveTab($leaguesGameWeeksRanking[nextActiveIndex])
+        setLeaguesGameWeeksRanking($leaguesGameWeeksRanking)
+
+        // Handles-Border-Width
+
+        // if(nextActiveIndex > 5) return //TODO:imp UNCOMMENT
+
         const el = elementsRef.current[lgwr.id]
         const { activeRect, activeLeft } = getActiveRect({
             itemRef: el,
@@ -107,15 +107,15 @@ export default function LeagueBoard () {
     }
 
     const handleControls = (isNext = false) => {
-        const nextLAR = controlsHandler({
+        const nextLGRW = controlsHandler({
             isNext,
-            leaguesGameWeeksRanking
+            leaguesGameWeeksRanking,
+            setLeaguesGameWeeksRanking
         })
 
-        if(!nextLGWR) return
-        setLeaguesGameWeeksRanking(nextLAR)
+        if(!nextLGRW) return
 
-        handleTabClick(nextLAR[])
+        handleTabClick(nextLGRW)
     }
 
     // const setBorderHeightDynamically = () => {
@@ -126,15 +126,17 @@ export default function LeagueBoard () {
     // }
 
     useEffect(() => {
+        controls.start('changeTextColor')
+    }, [activeTab])
+
+    useEffect(() => {
         setInitialSettings({
             initialGameWeeksRankings: INITIAL_GAME_WEEKS_RANKINGS,
             setLeaguesGameWeeksRanking,
-            setActiveTabContent
+            setActiveTab
         })
-        // setLeaguesGameWeeksRanking([...INITIAL_GAME_WEEKS_RANKINGS])
         // setBorderHeightDynamically()
     }, [])
-
 
     return (
         <Div
@@ -154,7 +156,7 @@ export default function LeagueBoard () {
                     <div style={{...STYLES.scrollContainer}} ref={scrollContainerRef}>
                         <Div className={'flex overflow-hidden'}>
                             {
-                                // lrw = League-Game-Week-Ranking
+                                // lgrw = League-Game-Week-Ranking
                                 leaguesGameWeeksRanking.length > 0 && leaguesGameWeeksRanking.map((lgwr, index) => {
                                     return (
                                         lgwr.date ? (
@@ -171,31 +173,32 @@ export default function LeagueBoard () {
                                                     color={colors.regent_grey}
                                                     mb={4}
                                                 />
-                                                <Text
-                                                    text={dayjs(lgwr.date).format('DD MMM')}
-                                                    fs={28}
-                                                    lh={32}
-                                                    fw={'bold'}
-                                                    fst={'italic'}
-                                                    color={colors.regent_grey}
-                                                />
+                                                <motion.p
+                                                    variants={subHeadingAnimation()}
+                                                    custom={{lgwr}}
+                                                    animate={controls}
+                                                    className={'italic uppercase'}
+                                                    style={STYLES.subHeading}
+                                                >
+                                                    {dayjs(lgwr.date).format('DD MMM')}
+                                                </motion.p>
                                             </div>
                                         ) : (
                                             <div
                                                 className={'flex items-center justify-center'}
                                                 style={STYLES.item}
-                                                ref={elementsRef.current[index]}
+                                                ref={elementsRef.current[lgwr.id]}
                                                 onClick={() => handleTabClick(lgwr)}
                                             >
-                                                <Text
-                                                    text={lgwr.week}
-                                                    fs={28}
-                                                    lh={32}
-                                                    fw={'bold'}
-                                                    fst={'italic'}
-                                                    tt={'uppercase'}
-                                                    color={colors.black_rock}
-                                                />
+                                                <motion.p
+                                                    variants={subHeadingAnimation()}
+                                                    custom={{lgwr}}
+                                                    animate={controls}
+                                                    className={'italic uppercase'}
+                                                    style={STYLES.subHeading}
+                                                >
+                                                    {lgwr.week}
+                                                </motion.p>
                                             </div>
                                         )
                                     )
