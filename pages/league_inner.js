@@ -36,6 +36,7 @@ export default function LeagueInner() {
         router.push('/my_squad_game_week')
     }
 
+    return null
     return (
         <Layout title={'Leagues'}>
             <Div
