@@ -17,7 +17,7 @@ import colors from "constants/colors";
 import getLeaguesGameWeeksRanking from "constants/data/leaguesGameWeeks";
 
 // utils
-import {clone} from "utils/helpers";
+import {clone, isEmpty} from "utils/helpers";
 import R from "utils/getResponsiveValue";
 
 import {
@@ -50,6 +50,10 @@ const getStyles = (R) => {
             lineHeight: R(32, 'px'),
             fontWeight: 'bold'
         },
+        content: {
+            flexGrow: 1,
+            overflow: 'scroll'
+        }
     }
 }
 
@@ -123,10 +127,11 @@ export default function LeagueBoard () {
             pt={40}
             pb={50}
             w={1280}
-            className={'bg-white'}
+            className={'flex flex-col bg-white'}
             position="relative"
             br={12}
             bs={SHADOW_WHITE_SMOKE}
+            style={STYLES.container}
         >
 
             {/*Tabs*/}
@@ -207,9 +212,18 @@ export default function LeagueBoard () {
             </Div>
 
             {/*Content*/}
-            <LeagueBoardContent
-                activeTab={activeTab}
-            />
+
+            {
+                !isEmpty(activeTab) && (
+                    <Div style={STYLES.content}>
+                        <LeagueBoardContent
+                            activeTab={activeTab}
+                        />
+                    </Div>
+
+                )
+            }
+
         </Div>
     )
 
