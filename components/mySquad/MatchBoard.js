@@ -158,7 +158,7 @@ export default function MatchBoard () {
 
     return (
         <Div
-            minHeight={720}
+            minH={720}
             pt={40}
             pb={50}
             w={1280}

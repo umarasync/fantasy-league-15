@@ -1,7 +1,7 @@
 // Components
 import Div from "components/html/Div";
 import Text from "components/html/Text";
-import Border from "components/Borders/Border";
+import Border from "components/borders/Border";
 
 // Constants
 import colors from "constants/colors";

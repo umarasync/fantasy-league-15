@@ -13,34 +13,13 @@ const LEAGUES_AND_RANKING = [
         totalMembers: 3000,
         points: 2138
     },
-    // {
-    //     id: 3,
-    //     image: 'club_ajax.png',
-    //     name: 'Eredivisie league',
-    //     totalMembers: 1200000,
-    //     points: 8413
-    // },
-    // {
-    //     id: 4,
-    //     image: 'club_zwo.png',
-    //     name: 'Fan league',
-    //     totalMembers: 3000,
-    //     points: 2138
-    // },
-    // {
-    //     id: 5,
-    //     image: 'club_ajax.png',
-    //     name: 'Eredivisie league',
-    //     totalMembers: 1200000,
-    //     points: 8413
-    // },
-    // {
-    //     id: 6,
-    //     image: 'club_zwo.png',
-    //     name: 'Fan league',
-    //     totalMembers: 3000,
-    //     points: 2138
-    // }
+    {
+        id: 3,
+        image: 'club_ajax.png',
+        name: 'Eredivisie2 league',
+        totalMembers: 1200000,
+        points: 700
+    },
 ]
 
 export default LEAGUES_AND_RANKING

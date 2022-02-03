@@ -2,7 +2,7 @@
 import Div from "components/html/Div";
 import PlayerImage from "components/player/PlayerImage";
 import Text from "components/html/Text";
-import BorderHorizontal from "components/Borders/BorderHorizontal";
+import BorderHorizontal from "components/borders/BorderHorizontal";
 
 // Constants
 import colors from "constants/colors";

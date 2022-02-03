@@ -59,7 +59,6 @@ export const scrollHandler = ({
     setMoved(moved + movedPixels)
 }
 
-
 export const scrollRenderer = (props) => {
     const {
         activeRef,

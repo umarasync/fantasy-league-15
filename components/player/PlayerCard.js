@@ -1,6 +1,6 @@
 // Components
 import PlayerImage from "components/player/PlayerImage";
-import Border from "components/Borders/Border";
+import Border from "components/borders/Border";
 
 // utils
 import R from "utils/getResponsiveValue";

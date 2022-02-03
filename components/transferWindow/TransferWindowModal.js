@@ -4,7 +4,7 @@ import Div from "components/html/Div"
 import Text from "components/html/Text"
 import Text_18_22_600 from "components/texts/Text_18_22_600";
 import Button from "components/html/Button";
-import BorderHorizontal from "components/Borders/BorderHorizontal";
+import BorderHorizontal from "components/borders/BorderHorizontal";
 
 // Constants
 import colors from "constants/colors";
