@@ -3,7 +3,7 @@ import {useState} from "react";
 import {v4 as uuidv4} from 'uuid';
 
 // Components
-import BorderHorizontal from "components/Borders/BorderHorizontal";
+import BorderHorizontal from "components/borders/BorderHorizontal";
 import Div from "components/html/Div";
 import Text from "components/html/Text";
 import LeagueCard from "components/leagues/LeagueCard";

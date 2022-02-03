@@ -1,6 +1,6 @@
 // Components
 import Button from "components/html/Button";
-import Border from "components/Borders/Border";
+import Border from "components/borders/Border";
 import Div from "components/html/Div";
 import Text from "components/html/Text";
 

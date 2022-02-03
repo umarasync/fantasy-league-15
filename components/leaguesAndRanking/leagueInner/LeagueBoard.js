@@ -1,6 +1,6 @@
 // Packages
-import {motion, useAnimation} from "framer-motion";
 import {createRef, useEffect, useRef, useState} from "react";
+import {motion, useAnimation} from "framer-motion";
 import dayjs from 'dayjs'
 
 // Components
@@ -8,8 +8,8 @@ import Div from "components/html/Div";
 import Text from "components/html/Text";
 import LeagueBoardControls from "components/leaguesAndRanking/leagueInner/LeagueBoardControls";
 import LeagueBoardBorder from "components/leaguesAndRanking/leagueInner/LeagueBoardBorder";
-import Image from "components/html/Image";
-import Button from "components/html/Button";
+import BorderHorizontal from "components/borders/BorderHorizontal";
+import LeagueBoardContent from "components/leaguesAndRanking/leagueInner/LeagueBoardContent";
 
 // Constants
 import {SHADOW_WHITE_SMOKE} from "constants/boxShadow";
@@ -19,26 +19,19 @@ import getLeaguesGameWeeksRanking from "constants/data/leaguesGameWeeks";
 // utils
 import {clone} from "utils/helpers";
 import R from "utils/getResponsiveValue";
-import MatchBoardContent from "components/mySquad/MatchBoardContent";
 
 import {
-    getActiveRect,
     setInitialSettings,
     controlsHandler,
-    scrollHandler,
     tabClickHandler
 } from "utils/leagueBoardHelper";
 
 // Animations
 import {subHeadingAnimation, scrollAnimation} from "Animations/leaguesAndRanking/LeagueAndRankingAnimation";
-import {ZERO} from "../../../constants/arrayIndexes";
-import BorderHorizontal from "../../Borders/BorderHorizontal";
-
 
 // Styles
 const getStyles = (R) => {
     return {
-        // New Styles
         item: {
             cursor: 'pointer',
             marginLeft: R(31),
@@ -214,9 +207,9 @@ export default function LeagueBoard () {
             </Div>
 
             {/*Content*/}
-            <Div center pt={200}>
-                <p>{activeTab.week}</p>
-            </Div>
+            <LeagueBoardContent
+                activeTab={activeTab}
+            />
         </Div>
     )
 

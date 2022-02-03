@@ -1,6 +1,6 @@
 // Components
 import PlayerImage from "components/player/PlayerImage";
-import Border from "components/Borders/Border";
+import Border from "components/borders/Border";
 import Div from "components/html/Div";
 import Image from "components/html/Image";
 import Text from "components/html/Text";
