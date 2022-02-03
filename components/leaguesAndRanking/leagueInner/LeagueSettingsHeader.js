@@ -7,18 +7,25 @@ import Button from "components/html/Button";
 // Constants
 import colors from "constants/colors";
 
-export default function LeagueHeader({
+export default function LeagueSettingsHeader({
     mb,
-    onSettingsClick,
-    onBackClick
+    onBackArrowClick
  }) {
     return (
         <Div className={'flex items-center justify-between'} mb={mb}>
-            <Div className={'flex'}>
-                <Image src={'/images/arrow_backward.png'} w={32} h={32} cursor={'pointer'} onClick={onBackClick}/>
-                <Div className={'flex flex-col'} ml={17} mt={-5}>
+            <Div className={'flex items-center'}>
+                <Image
+                    src={'/images/arrow_backward.png'}
+                    w={32}
+                    h={32}
+                    mt={-7}
+                    cursor={'pointer'}
+                    alt={'arrow_backward'}
+                    onClick={onBackArrowClick}
+                />
+                <Div className={'flex flex-col'} ml={17}>
                     <Text
-                        text={'TheRoom FC'}
+                        text={'league settings'}
                         fs={42}
                         lh={46}
                         fw={900}
@@ -27,24 +34,20 @@ export default function LeagueHeader({
                         color={colors.white}
                         mb={8}
                     />
-                    <Text
-                        text={'5 members'}
-                        fs={18}
-                        lh={26}
-                        color={colors.regent_grey}
-                    />
                 </Div>
             </Div>
             <Div center>
                 <Button
-                    title={'Invite friends'}
+                    title={'Delete league'}
                     disabled={false}
-                    mr={8}
+                    h={50}
+                    lh={20}
                     w={236}
+                    color={colors.white}
+                    bg={colors.rhino_shine}
                     bs={'unset'}
                     onClick={() => false}
                 />
-                <Image src={`/images/settings.png`} w={70} h={70} cursor={'pointer'} onClick={onSettingsClick}/>
             </Div>
         </Div>
     )

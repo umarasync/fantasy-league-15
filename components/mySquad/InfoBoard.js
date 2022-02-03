@@ -7,7 +7,7 @@ import {useRouter} from "next/router";
 import BorderHorizontal from "components/borders/BorderHorizontal";
 import Div from "components/html/Div";
 import Text from "components/html/Text";
-import LeagueCard from "components/leagues/LeagueCard";
+import LeagueCard from "components/leaguesAndRanking/LeagueCard";
 import Image from "components/html/Image";
 import Button from "components/html/Button";
 import InfoBoardHead from "components/leaguesAndRanking/InfoBoardHead";

@@ -1,5 +1,6 @@
 // Packages
 import dayjs from 'dayjs';
+import {v4 as uuidv4} from 'uuid';
 
 // Utils
 import {clone, shuffle} from "utils/helpers";
@@ -21,6 +22,7 @@ const buildTeamPoints = ({
     totalPoints
 }) => {
     return {
+        id: uuidv4(),
         teamName,
         weeklyPoints,
         totalPoints

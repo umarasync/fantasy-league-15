@@ -1,5 +1,6 @@
 // Packages
 import {useRouter} from "next/router";
+import {useState} from "react";
 
 // Components
 import Layout from "components/layout";
@@ -8,15 +9,32 @@ import Image from "components/html/Image";
 import Username from "components/user/Username";
 import LeagueHeader from "components/leaguesAndRanking/leagueInner/LeagueHeader";
 import LeagueBoard from "components/leaguesAndRanking/leagueInner/LeagueBoard";
+import LeagueSettingsHeader from "components/leaguesAndRanking/leagueInner/LeagueSettingsHeader";
 
 // Utils
 import R from "utils/getResponsiveValue";
+import LeagueSettingsBoard from "../components/leaguesAndRanking/leagueInner/LeagueSettingsBoard";
 
 export default function LeagueInner() {
+    // Router
 
     const router = useRouter()
     const {query} = router
     const {leagueId} = query
+    // States
+    const [showSettings, setShowSettings] = useState(false)
+
+    const handleSettingsBackClick = () => {
+        setShowSettings(false)
+    }
+
+    const handleSettingsClick = () => {
+        setShowSettings(true)
+    }
+
+    const handleBackClick = () => {
+        router.push('/my_squad_game_week')
+    }
 
     return (
         <Layout title={'Leagues'}>
@@ -34,8 +52,26 @@ export default function LeagueInner() {
                     <Username username={'martine.bakker'} iconSrc={'/images/user_white.png'}/>
                 </Div>
 
-                <LeagueHeader mb={32}/>
-                <LeagueBoard leagueId={leagueId}/>
+                {
+                    showSettings ? (
+                        <div>
+                            <LeagueSettingsHeader
+                                mb={32}
+                                onBackArrowClick={handleSettingsBackClick}
+                            />
+                            <LeagueSettingsBoard leagueId={leagueId}/>
+                        </div>
+                    ): (
+                        <div>
+                            <LeagueHeader
+                                mb={32}
+                                onSettingsClick={handleSettingsClick}
+                                onBackClick={handleBackClick}
+                            />
+                            <LeagueBoard leagueId={leagueId}/>
+                        </div>
+                    )
+                }
             </Div>
         </Layout>
     )

@@ -1,9 +1,10 @@
-// Packages
-import {motion, AnimatePresence} from "framer-motion";
-
 // Components
-import Div from "components/html/Div";
 import Text from "components/html/Text";
+import LeagueBoardTeamName from "components/leaguesAndRanking/leagueInner/LeagueBoardTeamName";
+import LeagueBoardGameWeekPoints from "components/leaguesAndRanking/leagueInner/LeagueBoardGameWeekPoints";
+import LeagueBoardWeeklyPoints from "components/leaguesAndRanking/leagueInner/LeagueBoardWeeklyPoints";
+import LeagueBoardWeeklyPointsHeading from "components/leaguesAndRanking/leagueInner/LeagueBoardWeeklyPointsHeading";
+import LeagueBoardGameWeekPointsHeading from "components/leaguesAndRanking/leagueInner/LeagueBoardGameWeekPointsHeading";
 
 // Constants
 import colors from "constants/colors"
@@ -11,13 +12,6 @@ import BorderHorizontal from "components/Borders/BorderHorizontal";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import {useEffect, useState} from "react";
-import {leagueBoardContentAnimation} from "../../../Animations/leaguesAndRanking/LeagueAndRankingAnimation";
-import LeagueBoardTeamName from "./LeagueBoardTeamName";
-import LeagueBoardGameWeekPoints from "./LeagueBoardGameWeekPoints";
-import LeagueBoardWeeklyPoints from "./LeagueBoardWeeklyPoints";
-import LeagueBoardWeeklyPointsHeading from "./LeagueBoardWeeklyPointsHeading";
-import LeagueBoardGameWeekPointsHeading from "./LeagueBoardGameWeekPointsHeading";
 
 // Styles
 const getStyles = (R) => {
