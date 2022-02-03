@@ -89,6 +89,10 @@ const getLeaguesGameWeeksRanking = () => {
     ]
 }
 
-
+export const getMembers = () => {
+    return [
+        ...getTeamsRankWeekly()
+    ]
+}
 
 export default getLeaguesGameWeeksRanking

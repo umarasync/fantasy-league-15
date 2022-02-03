@@ -122,7 +122,7 @@ export default function LeagueBoard ({
 
     return (
         <Div
-            h={593}
+            h={615}
             pt={40}
             pb={50}
             w={1280}
