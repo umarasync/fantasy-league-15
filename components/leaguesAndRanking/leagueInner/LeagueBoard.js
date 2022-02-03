@@ -53,7 +53,9 @@ const getStyles = (R) => {
     }
 }
 
-export default function LeagueBoard () {
+export default function LeagueBoard ({
+    leagueId
+}) {
 
     const STYLES =  { ...getStyles(R) }
 
@@ -213,7 +215,7 @@ export default function LeagueBoard () {
             {
                 !isEmpty(activeTab) && (
                     <LeagueBoardContent
-                        activeTab={activeTab}
+                        activeTab={{...activeTab, leagueId}}
                     />
                 )
             }

@@ -1,20 +1,23 @@
+// Packages
+import {useRouter} from "next/router";
+
 // Components
 import Layout from "components/layout";
 import Div from "components/html/Div";
 import Image from "components/html/Image";
-import Text from "components/html/Text";
-import Button from "components/html/Button";
 import Username from "components/user/Username";
 import LeagueHeader from "components/leaguesAndRanking/leagueInner/LeagueHeader";
+import LeagueBoard from "components/leaguesAndRanking/leagueInner/LeagueBoard";
 
 // Utils
 import R from "utils/getResponsiveValue";
 
-// Constants
-import colors from "constants/colors";
-import LeagueBoard from "../components/leaguesAndRanking/leagueInner/LeagueBoard";
-
 export default function LeagueInner() {
+
+    const router = useRouter()
+    const {query} = router
+    const {leagueId} = query
+
     return (
         <Layout title={'Leagues'}>
             <Div
@@ -32,7 +35,7 @@ export default function LeagueInner() {
                 </Div>
 
                 <LeagueHeader mb={32}/>
-                <LeagueBoard/>
+                <LeagueBoard leagueId={leagueId}/>
             </Div>
         </Layout>
     )

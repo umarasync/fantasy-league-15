@@ -23,6 +23,7 @@ const getStyles = (R) => {
         }
     }
 }
+
 export default function LeagueBoardWeeklyPointsHeading({
     heading,
     overall,

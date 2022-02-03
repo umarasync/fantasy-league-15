@@ -50,8 +50,10 @@ export default function LeagueBoardContentTable({
     activeTab,
 }) {
     const STYLES = {...getStyles(R)}
-    const {data, animationChange} = activeTab
-    const {teamsRank, overall, week, } = data
+    const {data, animationChange, leagueId} = activeTab
+    const {teamsRank, overall, week, id} = data
+
+    const shouldTexColorBeRed = id === leagueId
 
     return (
         <div style={STYLES.container}>
@@ -91,7 +93,12 @@ export default function LeagueBoardContentTable({
                                     ...STYLES.trow1,
                                 }}>
                                     <td className={'w-[70%] text-left whitespace-nowrap'}>
-                                        <LeagueBoardTeamName team={team} index={index} animationChange={animationChange} />
+                                        <LeagueBoardTeamName
+                                            team={team}
+                                            index={index}
+                                            animationChange={animationChange}
+                                            shouldTexColorBeRed={shouldTexColorBeRed}
+                                        />
                                     </td>
                                     <td className={'w-[15%] text-center whitespace-nowrap'}>
                                         <LeagueBoardWeeklyPoints overall={overall} team={team}/>

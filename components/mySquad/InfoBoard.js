@@ -1,6 +1,7 @@
 // Packages
 import {useState} from "react";
 import {v4 as uuidv4} from 'uuid';
+import {useRouter} from "next/router";
 
 // Components
 import BorderHorizontal from "components/borders/BorderHorizontal";
@@ -42,7 +43,7 @@ const getStyles = (R) => {
 export default function InfoBoard() {
 
     const STYLES = {...getStyles(R)}
-
+    const router = useRouter()
     const LEAGUES_AND_RANKING_INITIAL = clone(LEAGUES_AND_RANKING)
     const [leaguesAndRanking, setLeaguesAndRanking] = useState(LEAGUES_AND_RANKING_INITIAL)
     const [showLeagueCreationModal, setShowLeagueCreationModal] = useState(false);
@@ -70,7 +71,7 @@ export default function InfoBoard() {
                 image: 'private_league.png',
                 name: leagueName,
                 totalMembers: totalMembers,
-                points: points
+                points: points,
             }
         ])
     }
@@ -85,9 +86,17 @@ export default function InfoBoard() {
         })
     };
 
+    const handleLeagueCardClick = () => {
+        return router.push({
+            pathname: '/league_inner',
+            query: {
+                leagueId: 3
+            }
+        })
+    }
     const handleJoinLeague = (inviteCode) => {
         setShowJoinLeagueModal(false)
-        // Search League from DB for "inviteCode"
+        // Search League from DB for "inviteCode" and join it
         createOrJoinPrivateLeague({
             leagueName: 'International',
             totalMembers: 113,
@@ -139,6 +148,7 @@ export default function InfoBoard() {
                                                     league={league}
                                                     pt={24}
                                                     pb={24}
+                                                    onClick={handleLeagueCardClick}
                                                 />
                                                 {index !== privateLeagues.length - 1 && <BorderHorizontal/>}
                                             </Div>

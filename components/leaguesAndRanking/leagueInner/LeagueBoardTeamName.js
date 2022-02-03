@@ -26,7 +26,8 @@ const getStyles = (R) => {
 export default function LeagueBoardTeamName({
     animationChange,
     team,
-    index
+    index,
+    shouldTexColorBeRed
 }) {
     const STYLES = {...getStyles(R)}
     const { teamName } = team
@@ -45,8 +46,10 @@ export default function LeagueBoardTeamName({
                         >
                             <Text text={`${index + 1}. ${teamName}`} fs={22} lh={26}
                                   fw={900}
-                                  color={colors.black_rock} fst={'italic'}
+                                  color={colors.black_rock}
+                                  fst={'italic'}
                                   tt={'uppercase'}
+                                  className={`${shouldTexColorBeRed && 'text-froly-cerise_red'}`}
                             />
                         </motion.div>
                     </AnimatePresence>
@@ -62,8 +65,10 @@ export default function LeagueBoardTeamName({
                         >
                             <Text text={`${index + 1}. ${teamName}`} fs={22} lh={26}
                                   fw={900}
-                                  color={colors.black_rock} fst={'italic'}
+                                  color={colors.black_rock}
+                                  fst={'italic'}
                                   tt={'uppercase'}
+                                  className={`${shouldTexColorBeRed && 'text-froly-cerise_red'}`}
                             />
                         </motion.div>
                     </AnimatePresence>
