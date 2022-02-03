@@ -9,7 +9,10 @@ export const setInitialSettings = ({
 }) => {
     const $initialGameWeeksRankings = clone(initialGameWeeksRankings)
     $initialGameWeeksRankings[0].active = true
-    setActiveTab({...$initialGameWeeksRankings[0]})
+    setActiveTab({
+        data: {...$initialGameWeeksRankings[0]},
+        animationChange: false
+    })
     setLeaguesGameWeeksRanking([...$initialGameWeeksRankings])
 }
 
@@ -61,6 +64,7 @@ export const tabClickHandler = ({
     leaguesGameWeeksRanking,
     setLeaguesGameWeeksRanking,
     // active tab
+    activeTab,
     setActiveTab,
     // scroll container
     scrollContainerRef,
@@ -85,7 +89,10 @@ export const tabClickHandler = ({
 
     $leaguesGameWeeksRanking[previousActiveIndex].active = false
     $leaguesGameWeeksRanking[nextActiveIndex].active = true
-    setActiveTab($leaguesGameWeeksRanking[nextActiveIndex])
+    setActiveTab({
+        data: {...$leaguesGameWeeksRanking[nextActiveIndex]},
+        animationChange: !activeTab.animationChange
+    })
     setLeaguesGameWeeksRanking($leaguesGameWeeksRanking)
 
     const el = elementsRef.current[lgwr.id]
@@ -103,6 +110,6 @@ export const tabClickHandler = ({
 
     setBorderData({
         width: activeRect.width,
-        leftOffset: activeLeft
+        // leftOffset: activeLeft
     })
 }

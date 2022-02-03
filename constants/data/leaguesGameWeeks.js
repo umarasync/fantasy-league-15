@@ -60,6 +60,7 @@ const getTeamsRankOverall = () => {
 const getOverAllRanking = () => {
     return {
         id: 0,
+        overall: true,
         week: 'overall',
         date: '',
         teamsRank: getTeamsRankOverall()
@@ -71,9 +72,10 @@ const getPreviousGameWeeksRanking = () => {
         const previousDate = getSomePreviousDate(DAYS_TO * (index + 1))
         return {
             id: week,
-            week: `Gameweek ${week}`,
+            overall: false,
+            week: week,
             date: previousDate,
-            teamsRank: getTeamsRankWeekly()
+            teamsRank: shuffle(getTeamsRankWeekly())
         }
     })
 }

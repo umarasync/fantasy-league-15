@@ -49,10 +49,6 @@ const getStyles = (R) => {
             fontSize: R(28),
             lineHeight: R(32, 'px'),
             fontWeight: 'bold'
-        },
-        content: {
-            flexGrow: 1,
-            overflow: 'scroll'
         }
     }
 }
@@ -79,6 +75,7 @@ export default function LeagueBoard () {
             leaguesGameWeeksRanking,
             setLeaguesGameWeeksRanking,
             // active tab
+            activeTab,
             setActiveTab,
             // scroll container
             scrollContainerRef,
@@ -156,7 +153,7 @@ export default function LeagueBoard () {
                                                 onClick={() => handleTabClick(lgwr)}
                                             >
                                                 <Text
-                                                    text={lgwr.week}
+                                                    text={`Gameweek ${lgwr.week}`}
                                                     fs={18}
                                                     lh={26}
                                                     color={colors.regent_grey}
@@ -215,12 +212,9 @@ export default function LeagueBoard () {
 
             {
                 !isEmpty(activeTab) && (
-                    <Div style={STYLES.content}>
-                        <LeagueBoardContent
-                            activeTab={activeTab}
-                        />
-                    </Div>
-
+                    <LeagueBoardContent
+                        activeTab={activeTab}
+                    />
                 )
             }
 
