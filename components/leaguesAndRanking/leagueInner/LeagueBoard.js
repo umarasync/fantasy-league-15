@@ -122,9 +122,8 @@ export default function LeagueBoard ({
 
     return (
         <Div
-            h={615}
+            minH={593}
             pt={40}
-            pb={50}
             w={1280}
             className={'flex flex-col bg-white'}
             position="relative"

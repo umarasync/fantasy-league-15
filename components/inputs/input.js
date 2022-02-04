@@ -65,6 +65,7 @@ export default function Input (props) {
     } = props
 
     const [focused, setFocused] = useState(false)
+
     const handleOnFocus = () => {
         onFocus(true)
         setFocused(true)

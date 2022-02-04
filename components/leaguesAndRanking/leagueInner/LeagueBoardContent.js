@@ -25,7 +25,7 @@ const getStyles = (R) => {
             display: 'block',
             overflowY: 'auto',
             overflowX: 'hidden',
-            height: R(435),
+            height: R(430),
             width: '143%',
             paddingTop: R(20),
             paddingBottom: R(20),
