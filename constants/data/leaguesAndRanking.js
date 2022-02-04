@@ -1,3 +1,6 @@
+// Packages
+import {v4 as uuidv4} from 'uuid';
+
 const LEAGUES_AND_RANKING = [
     {
         id: 1,
@@ -21,5 +24,28 @@ const LEAGUES_AND_RANKING = [
         points: 700
     },
 ]
+
+
+const buildDropDownLi = ({week, heading}) => {
+    return {
+        id: uuidv4(),
+        week,
+        heading
+    }
+}
+export const getLeagueSettingsDropdownData = () => {
+
+    return [
+        {...buildDropDownLi({week:8, heading:'Gameweek 8'})},
+        {...buildDropDownLi({week:9, heading:'Gameweek 9'})},
+        {...buildDropDownLi({week:10, heading:'Gameweek 10'})},
+        {...buildDropDownLi({week:11, heading:'Gameweek 11'})},
+        {...buildDropDownLi({week:12, heading:'Gameweek 12'})},
+        {...buildDropDownLi({week:13, heading:'Gameweek 13'})},
+        {...buildDropDownLi({week:14, heading:'Gameweek 14'})},
+        {...buildDropDownLi({week:'', heading:'Most transferred in last 24h'})},
+    ]
+
+}
 
 export default LEAGUES_AND_RANKING

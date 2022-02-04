@@ -3,9 +3,11 @@ import Div from "components/html/Div";
 import Image from "components/html/Image";
 import Text from "components/html/Text";
 import Button from "components/html/Button";
+import BorderGreyVertical from "components/borders/BorderGreyVertical";
 
 // Constants
 import colors from "constants/colors";
+import LeagueSettingsDropDown from "./LeagueSettingsDropDown";
 
 export default function LeagueSettingsHeader({
     mb,
@@ -36,7 +38,9 @@ export default function LeagueSettingsHeader({
                     />
                 </Div>
             </Div>
-            <Div center>
+            <Div className={'flex items-center justify-between'}>
+                <LeagueSettingsDropDown/>
+                <BorderGreyVertical ml={32} mr={32}/>
                 <Button
                     title={'Delete league'}
                     disabled={false}

@@ -75,6 +75,7 @@ const POSITIONING = {
 }
 
 const BORDER = {
+    border: v => v ? {border: v} : {},
     borderRadius: v => v ? {borderRadius: R(v)} : {},
     borderTopLeftRadius: v => v ? {borderTopLeftRadius: R(v)} : {},
     borderTopRightRadius: v => v ? {borderTopRightRadius: R(v)} : {},
