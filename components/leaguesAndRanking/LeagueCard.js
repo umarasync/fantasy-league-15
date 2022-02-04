@@ -20,7 +20,7 @@ export default function LeagueCard({
     const {image, name, totalMembers, points} = league
 
     return (
-        <Div className={'w-full flex items-center justify-between cursor-pointer'} pb={pb} pt={pt} onClick={onClick}>
+        <Div className={'w-full flex items-center justify-between cursor-pointer'} pb={pb} pt={pt} onClick={() => onClick(league)}>
             <Div className={'flex'}>
                 <Image w={42} h={42} src={`/images/${image}`}/>
                 <Div ml={12}>

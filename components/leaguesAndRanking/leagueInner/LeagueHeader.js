@@ -14,7 +14,8 @@ import colors from "constants/colors";
 export default function LeagueHeader({
     mb,
     onSettingsClick,
-    onBackClick
+    onBackClick,
+    league
  }) {
     const [showInviteYourFriendsModal, setShowInviteYourFriendsModal] = useState(false);
 
@@ -46,21 +47,33 @@ export default function LeagueHeader({
                     </Div>
                 </Div>
                 <Div center>
-                    <Button
-                        title={'Invite friends'}
-                        disabled={false}
-                        mr={8}
-                        w={236}
-                        bs={'unset'}
-                        onClick={handleShowInviteYourFriendsModal}
-                    />
-                    <Image src={`/images/settings.png`} w={70} h={70} cursor={'pointer'} onClick={onSettingsClick}/>
+                    {
+                        league.isLeagueOwner && (
+                            <>
+                                <Button
+                                    title={'Invite friends'}
+                                    disabled={false}
+                                    mr={8}
+                                    w={236}
+                                    bs={'unset'}
+                                    onClick={handleShowInviteYourFriendsModal}
+                                />
+                                <Image src={`/images/settings.png`} w={70} h={70} cursor={'pointer'}
+                                       onClick={onSettingsClick}/>
+                            </>
+                        )
+                    }
+
                 </Div>
             </Div>
-            <InviteYourFriendsModal
-                show={showInviteYourFriendsModal}
-                onClose={() => setShowInviteYourFriendsModal(false)}
-            />
+            {
+                league.isLeagueOwner && (
+                    <InviteYourFriendsModal
+                        show={showInviteYourFriendsModal}
+                        onClose={() => setShowInviteYourFriendsModal(false)}
+                    />
+                )
+            }
         </Div>
 
     )

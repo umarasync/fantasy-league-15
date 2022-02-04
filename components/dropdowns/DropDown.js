@@ -5,12 +5,25 @@ import {AnimatePresence, motion} from "framer-motion";
 // Components
 import Div from "components/html/Div";
 import Image from "components/html/Image";
+import BorderHorizontal from "components/borders/BorderHorizontal";
 
 // Animation
 import {getDropDownAnimation} from 'Animations/DropDownAnimation'
-import Text from "../html/Text";
-import colors from "../../constants/colors";
-import BorderHorizontal from "../borders/BorderHorizontal";
+import R from "utils/getResponsiveValue";
+
+// Constants
+import colors from "constants/colors";
+
+// Styles
+const getStyles = (R) => {
+    return {
+        container: {
+            background: colors.white,
+            borderRadius: R(12),
+            marginTop: R(20)
+        }
+    }
+}
 
 const DropDownsArrows = ({opened}) => {
     return (
@@ -26,33 +39,36 @@ const DropDownsArrows = ({opened}) => {
 }
 
 export default function DropDown ({
+    //Required
+    data,
     header,
     li,
-
-    body,
-    left,
-    right = 0,
-    pt = 20,
-                                      dropDownContentStyle,
-                                      data,
-                                      handleLiClick,
-
+    onSelect,
+    // Optional
+    styles,
+    directionRight
 }) {
 
+    const STYLES = {...getStyles(R)}
+
     const [opened, setOpened] = useState(false)
+    const [selectedItem, setSelectedItem] = useState({...data[0]})
 
     const handleHeaderClick = () => {
         setOpened(!opened)
     }
 
+    const handleLiClick = (item) => {
+        setSelectedItem({...item})
+        onSelect({...item})
+    }
+
     return (
         <div className={`relative w-full z-[1]`}>
-
             <Div className={'flex items-center cursor-pointer'} onClick={handleHeaderClick}>
-                {header}
+                {header(selectedItem)}
                 <DropDownsArrows opened={opened}/>
             </Div>
-
             {
                 opened ? (
                     <AnimatePresence>
@@ -62,30 +78,22 @@ export default function DropDown ({
                             animate="animate"
                             exit="exit"
                         >
-                            <Div position={'absolute'} left={left} right={right} pt={pt}>
-                                {/*{body}*/}
-                                <div style={dropDownContentStyle}>
+                            <Div position={'absolute'} right={directionRight}>
+                                <div style={{...STYLES.container, ...styles.container}}>
                                     {
                                         data.length > 0 && data.map((item, index) => {
                                             return (
-                                                <Div key={item.id} onClick={() => handleLiClick(item)}
-                                                     cursor={'pointer'}>
-
-                                                    {li(item)}
-
-                                                    {
-                                                        index !== data.length - 1 && (
-                                                            <BorderHorizontal/>
-                                                        )
-                                                    }
+                                                <Div
+                                                    key={item.id}
+                                                    onClick={() => handleLiClick(item)}
+                                                    cursor={'pointer'}
+                                                >
+                                                    {li({item, index, data})}
                                                 </Div>
-
                                             )
                                         })
                                     }
                                 </div>
-
-
                             </Div>
                         </motion.div>
                     </AnimatePresence>

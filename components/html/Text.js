@@ -5,7 +5,7 @@ import RS from "utils/responsiveStyle"
 const getStyles = (RS, style) => {
     const {
         w, h, p, pl, pr, pt, pb, m, ml, mr, mt, mb, fs, lh, fw, fst, tt, br, bs, bg, cursor,
-        textCenter, textAlign, center, color, z, nowrap, opacity, inline
+        textCenter, textAlign, center, color, z, nowrap, opacity, inline, minW
     } = style
 
     return {
@@ -21,6 +21,7 @@ const getStyles = (RS, style) => {
             ...RS.textAlign(textAlign),
 
             ...RS.width(w),
+            ...RS.minWidth(minW),
             ...RS.height(h),
 
             ...RS.padding(p),

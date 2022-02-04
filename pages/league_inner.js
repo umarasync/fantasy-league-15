@@ -1,7 +1,7 @@
 // Packages
 import {motion, AnimatePresence} from "framer-motion";
 import {useRouter} from "next/router";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 // Components
 import Layout from "components/layout";
@@ -32,11 +32,16 @@ const getStyles = (R) => {
 export default function LeagueInner() {
 
     const STYLES = {...getStyles(R)}
+    const [league, setLeague] = useState({
+        isPrivateLeague: false,
+        isLeagueOwner: true
+    })
 
     // Router
     const router = useRouter()
     const {query} = router
-    const {leagueId} = query
+    let {leagueId} = query
+
     // States
     const [showSettings, setShowSettings] = useState(false)
 
@@ -51,6 +56,10 @@ export default function LeagueInner() {
     const handleBackClick = () => {
         router.push('/my_squad_game_week')
     }
+
+    useEffect(() => {
+        // fetch league by leagueId and set the league data here
+    }, [])
 
     return (
         <Layout title={'Leagues'}>
@@ -83,7 +92,7 @@ export default function LeagueInner() {
                                         mb={32}
                                         onBackArrowClick={handleSettingsBackClick}
                                     />
-                                    <LeagueSettingsBoard leagueId={leagueId}/>
+                                    <LeagueSettingsBoard/>
                                 </motion.div>
                             </AnimatePresence>
                         ) : (
@@ -100,8 +109,9 @@ export default function LeagueInner() {
                                         mb={32}
                                         onSettingsClick={handleSettingsClick}
                                         onBackClick={handleBackClick}
+                                        league={league}
                                     />
-                                    <LeagueBoard leagueId={leagueId}/>
+                                    <LeagueBoard/>
                                 </motion.div>
                             </AnimatePresence>
                         )

@@ -10,6 +10,7 @@ import LeagueBoardControls from "components/leaguesAndRanking/leagueInner/League
 import LeagueBoardBorder from "components/leaguesAndRanking/leagueInner/LeagueBoardBorder";
 import BorderHorizontal from "components/borders/BorderHorizontal";
 import LeagueBoardContent from "components/leaguesAndRanking/leagueInner/LeagueBoardContent";
+import LeagueBoardLastRank from "components/leaguesAndRanking/leagueInner/LeagueBoardLastRank";
 
 // Constants
 import {SHADOW_WHITE_SMOKE} from "constants/boxShadow";
@@ -53,9 +54,7 @@ const getStyles = (R) => {
     }
 }
 
-export default function LeagueBoard ({
-    leagueId
-}) {
+export default function LeagueBoard ({}) {
 
     const STYLES =  { ...getStyles(R) }
 
@@ -121,105 +120,110 @@ export default function LeagueBoard ({
     }, [])
 
     return (
-        <Div
-            minH={593}
-            pt={40}
-            w={1280}
-            className={'flex flex-col bg-white'}
-            position="relative"
-            br={12}
-            bs={SHADOW_WHITE_SMOKE}
-            style={STYLES.container}
-        >
+        <Div>
+            <Div
+                minH={593}
+                pt={40}
+                w={1280}
+                className={'flex flex-col bg-white'}
+                position="relative"
+                br={12}
+                bs={SHADOW_WHITE_SMOKE}
+            >
 
-            {/*Tabs*/}
-            <Div position={'relative'} style={STYLES.scrollBox}>
-                <Div className={'flex justify-center'}>
-                    <div style={{...STYLES.scrollContainer}} ref={scrollContainerRef}>
-                        <Div className={'flex overflow-hidden'}>
-                            {
-                                // lgrw = League-Game-Week-Ranking
-                                leaguesGameWeeksRanking.length > 0 && leaguesGameWeeksRanking.map((lgwr, index) => {
-                                    return (
-                                        lgwr.date ? (
-                                            <motion.div
-                                                variants={scrollAnimation}
-                                                animate={controls}
-                                                custom={{
-                                                    moved
-                                                }}
-                                                className={'flex flex-col items-center justify-center'}
-                                                style={STYLES.item}
-                                                ref={elementsRef.current[lgwr.id]}
-                                                onClick={() => handleTabClick(lgwr)}
-                                            >
-                                                <Text
-                                                    text={`Gameweek ${lgwr.week}`}
-                                                    fs={18}
-                                                    lh={26}
-                                                    color={colors.regent_grey}
-                                                    mb={4}
-                                                />
-                                                <motion.p
-                                                    variants={subHeadingAnimation()}
-                                                    custom={{lgwr}}
+                {/*Tabs*/}
+                <Div position={'relative'} style={STYLES.scrollBox}>
+                    <Div className={'flex justify-center'}>
+                        <div style={{...STYLES.scrollContainer}} ref={scrollContainerRef}>
+                            <Div className={'flex overflow-hidden'}>
+                                {
+                                    // lgrw = League-Game-Week-Ranking
+                                    leaguesGameWeeksRanking.length > 0 && leaguesGameWeeksRanking.map((lgwr, index) => {
+                                        return (
+                                            lgwr.date ? (
+                                                <motion.div
+                                                    variants={scrollAnimation}
                                                     animate={controls}
-                                                    className={'italic uppercase'}
-                                                    style={STYLES.subHeading}
+                                                    custom={{
+                                                        moved
+                                                    }}
+                                                    className={'flex flex-col items-center justify-center'}
+                                                    style={STYLES.item}
+                                                    ref={elementsRef.current[lgwr.id]}
+                                                    onClick={() => handleTabClick(lgwr)}
                                                 >
-                                                    {dayjs(lgwr.date).format('DD MMM')}
-                                                </motion.p>
-                                            </motion.div>
-                                        ) : (
+                                                    <Text
+                                                        text={`Gameweek ${lgwr.week}`}
+                                                        fs={18}
+                                                        lh={26}
+                                                        color={colors.regent_grey}
+                                                        mb={4}
+                                                    />
+                                                    <motion.p
+                                                        variants={subHeadingAnimation()}
+                                                        custom={{lgwr}}
+                                                        animate={controls}
+                                                        className={'italic uppercase'}
+                                                        style={STYLES.subHeading}
+                                                    >
+                                                        {dayjs(lgwr.date).format('DD MMM')}
+                                                    </motion.p>
+                                                </motion.div>
+                                            ) : (
 
-                                            <motion.div
-                                                variants={scrollAnimation}
-                                                animate={controls}
-                                                custom={{
-                                                    moved
-                                                }}
-                                                className={'flex items-center justify-center'}
-                                                style={STYLES.item}
-                                                ref={elementsRef.current[lgwr.id]}
-                                                onClick={() => handleTabClick(lgwr)}
-                                            >
-                                                <motion.p
-                                                    variants={subHeadingAnimation()}
-                                                    custom={{lgwr}}
+                                                <motion.div
+                                                    variants={scrollAnimation}
                                                     animate={controls}
-                                                    className={'italic uppercase'}
-                                                    style={STYLES.subHeading}
+                                                    custom={{
+                                                        moved
+                                                    }}
+                                                    className={'flex items-center justify-center'}
+                                                    style={STYLES.item}
+                                                    ref={elementsRef.current[lgwr.id]}
+                                                    onClick={() => handleTabClick(lgwr)}
                                                 >
-                                                    {lgwr.week}
-                                                </motion.p>
-                                            </motion.div>
+                                                    <motion.p
+                                                        variants={subHeadingAnimation()}
+                                                        custom={{lgwr}}
+                                                        animate={controls}
+                                                        className={'italic uppercase'}
+                                                        style={STYLES.subHeading}
+                                                    >
+                                                        {lgwr.week}
+                                                    </motion.p>
+                                                </motion.div>
+                                            )
                                         )
-                                    )
-                                })
-                            }
-                        </Div>
-                        <LeagueBoardBorder
-                            borderData={borderData}
-                            setAnimationInProgress={setAnimationInProgress}
-                        />
-                    </div>
+                                    })
+                                }
+                            </Div>
+                            <LeagueBoardBorder
+                                borderData={borderData}
+                                setAnimationInProgress={setAnimationInProgress}
+                            />
+                        </div>
+                    </Div>
+
+                    <Div mt={20}><BorderHorizontal opacity={0.5}/></Div>
+                    <LeagueBoardControls onPrevious={handleControls} onNext={() => handleControls(true)}/>
                 </Div>
 
-                <Div mt={20}><BorderHorizontal opacity={0.5}/></Div>
-                <LeagueBoardControls onPrevious={handleControls} onNext={() => handleControls(true)} />
+                {/*Content*/}
+
+                {
+                    !isEmpty(activeTab) && (
+                        <LeagueBoardContent activeTab={{...activeTab}}/>
+                    )
+                }
+
             </Div>
+            <Div
 
-            {/*Content*/}
-
-            {
-                !isEmpty(activeTab) && (
-                    <LeagueBoardContent
-                        activeTab={{...activeTab, leagueId}}
-                    />
-                )
-            }
-
+            >
+                <LeagueBoardLastRank/>
+            </Div>
         </Div>
+
     )
 
 }

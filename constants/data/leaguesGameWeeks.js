@@ -95,4 +95,11 @@ export const getMembers = () => {
     ]
 }
 
+export const getLastTeamRank = () => {
+    return (
+        {...buildTeamPoints({teamName: 'champions fc ', weeklyPoints: 80, totalPoints: 613})}
+    )
+
+}
+
 export default getLeaguesGameWeeksRanking
