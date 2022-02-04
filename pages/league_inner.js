@@ -1,6 +1,7 @@
 // Packages
+import {motion, AnimatePresence} from "framer-motion";
 import {useRouter} from "next/router";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 // Components
 import Layout from "components/layout";
@@ -10,17 +11,36 @@ import Username from "components/user/Username";
 import LeagueHeader from "components/leaguesAndRanking/leagueInner/LeagueHeader";
 import LeagueBoard from "components/leaguesAndRanking/leagueInner/LeagueBoard";
 import LeagueSettingsHeader from "components/leaguesAndRanking/leagueInner/LeagueSettingsHeader";
+import LeagueSettingsBoard from "components/leaguesAndRanking/leagueInner/LeagueSettingsBoard";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import LeagueSettingsBoard from "../components/leaguesAndRanking/leagueInner/LeagueSettingsBoard";
+
+// Animations
+import {leagueSettingsBoardAnimation} from "Animations/leaguesAndRanking/LeagueAndRankingSettingsAnimation";
+
+// Styles
+const getStyles = (R) => {
+    return {
+        content: {
+            gridColumn: 1,
+            gridRow: 1
+        }
+    }
+}
 
 export default function LeagueInner() {
-    // Router
 
+    const STYLES = {...getStyles(R)}
+    const [league, setLeague] = useState({
+        isLeagueOwner: true
+    })
+
+    // Router
     const router = useRouter()
     const {query} = router
-    const {leagueId} = query
+    let {leagueId} = query
+
     // States
     const [showSettings, setShowSettings] = useState(false)
 
@@ -36,6 +56,9 @@ export default function LeagueInner() {
         router.push('/my_squad_game_week')
     }
 
+    useEffect(() => {
+        // fetch league by leagueId and set the league data here
+    }, [])
     return null
     return (
         <Layout title={'Leagues'}>
@@ -52,27 +75,47 @@ export default function LeagueInner() {
                     <Image src={'/images/logo_white.png'} w={164} h={40} alt={'logo_white'}/>
                     <Username username={'martine.bakker'} iconSrc={'/images/user_white.png'}/>
                 </Div>
-
-                {
-                    showSettings ? (
-                        <div>
-                            <LeagueSettingsHeader
-                                mb={32}
-                                onBackArrowClick={handleSettingsBackClick}
-                            />
-                            <LeagueSettingsBoard leagueId={leagueId}/>
-                        </div>
-                    ): (
-                        <div>
-                            <LeagueHeader
-                                mb={32}
-                                onSettingsClick={handleSettingsClick}
-                                onBackClick={handleBackClick}
-                            />
-                            <LeagueBoard leagueId={leagueId}/>
-                        </div>
-                    )
-                }
+                <Div className={"grid"}>
+                    {
+                        showSettings ? (
+                            <AnimatePresence>
+                                <motion.div
+                                    variants={leagueSettingsBoardAnimation()}
+                                    initial={"initial"}
+                                    animate={"animate"}
+                                    exit={"exit"}
+                                    key={1}
+                                    style={STYLES.content}
+                                >
+                                    <LeagueSettingsHeader
+                                        mb={32}
+                                        onBackArrowClick={handleSettingsBackClick}
+                                    />
+                                    <LeagueSettingsBoard/>
+                                </motion.div>
+                            </AnimatePresence>
+                        ) : (
+                            <AnimatePresence>
+                                <motion.div
+                                    variants={leagueSettingsBoardAnimation()}
+                                    initial={"initial"}
+                                    animate={"animate"}
+                                    exit={"exit"}
+                                    key={2}
+                                    style={STYLES.content}
+                                >
+                                    <LeagueHeader
+                                        mb={32}
+                                        onSettingsClick={handleSettingsClick}
+                                        onBackClick={handleBackClick}
+                                        league={league}
+                                    />
+                                    <LeagueBoard league={league}/>
+                                </motion.div>
+                            </AnimatePresence>
+                        )
+                    }
+                </Div>
             </Div>
         </Layout>
     )

@@ -14,6 +14,7 @@ import InfoBoardHead from "components/leaguesAndRanking/InfoBoardHead";
 import InfoBoardPoints from "components/leaguesAndRanking/InfoBoardPoints";
 import CreateLeagueModal from "components/leaguesAndRanking/CreateLeagueModal";
 import InviteYourFriendsModal from "components/leaguesAndRanking/InviteYourFriendsModal";
+import JoinLeagueModal from "components/leaguesAndRanking/JoinLeagueModal";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -25,9 +26,8 @@ import colors from "constants/colors";
 import {clone} from "utils/helpers";
 
 // Constants
-import LEAGUES_AND_RANKING from "constants/data/leaguesAndRanking";
+import {getPublicLeagues} from "constants/data/leaguesAndRanking";
 import {SHADOW_DARK_INDIGO, SHADOW_WHITE_SMOKE} from "constants/boxShadow";
-import JoinLeagueModal from "../leaguesAndRanking/JoinLeagueModal";
 
 // Styles
 const getStyles = (R) => {
@@ -44,8 +44,7 @@ export default function InfoBoard() {
 
     const STYLES = {...getStyles(R)}
     const router = useRouter()
-    const LEAGUES_AND_RANKING_INITIAL = clone(LEAGUES_AND_RANKING)
-    const [leaguesAndRanking, setLeaguesAndRanking] = useState(LEAGUES_AND_RANKING_INITIAL)
+    const [publicLeagues, setPublicLeagues] = useState(clone(getPublicLeagues()))
     const [showLeagueCreationModal, setShowLeagueCreationModal] = useState(false);
     const [showJoinLeagueModal, setShowJoinLeagueModal] = useState(false);
     const [showInviteYourFriendsModal, setShowInviteYourFriendsModal] = useState(false);
@@ -71,7 +70,7 @@ export default function InfoBoard() {
                 image: 'private_league.png',
                 name: leagueName,
                 totalMembers: totalMembers,
-                points: points,
+                points: points
             }
         ])
     }
@@ -82,27 +81,30 @@ export default function InfoBoard() {
         createOrJoinPrivateLeague({
             leagueName,
             totalMembers: 5,
-            points: 2
+            points: 2,
         })
     };
 
-    const handleLeagueCardClick = () => {
-        return router.push({
-            pathname: '/league_inner',
-            query: {
-                leagueId: 3
-            }
-        })
-    }
+
     const handleJoinLeague = (inviteCode) => {
         setShowJoinLeagueModal(false)
         // Search League from DB for "inviteCode" and join it
         createOrJoinPrivateLeague({
             leagueName: 'International',
             totalMembers: 113,
-            points: 108
+            points: 108,
         })
     }
+
+    const handleLeagueClick = (league) => {
+        return router.push({
+            pathname: '/league_inner',
+            query: {
+                leagueId: league.id,
+            }
+        })
+    }
+
 
     return (
         <Div w={390} pt={35}>
@@ -121,14 +123,15 @@ export default function InfoBoard() {
                     <div style={STYLES.leaguesBody}>
                         <Div>
                             {
-                                leaguesAndRanking.map((league, index) => (
+                                publicLeagues.map((league, index) => (
                                     <Div key={league.id}>
                                         <LeagueCard
                                             league={league}
                                             pt={24}
                                             pb={24}
+                                            onClick={handleLeagueClick}
                                         />
-                                        {index !== leaguesAndRanking.length - 1 && <BorderHorizontal/>}
+                                        {index !== publicLeagues.length - 1 && <BorderHorizontal/>}
                                     </Div>
                                 ))
                             }
@@ -148,7 +151,7 @@ export default function InfoBoard() {
                                                     league={league}
                                                     pt={24}
                                                     pb={24}
-                                                    onClick={handleLeagueCardClick}
+                                                    onClick={handleLeagueClick}
                                                 />
                                                 {index !== privateLeagues.length - 1 && <BorderHorizontal/>}
                                             </Div>

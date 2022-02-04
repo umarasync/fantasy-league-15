@@ -16,6 +16,8 @@ const TYPOGRAPHY = {
 
 const SIZING = {
     width: v => v ? {width: R(v)} : {},
+    minWidth: v => v ? {minWidth: R(v)} : {},
+    maxWidth: v => v ? {maxWidth: R(v)} : {},
     height: v => v ? {height: R(v)} : {},
     minHeight: v => v ? {minHeight: R(v)} : {},
     maxHeight: v => v ? {maxHeight: R(v)} : {},
@@ -75,6 +77,7 @@ const POSITIONING = {
 }
 
 const BORDER = {
+    border: v => v ? {border: v} : {},
     borderRadius: v => v ? {borderRadius: R(v)} : {},
     borderTopLeftRadius: v => v ? {borderTopLeftRadius: R(v)} : {},
     borderTopRightRadius: v => v ? {borderTopRightRadius: R(v)} : {},

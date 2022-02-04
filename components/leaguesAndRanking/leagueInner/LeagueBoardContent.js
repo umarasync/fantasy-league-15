@@ -25,7 +25,7 @@ const getStyles = (R) => {
             display: 'block',
             overflowY: 'auto',
             overflowX: 'hidden',
-            height: R(435),
+            height: R(430),
             width: '143%',
             paddingTop: R(20),
             paddingBottom: R(20),
@@ -44,10 +44,9 @@ export default function LeagueBoardContentTable({
     activeTab,
 }) {
     const STYLES = {...getStyles(R)}
-    const {data, animationChange, leagueId} = activeTab
-    const {teamsRank, overall, week, id} = data
-
-    const shouldTexColorBeRed = id === leagueId
+    const {data, animationChange} = activeTab
+    const {teamsRank, overall, week} = data
+    const shouldTexColorBeRed = false // put condition to make it red
 
     return (
         <div style={STYLES.container}>
@@ -118,6 +117,7 @@ export default function LeagueBoardContentTable({
                 }
                 </tbody>
             </table>
+
         </div>
     )
 }

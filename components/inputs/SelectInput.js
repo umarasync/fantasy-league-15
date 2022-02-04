@@ -101,9 +101,9 @@ export default function Input ({
                         </div>
                         <div className={'flex items-center'} style={{marginLeft: R(15)}}>
                             <img
-                                src={opened ? '/images/arrow-up.png' : '/images/arrow-down.png'}
-                                width={R(15)}
-                                height={R(15)}
+                                src={opened ? '/images/arrow_up.png' : '/images/arrow_down.png'}
+                                width={R(24)}
+                                height={R(24)}
                                 alt=""
                             />
                         </div>
@@ -124,7 +124,7 @@ export default function Input ({
                         style={STYLES.arrowImage}
                     >
                         <img
-                            src={opened ? '/images/arrow-up.png' : '/images/arrow-down.png'}
+                            src={opened ? '/images/arrow_up.png' : '/images/arrow_down.png'}
                             width={R(15)}
                             height={R(15)}
                             alt=""
