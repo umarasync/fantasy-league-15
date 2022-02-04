@@ -54,7 +54,7 @@ const getStyles = (R) => {
     }
 }
 
-export default function LeagueBoard ({}) {
+export default function LeagueBoard ({league}) {
 
     const STYLES =  { ...getStyles(R) }
 
@@ -217,11 +217,11 @@ export default function LeagueBoard ({}) {
                 }
 
             </Div>
-            <Div
-
-            >
-                <LeagueBoardLastRank/>
-            </Div>
+            {
+                !league.isLeagueOwner && (
+                    <LeagueBoardLastRank/>
+                )
+            }
         </Div>
 
     )

@@ -33,7 +33,6 @@ export default function LeagueInner() {
 
     const STYLES = {...getStyles(R)}
     const [league, setLeague] = useState({
-        isPrivateLeague: false,
         isLeagueOwner: true
     })
 
@@ -60,7 +59,7 @@ export default function LeagueInner() {
     useEffect(() => {
         // fetch league by leagueId and set the league data here
     }, [])
-
+    return null
     return (
         <Layout title={'Leagues'}>
             <Div
@@ -111,7 +110,7 @@ export default function LeagueInner() {
                                         onBackClick={handleBackClick}
                                         league={league}
                                     />
-                                    <LeagueBoard/>
+                                    <LeagueBoard league={league}/>
                                 </motion.div>
                             </AnimatePresence>
                         )
