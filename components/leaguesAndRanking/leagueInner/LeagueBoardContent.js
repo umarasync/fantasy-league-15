@@ -8,7 +8,7 @@ import LeagueBoardGameWeekPointsHeading from "components/leaguesAndRanking/leagu
 
 // Constants
 import colors from "constants/colors"
-import BorderHorizontal from "components/Borders/BorderHorizontal";
+import BorderHorizontal from "components/borders/BorderHorizontal";
 
 // Utils
 import R from "utils/getResponsiveValue";

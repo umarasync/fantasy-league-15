@@ -7,7 +7,7 @@ import Text from "components/html/Text";
 import Image from "components/html/Image";
 import Button from "components/html/Button";
 import LeagueSettingsBoardContent from "components/leaguesAndRanking/leagueInner/LeagueSettingsBoardContent";
-import BorderHorizontal from "components/Borders/BorderHorizontal";
+import BorderHorizontal from "components/borders/BorderHorizontal";
 
 // Constants
 import {SHADOW_WHITE_SMOKE} from "constants/boxShadow";

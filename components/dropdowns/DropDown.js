@@ -5,7 +5,6 @@ import {AnimatePresence, motion} from "framer-motion";
 // Components
 import Div from "components/html/Div";
 import Image from "components/html/Image";
-import BorderHorizontal from "components/borders/BorderHorizontal";
 
 // Animation
 import {getDropDownAnimation} from 'Animations/DropDownAnimation'
