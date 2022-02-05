@@ -59,7 +59,7 @@ export default function LeagueInner() {
     useEffect(() => {
         // fetch league by leagueId and set the league data here
     }, [])
-    return null
+
     return (
         <Layout title={'Leagues'}>
             <Div

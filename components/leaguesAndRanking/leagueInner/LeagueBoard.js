@@ -217,11 +217,8 @@ export default function LeagueBoard ({league}) {
                 }
 
             </Div>
-            {
-                !league.isLeagueOwner && (
-                    <LeagueBoardLastRank/>
-                )
-            }
+
+            <LeagueBoardLastRank/>
         </Div>
 
     )
