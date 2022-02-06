@@ -7,11 +7,11 @@ import dayjs from "dayjs";
 import Div from "components/html/Div";
 import Text from "components/html/Text";
 import BorderHorizontal from "components/borders/BorderHorizontal";
-import LeagueBoardBorder from "components/leaguesAndRanking/leagueInner/LeagueBoardBorder";
+import OtherTeamSliderTabBorder from "components/otherTeam/OtherTeamSliderTabBorder";
 import OtherTeamSliderControls from "components/otherTeam/OtherTeamSliderControls";
 
 // Animation
-import {scrollAnimation, subHeadingAnimation} from "Animations/leaguesAndRanking/LeagueAndRankingAnimation";
+import {scrollAnimation, subHeadingAnimation} from "Animations/otherTeam/OtherTeamAnimation";
 
 // Constants
 import colors from "constants/colors";
@@ -19,16 +19,16 @@ import {getOtherTeamData} from "constants/data/otherTeam";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import {clone} from "utils/helpers";
-import {setInitialSettings} from "utils/otherTeamHelper";
+import {clone, isEmpty} from "utils/helpers";
+import {setInitialSettings, tabClickHandler, controlsHandler, scrollRenderer} from "utils/otherTeamHelper";
 
 // Styles
 const getStyles = (R) => {
     return {
         item: {
             cursor: 'pointer',
-            marginLeft: R(35),
-            marginRight: R(35),
+            marginLeft: R(37),
+            marginRight: R(37),
         },
         scrollBox: {
             whiteSpace: 'nowrap',
@@ -53,7 +53,9 @@ export default function OtherTeamGameWeeksSlider() {
 
     const INITIAL_OTHER_TEAM_DATA = clone(getOtherTeamData())
     const [activeTab, setActiveTab] = useState({})
+    const [initialRenderDone, setInitialRenderDone] = useState(false)
     const [animationInProgress, setAnimationInProgress] = useState(false)
+    const [borderWidth, setBorderWidth] = useState(0)
     const [otherTeamData, setOtherTeamData] = useState([])
 
     const controls = useAnimation()
@@ -61,13 +63,69 @@ export default function OtherTeamGameWeeksSlider() {
     const [moved, setMoved] = useState(0)
 
     // Refs
+    let activeRef = useRef()
     const scrollContainerRef = useRef()
     const elementsRef = useRef(INITIAL_OTHER_TEAM_DATA.map(() => createRef()));
-    const scrollBoxOriginPoint = R(40)
+    const scrollBoxOriginPoint = R(235)
 
-    const handleControls = (isNext) => {
-        return false
+    const handleTabClick = (lgwr) => {
+        tabClickHandler({
+            // League and ranking
+            lgwr,
+            otherTeamData,
+            setOtherTeamData,
+            // active tab
+            activeTab,
+            setActiveTab,
+            // scroll container
+            scrollContainerRef,
+            scrollBoxOriginPoint,
+            // moved
+            moved,
+            setMoved,
+            // border
+            setBorderData,
+            // animation
+            animationInProgress,
+            // refs
+            activeRef,
+            elementsRef
+        })
     }
+
+    const handleControls = (isNext = false) => {
+        if (animationInProgress) return
+        const nextLGRW = controlsHandler({
+            isNext,
+            otherTeamData,
+        })
+
+        if (!nextLGRW) return
+
+        handleTabClick(nextLGRW)
+    }
+
+    useEffect(() => {
+        controls.start('changeTextColor')
+        controls.start('scroll')
+    }, [activeTab, moved])
+
+
+    useEffect(() => {
+        setInitialRenderDone(true)
+        if (initialRenderDone && activeRef && activeRef.current) {
+            setTimeout(() => {
+                scrollRenderer({
+                    activeRef,
+                    scrollContainerRef,
+                    scrollBoxOriginPoint,
+                    moved,
+                    setMoved,
+                    setBorderWidth,
+                })
+            }, 50)  
+        }
+    }, [otherTeamData, initialRenderDone])
 
     useEffect(() => {
         setInitialSettings({
@@ -95,7 +153,7 @@ export default function OtherTeamGameWeeksSlider() {
                                             }}
                                             className={'flex flex-col items-center justify-center'}
                                             style={STYLES.item}
-                                            ref={elementsRef.current[lgwr.id]}
+                                            ref={lgwr.active ? activeRef : elementsRef.current[lgwr.id]}
                                             onClick={() => handleTabClick(lgwr)}
                                         >
                                             <Text
@@ -116,7 +174,6 @@ export default function OtherTeamGameWeeksSlider() {
                                             </motion.p>
                                         </motion.div>
                                     ) : (
-
                                         <motion.div
                                             variants={scrollAnimation}
                                             animate={controls}
@@ -125,7 +182,7 @@ export default function OtherTeamGameWeeksSlider() {
                                             }}
                                             className={'flex items-center justify-center'}
                                             style={STYLES.item}
-                                            ref={elementsRef.current[lgwr.id]}
+                                            ref={lgwr.active ? activeRef : elementsRef.current[lgwr.id]}
                                             onClick={() => handleTabClick(lgwr)}
                                         >
                                             <motion.p
@@ -143,7 +200,7 @@ export default function OtherTeamGameWeeksSlider() {
                             })
                         }
                     </Div>
-                    <LeagueBoardBorder
+                    <OtherTeamSliderTabBorder
                         borderData={borderData}
                         setAnimationInProgress={setAnimationInProgress}
                     />
