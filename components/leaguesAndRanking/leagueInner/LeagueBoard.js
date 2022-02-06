@@ -131,7 +131,7 @@ export default function LeagueBoard ({league}) {
                 bs={SHADOW_WHITE_SMOKE}
             >
 
-                {/*Tabs*/}
+                {/*Slider*/}
                 <Div position={'relative'} style={STYLES.scrollBox}>
                     <Div className={'flex justify-center'}>
                         <div style={{...STYLES.scrollContainer}} ref={scrollContainerRef}>
@@ -209,7 +209,6 @@ export default function LeagueBoard ({league}) {
                 </Div>
 
                 {/*Content*/}
-
                 {
                     !isEmpty(activeTab) && (
                         <LeagueBoardContent activeTab={{...activeTab}}/>

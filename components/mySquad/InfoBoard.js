@@ -28,6 +28,7 @@ import {clone} from "utils/helpers";
 // Constants
 import {getPublicLeagues} from "constants/data/leaguesAndRanking";
 import {SHADOW_DARK_INDIGO, SHADOW_WHITE_SMOKE} from "constants/boxShadow";
+import Username from "../user/Username";
 
 // Styles
 const getStyles = (R) => {
@@ -40,11 +41,14 @@ const getStyles = (R) => {
     }
 }
 
-export default function InfoBoard() {
+export default function InfoBoard({
+    publicLeagues,
+    hideInfoBoardHead,
+    hideInfoBoardFooter
+}) {
 
     const STYLES = {...getStyles(R)}
     const router = useRouter()
-    const [publicLeagues, setPublicLeagues] = useState(clone(getPublicLeagues()))
     const [showLeagueCreationModal, setShowLeagueCreationModal] = useState(false);
     const [showJoinLeagueModal, setShowJoinLeagueModal] = useState(false);
     const [showInviteYourFriendsModal, setShowInviteYourFriendsModal] = useState(false);
@@ -108,7 +112,11 @@ export default function InfoBoard() {
 
     return (
         <Div w={390} pt={35}>
-            <InfoBoardHead/>
+            {/*username*/}
+            <div className={'flex flex-row-reverse'}>
+                <Username username={'martine.bakker'}/>
+            </div>
+            {!hideInfoBoardHead && <InfoBoardHead/>}
             <InfoBoardPoints/>
             {/*Leagues-And-Rankings*/}
             <Div maxH={502} className={'flex flex-col justify-between'} bs={SHADOW_WHITE_SMOKE} mt={24} p={24} br={12}>
@@ -172,44 +180,53 @@ export default function InfoBoard() {
                     </div>
                 </Div>
                 {/*Footer*/}
-                <Div justifyBetween mt={20}>
-                    <Button
-                        w={162}
-                        h={50}
-                        fs={14}
-                        lh={20}
-                        mr={8}
-                        onClick={handleShowCreateLeagueModal}
-                        title={'Create a league'}
-                    />
-                    <Button
-                        w={162}
-                        h={50}
-                        fs={14}
-                        lh={20}
-                        ml={9}
-                        onClick={handleShowJoinLeagueModal}
-                        bg={colors.dark_indigo}
-                        title={'Join a league'}
-                        bs={SHADOW_DARK_INDIGO}
-                    />
-                </Div>
+                {!hideInfoBoardFooter && (
+                    <Div justifyBetween mt={20}>
+                        <Button
+                            w={162}
+                            h={50}
+                            fs={14}
+                            lh={20}
+                            mr={8}
+                            onClick={handleShowCreateLeagueModal}
+                            title={'Create a league'}
+                        />
+                        <Button
+                            w={162}
+                            h={50}
+                            fs={14}
+                            lh={20}
+                            ml={9}
+                            onClick={handleShowJoinLeagueModal}
+                            bg={colors.dark_indigo}
+                            title={'Join a league'}
+                            bs={SHADOW_DARK_INDIGO}
+                        />
+                    </Div>
+                )}
+
             </Div>
             {/*Create-League-Modal*/}
-            <CreateLeagueModal
-                show={showLeagueCreationModal}
-                onClose={() => setShowLeagueCreationModal(false)}
-                onConfirm={handleCreateLeague}
-            />
-            <JoinLeagueModal
-                show={showJoinLeagueModal}
-                onClose={() => setShowJoinLeagueModal(false)}
-                onConfirm={handleJoinLeague}
-            />
-            <InviteYourFriendsModal
-                show={showInviteYourFriendsModal}
-                onClose={() => setShowInviteYourFriendsModal(false)}
-            />
+            {
+                !hideInfoBoardFooter && (
+                    <Div>
+                        <CreateLeagueModal
+                            show={showLeagueCreationModal}
+                            onClose={() => setShowLeagueCreationModal(false)}
+                            onConfirm={handleCreateLeague}
+                        />
+                        <JoinLeagueModal
+                            show={showJoinLeagueModal}
+                            onClose={() => setShowJoinLeagueModal(false)}
+                            onConfirm={handleJoinLeague}
+                        />
+                        <InviteYourFriendsModal
+                            show={showInviteYourFriendsModal}
+                            onClose={() => setShowInviteYourFriendsModal(false)}
+                        />
+                    </Div>
+                )
+            }
         </Div>
     )
 }
