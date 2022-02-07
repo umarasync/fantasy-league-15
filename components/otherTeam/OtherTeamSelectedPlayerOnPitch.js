@@ -118,7 +118,7 @@ const SubTitle = ({player, initialOpacity}) => {
 
 }
 
-const PlayerComponent = ({player, onPlayerClick, initialOpacity}) => {
+const PlayerComponent = ({player, initialOpacity}) => {
 
     const STYLES = {...getStyles(R, player)}
 
@@ -133,9 +133,8 @@ const PlayerComponent = ({player, onPlayerClick, initialOpacity}) => {
                 clickedIconStyle={STYLES.clickedIcon}
             />
             <div
-                className={`items-center relative items-center text-center justify-center cursor-pointer text-white whitespace-nowrap ${getButtonBGColor(player)}`}
+                className={`relative items-center text-center cursor-pointer text-white whitespace-nowrap ${getButtonBGColor(player)}`}
                 style={STYLES.buttonStyle}
-                onClick={() => onPlayerClick(player)}
             >
                 {
                     player.status === STATUS_INJURED || player.status === STATUS_SUSPENDED && (

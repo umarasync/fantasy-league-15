@@ -125,22 +125,14 @@ export const setPlayersAdditionalData = (pickedPlayersObject) => {
 
     // Set icon for GKs
     const GKs = $pickedPlayersObject[POSITION_GK].map((player, index) => {
-        if (index === $pickedPlayersObject[POSITION_GK].length - 1) {
-            player.isSubstitutePlayer = true
-        } else {
-            player.isSubstitutePlayer = false
-        }
+        player.isSubstitutePlayer = index === $pickedPlayersObject[POSITION_GK].length - 1;
         return player
     })
 
     // Set icon for DEFS
     const DEFs = $pickedPlayersObject[POSITION_DEF].map((player, index) => {
 
-        if (index === $pickedPlayersObject[POSITION_DEF].length - 1 || index === $pickedPlayersObject[POSITION_DEF].length - 2) {
-            player.isSubstitutePlayer = true
-        } else {
-            player.isSubstitutePlayer = false
-        }
+        player.isSubstitutePlayer = index === $pickedPlayersObject[POSITION_DEF].length - 1 || index === $pickedPlayersObject[POSITION_DEF].length - 2;
 
         return player
     })
@@ -148,11 +140,7 @@ export const setPlayersAdditionalData = (pickedPlayersObject) => {
     // Set icon for MIDs
     const MIDs = $pickedPlayersObject[POSITION_MID].map((player, index) => {
 
-        if (index === $pickedPlayersObject[POSITION_MID].length - 1) {
-            player.isSubstitutePlayer = true
-        } else {
-            player.isSubstitutePlayer = false
-        }
+        player.isSubstitutePlayer = index === $pickedPlayersObject[POSITION_MID].length - 1;
         return player
     })
 
@@ -180,11 +168,11 @@ export const setPlayersAdditionalData = (pickedPlayersObject) => {
         MIDs[4],
     ]
 
-    return shuffle(players.map((player, index) => {
+    return players.map((player, index) => {
 
         player.opacity = 1
         player.animationState = true
 
         return player
-    }))
+    })
 }

@@ -36,7 +36,7 @@ import {
     Player9Animation,
     Player10Animation,
     Player11Animation
-} from "Animations/mySquad/PlayersFormationAnimation";
+} from "Animations/otherTeam/PlayerFormationAnimation";
 import {ANIMATE, INITIAL} from "constants/animations";
 
 // Styles
@@ -44,6 +44,15 @@ const getStyles = (R) => {
     return {
         commonPlayersStyle: {
             minWidth: R(120)
+        },
+        p2: {
+            marginTop: R(15),
+        },
+        p5: {
+            marginTop: R(15),
+        },
+        p7: {
+            marginTop: R(-40)
         },
         commonPlayersStyle1: {
             marginLeft: R(10),
@@ -54,6 +63,10 @@ const getStyles = (R) => {
             display: 'flex',
             flexFlow: 'row',
             justifyContent: 'center'
+        },
+        container2: {
+          paddingLeft: R(80),
+          paddingRight: R(80)
         },
         commonWidth: {}
 
@@ -118,45 +131,49 @@ export default function OtherTeamSelectedSquadOnPitch({
                     }}
                 />
             </Div>
+
             {/*2*/}
-            <Div style={STYLES.container} mt={24}>
-                <OtherTeamSelectedPlayerOnPitch
-                    player={p2}
-                    changed={p2.animationState}
-                    style={{
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p2.opacity
-                    }}
-                />
-                <OtherTeamSelectedPlayerOnPitch
-                    player={p3}
-                    changed={p3.animationState}
-                    style={{
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p3.opacity
-                    }}
-                />
-                <OtherTeamSelectedPlayerOnPitch
-                    player={p4}
-                    changed={p4.animationState}
-                    style={{
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p4.opacity
-                    }}
-                />
-            </Div>
-            {/*3*/}
-            <Div style={STYLES.container} mt={24}>
-                <motion.div variants={Player5Animation} animate={controls}>
+            <Div style={STYLES.container2} className={'flex items-center justify-between'} mt={4}>
+                <Div w={200} className={'flex items-start justify-between'}>
+                    <OtherTeamSelectedPlayerOnPitch
+                        player={p2}
+                        changed={p2.animationState}
+                        style={{
+                            ...STYLES.p2,
+                            opacity: p2.opacity
+                        }}
+                    />
+                    <OtherTeamSelectedPlayerOnPitch
+                        player={p3}
+                        changed={p3.animationState}
+                        style={{
+                            ...STYLES.p3,
+                            opacity: p3.opacity
+                        }}
+                    />
+                </Div>
+                <Div w={200} className={'flex items-start justify-between'}>
+                    <OtherTeamSelectedPlayerOnPitch
+                        player={p4}
+                        changed={p4.animationState}
+                        style={{
+                            ...STYLES.p4,
+                            opacity: p4.opacity
+                        }}
+                    />
                     <OtherTeamSelectedPlayerOnPitch
                         player={p5}
                         changed={p5.animationState}
                         style={{
-                            ...STYLES.commonPlayersStyle,
+                            ...STYLES.p5,
                             opacity: p5.opacity
                         }}
                     />
-                </motion.div>
+                </Div>
+            </Div>
+
+            {/*3*/}
+            <Div style={STYLES.container} mt={24}>
                 <motion.div variants={Player6Animation} animate={controls}>
                     <OtherTeamSelectedPlayerOnPitch
                         player={p6}
@@ -173,6 +190,7 @@ export default function OtherTeamSelectedSquadOnPitch({
                         changed={p7.animationState}
                         style={{
                             ...STYLES.commonPlayersStyle,
+                            ...STYLES.p7,
                             opacity: p7.opacity
                         }}
                     />
@@ -261,3 +279,5 @@ export default function OtherTeamSelectedSquadOnPitch({
         </div>
     )
 }
+
+
