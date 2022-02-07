@@ -1,7 +1,7 @@
 // Constants
 import colors from "constants/colors";
 
-const duration = 0.6
+const duration = 0.5
 
 export const scrollAnimation = {
     scroll: ({moved}) => {

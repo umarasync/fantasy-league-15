@@ -49,7 +49,8 @@ const getStyles = (R) => {
             color: colors.regent_grey,
             fontSize: R(28),
             lineHeight: R(32, 'px'),
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            marginLeft: R(-5)
         }
     }
 }
@@ -167,7 +168,7 @@ export default function MatchBoard() {
                                                     variants={subHeadingAnimation()}
                                                     animate={controls}
                                                     custom={{otherTeam: ot}}
-                                                    className={'italic uppercase font-[700]'}
+                                                    className={'italic uppercase'}
                                                     style={STYLES.subHeading}
                                                 >
                                                     {dayjs(ot.date).format('DD MMM')}
