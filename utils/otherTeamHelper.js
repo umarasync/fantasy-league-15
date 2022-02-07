@@ -1,11 +1,7 @@
-// Packages
-import dayjs from "dayjs";
-
 // Utils
-import {clone} from "utils/helpers";
-
-// Constants
-export const MAKE_TRANSFERS = 'make transfers'
+import {clone, shuffle} from "utils/helpers";
+import {POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID} from "../constants/data/filters";
+import {TOTAL_POINTS, TRANSFER_ICON} from "./mySquadHelper";
 
 export const setInitialSettings = ({
    initialOtherTeamData,
@@ -14,6 +10,7 @@ export const setInitialSettings = ({
 }) => {
     const $initialOtherTeamData = clone(initialOtherTeamData)
 
+    // TODO:BACKEND Handle first active logic at backend
     $initialOtherTeamData.map((item, index) => {
         item.active = item.week === 10;
         return item
@@ -23,15 +20,14 @@ export const setInitialSettings = ({
         data: {...$initialOtherTeamData.find((item) => item.active)},
         animationChange: false
     })
+
     setOtherTeamData([...$initialOtherTeamData])
 }
 
-
-
 export const getActiveRect = ({
-                                  itemRef,
-                                  scrollContainerRef
-                              }) => {
+    itemRef,
+    scrollContainerRef
+}) => {
     if (!itemRef.current) return;
     const scrollRect = scrollContainerRef.current.getBoundingClientRect()
     const activeRect = itemRef.current.getBoundingClientRect()
@@ -100,7 +96,6 @@ export const tabClickHandler = ({
     setOtherTeamData($otherTeamData)
 }
 
-
 export const controlsHandler = ({
     isNext,
     otherTeamData,
@@ -123,3 +118,73 @@ export const controlsHandler = ({
     })
 }
 
+
+export const setPlayersAdditionalData = (pickedPlayersObject) => {
+
+    const $pickedPlayersObject = clone(pickedPlayersObject)
+
+    // Set icon for GKs
+    const GKs = $pickedPlayersObject[POSITION_GK].map((player, index) => {
+        if (index === $pickedPlayersObject[POSITION_GK].length - 1) {
+            player.isSubstitutePlayer = true
+        } else {
+            player.isSubstitutePlayer = false
+        }
+        return player
+    })
+
+    // Set icon for DEFS
+    const DEFs = $pickedPlayersObject[POSITION_DEF].map((player, index) => {
+
+        if (index === $pickedPlayersObject[POSITION_DEF].length - 1 || index === $pickedPlayersObject[POSITION_DEF].length - 2) {
+            player.isSubstitutePlayer = true
+        } else {
+            player.isSubstitutePlayer = false
+        }
+
+        return player
+    })
+
+    // Set icon for MIDs
+    const MIDs = $pickedPlayersObject[POSITION_MID].map((player, index) => {
+
+        if (index === $pickedPlayersObject[POSITION_MID].length - 1) {
+            player.isSubstitutePlayer = true
+        } else {
+            player.isSubstitutePlayer = false
+        }
+        return player
+    })
+
+    // Set icon for FWDs
+    const FWDs = $pickedPlayersObject[POSITION_FWD].map((player) => {
+        player.isSubstitutePlayer = false
+        return player
+    })
+
+    const players = [
+        GKs[0],
+        DEFs[0],
+        DEFs[1],
+        DEFs[2],
+        MIDs[0],
+        MIDs[1],
+        MIDs[2],
+        MIDs[3],
+        FWDs[0],
+        FWDs[1],
+        FWDs[2],
+        GKs[1],
+        DEFs[3],
+        DEFs[4],
+        MIDs[4],
+    ]
+
+    return shuffle(players.map((player, index) => {
+
+        player.opacity = 1
+        player.animationState = true
+
+        return player
+    }))
+}

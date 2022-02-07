@@ -11,12 +11,10 @@ import OtherTeamSliderControls from "components/otherTeam/OtherTeamSliderControl
 
 // Constants
 import colors from "constants/colors";
-import {MATCHES} from "constants/data/matches";
 import {getOtherTeamData} from "constants/data/otherTeam";
 
-
 // utils
-import {clone} from "utils/helpers";
+import {clone, isEmpty} from "utils/helpers";
 import R from "utils/getResponsiveValue";
 import {
     controlsHandler,
@@ -55,7 +53,9 @@ const getStyles = (R) => {
     }
 }
 
-export default function MatchBoard() {
+export default function OtherTeamGameWeeksSlider({
+                                                     onSelectWeek
+}) {
 
     const STYLES = {...getStyles(R)}
 
@@ -120,6 +120,10 @@ export default function MatchBoard() {
         }
     }, [otherTeamData, initialRenderDone])
 
+    useEffect(()=> {
+        if(isEmpty(activeTab)) return
+        onSelectWeek(activeTab)
+    }, [activeTab])
 
     useEffect(() => {
         setInitialSettings({
@@ -128,6 +132,7 @@ export default function MatchBoard() {
             setActiveTab
         })
     }, [])
+
 
     return (
         <Div>

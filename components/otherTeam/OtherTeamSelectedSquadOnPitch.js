@@ -46,9 +46,9 @@ const getStyles = (R) => {
             minWidth: R(120)
         },
         commonPlayersStyle1: {
-            paddingLeft: R(10),
-            paddingRight: R(10),
-            minWidth: R(100)
+            marginLeft: R(10),
+            marginRight: R(10),
+            minWidth: R(90)
         },
         container: {
             display: 'flex',

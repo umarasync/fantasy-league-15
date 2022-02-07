@@ -17,6 +17,7 @@ import colors from "constants/colors";
 export default function OtherTeamMySquadLeftSection({
    pickedPlayers,
    changeFormation,
+   onSelectWeek,
 }) {
 
     const router = useRouter()
@@ -59,7 +60,9 @@ export default function OtherTeamMySquadLeftSection({
                 </Div>
             </Div>
             <Div mt={40} mb={50}>
-                <OtherTeamGameWeeksSlider/>
+                <OtherTeamGameWeeksSlider
+                    onSelectWeek={onSelectWeek}
+                />
             </Div>
             <div className={'flex items-center justify-center'}>
                 <Div w={610} h={621}>
