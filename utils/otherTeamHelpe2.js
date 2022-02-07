@@ -7,22 +7,43 @@ import {clone} from "utils/helpers";
 // Constants
 export const MAKE_TRANSFERS = 'make transfers'
 
+
 export const setInitialSettings = ({
-                                       initialMatches,
-                                       setActiveTabContent,
-                                       setMatches
-                                   }) => {
-    const $matches = initialMatches.map((match, index) => {
-        const todayDate = dayjs().format('YYYY-MM-D')
-        if (dayjs(match.date).isSame(todayDate)) {
-            match.date = MAKE_TRANSFERS
-            match.active = true
-            setActiveTabContent({...match})
-        }
-        return match
+    initialOtherTeamData,
+    setOtherTeamData,
+    setActiveTab,
+}) => {
+    const $initialOtherTeamData = clone(initialOtherTeamData)
+
+    $initialOtherTeamData.map((item, index) => {
+        item.active = item.week === 10;
+        return item
     })
-    setMatches($matches)
+
+    setActiveTab({
+        data: {...$initialOtherTeamData.find((item) => item.active)},
+        animationChange: false
+    })
+    setOtherTeamData([...$initialOtherTeamData])
 }
+
+
+// export const setInitialSettings = ({
+//                                        initialOtherTeamData,
+//                                        setActiveTab,
+//                                        setMatches
+//                                    }) => {
+//     const $matches = initialOtherTeamData.map((match, index) => {
+//         const todayDate = dayjs().format('YYYY-MM-D')
+//         if (dayjs(match.date).isSame(todayDate)) {
+//             match.date = MAKE_TRANSFERS
+//             match.active = true
+//             setActiveTab({...match})
+//         }
+//         return match
+//     })
+//     setMatches($matches)
+// }
 
 export const getActiveRect = ({
                                   itemRef,
@@ -56,6 +77,12 @@ export const scrollHandler = ({
     } else {
         movedPixels = -1 * (scrollBoxOriginPoint - activeLeft)
     }
+
+    console.log('2=========', {
+        activeLeft,
+         moved,
+        movedPixels
+    })
     setMoved(moved + movedPixels)
 }
 
@@ -78,26 +105,27 @@ export const scrollRenderer = (props) => {
 }
 
 export const tabClickHandler = ({
-                                    match,
-                                    matches,
-                                    setMatches,
-                                    tabChanged,
-                                    setTabChanged,
-                                    setActiveTabContent,
-                                    animationInProgress,
-                                }) => {
+        otherTeamObj,
+        otherTeamData,
+        setOtherTeamData,
+        activeTab,
+        setActiveTab,
+        animationInProgress,
+    }) => {
     if (animationInProgress) return
-    let currentActive = matches.findIndex((match) => match.active)
-    const $matches = matches.map((item, index) => {
-        item.active = item.id === match.id;
+    const $otherTeamData = otherTeamData.map((item, index) => {
+        item.active = item.id === otherTeamObj.id;
         if (item.active) {
-            setActiveTabContent({...item})
-            setTabChanged(!tabChanged)
+
+            setActiveTab({
+                data: {...item},
+                animationChange: !activeTab.animationChange
+            })
         }
-        item.lastActive = index === currentActive
         return item
     })
-    setMatches($matches)
+
+    setOtherTeamData([...$otherTeamData])
 }
 
 

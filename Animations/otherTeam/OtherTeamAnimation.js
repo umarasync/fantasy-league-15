@@ -29,9 +29,9 @@ export const tabsBorderAnimation = () => {
 export const subHeadingAnimation = () => {
     return (
         {
-            changeTextColor: ({lgwr}) => {
+            changeTextColor: ({otherTeam}) => {
                 return {
-                    color: lgwr.active ? colors.white : colors.regent_grey,
+                    color: otherTeam.active ? colors.white : colors.regent_grey,
                     transition: {
                         duration: duration
                     }

@@ -28,12 +28,15 @@ import {
 
 // Animations
 import {scrollAnimation, subHeadingAnimation} from "Animations/otherTeam/OtherTeamAnimation";
+import OtherTeamSliderTabBorder from "./OtherTeamSliderTabBorder";
 import BorderHorizontal from "../borders/BorderHorizontal";
 import OtherTeamSliderControls from "./OtherTeamSliderControls";
+import {getOtherTeamData} from "../../constants/data/otherTeam";
 
 // Styles
 const getStyles = (R) => {
     return {
+
         item: {
             cursor: 'pointer',
             marginLeft: R(37),
@@ -44,6 +47,7 @@ const getStyles = (R) => {
         },
         scrollContainer: {
             width: '80%',
+            // width: R(570),
             paddingLeft: R(10),
         },
         subHeading: {
@@ -52,16 +56,17 @@ const getStyles = (R) => {
             lineHeight: R(32, 'px'),
             fontWeight: 'bold'
         }
+
     }
 }
 
-export default function MatchBoard() {
+export default function OtherTeamGameWeeksSlider() {
 
     const STYLES = {...getStyles(R)}
 
-    const INITIAL_MATCHES = clone(MATCHES)
-
-    const [matches, setMatches] = useState([])
+    const INITIAL_OTHER_TEAM_DATA = clone(getOtherTeamData())
+    const [otherTeamData, setOtherTeamData] = useState([])
+    const [matches, setMatches] = useState([]) //TODO:REMOVE
 
     const scrollContainerRef = useRef()
     let activeRef = useRef()
@@ -70,12 +75,13 @@ export default function MatchBoard() {
     const borderAnimationControls = useAnimation()
 
     const [moved, setMoved] = useState(0)
+    const [borderData, setBorderData] = useState({})
     const [initialRenderDone, setInitialRenderDone] = useState(false)
     const [animationInProgress, setAnimationInProgress] = useState(false)
     const [tabChanged, setTabChanged] = useState(false)
     const [borderWidth, setBorderWidth] = useState(0)
-    const [activeTabContent, setActiveTabContent] = useState({})
-    const elementsRef = useRef(INITIAL_MATCHES.map(() => createRef()));
+    const [activeTab, setActiveTab] = useState({})
+    // const scrollBoxOriginPointForBorder = R(517.421)
     const scrollBoxOriginPoint = R(235)
 
     useEffect(() => {
@@ -86,15 +92,14 @@ export default function MatchBoard() {
         }
     }, [moved])
 
-    const handleTabClick = (match) => {
+    const handleTabClick = (otherTeamObj) => {
         tabClickHandler({
-            match,
+            otherTeamObj,
             animationInProgress,
-            matches,
-            setMatches,
-            tabChanged,
-            setTabChanged,
-            setActiveTabContent,
+            otherTeamData,
+            setOtherTeamData,
+            activeTab,
+            setActiveTab,
         })
     }
     const handleControls = (isNext = false) => {
@@ -105,7 +110,7 @@ export default function MatchBoard() {
             setMatches,
             tabChanged,
             setTabChanged,
-            setActiveTabContent,
+            setActiveTab,
         })
     }
 
@@ -123,15 +128,19 @@ export default function MatchBoard() {
                 })
             }, 50)
         }
-    }, [matches, initialRenderDone])
+    }, [otherTeamData, initialRenderDone])
 
-    useEffect(() => {
-        setInitialSettings({
-            initialMatches: INITIAL_MATCHES,
-            setActiveTabContent,
-            setMatches
-        })
-    }, [])
+
+    // useEffect(() => {
+    //     setInitialSettings({
+    //         initialOtherTeamData: INITIAL_OTHER_TEAM_DATA,
+    //         setOtherTeamData,
+    //         setActiveTab,
+    //     })
+    // }, [])
+
+
+
 
     const onAnimationComplete = (definition) => {
         if (definition === 'borderWidth') {
@@ -151,55 +160,62 @@ export default function MatchBoard() {
                     >
                         <Div className={'flex overflow-hidden'}>
                             {
-                                matches.length > 0 && matches.map((match, index) => {
+                                // lgrw = League-Game-Week-Ranking
+                                otherTeamData.length > 0 && otherTeamData.map((otherTeam, index) => {
                                     return (
                                         <motion.div
+                                            key={otherTeam.id}
                                             variants={scrollAnimation}
                                             animate={controls}
                                             custom={{
-                                                match,
                                                 moved
                                             }}
-                                            key={match.id}
-                                            className={'flex flex-col items-center'}
-                                            style={{...STYLES.item}}
+                                            className={'flex flex-col items-center justify-center'}
+                                            style={STYLES.item}
+                                            // ref={otherTeam.active ? activeRef : elementsRef.current[index]}
+                                            ref={otherTeam.active ? activeRef : null}
+                                            onClick={() => handleTabClick(otherTeam)}
                                         >
-                                            <div
-                                                className={'flex flex-col items-center'}
-                                                ref={match.active ? activeRef : null}
-                                                onClick={() => handleTabClick(match)}
-                                                data-lastChild={match.lastChild}
-                                                data-firstChild={match.firstChild}
+                                            <Text
+                                                text={`Gameweek ${otherTeam.week}`}
+                                                fs={18}
+                                                lh={26}
+                                                color={colors.regent_grey}
+                                                mb={4}
+                                            />
+                                            <Text
+                                                text={`${otherTeam.active}`}
+                                                fs={18}
+                                                lh={26}
+                                                color={colors.regent_grey}
+                                                mb={4}
+                                            />
+                                            <motion.p
+                                                variants={subHeadingAnimation()}
+                                                custom={{otherTeam}}
+                                                animate={controls}
+                                                className={'italic uppercase'}
+                                                style={STYLES.subHeading}
                                             >
-                                                <Text text={match.week} color={colors.regent_grey} fs={18} lh={26}/>
-                                                <motion.p
-                                                    variants={subHeadingAnimation()}
-                                                    animate={controls}
-                                                    custom={{otherTeam: match}}
-                                                    className={'italic uppercase font-[700]'}
-                                                    style={STYLES.subHeading}
-                                                >
-                                                    {
-                                                        match.date !== MAKE_TRANSFERS
-                                                            ? dayjs(match.date).format('DD MMM')
-                                                            : match.date
-                                                    }
-                                                </motion.p>
-                                            </div>
-
+                                                {dayjs(otherTeam.date).format('DD MMM')}
+                                            </motion.p>
                                         </motion.div>
                                     )
                                 })
                             }
                         </Div>
 
+                        <OtherTeamSliderTabBorder
+                            borderData={borderData}
+                            setAnimationInProgress={setAnimationInProgress}
+                        />
                     </div>
 
                 </Div>
-
                 <Div mt={20}><BorderHorizontal opacity={0.5}/></Div>
                 <OtherTeamSliderControls onPrevious={handleControls} onNext={() => handleControls(true)}/>
             </Div>
+
         </Div>
     )
 
