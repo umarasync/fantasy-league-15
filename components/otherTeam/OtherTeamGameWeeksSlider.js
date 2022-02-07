@@ -1,37 +1,34 @@
 // Packages
 import {motion, useAnimation} from "framer-motion";
-import {createRef, useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import dayjs from 'dayjs'
 
 // Components
 import Div from "components/html/Div";
 import Text from "components/html/Text";
-import Image from "components/html/Image";
-import Button from "components/html/Button";
+import OtherTeamSliderTabBorder from "components/otherTeam/OtherTeamSliderTabBorder";
+import OtherTeamSliderControls from "components/otherTeam/OtherTeamSliderControls";
 
 // Constants
-import {SHADOW_WHITE_SMOKE} from "constants/boxShadow";
 import colors from "constants/colors";
 import {MATCHES} from "constants/data/matches";
+import {getOtherTeamData} from "constants/data/otherTeam";
+
 
 // utils
 import {clone} from "utils/helpers";
 import R from "utils/getResponsiveValue";
-import MatchBoardContent from "components/mySquad/MatchBoardContent";
 import {
     controlsHandler,
     scrollRenderer,
     tabClickHandler,
-    MAKE_TRANSFERS,
     setInitialSettings
 } from "utils/otherTeamHelper";
 
 // Animations
 import {scrollAnimation, subHeadingAnimation} from "Animations/otherTeam/OtherTeamAnimation";
-import BorderHorizontal from "../borders/BorderHorizontal";
-import OtherTeamSliderControls from "./OtherTeamSliderControls";
-import {getOtherTeamData} from "../../constants/data/otherTeam";
-import OtherTeamSliderTabBorder from "./OtherTeamSliderTabBorder";
+import BorderHorizontal from "components/borders/BorderHorizontal";
+
 
 // Styles
 const getStyles = (R) => {
@@ -59,45 +56,28 @@ const getStyles = (R) => {
 
 export default function MatchBoard() {
 
-
     const STYLES = {...getStyles(R)}
 
-    const INITIAL_MATCHES = clone(MATCHES)
-
-
-
-    const [matches, setMatches] = useState([]) // TODO:REMOVED
-
-
-
-    const scrollContainerRef = useRef()
-    let activeRef = useRef()
-
-    const controls = useAnimation()
-    const borderAnimationControls = useAnimation()
-
-    const [moved, setMoved] = useState(0)
-    const [initialRenderDone, setInitialRenderDone] = useState(false)
-    const [animationInProgress, setAnimationInProgress] = useState(false)
-    const [tabChanged, setTabChanged] = useState(false)
-    const [borderWidth, setBorderWidth] = useState(0)
-    const [activeTabContent, setActiveTabContent] = useState({})
-    const scrollBoxOriginPoint = R(235)
-
-
-
-    /**********************NEW STATES *************/
     const INITIAL_OTHER_TEAM_DATA = clone(getOtherTeamData())
     const [activeTab, setActiveTab] = useState({})
     const [otherTeamData, setOtherTeamData] = useState([])
     const [borderData, setBorderData] = useState({})
-    /**********************NEW STATES *************/
 
+    const [moved, setMoved] = useState(0)
+    const [initialRenderDone, setInitialRenderDone] = useState(false)
+    const [animationInProgress, setAnimationInProgress] = useState(false)
+    const scrollBoxOriginPoint = R(235)
+
+    // Refs
+    const scrollContainerRef = useRef()
+    const activeRef = useRef()
+
+    // Animation Controls
+    const controls = useAnimation()
 
     useEffect(() => {
         if (initialRenderDone) {
             controls.start('scroll')
-            borderAnimationControls.start('borderWidth')
             controls.start('changeTextColor')
         }
     }, [moved])
@@ -147,7 +127,6 @@ export default function MatchBoard() {
             setActiveTab
         })
     }, [])
-
 
     return (
         <Div>
