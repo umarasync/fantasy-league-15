@@ -31,6 +31,7 @@ import {scrollAnimation, subHeadingAnimation} from "Animations/otherTeam/OtherTe
 import BorderHorizontal from "../borders/BorderHorizontal";
 import OtherTeamSliderControls from "./OtherTeamSliderControls";
 import {getOtherTeamData} from "../../constants/data/otherTeam";
+import OtherTeamSliderTabBorder from "./OtherTeamSliderTabBorder";
 
 // Styles
 const getStyles = (R) => {
@@ -89,6 +90,7 @@ export default function MatchBoard() {
     const INITIAL_OTHER_TEAM_DATA = clone(getOtherTeamData())
     const [activeTab, setActiveTab] = useState({})
     const [otherTeamData, setOtherTeamData] = useState([])
+    const [borderData, setBorderData] = useState({})
     /**********************NEW STATES *************/
 
 
@@ -101,9 +103,9 @@ export default function MatchBoard() {
     }, [moved])
 
     const handleTabClick = (ot) => {
+        if (animationInProgress) return
         tabClickHandler({
             ot,
-            animationInProgress,
             otherTeamData,
             setOtherTeamData,
             activeTab,
@@ -111,9 +113,9 @@ export default function MatchBoard() {
         })
     }
     const handleControls = (isNext = false) => {
+        if(animationInProgress) return
         controlsHandler({
             isNext,
-            animationInProgress,
             otherTeamData,
             setOtherTeamData,
             activeTab,
@@ -131,7 +133,7 @@ export default function MatchBoard() {
                     scrollBoxOriginPoint,
                     moved,
                     setMoved,
-                    setBorderWidth,
+                    setBorderData,
                 })
             }, 50)
         }
@@ -175,7 +177,13 @@ export default function MatchBoard() {
                                                 ref={ot.active ? activeRef : null}
                                                 onClick={() => handleTabClick(ot)}
                                             >
-                                                <Text text={`Gameweek ${ot.week}`} color={colors.regent_grey} fs={18} lh={26}/>
+                                                <Text
+                                                    text={`Gameweek ${ot.week}`}
+                                                    fs={18}
+                                                    lh={26}
+                                                    color={colors.regent_grey}
+                                                    mb={4}
+                                                />
                                                 <motion.p
                                                     variants={subHeadingAnimation()}
                                                     animate={controls}
@@ -192,7 +200,10 @@ export default function MatchBoard() {
                                 })
                             }
                         </Div>
-
+                        <OtherTeamSliderTabBorder
+                            borderData={borderData}
+                            setAnimationInProgress={setAnimationInProgress}
+                        />
                     </div>
 
                 </Div>

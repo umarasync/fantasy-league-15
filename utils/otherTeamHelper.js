@@ -27,22 +27,6 @@ export const setInitialSettings = ({
 }
 
 
-// export const setInitialSettings = ({
-//                                        initialMatches,
-//                                        setActiveTabContent,
-//                                        setMatches
-//                                    }) => {
-//     const $matches = initialMatches.map((match, index) => {
-//         const todayDate = dayjs().format('YYYY-MM-D')
-//         if (dayjs(match.date).isSame(todayDate)) {
-//             match.date = MAKE_TRANSFERS
-//             match.active = true
-//             setActiveTabContent({...match})
-//         }
-//         return match
-//     })
-//     setMatches($matches)
-// }
 
 export const getActiveRect = ({
                                   itemRef,
@@ -63,13 +47,11 @@ export const scrollHandler = ({
   scrollBoxOriginPoint,
   moved,
   setMoved,
-  setBorderWidth,
 }) => {
     const {activeLeft, activeRect} = getActiveRect({
         itemRef: activeRef,
         scrollContainerRef
     })
-    setBorderWidth(activeRect.width)
     let movedPixels = 0;
     if (activeLeft > scrollBoxOriginPoint) {
         movedPixels = activeLeft - scrollBoxOriginPoint
@@ -83,7 +65,7 @@ export const scrollRenderer = (props) => {
     const {
         activeRef,
         scrollContainerRef,
-        setBorderWidth,
+        setBorderData,
     } = props
 
     const $activeRectObj = getActiveRect({
@@ -92,20 +74,19 @@ export const scrollRenderer = (props) => {
     })
     if ($activeRectObj) {
         const {activeRect} = $activeRectObj
-        setBorderWidth(activeRect.width)
+        setBorderData({width: activeRect.width})
         scrollHandler({...props})
     }
 }
 
 export const tabClickHandler = ({
-                                    ot,
-                                    animationInProgress,
-                                    otherTeamData,
-                                    setOtherTeamData,
-                                    activeTab,
-                                    setActiveTab,
-                                }) => {
-    if (animationInProgress) return
+    ot,
+    otherTeamData,
+    setOtherTeamData,
+    activeTab,
+    setActiveTab,
+}) => {
+
     const $otherTeamData = otherTeamData.map((item, index) => {
         item.active = item.id === ot.id;
         if (item.active) {
@@ -121,7 +102,6 @@ export const tabClickHandler = ({
 
 
 export const controlsHandler = ({
-    animationInProgress,
     isNext,
     otherTeamData,
     // These props are necessary for tabClickHandler function
@@ -129,14 +109,12 @@ export const controlsHandler = ({
     activeTab,
     setActiveTab,
 }) => {
-    if (animationInProgress) return;
     const $otherTeamData = clone(otherTeamData)
     let objIndex = $otherTeamData.findIndex((item) => item.active)
     let nextIndex = isNext ? objIndex + 1 : objIndex - 1
     if (nextIndex === $otherTeamData.length || nextIndex === -1) return
 
     tabClickHandler({
-        animationInProgress,
         ot: $otherTeamData[nextIndex],
         otherTeamData,
         setOtherTeamData,
