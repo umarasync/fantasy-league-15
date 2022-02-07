@@ -8,21 +8,41 @@ import {clone} from "utils/helpers";
 export const MAKE_TRANSFERS = 'make transfers'
 
 export const setInitialSettings = ({
-                                       initialMatches,
-                                       setActiveTabContent,
-                                       setMatches
-                                   }) => {
-    const $matches = initialMatches.map((match, index) => {
-        const todayDate = dayjs().format('YYYY-MM-D')
-        if (dayjs(match.date).isSame(todayDate)) {
-            match.date = MAKE_TRANSFERS
-            match.active = true
-            setActiveTabContent({...match})
-        }
-        return match
+   initialOtherTeamData,
+   setOtherTeamData,
+   setActiveTab,
+}) => {
+    const $initialOtherTeamData = clone(initialOtherTeamData)
+
+    $initialOtherTeamData.map((item, index) => {
+        item.active = item.week === 10;
+        return item
     })
-    setMatches($matches)
+
+    setActiveTab({
+        data: {...$initialOtherTeamData.find((item) => item.active)},
+        animationChange: false
+    })
+    setOtherTeamData([...$initialOtherTeamData])
 }
+
+
+// export const setInitialSettings = ({
+//                                        initialMatches,
+//                                        setActiveTabContent,
+//                                        setMatches
+//                                    }) => {
+//     const $matches = initialMatches.map((match, index) => {
+//         const todayDate = dayjs().format('YYYY-MM-D')
+//         if (dayjs(match.date).isSame(todayDate)) {
+//             match.date = MAKE_TRANSFERS
+//             match.active = true
+//             setActiveTabContent({...match})
+//         }
+//         return match
+//     })
+//     setMatches($matches)
+// }
 
 export const getActiveRect = ({
                                   itemRef,
@@ -38,13 +58,13 @@ export const getActiveRect = ({
 }
 
 export const scrollHandler = ({
-                                  activeRef,
-                                  scrollContainerRef,
-                                  scrollBoxOriginPoint,
-                                  moved,
-                                  setMoved,
-                                  setBorderWidth,
-                              }) => {
+  activeRef,
+  scrollContainerRef,
+  scrollBoxOriginPoint,
+  moved,
+  setMoved,
+  setBorderWidth,
+}) => {
     const {activeLeft, activeRect} = getActiveRect({
         itemRef: activeRef,
         scrollContainerRef

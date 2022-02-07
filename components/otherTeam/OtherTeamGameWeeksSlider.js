@@ -30,6 +30,7 @@ import {
 import {scrollAnimation, subHeadingAnimation} from "Animations/otherTeam/OtherTeamAnimation";
 import BorderHorizontal from "../borders/BorderHorizontal";
 import OtherTeamSliderControls from "./OtherTeamSliderControls";
+import {getOtherTeamData} from "../../constants/data/otherTeam";
 
 // Styles
 const getStyles = (R) => {
@@ -57,11 +58,16 @@ const getStyles = (R) => {
 
 export default function MatchBoard() {
 
+
     const STYLES = {...getStyles(R)}
 
     const INITIAL_MATCHES = clone(MATCHES)
 
-    const [matches, setMatches] = useState([])
+
+
+    const [matches, setMatches] = useState([]) // TODO:REMOVED
+
+
 
     const scrollContainerRef = useRef()
     let activeRef = useRef()
@@ -75,8 +81,16 @@ export default function MatchBoard() {
     const [tabChanged, setTabChanged] = useState(false)
     const [borderWidth, setBorderWidth] = useState(0)
     const [activeTabContent, setActiveTabContent] = useState({})
-    const elementsRef = useRef(INITIAL_MATCHES.map(() => createRef()));
     const scrollBoxOriginPoint = R(235)
+
+
+
+    /**********************NEW STATES *************/
+    const INITIAL_OTHER_TEAM_DATA = clone(getOtherTeamData())
+    const [activeTab, setActiveTab] = useState({})
+    const [otherTeamData, setOtherTeamData] = useState([])
+    /**********************NEW STATES *************/
+
 
     useEffect(() => {
         if (initialRenderDone) {
@@ -86,9 +100,10 @@ export default function MatchBoard() {
         }
     }, [moved])
 
-    const handleTabClick = (match) => {
+    const handleTabClick = (ot) => {
+        console.log('1=====', ot)
         tabClickHandler({
-            match,
+            ot,
             animationInProgress,
             matches,
             setMatches,
@@ -125,21 +140,31 @@ export default function MatchBoard() {
         }
     }, [matches, initialRenderDone])
 
+
     useEffect(() => {
         setInitialSettings({
-            initialMatches: INITIAL_MATCHES,
-            setActiveTabContent,
-            setMatches
+            initialOtherTeamData: INITIAL_OTHER_TEAM_DATA,
+            setOtherTeamData,
+            setActiveTab
         })
     }, [])
 
-    const onAnimationComplete = (definition) => {
-        if (definition === 'borderWidth') {
-            setAnimationInProgress(false)
-            setTimeout(() => {
-            }, 300)
-        }
-    }
+
+    // useEffect(() => {
+    //     setInitialSettings({
+    //         initialMatches: INITIAL_MATCHES,
+    //         setActiveTabContent,
+    //         setMatches
+    //     })
+    // }, [])
+    //
+    // const onAnimationComplete = (definition) => {
+    //     if (definition === 'borderWidth') {
+    //         setAnimationInProgress(false)
+    //         setTimeout(() => {
+    //         }, 300)
+    //     }
+    // }
 
     return (
         <Div>
@@ -151,39 +176,33 @@ export default function MatchBoard() {
                     >
                         <Div className={'flex overflow-hidden'}>
                             {
-                                matches.length > 0 && matches.map((match, index) => {
+                                otherTeamData.length > 0 && otherTeamData.map((ot, index) => {
                                     return (
                                         <motion.div
                                             variants={scrollAnimation}
                                             animate={controls}
                                             custom={{
-                                                match,
+                                                ot,
                                                 moved
                                             }}
-                                            key={match.id}
+                                            key={ot.id}
                                             className={'flex flex-col items-center'}
                                             style={{...STYLES.item}}
                                         >
                                             <div
                                                 className={'flex flex-col items-center'}
-                                                ref={match.active ? activeRef : null}
-                                                onClick={() => handleTabClick(match)}
-                                                data-lastChild={match.lastChild}
-                                                data-firstChild={match.firstChild}
+                                                ref={ot.active ? activeRef : null}
+                                                onClick={() => handleTabClick(ot)}
                                             >
-                                                <Text text={match.week} color={colors.regent_grey} fs={18} lh={26}/>
+                                                <Text text={`Gameweek ${ot.week}`} color={colors.regent_grey} fs={18} lh={26}/>
                                                 <motion.p
                                                     variants={subHeadingAnimation()}
                                                     animate={controls}
-                                                    custom={{otherTeam: match}}
+                                                    custom={{otherTeam: ot}}
                                                     className={'italic uppercase font-[700]'}
                                                     style={STYLES.subHeading}
                                                 >
-                                                    {
-                                                        match.date !== MAKE_TRANSFERS
-                                                            ? dayjs(match.date).format('DD MMM')
-                                                            : match.date
-                                                    }
+                                                    {dayjs(ot.date).format('DD MMM')}
                                                 </motion.p>
                                             </div>
 
