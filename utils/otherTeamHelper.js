@@ -98,52 +98,50 @@ export const scrollRenderer = (props) => {
 }
 
 export const tabClickHandler = ({
-                                    match,
-                                    matches,
-                                    setMatches,
-                                    tabChanged,
-                                    setTabChanged,
-                                    setActiveTabContent,
+                                    ot,
                                     animationInProgress,
+                                    otherTeamData,
+                                    setOtherTeamData,
+                                    activeTab,
+                                    setActiveTab,
                                 }) => {
     if (animationInProgress) return
-    let currentActive = matches.findIndex((match) => match.active)
-    const $matches = matches.map((item, index) => {
-        item.active = item.id === match.id;
+    const $otherTeamData = otherTeamData.map((item, index) => {
+        item.active = item.id === ot.id;
         if (item.active) {
-            setActiveTabContent({...item})
-            setTabChanged(!tabChanged)
+            setActiveTab({
+                data: {...item},
+                animationChange: !activeTab.animationChange
+            })
         }
-        item.lastActive = index === currentActive
         return item
     })
-    setMatches($matches)
+    setOtherTeamData($otherTeamData)
 }
 
 
 export const controlsHandler = ({
-                                    animationInProgress,
-                                    isNext,
-                                    matches,
-                                    // These props are necessary for tabClickHandler function
-                                    setMatches,
-                                    tabChanged,
-                                    setTabChanged,
-                                    setActiveTabContent,
-                                }) => {
+    animationInProgress,
+    isNext,
+    otherTeamData,
+    // These props are necessary for tabClickHandler function
+    setOtherTeamData,
+    activeTab,
+    setActiveTab,
+}) => {
     if (animationInProgress) return;
-    const $matches = clone(matches)
-    let objIndex = $matches.findIndex((match) => match.active)
+    const $otherTeamData = clone(otherTeamData)
+    let objIndex = $otherTeamData.findIndex((item) => item.active)
     let nextIndex = isNext ? objIndex + 1 : objIndex - 1
-    if (nextIndex === $matches.length || nextIndex === -1) return
+    if (nextIndex === $otherTeamData.length || nextIndex === -1) return
 
     tabClickHandler({
-        matches,
-        match: $matches[nextIndex],
-        setMatches,
-        tabChanged,
-        setTabChanged,
-        setActiveTabContent,
+        animationInProgress,
+        ot: $otherTeamData[nextIndex],
+        otherTeamData,
+        setOtherTeamData,
+        activeTab,
+        setActiveTab,
     })
 }
 

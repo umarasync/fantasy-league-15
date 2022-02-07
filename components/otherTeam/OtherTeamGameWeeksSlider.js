@@ -101,26 +101,23 @@ export default function MatchBoard() {
     }, [moved])
 
     const handleTabClick = (ot) => {
-        console.log('1=====', ot)
         tabClickHandler({
             ot,
             animationInProgress,
-            matches,
-            setMatches,
-            tabChanged,
-            setTabChanged,
-            setActiveTabContent,
+            otherTeamData,
+            setOtherTeamData,
+            activeTab,
+            setActiveTab,
         })
     }
     const handleControls = (isNext = false) => {
         controlsHandler({
-            animationInProgress,
             isNext,
-            matches,
-            setMatches,
-            tabChanged,
-            setTabChanged,
-            setActiveTabContent,
+            animationInProgress,
+            otherTeamData,
+            setOtherTeamData,
+            activeTab,
+            setActiveTab,
         })
     }
 
@@ -138,7 +135,7 @@ export default function MatchBoard() {
                 })
             }, 50)
         }
-    }, [matches, initialRenderDone])
+    }, [otherTeamData, initialRenderDone])
 
 
     useEffect(() => {
@@ -149,22 +146,6 @@ export default function MatchBoard() {
         })
     }, [])
 
-
-    // useEffect(() => {
-    //     setInitialSettings({
-    //         initialMatches: INITIAL_MATCHES,
-    //         setActiveTabContent,
-    //         setMatches
-    //     })
-    // }, [])
-    //
-    // const onAnimationComplete = (definition) => {
-    //     if (definition === 'borderWidth') {
-    //         setAnimationInProgress(false)
-    //         setTimeout(() => {
-    //         }, 300)
-    //     }
-    // }
 
     return (
         <Div>
