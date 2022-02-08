@@ -32,7 +32,7 @@ import {
 // Animations
 import {
     player6Animation,
-    player9Type1Animation, player7Animation, player8Animation, player10Animation
+    fadeInAndOutAnimation, player7Animation, player8Animation, player10Animation
 } from "Animations/otherTeam/PlayerFormationAnimation";
 import {ANIMATE, INITIAL} from "constants/animations";
 
@@ -54,6 +54,10 @@ const getStyles = (R) => {
         commonPlayersStyle1: {
             marginLeft: R(12),
             marginRight: R(12),
+        },
+        rowFourth: {
+            gridColumn: 1,
+            gridRow: 1
         },
         container: {
             display: 'flex',
@@ -175,14 +179,14 @@ export default function OtherTeamSelectedSquadOnPitch({
 
     const p9 = () => {
         return {
-            animationVariants: player10Animation(),
+            animationVariants: null,
             player: {...buildPlayer(EIGHT)},
             style: {...STYLES.commonPlayersStyle1,}
         }
     }
     const p9type1 = (payload) => {
         return {
-            animationVariants: player9Type1Animation(),
+            animationVariants: fadeInAndOutAnimation(),
             player: {...buildPlayer(EIGHT)},
             style: {...STYLES.commonPlayersStyle1,},
             ...payload
@@ -191,7 +195,7 @@ export default function OtherTeamSelectedSquadOnPitch({
 
     const p10 = () => {
         return {
-            animationVariants: player10Animation(),
+            animationVariants: null,
             player: {...buildPlayer(NINE)},
             style: {...STYLES.commonPlayersStyle1,}
         }
@@ -237,41 +241,13 @@ export default function OtherTeamSelectedSquadOnPitch({
         }
     }
 
+    // Player-JSX
     const getPlayer = (props) => {
         const {
             animationVariants,
             player,
             style,
-            // For Separate Type JSX Player
-            type1,
-            changeFormation
         } = props
-        if (type1) {
-            if (changeFormation === ANIMATE) {
-                return (
-                    <AnimatePresence>
-                        <motion.div
-                            variants={animationVariants}
-                            initial={"initial"}
-                            animate={"animate"}
-                            exit={"exit"}
-                            key={1}
-                        >
-                            <SelectedPlayerOnPitch
-                                player={player}
-                                changed={player.animationState}
-                                style={{
-                                    ...style,
-                                    opacity: player.opacity
-                                }}
-                            />
-                        </motion.div>
-                    </AnimatePresence>
-                )
-            } else {
-                return (<AnimatePresence/>)
-            }
-        }
 
         return (
             <motion.div variants={animationVariants} animate={controls}>
@@ -285,6 +261,40 @@ export default function OtherTeamSelectedSquadOnPitch({
                 />
             </motion.div>
         )
+    }
+
+    // A-Different-Type-Player-JSX
+    const getPlayerType1 = (props) => {
+        const {
+            animationVariants,
+            player,
+            style,
+            changeFormation
+        } = props
+        if (changeFormation === ANIMATE) {
+            return (
+                <AnimatePresence>
+                    <motion.div
+                        variants={animationVariants}
+                        initial={"initial"}
+                        animate={"animate"}
+                        exit={"exit"}
+                        key={1}
+                    >
+                        <SelectedPlayerOnPitch
+                            player={player}
+                            changed={player.animationState}
+                            style={{
+                                ...style,
+                                opacity: player.opacity
+                            }}
+                        />
+                    </motion.div>
+                </AnimatePresence>
+            )
+        } else {
+            return (<AnimatePresence/>)
+        }
     }
 
     return (
@@ -309,20 +319,53 @@ export default function OtherTeamSelectedSquadOnPitch({
             {/*3*/}
             <Div style={STYLES.container} mt={24} position={'relative'}>
                 <Div position={'absolute'} top={0} left={190}>
-                    {getPlayer(p9type1({changeFormation, type1: true}))}
+                    {getPlayerType1(p9type1({changeFormation}))}
                 </Div>
                 {getPlayer(p6())}
                 {getPlayer(p7())}
                 {getPlayer(p8())}
             </Div>
             {/*4*/}
-            <Div style={STYLES.container} mt={30}>
-                {getPlayer(p9())}
-                {getPlayer(p10())}
-                {getPlayer(p11())}
+            <Div className={'grid'}>
+                {
+                    changeFormation === ANIMATE ? (
+                        <AnimatePresence>
+                            <motion.div
+                                variants={fadeInAndOutAnimation()}
+                                initial={"initial"}
+                                animate={"animate"}
+                                exit={"exit"}
+                                key={1}
+                                style={STYLES.rowFourth}
+                            >
+                                <Div style={STYLES.container} mt={35}>
+                                    <Div mr={10}>{getPlayer(p10())}</Div>
+                                    <Div ml={10}>{getPlayer(p11())}</Div>
+                                </Div>
+                            </motion.div>
+                        </AnimatePresence>
+                    ) : (
+                        <AnimatePresence>
+                            <motion.div
+                                variants={fadeInAndOutAnimation()}
+                                initial={"initial"}
+                                animate={"animate"}
+                                exit={"exit"}
+                                key={2}
+                                style={STYLES.rowFourth}
+                            >
+                                <Div style={STYLES.container} mt={35}>
+                                    {getPlayer(p9())}
+                                    {getPlayer(p10())}
+                                    {getPlayer(p11())}
+                                </Div>
+                            </motion.div>
+                        </AnimatePresence>
+                    )
+                }
             </Div>
             {/*5*/}
-            <Div style={STYLES.container} mt={50}>
+            <Div style={STYLES.container} mt={45}>
                 {getPlayer(p12())}
                 {getPlayer(p13())}
                 {getPlayer(p14())}
