@@ -31,12 +31,12 @@ import {
 
 // Animations
 import {
-    Player6Animation,
+    player6Animation,
     Player7Animation,
     Player8Animation,
     Player10Animation,
     Player11Animation,
-    getPlayer9Animation
+    player9Animation, player7Animation, player8Animation, player10Animation
 } from "Animations/otherTeam/PlayerFormationAnimation";
 import {ANIMATE, INITIAL} from "constants/animations";
 
@@ -65,8 +65,8 @@ const getStyles = (R) => {
             justifyContent: 'center'
         },
         container2: {
-          paddingLeft: R(72),
-          paddingRight: R(70)
+            paddingLeft: R(72),
+            paddingRight: R(70)
         },
         commonWidth: {}
 
@@ -74,8 +74,8 @@ const getStyles = (R) => {
 }
 
 export default function OtherTeamSelectedSquadOnPitch({
-     pickedPlayers,
-     changeFormation,
+  pickedPlayers,
+  changeFormation,
 }) {
 
     const STYLES = {...getStyles(R)}
@@ -107,28 +107,105 @@ export default function OtherTeamSelectedSquadOnPitch({
         }
     }
 
-    const p1 = buildPlayer(ZERO)
-    const p2 = buildPlayer(ONE)
-    const p3 = buildPlayer(TWO)
-    const p4 = buildPlayer(THREE)
-    const p5 = buildPlayer(FOUR)
-    const p6 = buildPlayer(FIVE)
-    const p7 = buildPlayer(SIX)
-    const p8 = buildPlayer(SEVEN)
-    const p9 = buildPlayer(EIGHT)
-    const p10 = buildPlayer(NINE)
-    const p11 = buildPlayer(TEN)
-    const p12 = buildPlayer(ELEVEN)
-    const p13 = buildPlayer(TWELVE)
-    const p14 = buildPlayer(THIRTEEN)
-    const p15 = buildPlayer(FOURTEEN)
+    const p1 = {
+        animationVariants: null,
+        player: {...buildPlayer(ZERO)},
+        style: {...STYLES.commonPlayersStyle}
+    }
 
-    const getPlayer9 = ({changeFormation, player}) => {
-        if(changeFormation === ANIMATE) {
+    const p2 = {
+        animationVariants: null,
+        player: {...buildPlayer(ONE)},
+        style: {...STYLES.p2},
+    }
+
+    const p3 = {
+        animationVariants: null,
+        player: {...buildPlayer(TWO)},
+        style: {...STYLES.p3},
+    }
+
+    const p4 = {
+        animationVariants: null,
+        player: {...buildPlayer(THREE)},
+        style: {...STYLES.p4},
+    }
+
+    const p5 = {
+        animationVariants: null,
+        player: {...buildPlayer(FOUR)},
+        style: {...STYLES.p5},
+    }
+
+    const p6 = {
+        animationVariants: player6Animation(),
+        player: {...buildPlayer(FIVE)},
+        style: {...STYLES.commonPlayersStyle},
+    }
+
+    const p7 = {
+        animationVariants: player7Animation(),
+        player: {...buildPlayer(SIX)},
+        style: {
+            ...STYLES.commonPlayersStyle,
+            ...STYLES.p7,
+        }
+    }
+
+    const p8 = {
+        animationVariants: player8Animation(),
+        player: {...buildPlayer(SEVEN)},
+        style: {...STYLES.commonPlayersStyle,}
+    }
+
+    const p9 = {
+        animationVariants: player10Animation(),
+        player: {...buildPlayer(EIGHT)},
+        style: {...STYLES.commonPlayersStyle1,}
+    }
+    const p9type1 = {
+        animationVariants: player9Animation(),
+        player: {...buildPlayer(EIGHT)},
+        style: {...STYLES.commonPlayersStyle1,}
+    }
+
+    const p10 = {
+        animationVariants: player10Animation(),
+        player: {...buildPlayer(NINE)},
+        style: {...STYLES.commonPlayersStyle1,}
+    }
+    const p11 = {
+        animationVariants: player10Animation(),
+        player: {...buildPlayer(TEN)},
+        style: {...STYLES.commonPlayersStyle1,}
+    }
+    const p12 = {
+        animationVariants: null,
+        player: {...buildPlayer(ELEVEN)},
+        style: {...STYLES.commonPlayersStyle,}
+    }
+    const p13 = {
+        animationVariants: null,
+        player: {...buildPlayer(TWELVE)},
+        style: {...STYLES.commonPlayersStyle,}
+    }
+    const p14 = {
+        animationVariants: null,
+        player: {...buildPlayer(THIRTEEN)},
+        style: {...STYLES.commonPlayersStyle,}
+    }
+    const p15 = {
+        animationVariants: null,
+        player: {...buildPlayer(FOURTEEN)},
+        style: {...STYLES.commonPlayersStyle,}
+    }
+
+    const getPlayerType1 = ({changeFormation, player}) => {
+        if (changeFormation === ANIMATE) {
             return (
                 <AnimatePresence>
                     <motion.div
-                        variants={getPlayer9Animation()}
+                        variants={player9Animation()}
                         initial={"initial"}
                         animate={"animate"}
                         exit={"exit"}
@@ -145,171 +222,101 @@ export default function OtherTeamSelectedSquadOnPitch({
                     </motion.div>
                 </AnimatePresence>
             )
-        }else {
+        } else {
             return (<AnimatePresence/>)
         }
+    }
+
+    const getPlayer = (props) => {
+        const {
+            animationVariants,
+            player,
+            style,
+            // For Separate Type JSX Player
+            type1,
+            changeFormation
+        } = props
+        if(type1) {
+            if (changeFormation === ANIMATE) {
+                return (
+                    <AnimatePresence>
+                        <motion.div
+                            variants={animationVariants}
+                            initial={"initial"}
+                            animate={"animate"}
+                            exit={"exit"}
+                            key={1}
+                        >
+                            <SelectedPlayerOnPitch
+                                player={player}
+                                changed={player.animationState}
+                                style={{
+                                    ...style,
+                                    opacity: player.opacity
+                                }}
+                            />
+                        </motion.div>
+                    </AnimatePresence>
+                )
+            } else {
+                return (<AnimatePresence/>)
+            }
+        }
+
+        return (
+            <motion.div variants={animationVariants} animate={controls}>
+                <SelectedPlayerOnPitch
+                    player={player}
+                    changed={player.animationState}
+                    style={{
+                        ...style,
+                        opacity: player.opacity,
+                    }}
+                />
+            </motion.div>
+        )
     }
 
     return (
         <div style={{paddingTop: R(22)}}>
             {/*1*/}
             <Div style={STYLES.container}>
-                <SelectedPlayerOnPitch
-                    player={p1}
-                    changed={p1.animationState}
-                    style={{
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p1.opacity
-                    }}
-                />
+                {getPlayer(p1)}
             </Div>
 
             {/*2*/}
             <Div style={STYLES.container2} className={'flex items-center justify-between'} mt={4}>
                 <Div w={200} className={'flex items-start justify-between'}>
-                    <SelectedPlayerOnPitch
-                        player={p2}
-                        changed={p2.animationState}
-                        style={{
-                            ...STYLES.p2,
-                            opacity: p2.opacity
-                        }}
-                    />
-                    <SelectedPlayerOnPitch
-                        player={p3}
-                        changed={p3.animationState}
-                        style={{
-                            ...STYLES.p3,
-                            opacity: p3.opacity
-                        }}
-                    />
+                    {getPlayer(p2)}
+                    {getPlayer(p3)}
                 </Div>
                 <Div w={200} className={'flex items-start justify-between'}>
-                    <SelectedPlayerOnPitch
-                        player={p4}
-                        changed={p4.animationState}
-                        style={{
-                            ...STYLES.p4,
-                            opacity: p4.opacity
-                        }}
-                    />
-                    <SelectedPlayerOnPitch
-                        player={p5}
-                        changed={p5.animationState}
-                        style={{
-                            ...STYLES.p5,
-                            opacity: p5.opacity
-                        }}
-                    />
+                    {getPlayer(p4)}
+                    {getPlayer(p5)}
                 </Div>
             </Div>
 
             {/*3*/}
             <Div style={STYLES.container} mt={24} position={'relative'}>
                 <Div position={'absolute'} top={0} left={190}>
-                    {getPlayer9({changeFormation, player:p9})}
+                    {/*{getPlayer({changeFormation, player: p9, type1: true})}*/}
                 </Div>
-                <motion.div variants={Player6Animation} animate={controls}>
-                    <SelectedPlayerOnPitch
-                        player={p6}
-                        changed={p6.animationState}
-                        style={{
-                            ...STYLES.commonPlayersStyle,
-                            opacity: p6.opacity,
-                        }}
-                    />
-                </motion.div>
-                <motion.div variants={Player7Animation} animate={controls}>
-                    <SelectedPlayerOnPitch
-                        player={p7}
-                        changed={p7.animationState}
-                        style={{
-                            ...STYLES.commonPlayersStyle,
-                            ...STYLES.p7,
-                            opacity: p7.opacity
-                        }}
-                    />
-                </motion.div>
-                <motion.div variants={Player8Animation} animate={controls}>
-                    <SelectedPlayerOnPitch
-                        player={p8}
-                        changed={p8.animationState}
-                        style={{
-                            ...STYLES.commonPlayersStyle,
-                            opacity: p8.opacity
-                        }}
-                    />
-                </motion.div>
+                {getPlayer(p6)}
+                {getPlayer(p7)}
+                {getPlayer(p8)}
             </Div>
             {/*4*/}
             <Div style={STYLES.container} mt={30}>
-                <motion.div variants={Player10Animation} animate={controls}>
-                    <SelectedPlayerOnPitch
-                        player={p9}
-                        changed={p9.animationState}
-                        style={{
-                            ...STYLES.commonPlayersStyle1,
-                            opacity: p9.opacity
-                        }}
-                    />
-                </motion.div>
-
-                <motion.div variants={Player10Animation} animate={controls}>
-                    <SelectedPlayerOnPitch
-                        player={p10}
-                        changed={p10.animationState}
-                        style={{
-                            ...STYLES.commonPlayersStyle1,
-                            opacity: p10.opacity
-                        }}
-                    />
-                </motion.div>
-
-                <motion.div variants={Player11Animation} animate={controls}>
-                    <SelectedPlayerOnPitch
-                        player={p11}
-                        changed={p11.animationState}
-                        style={{
-                            ...STYLES.commonPlayersStyle1,
-                            opacity: p11.opacity
-                        }}
-                    />
-                </motion.div>
+                {getPlayer(p9)}
+                {getPlayer(p10)}
+                {getPlayer(p11)}
             </Div>
             {/*5*/}
             <Div style={STYLES.container} mt={50}>
-                <SelectedPlayerOnPitch
-                    player={p12}
-                    changed={p12.animationState}
-                    style={{
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p12.opacity
-                    }}
-                />
-                <SelectedPlayerOnPitch
-                    player={p13}
-                    changed={p13.animationState}
-                    style={{
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p13.opacity
-                    }}
-                />
-                <SelectedPlayerOnPitch
-                    player={p14}
-                    changed={p14.animationState}
-                    style={{
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p14.opacity
-                    }}
-                />
-                <SelectedPlayerOnPitch
-                    player={p15}
-                    changed={p15.animationState}
-                    style={{
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p15.opacity
-                    }}
-                />
+                {getPlayer(p12)}
+                {getPlayer(p13)}
+                {getPlayer(p14)}
+                {getPlayer(p15)}
             </Div>
         </div>
     )
