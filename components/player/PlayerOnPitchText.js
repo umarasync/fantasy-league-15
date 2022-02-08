@@ -1,6 +1,7 @@
 // Components
 import Div from "components/html/Div";
 import Image from "components/html/Image";
+import Text from "components/html/Text";
 
 // Constants
 import {STATUS_INJURED, STATUS_SUSPENDED} from "constants/data/filters";
@@ -39,8 +40,20 @@ export default function PlayerOnPitchText({player, mt}) {
                 )
             }
 
-            <span>{truncate(`${player.name}`, player.captain || player.viceCaptain ? 10 : 12)}</span><br/>
-            <span>{`${nFormatter(player.price)} ${player.position}`}</span><br/>
+            <Text
+                text={truncate(`${player.name}`, player.captain || player.viceCaptain ? 10 : 12)}
+                fs={10}
+                lh={14}
+                color={colors.white}
+                mb={2}
+                fw={600}
+            />
+            <Text
+                text={`${nFormatter(player.price)} ${player.position}`}
+                fs={10}
+                lh={14}
+                color={colors.white}
+            />
         </Div>
     )
 }

@@ -16,6 +16,8 @@ import {STATUS_INJURED, STATUS_SUSPENDED} from "constants/data/filters";
 
 // Animations
 import {TextUnderPlayerNameAnimation} from "Animations/mySquad/SelectedPlayerOnPitchAnimation";
+import Text from "../html/Text";
+import colors from "../../constants/colors";
 
 // Styles
 const getStyles = (R, player) => {
@@ -67,7 +69,12 @@ const SubTitle = ({player}) => {
                     key={1}
                     style={STYLES.subTitle}
                 >
-                    {`${player.points} pts ${player.position}`}
+                    <Text
+                        text={`${player.points} pts ${player.position}`}
+                        fs={10}
+                        lh={14}
+                        color={colors.white}
+                    />
                 </motion.span>
             </AnimatePresence>
         )
@@ -82,7 +89,12 @@ const SubTitle = ({player}) => {
                     key={2}
                     style={STYLES.subTitle}
                 >
-                    {`${player.nextMatch.vs} (${player.nextMatch.matchType}) ${player.position}`}
+                    <Text
+                        text={`${player.nextMatch.vs} (${player.nextMatch.matchType}) ${player.position}`}
+                        fs={10}
+                        lh={14}
+                        color={colors.white}
+                    />
                 </motion.span>
             </AnimatePresence>
         )
@@ -98,8 +110,12 @@ const SubTitle = ({player}) => {
                 key={3}
                 style={STYLES.subTitle}
             >
-                {`${nFormatter(player.price)} ${player.position}`}
-
+                <Text
+                    text={`${nFormatter(player.price)} ${player.position}`}
+                    fs={10}
+                    lh={14}
+                    color={colors.white}
+                />
             </motion.span>
         </AnimatePresence>
     )
