@@ -29,6 +29,8 @@ export default function OtherTeam() {
         setPickedPlayers([...$pickedPlayers])
     }
 
+    return null
+
     return (
         <Layout title={'other team'}>
             <Div className="mx-auto relative bg-white">
