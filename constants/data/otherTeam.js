@@ -1,6 +1,7 @@
 // Packages
 import dayjs from 'dayjs';
 import {v4 as uuidv4} from 'uuid';
+import otherTeamPlayers from "./otherTeamPlayers";
 
 // Utils
 import {clone, shuffle} from "utils/helpers";
@@ -53,23 +54,21 @@ const getTeamsRankOverall = () => {
     ]
 }
 
-const getPreviousGameWeeksRanking = () => {
-    return [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map((week, index) => {
+const getPlayersForEachGameWeek = () => {
+    return JSON.parse(otherTeamPlayers)
+}
+
+export const getOtherTeamData = () => {
+    return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((week, index) => {
         const previousDate = getSomePreviousDate(DAYS_TO * (index + 1))
         return {
             id: week,
             overall: false,
             week: week,
             date: previousDate,
-            teamsRank: shuffle(getTeamsRankWeekly())
+            players: [...getPlayersForEachGameWeek()]
         }
     })
-}
-
-export const getOtherTeamData = () => {
-    return [
-        ...getPreviousGameWeeksRanking()
-    ]
 }
 
 

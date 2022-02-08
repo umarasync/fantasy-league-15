@@ -12,7 +12,6 @@ import {getPublicLeagues} from "constants/data/leaguesAndRanking";
 
 // Utils
 import {clone} from "utils/helpers";
-import {setPlayersAdditionalData} from "utils/otherTeamHelper";
 
 export default function OtherTeam() {
 
@@ -22,11 +21,8 @@ export default function OtherTeam() {
     const [changeFormation, setChangeFormation] = useState(false)
 
     const onSelectWeek = (selectedWeek) => {
-
-        // TODO:BACKEND - FETCH DATA FROM BACKEND By Week ID and Update
-        const teamData = JSON.parse(localStorage.getItem('teamData'))
-        let $pickedPlayers = setPlayersAdditionalData(teamData.pickedPlayers)
-        $pickedPlayers = $pickedPlayers.map((p) => {
+        const {data} = selectedWeek
+        const $pickedPlayers = data.players.map((p) => {
             p.animationState = selectedWeek.animationChange
             return p
         })

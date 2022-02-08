@@ -54,7 +54,7 @@ const getStyles = (R) => {
 }
 
 export default function OtherTeamGameWeeksSlider({
-                                                     onSelectWeek
+   onSelectWeek
 }) {
 
     const STYLES = {...getStyles(R)}
