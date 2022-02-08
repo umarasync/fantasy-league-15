@@ -4,6 +4,7 @@ import {AnimatePresence, motion} from "framer-motion";
 // Components
 import PlayerImage from "components/player/PlayerImage";
 import PlayerName from "components/player/PlayerName";
+import Image from "components/html/Image";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -131,7 +132,7 @@ const PlayerInsideField = ({player}) => {
                 {
                     player.status === STATUS_INJURED || player.status === STATUS_SUSPENDED && (
                         <div className={'flex items-center justify-center'} style={STYLES.statusImage}>
-                            <img src={`/images/${player.statusImage}`} alt="" width={10} height={10}/>
+                            <Image src={`/images/${player.statusImage}`} alt="statusImage" w={10} h={10}/>
                         </div>
                     )
                 }

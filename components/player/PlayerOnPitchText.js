@@ -7,7 +7,7 @@ import {STATUS_INJURED, STATUS_SUSPENDED} from "constants/data/filters";
 import colors from "constants/colors"
 
 // Utils
-import {nFormatter} from "utils/helpers";
+import {nFormatter, truncate} from "utils/helpers";
 
 export default function PlayerOnPitchText({player, mt}) {
 
@@ -19,6 +19,7 @@ export default function PlayerOnPitchText({player, mt}) {
             pb={4}
             br={40}
             mt={mt}
+            w={90}
             className={'items-center relative items-center text-center justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
         >
             {
@@ -38,8 +39,8 @@ export default function PlayerOnPitchText({player, mt}) {
                 )
             }
 
-            <span>{player.name}</span><br/>
-            <span>{nFormatter(player.price)}</span><br/>
+            <span>{truncate(`${player.name}`, player.captain || player.viceCaptain ? 10 : 12)}</span><br/>
+            <span>{`${nFormatter(player.price)} ${player.position}`}</span><br/>
         </Div>
     )
 }
