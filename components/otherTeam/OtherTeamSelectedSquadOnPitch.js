@@ -89,15 +89,12 @@ export default function OtherTeamSelectedSquadOnPitch({
             controls.start('p7Animation')
             controls.start('p8Animation')
             controls.start('p9Animation')
-            // controls.start('p10Animation')
-            // controls.start('p11Animation')
         } else if (changeFormation === INITIAL) {
             controls.start('p6Initial')
             controls.start('p7Initial')
             controls.start('p8Initial')
             controls.start('p9Initial')
         }
-
     }, [changeFormation])
 
     if (!pickedPlayers.length) return null
@@ -242,7 +239,7 @@ export default function OtherTeamSelectedSquadOnPitch({
     }
 
     // Player-JSX
-    const getPlayer = (props) => {
+    const renderPlayer = (props) => {
         const {
             animationVariants,
             player,
@@ -264,7 +261,7 @@ export default function OtherTeamSelectedSquadOnPitch({
     }
 
     // A-Different-Type-Player-JSX
-    const getPlayerType1 = (props) => {
+    const renderPlayerType1 = (props) => {
         const {
             animationVariants,
             player,
@@ -292,8 +289,45 @@ export default function OtherTeamSelectedSquadOnPitch({
                     </motion.div>
                 </AnimatePresence>
             )
-        } else {
+        } else if(changeFormation === INITIAL) {
             return (<AnimatePresence/>)
+        }
+    }
+
+    const renderForthRow = ({changeFormation}) => {
+        if(changeFormation === ANIMATE) {
+            return (<AnimatePresence>
+                <motion.div
+                    variants={fadeInAndOutAnimation()}
+                    initial={"initial"}
+                    animate={"animate"}
+                    exit={"exit"}
+                    key={1}
+                    style={STYLES.rowFourth}
+                >
+                    <Div style={STYLES.container} mt={35}>
+                        <Div mr={10}>{renderPlayer(p10())}</Div>
+                        <Div ml={10}>{renderPlayer(p11())}</Div>
+                    </Div>
+                </motion.div>
+            </AnimatePresence>)
+        } else if (changeFormation === INITIAL) {
+            return (<AnimatePresence>
+                <motion.div
+                    variants={fadeInAndOutAnimation()}
+                    initial={"initial"}
+                    animate={"animate"}
+                    exit={"exit"}
+                    key={2}
+                    style={STYLES.rowFourth}
+                >
+                    <Div style={STYLES.container} mt={35}>
+                        {renderPlayer(p9())}
+                        {renderPlayer(p10())}
+                        {renderPlayer(p11())}
+                    </Div>
+                </motion.div>
+            </AnimatePresence>)
         }
     }
 
@@ -301,75 +335,40 @@ export default function OtherTeamSelectedSquadOnPitch({
         <div style={{paddingTop: R(22)}}>
             {/*1*/}
             <Div style={STYLES.container}>
-                {getPlayer(p1())}
+                {renderPlayer(p1())}
             </Div>
 
             {/*2*/}
             <Div style={STYLES.container2} className={'flex items-center justify-between'} mt={4}>
                 <Div w={200} className={'flex items-start justify-between'}>
-                    {getPlayer(p2())}
-                    {getPlayer(p3())}
+                    {renderPlayer(p2())}
+                    {renderPlayer(p3())}
                 </Div>
                 <Div w={200} className={'flex items-start justify-between'}>
-                    {getPlayer(p4())}
-                    {getPlayer(p5())}
+                    {renderPlayer(p4())}
+                    {renderPlayer(p5())}
                 </Div>
             </Div>
 
             {/*3*/}
             <Div style={STYLES.container} mt={24} position={'relative'}>
                 <Div position={'absolute'} top={0} left={190}>
-                    {getPlayerType1(p9type1({changeFormation}))}
+                    {renderPlayerType1(p9type1({changeFormation}))}
                 </Div>
-                {getPlayer(p6())}
-                {getPlayer(p7())}
-                {getPlayer(p8())}
+                {renderPlayer(p6())}
+                {renderPlayer(p7())}
+                {renderPlayer(p8())}
             </Div>
             {/*4*/}
             <Div className={'grid'}>
-                {
-                    changeFormation === ANIMATE ? (
-                        <AnimatePresence>
-                            <motion.div
-                                variants={fadeInAndOutAnimation()}
-                                initial={"initial"}
-                                animate={"animate"}
-                                exit={"exit"}
-                                key={1}
-                                style={STYLES.rowFourth}
-                            >
-                                <Div style={STYLES.container} mt={35}>
-                                    <Div mr={10}>{getPlayer(p10())}</Div>
-                                    <Div ml={10}>{getPlayer(p11())}</Div>
-                                </Div>
-                            </motion.div>
-                        </AnimatePresence>
-                    ) : (
-                        <AnimatePresence>
-                            <motion.div
-                                variants={fadeInAndOutAnimation()}
-                                initial={"initial"}
-                                animate={"animate"}
-                                exit={"exit"}
-                                key={2}
-                                style={STYLES.rowFourth}
-                            >
-                                <Div style={STYLES.container} mt={35}>
-                                    {getPlayer(p9())}
-                                    {getPlayer(p10())}
-                                    {getPlayer(p11())}
-                                </Div>
-                            </motion.div>
-                        </AnimatePresence>
-                    )
-                }
+                {renderForthRow({changeFormation})}
             </Div>
             {/*5*/}
             <Div style={STYLES.container} mt={45}>
-                {getPlayer(p12())}
-                {getPlayer(p13())}
-                {getPlayer(p14())}
-                {getPlayer(p15())}
+                {renderPlayer(p12())}
+                {renderPlayer(p13())}
+                {renderPlayer(p14())}
+                {renderPlayer(p15())}
             </Div>
         </div>
     )
