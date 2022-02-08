@@ -9,10 +9,6 @@ import colors from "constants/colors";
 export default function InfoBoardHead() {
     return(
         <>
-            {/*username*/}
-            <div className={'flex flex-row-reverse'}>
-                <Username username={'martine.bakker'}/>
-            </div>
             <Div mt={45}>
                 <Text text={'gameweek 10'} fs={34} fw={900} fst={'italic'} tt={'uppercase'} lh={38}
                       color={colors.dark_indigo}/>

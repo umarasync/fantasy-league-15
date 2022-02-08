@@ -13,7 +13,7 @@ import TripleCaptainModal from "components/playerInfo/TripleCaptainModal";
 import BenchBoostModal from "components/playerInfo/BenchBoostModal";
 
 // Utils
-import {isEmpty} from "utils/helpers";
+import {clone, isEmpty} from "utils/helpers";
 import {
     resetPlayers,
     setPlayersAdditionalData,
@@ -26,6 +26,7 @@ import {handlePlayerTransfer as HPT, DIAMOND_UP_GREEN} from "utils/mySquadHelper
 
 // Constants
 import {INITIAL} from "constants/animations";
+import {getPublicLeagues} from "constants/data/leaguesAndRanking";
 
 export default function MySquadGameWeek () {
 
@@ -52,6 +53,9 @@ export default function MySquadGameWeek () {
     const [benchBoostDisabled, setBenchBoostDisabled] = useState(true);
     const [benchBoostApplied, setBenchBoostApplied] = useState(false);
     const [benchBoostPlayers, setBenchBoostPlayers] = useState([]);
+
+    // Info-Board
+    const [publicLeagues, setPublicLeagues] = useState(clone(getPublicLeagues()))
 
 
     //Player-Transfer
@@ -212,7 +216,9 @@ export default function MySquadGameWeek () {
                     </Div>
                     {/*Right-Section*/}
                     <Div className="w-[38%] flex justify-center">
-                        <InfoBoard/>
+                        <InfoBoard
+                            publicLeagues={publicLeagues}
+                        />
                     </Div>
                 </div>
 

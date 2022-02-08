@@ -12,7 +12,7 @@ const animateTo = (x, y) => {
 
 export const Player5Animation = {
     p5Initial: animateTo(0, 0),
-    p5Animation: animateTo(-30, 68),
+    p5Animation: animateTo(-35, 65),
 };
 
 export const Player6Animation = {
@@ -32,5 +32,5 @@ export const Player10Animation = {
 
 export const Player11Animation = {
     p11Initial: animateTo(0, 0),
-    p11Animation: animateTo(100, -45)
+    p11Animation: animateTo(110, -50)
 };
