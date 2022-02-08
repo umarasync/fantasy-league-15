@@ -1,6 +1,6 @@
 // Packages
 import {useEffect} from "react";
-import {motion, useAnimation} from "framer-motion";
+import {AnimatePresence, motion, useAnimation} from "framer-motion";
 
 // Components
 import SelectedPlayerOnPitch from "components/mySquad/SelectedPlayerOnPitch";
@@ -31,11 +31,12 @@ import {
 
 // Animations
 import {
-    Player5Animation,
     Player6Animation,
-    Player9Animation,
+    Player7Animation,
+    Player8Animation,
     Player10Animation,
-    Player11Animation
+    Player11Animation,
+    getPlayer9Animation
 } from "Animations/otherTeam/PlayerFormationAnimation";
 import {ANIMATE, INITIAL} from "constants/animations";
 
@@ -55,9 +56,8 @@ const getStyles = (R) => {
             marginTop: R(-40)
         },
         commonPlayersStyle1: {
-            marginLeft: R(10),
-            marginRight: R(10),
-            minWidth: R(90)
+            marginLeft: R(12),
+            marginRight: R(12),
         },
         container: {
             display: 'flex',
@@ -65,8 +65,8 @@ const getStyles = (R) => {
             justifyContent: 'center'
         },
         container2: {
-          paddingLeft: R(80),
-          paddingRight: R(80)
+          paddingLeft: R(72),
+          paddingRight: R(70)
         },
         commonWidth: {}
 
@@ -84,12 +84,17 @@ export default function OtherTeamSelectedSquadOnPitch({
     useEffect(() => {
         if (!pickedPlayers.length) return
         if (changeFormation === ANIMATE) {
-            controls.start('p5Animation')
             controls.start('p6Animation')
+            controls.start('p7Animation')
+            controls.start('p8Animation')
             controls.start('p9Animation')
-            controls.start('p10Animation')
-            controls.start('p11Animation')
+            // controls.start('p10Animation')
+            // controls.start('p11Animation')
         } else if (changeFormation === INITIAL) {
+            controls.start('p6Initial')
+            controls.start('p7Initial')
+            controls.start('p8Initial')
+            controls.start('p9Initial')
         }
 
     }, [changeFormation])
@@ -117,6 +122,33 @@ export default function OtherTeamSelectedSquadOnPitch({
     const p13 = buildPlayer(TWELVE)
     const p14 = buildPlayer(THIRTEEN)
     const p15 = buildPlayer(FOURTEEN)
+
+    const getPlayer9 = ({changeFormation, player}) => {
+        if(changeFormation === ANIMATE) {
+            return (
+                <AnimatePresence>
+                    <motion.div
+                        variants={getPlayer9Animation()}
+                        initial={"initial"}
+                        animate={"animate"}
+                        exit={"exit"}
+                        key={1}
+                    >
+                        <SelectedPlayerOnPitch
+                            player={player}
+                            changed={player.animationState}
+                            style={{
+                                ...STYLES.commonPlayersStyle1,
+                                opacity: player.opacity
+                            }}
+                        />
+                    </motion.div>
+                </AnimatePresence>
+            )
+        }else {
+            return (<AnimatePresence/>)
+        }
+    }
 
     return (
         <div style={{paddingTop: R(22)}}>
@@ -173,18 +205,21 @@ export default function OtherTeamSelectedSquadOnPitch({
             </Div>
 
             {/*3*/}
-            <Div style={STYLES.container} mt={24}>
+            <Div style={STYLES.container} mt={24} position={'relative'}>
+                <Div position={'absolute'} top={0} left={190}>
+                    {getPlayer9({changeFormation, player:p9})}
+                </Div>
                 <motion.div variants={Player6Animation} animate={controls}>
                     <SelectedPlayerOnPitch
                         player={p6}
                         changed={p6.animationState}
                         style={{
                             ...STYLES.commonPlayersStyle,
-                            opacity: p6.opacity
+                            opacity: p6.opacity,
                         }}
                     />
                 </motion.div>
-                <motion.div variants={Player6Animation} animate={controls}>
+                <motion.div variants={Player7Animation} animate={controls}>
                     <SelectedPlayerOnPitch
                         player={p7}
                         changed={p7.animationState}
@@ -195,7 +230,7 @@ export default function OtherTeamSelectedSquadOnPitch({
                         }}
                     />
                 </motion.div>
-                <motion.div variants={Player6Animation} animate={controls}>
+                <motion.div variants={Player8Animation} animate={controls}>
                     <SelectedPlayerOnPitch
                         player={p8}
                         changed={p8.animationState}
@@ -207,8 +242,8 @@ export default function OtherTeamSelectedSquadOnPitch({
                 </motion.div>
             </Div>
             {/*4*/}
-            <Div style={STYLES.container} mt={24}>
-                <motion.div variants={Player9Animation} animate={controls}>
+            <Div style={STYLES.container} mt={30}>
+                <motion.div variants={Player10Animation} animate={controls}>
                     <SelectedPlayerOnPitch
                         player={p9}
                         changed={p9.animationState}

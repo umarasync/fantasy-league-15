@@ -1,5 +1,5 @@
 // Packages
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 // Components
 import Div from "components/html/Div";
@@ -9,6 +9,8 @@ import OtherTeamMySquadLeftSection from "components/otherTeam/OtherTeamMySquadLe
 
 // constants
 import {getPublicLeagues} from "constants/data/leaguesAndRanking";
+import {INITIAL} from "constants/animations";
+import {getOtherTeamData} from "constants/data/otherTeam";
 
 // Utils
 import {clone} from "utils/helpers";
@@ -16,9 +18,11 @@ import {clone} from "utils/helpers";
 export default function OtherTeam() {
 
     // Info-Board
-    const [publicLeagues, setPublicLeagues] = useState(clone(getPublicLeagues()))
+    const [publicLeagues, setPublicLeagues] = useState([])
+    const [otherTeamData, setOtherTeamData] = useState([])
     const [pickedPlayers, setPickedPlayers] = useState([])
-    const [changeFormation, setChangeFormation] = useState(false)
+    const [changeFormation, setChangeFormation] = useState(INITIAL)
+
 
     const onSelectWeek = (selectedWeek) => {
         const {data} = selectedWeek
@@ -27,27 +31,42 @@ export default function OtherTeam() {
             return p
         })
         setPickedPlayers([...$pickedPlayers])
+        setChangeFormation(data.changeFormation)
     }
 
-    return null
+    useEffect(() => {
+        setPublicLeagues(clone(getPublicLeagues()))
+        setOtherTeamData(clone(getOtherTeamData()))
+    }, [])
+
 
     return (
         <Layout title={'other team'}>
             <Div className="mx-auto relative bg-white">
                 <Div className={'flex'}>
                     <Div className={'w-[62%]'}>
-                        <OtherTeamMySquadLeftSection
-                            pickedPlayers={pickedPlayers}
-                            changeFormation={changeFormation}
-                            onSelectWeek={onSelectWeek}
-                        />
+                        {
+                            otherTeamData.length > 0 && (
+                                <OtherTeamMySquadLeftSection
+                                    pickedPlayers={pickedPlayers}
+                                    changeFormation={changeFormation}
+                                    onSelectWeek={onSelectWeek}
+                                    otherTeamData={otherTeamData}
+                                />
+                            )
+                        }
+
                     </Div>
                     <Div className={'w-[38%] flex justify-center'}>
-                        <InfoBoard
-                            publicLeagues={publicLeagues}
-                            hideInfoBoardHead
-                            hideInfoBoardFooter
-                        />
+                        {
+                            publicLeagues.length > 0 && (
+                                <InfoBoard
+                                    publicLeagues={publicLeagues}
+                                    hideInfoBoardHead
+                                    hideInfoBoardFooter
+                                />
+                            )
+                        }
                     </Div>
                 </Div>
             </Div>

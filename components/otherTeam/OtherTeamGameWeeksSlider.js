@@ -11,7 +11,6 @@ import OtherTeamSliderControls from "components/otherTeam/OtherTeamSliderControl
 
 // Constants
 import colors from "constants/colors";
-import {getOtherTeamData} from "constants/data/otherTeam";
 
 // utils
 import {clone, isEmpty} from "utils/helpers";
@@ -26,7 +25,6 @@ import {
 // Animations
 import {scrollAnimation, subHeadingAnimation} from "Animations/otherTeam/OtherTeamAnimation";
 import BorderHorizontal from "components/borders/BorderHorizontal";
-
 
 // Styles
 const getStyles = (R) => {
@@ -54,12 +52,12 @@ const getStyles = (R) => {
 }
 
 export default function OtherTeamGameWeeksSlider({
-   onSelectWeek
+    onSelectWeek,
+    otherTeamDataInitial
 }) {
 
     const STYLES = {...getStyles(R)}
 
-    const INITIAL_OTHER_TEAM_DATA = clone(getOtherTeamData())
     const [activeTab, setActiveTab] = useState({})
     const [otherTeamData, setOtherTeamData] = useState([])
     const [borderData, setBorderData] = useState({})
@@ -127,12 +125,11 @@ export default function OtherTeamGameWeeksSlider({
 
     useEffect(() => {
         setInitialSettings({
-            initialOtherTeamData: INITIAL_OTHER_TEAM_DATA,
+            otherTeamDataInitial,
             setOtherTeamData,
             setActiveTab
         })
     }, [])
-
 
     return (
         <Div>
@@ -190,9 +187,7 @@ export default function OtherTeamGameWeeksSlider({
                             setAnimationInProgress={setAnimationInProgress}
                         />
                     </div>
-
                 </Div>
-
                 <Div mt={20}><BorderHorizontal opacity={0.5}/></Div>
                 <OtherTeamSliderControls onPrevious={handleControls} onNext={() => handleControls(true)}/>
             </Div>

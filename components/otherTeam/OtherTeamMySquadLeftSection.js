@@ -18,6 +18,7 @@ export default function OtherTeamMySquadLeftSection({
    pickedPlayers,
    changeFormation,
    onSelectWeek,
+   otherTeamData
 }) {
 
     const router = useRouter()
@@ -62,6 +63,7 @@ export default function OtherTeamMySquadLeftSection({
             <Div mt={40} mb={50}>
                 <OtherTeamGameWeeksSlider
                     onSelectWeek={onSelectWeek}
+                    otherTeamDataInitial={otherTeamData}
                 />
             </Div>
             <div className={'flex items-center justify-center'}>

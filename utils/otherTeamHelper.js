@@ -1,27 +1,24 @@
 // Utils
-import {clone, shuffle} from "utils/helpers";
+import {clone} from "utils/helpers";
 import {POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID} from "../constants/data/filters";
-import {TOTAL_POINTS, TRANSFER_ICON} from "./mySquadHelper";
+import {ANIMATE, INITIAL} from "../constants/animations";
 
 export const setInitialSettings = ({
-   initialOtherTeamData,
+   otherTeamDataInitial,
    setOtherTeamData,
    setActiveTab,
 }) => {
-    const $initialOtherTeamData = clone(initialOtherTeamData)
-
-    // TODO:BACKEND Handle first active logic at backend
-    $initialOtherTeamData.map((item, index) => {
-        item.active = item.week === 10;
+    const $otherTeamDataInitial = clone(otherTeamDataInitial)
+    $otherTeamDataInitial.map((item) => {
+        item.active = item.week === 10;  // TODO:BACKEND send initial active from backend
+        item.changeFormation = INITIAL
         return item
     })
-
     setActiveTab({
-        data: {...$initialOtherTeamData.find((item) => item.active)},
+        data: {...$otherTeamDataInitial.find((item) => item.active)},
         animationChange: false
     })
-
-    setOtherTeamData([...$initialOtherTeamData])
+    setOtherTeamData([...$otherTeamDataInitial])
 }
 
 export const getActiveRect = ({
@@ -54,6 +51,7 @@ export const scrollHandler = ({
     } else {
         movedPixels = -1 * (scrollBoxOriginPoint - activeLeft)
     }
+
     setMoved(moved + movedPixels)
 }
 
@@ -68,11 +66,21 @@ export const scrollRenderer = (props) => {
         itemRef: activeRef,
         scrollContainerRef
     })
+
     if ($activeRectObj) {
         const {activeRect} = $activeRectObj
         setBorderData({width: activeRect.width})
         scrollHandler({...props})
     }
+}
+
+const changeAnimationFormation = (item) => {
+    if (item.changeFormation === ANIMATE) {
+        item.changeFormation = INITIAL
+    } else {
+        item.changeFormation = ANIMATE
+    }
+    return item
 }
 
 export const tabClickHandler = ({
@@ -83,8 +91,9 @@ export const tabClickHandler = ({
     setActiveTab,
 }) => {
 
-    const $otherTeamData = otherTeamData.map((item, index) => {
-        item.active = item.id === ot.id;
+    const $otherTeamData = otherTeamData.map(($item) => {
+        $item.active = $item.id === ot.id;
+        let item = changeAnimationFormation($item)
         if (item.active) {
             setActiveTab({
                 data: {...item},
@@ -93,7 +102,8 @@ export const tabClickHandler = ({
         }
         return item
     })
-    setOtherTeamData($otherTeamData)
+
+    setOtherTeamData([...$otherTeamData])
 }
 
 export const controlsHandler = ({

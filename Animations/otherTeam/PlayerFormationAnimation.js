@@ -10,19 +10,54 @@ const animateTo = (x, y) => {
     }
 }
 
-export const Player5Animation = {
-    p5Initial: animateTo(0, 0),
-    p5Animation: animateTo(-35, 65),
-};
-
 export const Player6Animation = {
     p6Initial: animateTo(0, 0),
-    p6Animation: animateTo(-60, 0)
+    p6Animation: animateTo(-75, 40),
 };
 
-export const Player9Animation = {
-    p9Initial: animateTo(0, 0),
-    p9Animation: animateTo(40, 0)
+export const Player7Animation = {
+    p7Initial: animateTo(0, 0),
+    p7Animation: animateTo(60, 40)
+};
+
+export const Player8Animation = {
+    p8Initial: animateTo(0, 0),
+    p8Animation: animateTo(70, 40)
+};
+
+export const getPlayer9Animation = () => {
+    // return {
+    //     p9Initial: {
+    //         opacity: 0,
+    //         transition: {
+    //             duration: duration,
+    //         },
+    //     },
+    //     p9Animation: {
+    //         opacity: 1,
+    //         transition: {
+    //             duration: duration,
+    //         },
+    //     },
+    // }
+
+    return {
+        initial: {
+            opacity: 0,
+        },
+        animate: {
+            opacity: 1,
+            transition: {
+                duration: duration,
+            },
+        },
+        exit: {
+            opacity: 0,
+            transition: {
+                duration: duration,
+            },
+        },
+    }
 };
 
 export const Player10Animation = {
