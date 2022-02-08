@@ -66,7 +66,7 @@ const SubTitle = ({player}) => {
                     key={1}
                     style={STYLES.subTitle}
                 >
-                    {`${player.points} pts`}
+                    {`${player.points} pts ${player.position}`}
                 </motion.span>
             </AnimatePresence>
         )
@@ -81,11 +81,12 @@ const SubTitle = ({player}) => {
                     key={2}
                     style={STYLES.subTitle}
                 >
-                    {`${player.nextMatch.vs} (${player.nextMatch.matchType})`}
+                    {`${player.nextMatch.vs} (${player.nextMatch.matchType}) ${player.position}`}
                 </motion.span>
             </AnimatePresence>
         )
     }
+
     return (
         <AnimatePresence>
             <motion.span
@@ -96,16 +97,19 @@ const SubTitle = ({player}) => {
                 key={3}
                 style={STYLES.subTitle}
             >
-                {nFormatter(player.price)}
+                {`${nFormatter(player.price)} ${player.position}`}
+
             </motion.span>
         </AnimatePresence>
     )
 
 }
 
-const PlayerInsideField = ({player, onPlayerChange, onPlayerClick}) => {
+const PlayerInsideField = ({player}) => {
 
     const STYLES = {...getStyles(R, player)}
+
+    const {onPlayerChange, onPlayerClick} = player
 
     return (
         <div className={'flex flex-col items-center'}>
@@ -115,14 +119,14 @@ const PlayerInsideField = ({player, onPlayerChange, onPlayerClick}) => {
                 cih={18}
                 cursor={'pointer'}
                 clickedIcon={player.clickedIcon}
-                onIconClick={() => onPlayerChange(player)}
-                onPlayerClick={() => onPlayerClick(player)}
+                onIconClick={() => onPlayerChange ? onPlayerChange(player): false}
+                onPlayerClick={() => onPlayerClick ? onPlayerClick(player): false}
                 clickedIconStyle={STYLES.clickedIcon}
             />
             <div
                 className={`items-center relative items-center text-center justify-center cursor-pointer text-white whitespace-nowrap ${getButtonBGColor(player)}`}
                 style={STYLES.nameSection}
-                onClick={() => onPlayerClick(player)}
+                onClick={() => onPlayerClick ? onPlayerClick(player): false}
             >
                 {
                     player.status === STATUS_INJURED || player.status === STATUS_SUSPENDED && (

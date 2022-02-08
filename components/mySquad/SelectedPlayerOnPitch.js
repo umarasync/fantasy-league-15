@@ -25,9 +25,7 @@ export default function SelectedPlayerOnPitch ({
     changed,
     player,
     style,
-    boxClasses,
-    onPlayerChange,
-    onPlayerClick,
+    boxClasses
 }) {
 
     const STYLES =  { ... getStyles(R) }
@@ -46,11 +44,7 @@ export default function SelectedPlayerOnPitch ({
                             exit="exit"
                             key={1}
                         >
-                            <PlayerInsideField
-                                player={player}
-                                onPlayerChange={onPlayerChange}
-                                onPlayerClick={onPlayerClick}
-                            />
+                            <PlayerInsideField player={player}/>
                         </motion.div>
                     </AnimatePresence>
 
@@ -65,11 +59,7 @@ export default function SelectedPlayerOnPitch ({
                             exit="exit"
                             key={2}
                         >
-                            <PlayerInsideField
-                                player={player}
-                                onPlayerChange={onPlayerChange}
-                                onPlayerClick={onPlayerClick}
-                            />
+                            <PlayerInsideField player={player}/>
                         </motion.div>
                     </AnimatePresence>
                 )

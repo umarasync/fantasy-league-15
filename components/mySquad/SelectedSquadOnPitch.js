@@ -68,6 +68,8 @@ export default function SelectedSquadOnPitch ({
     const buildPlayer = (index) => {
         return {
             ...pickedPlayers[index],
+            onPlayerChange: (player) => onPlayerChange(player, index),
+            onPlayerClick: (player) => onPlayerClick(player, index),
             tripleCaptainApplied,
             benchBoostApplied
         }
@@ -96,8 +98,6 @@ export default function SelectedSquadOnPitch ({
                 <SelectedPlayerOnPitch
                     player={p1}
                     changed={p1.animationState}
-                    onPlayerChange={(player) => onPlayerChange(player, ZERO)}
-                    onPlayerClick={(player) => onPlayerClick(player, ZERO)}
                     style={{
                         ...STYLES.commonPlayersStyle,
                         opacity: p1.opacity
@@ -109,8 +109,6 @@ export default function SelectedSquadOnPitch ({
                 <SelectedPlayerOnPitch
                     player={p2}
                     changed={p2.animationState}
-                    onPlayerChange={(player) => onPlayerChange(player, ONE)}
-                    onPlayerClick={(player) => onPlayerClick(player, ONE)}
                     style={{
                         ...STYLES.commonPlayersStyle,
                         opacity: p2.opacity
@@ -119,8 +117,6 @@ export default function SelectedSquadOnPitch ({
                 <SelectedPlayerOnPitch
                     player={p3}
                     changed={p3.animationState}
-                    onPlayerChange={(player) => onPlayerChange(player, TWO)}
-                    onPlayerClick={(player) => onPlayerClick(player, TWO)}
                     style={{
                         ...STYLES.commonPlayersStyle,
                         opacity: p3.opacity
@@ -129,8 +125,6 @@ export default function SelectedSquadOnPitch ({
                     <SelectedPlayerOnPitch
                         player={p4}
                         changed={p4.animationState}
-                        onPlayerChange={(player) => onPlayerChange(player, THREE)}
-                        onPlayerClick={(player) => onPlayerClick(player, THREE)}
                         style={{
                             ...STYLES.commonPlayersStyle,
                             opacity: p4.opacity
@@ -143,8 +137,6 @@ export default function SelectedSquadOnPitch ({
                     <SelectedPlayerOnPitch
                         player={p5}
                         changed={p5.animationState}
-                        onPlayerChange={(player) => onPlayerChange(player, FOUR)}
-                        onPlayerClick={(player) => onPlayerClick(player, FOUR)}
                         style={{
                             ...STYLES.commonPlayersStyle,
                             opacity: p5.opacity
@@ -155,8 +147,6 @@ export default function SelectedSquadOnPitch ({
                     <SelectedPlayerOnPitch
                         player={p6}
                         changed={p6.animationState}
-                        onPlayerChange={(player) => onPlayerChange(player, FIVE)}
-                        onPlayerClick={(player) => onPlayerClick(player, FIVE)}
                         style={{
                             ...STYLES.commonPlayersStyle,
                             opacity: p6.opacity
@@ -167,8 +157,6 @@ export default function SelectedSquadOnPitch ({
                     <SelectedPlayerOnPitch
                         player={p7}
                         changed={p7.animationState}
-                        onPlayerChange={(player) => onPlayerChange(player, SIX)}
-                        onPlayerClick={(player) => onPlayerClick(player, SIX)}
                         style={{
                             ...STYLES.commonPlayersStyle,
                             opacity: p7.opacity
@@ -179,8 +167,6 @@ export default function SelectedSquadOnPitch ({
                     <SelectedPlayerOnPitch
                         player={p8}
                         changed={p8.animationState}
-                        onPlayerChange={(player) => onPlayerChange(player, SEVEN)}
-                        onPlayerClick={(player) => onPlayerClick(player, SEVEN)}
                         style={{
                             ...STYLES.commonPlayersStyle,
                             opacity: p8.opacity
@@ -194,8 +180,6 @@ export default function SelectedSquadOnPitch ({
                     <SelectedPlayerOnPitch
                         player={p9}
                         changed={p9.animationState}
-                        onPlayerChange={(player) => onPlayerChange(player, EIGHT)}
-                        onPlayerClick={(player) => onPlayerClick(player, EIGHT)}
                         style={{
                             ...STYLES.commonPlayersStyle1,
                             opacity: p9.opacity
@@ -207,8 +191,6 @@ export default function SelectedSquadOnPitch ({
                     <SelectedPlayerOnPitch
                         player={p10}
                         changed={p10.animationState}
-                        onPlayerChange={(player) => onPlayerChange(player, NINE)}
-                        onPlayerClick={(player) => onPlayerClick(player, NINE)}
                         style={{
                             ...STYLES.commonPlayersStyle1,
                             opacity: p10.opacity
@@ -220,8 +202,6 @@ export default function SelectedSquadOnPitch ({
                     <SelectedPlayerOnPitch
                         player={p11}
                         changed={p11.animationState}
-                        onPlayerChange={(player) => onPlayerChange(player, TEN)}
-                        onPlayerClick={(player) => onPlayerClick(player, TEN)}
                         style={{
                             ...STYLES.commonPlayersStyle1,
                             opacity: p11.opacity
@@ -234,8 +214,6 @@ export default function SelectedSquadOnPitch ({
                 <SelectedPlayerOnPitch
                     player={p12}
                     changed={p12.animationState}
-                    onPlayerChange={(player) => onPlayerChange(player, ELEVEN)}
-                    onPlayerClick={(player) => onPlayerClick(player, ELEVEN)}
                     style={{
                         ...STYLES.commonPlayersStyle,
                         opacity: p12.opacity
@@ -244,8 +222,6 @@ export default function SelectedSquadOnPitch ({
                 <SelectedPlayerOnPitch
                     player={p13}
                     changed={p13.animationState}
-                    onPlayerChange={(player) => onPlayerChange(player, TWELVE)}
-                    onPlayerClick={(player) => onPlayerClick(player, TWELVE)}
                     style={{
                         ...STYLES.commonPlayersStyle,
                         opacity: p13.opacity
@@ -254,8 +230,6 @@ export default function SelectedSquadOnPitch ({
                 <SelectedPlayerOnPitch
                     player={p14}
                     changed={p14.animationState}
-                    onPlayerChange={(player) => onPlayerChange(player, THIRTEEN)}
-                    onPlayerClick={(player) => onPlayerClick(player, THIRTEEN)}
                     style={{
                         ...STYLES.commonPlayersStyle,
                         opacity: p14.opacity
@@ -264,8 +238,6 @@ export default function SelectedSquadOnPitch ({
                 <SelectedPlayerOnPitch
                     player={p15}
                     changed={p15.animationState}
-                    onPlayerChange={(player) => onPlayerChange(player, FOURTEEN)}
-                    onPlayerClick={(player) => onPlayerClick(player, FOURTEEN)}
                     style={{
                         ...STYLES.commonPlayersStyle,
                         opacity: p15.opacity
