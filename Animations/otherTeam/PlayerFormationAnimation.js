@@ -32,7 +32,7 @@ export const player8Animation = () => {
 };
 
 
-export const player9Animation = () => {
+export const player9Type1Animation = () => {
     return {
         initial: {
             opacity: 0,
