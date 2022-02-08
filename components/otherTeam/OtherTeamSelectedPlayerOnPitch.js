@@ -4,10 +4,11 @@ import {AnimatePresence, motion} from "framer-motion";
 
 // Components
 import PlayerImage from "components/player/PlayerImage";
+import PlayerName from "components/player/PlayerName";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import {nFormatter} from "utils/helpers";
+import {nFormatter, truncate} from "utils/helpers";
 import {MATCHES, TOTAL_POINTS, getButtonBGColor} from "utils/mySquadHelper";
 
 // Constants
@@ -15,7 +16,6 @@ import {STATUS_SUSPENDED, STATUS_INJURED} from "constants/data/filters";
 
 // Animation
 import SelectedPlayerOnPitchAnimation, {TextUnderPlayerNameAnimation} from "Animations/mySquad/SelectedPlayerOnPitchAnimation";
-import Image from "../html/Image";
 
 // Styles
 const getStyles = (R, player) => {
@@ -46,6 +46,7 @@ const getStyles = (R, player) => {
             borderRadius: R(40),
             marginTop: R(3),
             fontSize: R(10),
+            width: R(90)
         },
         statusImage: {
             width: R(15),
@@ -111,7 +112,7 @@ const SubTitle = ({player, initialOpacity}) => {
                 key={3}
                 style={STYLES.subTitle}
             >
-                {nFormatter(player.price)}
+                {`${nFormatter(player.price)} ${player.position}`}
             </motion.span>
         </AnimatePresence>
     )
@@ -133,7 +134,7 @@ const PlayerComponent = ({player, initialOpacity}) => {
                 clickedIconStyle={STYLES.clickedIcon}
             />
             <div
-                className={`relative items-center text-center cursor-pointer text-white whitespace-nowrap ${getButtonBGColor(player)}`}
+                className={`relative items-center text-center cursor-pointer justify-center text-white whitespace-nowrap ${getButtonBGColor(player)}`}
                 style={STYLES.buttonStyle}
             >
                 {
@@ -144,19 +145,7 @@ const PlayerComponent = ({player, initialOpacity}) => {
                     )
                 }
 
-                <div className={'flex'}>
-                    <span>{player.name}</span>
-                    {
-                        player.captain && (
-                            <Image src={'/images/captain1.png'} w={16} h={16} ml={4}/>
-                        )
-                    }
-                    {
-                        player.viceCaptain && (
-                            <Image src={'/images/vice-captain1.png'} w={16} h={16} ml={4}/>
-                        )
-                    }
-                </div>
+                <PlayerName player={player}/>
 
                 <div className={'relative'}>
                     <SubTitle player={player} initialOpacity={initialOpacity}/>

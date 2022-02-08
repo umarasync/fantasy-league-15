@@ -1,9 +1,9 @@
 const duration = 0.7
 
 const SelectedPlayerOnPitchAnimation = {
-    initial: ({initialOpacity}) => {
+    initial: () => {
         return {
-            opacity: initialOpacity,
+            opacity: 0,
         }
     },
     animate: {
@@ -22,9 +22,9 @@ const SelectedPlayerOnPitchAnimation = {
 
 
 export const TextUnderPlayerNameAnimation = {
-    initial: ({initialOpacity}) => {
+    initial: () => {
         return {
-            opacity: initialOpacity,
+            opacity: 0,
         }
     },
     animate: {

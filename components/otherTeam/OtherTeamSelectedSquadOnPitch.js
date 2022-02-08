@@ -4,6 +4,7 @@ import {motion, useAnimation} from "framer-motion";
 
 // Components
 import OtherTeamSelectedPlayerOnPitch from "components/otherTeam/OtherTeamSelectedPlayerOnPitch";
+import SelectedPlayerOnPitch from "components/mySquad/SelectedPlayerOnPitch";
 
 import Div from "components/html/Div";
 
