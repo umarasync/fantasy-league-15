@@ -39,7 +39,6 @@ export default function OtherTeam() {
         setOtherTeamData(clone(getOtherTeamData()))
     }, [])
 
-    return null
     return (
         <Layout title={'other team'}>
             <Div className="mx-auto relative bg-white">

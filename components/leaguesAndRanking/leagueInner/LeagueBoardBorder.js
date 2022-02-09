@@ -9,7 +9,6 @@ import Div from "components/html/Div";
 import {tabsBorderAnimation} from "Animations/leaguesAndRanking/LeagueAndRankingAnimation";
 
 // Constants
-import {ZERO} from "constants/arrayIndexes";
 import colors from "constants/colors";
 
 // Utils
@@ -47,8 +46,6 @@ export default function LeagueBoardBorder({
     const onAnimationComplete = (definition) => {
         if (definition === 'moveBorder') {
             setAnimationInProgress(false)
-            setTimeout(() => {
-            }, 300)
         }
     }
 
