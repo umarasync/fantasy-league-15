@@ -23,9 +23,14 @@ const getPlayersForEachGameWeek = () => {
 export const getOtherTeamData = () => {
     return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((week, index) => {
         const previousDate = getSomePreviousDate(DAYS_TO * (index + 1))
+
+        // Making week 10 current active week
+        let active = week === 10
+
         return {
             id: uuidv4(),
             week: week,
+            active,
             date: previousDate,
             weeklyPoints: shuffle([80, 50, 69, 45, 90])[0],
             totalPoints: shuffle([1013, 800, 732, 619, 880, 999])[0],

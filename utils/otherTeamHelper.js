@@ -10,7 +10,6 @@ export const setInitialSettings = ({
 }) => {
     const $otherTeamDataInitial = clone(otherTeamDataInitial)
     $otherTeamDataInitial.map((item) => {
-        item.active = item.week === 10;  // TODO:BACKEND send initial active from backend
         item.playersFormationAnimation = INITIAL
         return item
     })

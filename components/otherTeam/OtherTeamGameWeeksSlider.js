@@ -42,7 +42,7 @@ const getStyles = (R) => {
             paddingLeft: R(10),
         },
         subHeading: {
-            color: colors.regent_grey,
+            color: colors.lavender_grey,
             fontSize: R(28),
             lineHeight: R(32, 'px'),
             fontWeight: 'bold',
@@ -163,7 +163,7 @@ export default function OtherTeamGameWeeksSlider({
                                                     text={`Gameweek ${ot.week}`}
                                                     fs={18}
                                                     lh={26}
-                                                    color={colors.regent_grey}
+                                                    color={colors.lavender_grey}
                                                     mb={4}
                                                 />
                                                 <motion.p

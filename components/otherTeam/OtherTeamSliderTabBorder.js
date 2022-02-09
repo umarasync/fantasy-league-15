@@ -63,7 +63,6 @@ export default function OtherTeamSliderTabBorder({
                         custom={{width: borderData.width}}
                         onAnimationStart={() => setAnimationInProgress(true)}
                         onAnimationComplete={(definition) => onAnimationComplete(definition)}
-
                         style={{
                             ...STYLES.border,
                             width: borderData.width

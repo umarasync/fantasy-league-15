@@ -31,7 +31,7 @@ export const subHeadingAnimation = () => {
         {
             changeTextColor: ({otherTeam}) => {
                 return {
-                    color: otherTeam.active ? colors.white : colors.regent_grey,
+                    color: otherTeam.active ? colors.white : colors.lavender_grey,
                     transition: {
                         duration: duration
                     }
@@ -40,7 +40,6 @@ export const subHeadingAnimation = () => {
         }
     )
 };
-
 
 export const leagueBoardContentAnimation = () => {
     const duration = 0.5
