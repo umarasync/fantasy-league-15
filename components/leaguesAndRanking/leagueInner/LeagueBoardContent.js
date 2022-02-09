@@ -1,3 +1,6 @@
+// Packages
+import {useRouter} from "next/router";
+
 // Components
 import Text from "components/html/Text";
 import LeagueBoardTeamName from "components/leaguesAndRanking/leagueInner/LeagueBoardTeamName";
@@ -44,9 +47,18 @@ export default function LeagueBoardContentTable({
     activeTab,
 }) {
     const STYLES = {...getStyles(R)}
+    const router = useRouter()
+
     const {data, animationChange} = activeTab
     const {teamsRank, overall, week} = data
     const shouldTexColorBeRed = false // put condition to make it red
+
+    const handleRowClick = (team) => {
+        router.push({
+            pathname: '/other_team',
+            id: team.id
+        })
+    }
 
     return (
         <div style={STYLES.container}>
@@ -81,10 +93,14 @@ export default function LeagueBoardContentTable({
                                         </tr>
                                     )
                                 }
-                                <tr key={index} style={{
-                                    ...STYLES.trow,
-                                    ...STYLES.trow1,
-                                }}>
+                                <tr key={index}
+                                    style={{
+                                        ...STYLES.trow,
+                                        ...STYLES.trow1,
+                                    }}
+                                    className={'cursor-pointer'}
+                                    onClick={() => handleRowClick(team)}
+                                >
                                     <td className={'w-[70%] text-left whitespace-nowrap'}>
                                         <LeagueBoardTeamName
                                             team={team}

@@ -16,8 +16,9 @@ import colors from "constants/colors";
 
 export default function OtherTeamMySquadLeftSection({
    pickedPlayers,
-   changeFormation,
+   playersFormationAnimation,
    onSelectWeek,
+   otherTeamData
 }) {
 
     const router = useRouter()
@@ -35,7 +36,7 @@ export default function OtherTeamMySquadLeftSection({
             className="bg-[url('/images/bg_my_squad.png')] bg-[length:100%_100%] bg-no-repeat w-full h-full"
             style={{minHeight: R()}}
         >
-            <Image src={'/images/logo_white.png'} w={164} h={40}/>
+            <Image src={'/images/logo_white.png'} w={164} h={40} alt={'logo_white'}/>
             <Div className={'flex items-center'} mt={50}>
                 <Image
                     src={'/images/arrow_backward.png'}
@@ -62,6 +63,7 @@ export default function OtherTeamMySquadLeftSection({
             <Div mt={40} mb={50}>
                 <OtherTeamGameWeeksSlider
                     onSelectWeek={onSelectWeek}
+                    otherTeamDataInitial={otherTeamData}
                 />
             </Div>
             <div className={'flex items-center justify-center'}>
@@ -70,7 +72,7 @@ export default function OtherTeamMySquadLeftSection({
                         {
                             pickedPlayers.length ? (
                                 <OtherTeamSelectedSquadOnPitch
-                                    changeFormation={changeFormation}
+                                    playersFormationAnimation={playersFormationAnimation}
                                     pickedPlayers={pickedPlayers}
                                 />
                             ) : null
