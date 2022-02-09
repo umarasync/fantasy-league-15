@@ -1,5 +1,5 @@
 // Packages
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {v4 as uuidv4} from 'uuid';
 import {useRouter} from "next/router";
 
@@ -22,11 +22,7 @@ import R from "utils/getResponsiveValue";
 // Constants
 import colors from "constants/colors";
 
-// Utils
-import {clone} from "utils/helpers";
-
 // Constants
-import {getPublicLeagues} from "constants/data/leaguesAndRanking";
 import {SHADOW_DARK_INDIGO, SHADOW_WHITE_SMOKE} from "constants/boxShadow";
 import Username from "../user/Username";
 
@@ -42,17 +38,24 @@ const getStyles = (R) => {
 }
 
 export default function InfoBoard({
-    publicLeagues,
+    gameWeekInfo,
     hideInfoBoardHead,
-    hideInfoBoardFooter
+    hideInfoBoardFooter,
+    disableClick
 }) {
 
     const STYLES = {...getStyles(R)}
+
     const router = useRouter()
+
+    const { data, animationChange } = gameWeekInfo
+    const { leaguesInfo, weeklyPoints, totalPoints } = data
+    const { publicLeagues } = leaguesInfo
     const [showLeagueCreationModal, setShowLeagueCreationModal] = useState(false);
     const [showJoinLeagueModal, setShowJoinLeagueModal] = useState(false);
     const [showInviteYourFriendsModal, setShowInviteYourFriendsModal] = useState(false);
     const [privateLeagues, setPrivateLeagues] = useState([])
+
 
     const handleShowCreateLeagueModal = () => {
         setShowLeagueCreationModal(true)
@@ -109,6 +112,11 @@ export default function InfoBoard({
         })
     }
 
+    useEffect(() => {
+        if(leaguesInfo.privateLeagues && leaguesInfo.privateLeagues.length > 0){
+            setPrivateLeagues(leaguesInfo.privateLeagues)
+        }
+    }, [gameWeekInfo])
 
     return (
         <Div w={390} pt={35}>
@@ -117,7 +125,11 @@ export default function InfoBoard({
                 <Username username={'martine.bakker'}/>
             </div>
             {!hideInfoBoardHead && <InfoBoardHead/>}
-            <InfoBoardPoints/>
+            <InfoBoardPoints
+                weeklyPoints={weeklyPoints}
+                totalPoints={totalPoints}
+                toggleAnimation={animationChange}
+            />
             {/*Leagues-And-Rankings*/}
             <Div maxH={502} className={'flex flex-col justify-between'} bs={SHADOW_WHITE_SMOKE} mt={24} p={24} br={12}>
                 {/* Header & Body */}
@@ -137,7 +149,7 @@ export default function InfoBoard({
                                             league={league}
                                             pt={24}
                                             pb={24}
-                                            onClick={handleLeagueClick}
+                                            onClick={disableClick ? false : handleLeagueClick}
                                         />
                                         {index !== publicLeagues.length - 1 && <BorderHorizontal/>}
                                     </Div>
@@ -159,7 +171,7 @@ export default function InfoBoard({
                                                     league={league}
                                                     pt={24}
                                                     pb={24}
-                                                    onClick={handleLeagueClick}
+                                                    onClick={disableClick ? false: handleLeagueClick}
                                                 />
                                                 {index !== privateLeagues.length - 1 && <BorderHorizontal/>}
                                             </Div>

@@ -36,7 +36,7 @@ export default function OtherTeamMySquadLeftSection({
             className="bg-[url('/images/bg_my_squad.png')] bg-[length:100%_100%] bg-no-repeat w-full h-full"
             style={{minHeight: R()}}
         >
-            <Image src={'/images/logo_white.png'} w={164} h={40}/>
+            <Image src={'/images/logo_white.png'} w={164} h={40} alt={'logo_white'}/>
             <Div className={'flex items-center'} mt={50}>
                 <Image
                     src={'/images/arrow_backward.png'}

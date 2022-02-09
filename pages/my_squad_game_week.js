@@ -26,7 +26,7 @@ import {handlePlayerTransfer as HPT, DIAMOND_UP_GREEN} from "utils/mySquadHelper
 
 // Constants
 import {INITIAL} from "constants/animations";
-import {getPublicLeagues} from "constants/data/leaguesAndRanking";
+import {getCurrentWeekInfo, getPublicLeagues} from "constants/data/leaguesAndRanking";
 
 export default function MySquadGameWeek () {
 
@@ -55,8 +55,7 @@ export default function MySquadGameWeek () {
     const [benchBoostPlayers, setBenchBoostPlayers] = useState([]);
 
     // Info-Board
-    const [publicLeagues, setPublicLeagues] = useState(clone(getPublicLeagues()))
-
+    const [currentGameWeekInfo, setCurrentGameWeekInfo] = useState({})
 
     //Player-Transfer
     const handlePlayerTransfer = (player, arrayIndex) => {
@@ -91,22 +90,6 @@ export default function MySquadGameWeek () {
             setPickedPlayers($pickedPlayers)
     }, [activeFilter])
 
-    // Did-Mount
-    useEffect(() => {
-        // TODO:LOCAL_STORAGE_FOR_TESTING:START
-        const teamData = JSON.parse(localStorage.getItem('teamData'))
-        // TODO:LOCAL_STORAGE_FOR_TESTING:ENDS
-
-        if (!teamData) {
-            return router.push('/build_team_all_players')
-        }
-
-        const players = setPlayersAdditionalData(teamData.pickedPlayers)
-        setPickedPlayers(players)
-        setSavedPlayers(players)
-        setShowPlayerInfoModal(false)
-        setShowTripleCaptainModal(false)
-    }, [])
 
     // Transfer_Edit-Cancel
     const handleCancel = () => {
@@ -193,6 +176,23 @@ export default function MySquadGameWeek () {
         handleBenchBoostDisable()
     }, [pickedPlayers])
 
+    // Did-Mount
+    useEffect(() => {
+        // TODO:LOCAL_STORAGE_FOR_TESTING:START
+        const teamData = JSON.parse(localStorage.getItem('teamData'))
+        // TODO:LOCAL_STORAGE_FOR_TESTING:ENDS
+
+        if (!teamData) {
+            return router.push('/build_team_all_players')
+        }
+
+        const players = setPlayersAdditionalData(teamData.pickedPlayers)
+        setPickedPlayers(players)
+        setSavedPlayers(players)
+        setShowPlayerInfoModal(false)
+        setShowTripleCaptainModal(false)
+        setCurrentGameWeekInfo(clone(getCurrentWeekInfo()))
+    }, [])
 
     if (pickedPlayers.length === 0) {
         return null
@@ -216,9 +216,11 @@ export default function MySquadGameWeek () {
                     </Div>
                     {/*Right-Section*/}
                     <Div className="w-[38%] flex justify-center">
-                        <InfoBoard
-                            publicLeagues={publicLeagues}
-                        />
+                        {
+                            !isEmpty(currentGameWeekInfo) && (
+                                <InfoBoard gameWeekInfo={currentGameWeekInfo}/>
+                            )
+                        }
                     </Div>
                 </div>
 

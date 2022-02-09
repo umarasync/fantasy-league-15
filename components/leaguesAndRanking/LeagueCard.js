@@ -20,7 +20,7 @@ export default function LeagueCard({
     const {image, name, totalMembers, points} = league
 
     return (
-        <Div className={'w-full flex items-center justify-between cursor-pointer'} pb={pb} pt={pt} onClick={() => onClick(league)}>
+        <Div className={`w-full flex items-center justify-between ${onClick && 'cursor-pointer'}`} pb={pb} pt={pt} onClick={() => onClick ? onClick(league): false}>
             <Div className={'flex'}>
                 <Image w={42} h={42} src={`/images/${image}`}/>
                 <Div ml={12}>
@@ -28,7 +28,7 @@ export default function LeagueCard({
                     <Text text={
                         `${nFormatterWOSign(totalMembers)}
                             ${totalMembers < limitToShowPlusSign && totalMembers > minLimitToShowPlusSign ? '+' : ''} 
-                            
+                          
                             ${totalMembers === 1 ? 'Member' : 'Members'}
                         `}
                           fs={12}
