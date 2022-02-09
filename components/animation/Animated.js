@@ -23,7 +23,8 @@ const getStyles = (R) => {
 const Animated = ({
     variants,
     toggleAnimation,
-    children
+    children,
+    children2
 }) => {
 
     const STYLES = {...getStyles(R)}
@@ -59,7 +60,7 @@ const Animated = ({
                             key={2}
                             style={STYLES.section}
                         >
-                            {children}
+                            {children2 || children}
                         </motion.div>
                     </AnimatePresence>
                 )

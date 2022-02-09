@@ -15,6 +15,7 @@ import InfoBoardPoints from "components/leaguesAndRanking/InfoBoardPoints";
 import CreateLeagueModal from "components/leaguesAndRanking/CreateLeagueModal";
 import InviteYourFriendsModal from "components/leaguesAndRanking/InviteYourFriendsModal";
 import JoinLeagueModal from "components/leaguesAndRanking/JoinLeagueModal";
+import Username from "components/user/Username";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -24,7 +25,6 @@ import colors from "constants/colors";
 
 // Constants
 import {SHADOW_DARK_INDIGO, SHADOW_WHITE_SMOKE} from "constants/boxShadow";
-import Username from "../user/Username";
 
 // Styles
 const getStyles = (R) => {
@@ -137,7 +137,7 @@ export default function InfoBoard({
                     {/*Header*/}
                     <Div className={'flex items-center justify-between'} pb={24}>
                         <Text text={'leagues and ranking'} fs={22} fw={900} fst={'italic'} tt={'uppercase'} lh={26}/>
-                        <Image w={24} h={24} src={'/images/info_grey.png'}/>
+                        <Image w={24} h={24} src={'/images/info_grey.png'} alt={'info_grey'}/>
                     </Div>
                     {/*Body*/}
                     <div style={STYLES.leaguesBody}>
@@ -160,7 +160,7 @@ export default function InfoBoard({
                         <Div className={'flex items-center justify-between'} pt={16} mb={16}>
                             <Text
                                 text={'Private leagues'} fs={22} fw={900} fst={'italic'} tt={'uppercase'} lh={26}/>
-                            <Image w={24} h={24} src={'/images/info_grey.png'}/>
+                            <Image w={24} h={24} src={'/images/info_grey.png'} alt={'info_grey'}/>
                         </Div>
                         {
                             privateLeagues.length > 0 ? (

@@ -12,26 +12,13 @@ import LeagueHeader from "components/leaguesAndRanking/leagueInner/LeagueHeader"
 import LeagueBoard from "components/leaguesAndRanking/leagueInner/LeagueBoard";
 import LeagueSettingsHeader from "components/leaguesAndRanking/leagueInner/LeagueSettingsHeader";
 import LeagueSettingsBoard from "components/leaguesAndRanking/leagueInner/LeagueSettingsBoard";
+import Animated from "components/animation/Animated";
 
 // Utils
 import R from "utils/getResponsiveValue";
 
-// Animations
-import {leagueSettingsBoardAnimation} from "Animations/leaguesAndRanking/LeagueAndRankingSettingsAnimation";
-
-// Styles
-const getStyles = (R) => {
-    return {
-        content: {
-            gridColumn: 1,
-            gridRow: 1
-        }
-    }
-}
-
 export default function LeagueInner() {
 
-    const STYLES = {...getStyles(R)}
     const [league, setLeague] = useState({
         isLeagueOwner: true
     })
@@ -76,45 +63,26 @@ export default function LeagueInner() {
                     <Username username={'martine.bakker'} iconSrc={'/images/user_white.png'}/>
                 </Div>
                 <Div className={"grid"}>
-                    {
-                        showSettings ? (
-                            <AnimatePresence>
-                                <motion.div
-                                    variants={leagueSettingsBoardAnimation()}
-                                    initial={"initial"}
-                                    animate={"animate"}
-                                    exit={"exit"}
-                                    key={1}
-                                    style={STYLES.content}
-                                >
-                                    <LeagueSettingsHeader
-                                        mb={32}
-                                        onBackArrowClick={handleSettingsBackClick}
-                                    />
-                                    <LeagueSettingsBoard/>
-                                </motion.div>
-                            </AnimatePresence>
-                        ) : (
-                            <AnimatePresence>
-                                <motion.div
-                                    variants={leagueSettingsBoardAnimation()}
-                                    initial={"initial"}
-                                    animate={"animate"}
-                                    exit={"exit"}
-                                    key={2}
-                                    style={STYLES.content}
-                                >
-                                    <LeagueHeader
-                                        mb={32}
-                                        onSettingsClick={handleSettingsClick}
-                                        onBackClick={handleBackClick}
-                                        league={league}
-                                    />
-                                    <LeagueBoard league={league}/>
-                                </motion.div>
-                            </AnimatePresence>
-                        )
-                    }
+                    <Animated
+                        toggleAnimation={showSettings}
+                        children2={
+                           <>
+                               <LeagueHeader
+                                   mb={32}
+                                   onSettingsClick={handleSettingsClick}
+                                   onBackClick={handleBackClick}
+                                   league={league}
+                               />
+                               <LeagueBoard league={league}/>
+                           </>
+                        }
+                    >
+                        <>
+                            <LeagueSettingsHeader mb={32} onBackArrowClick={handleSettingsBackClick}/>
+                            <LeagueSettingsBoard/>
+                        </>
+                    </Animated>
+
                 </Div>
             </Div>
         </Layout>
