@@ -191,7 +191,12 @@ export default function MySquadGameWeek () {
         setSavedPlayers(players)
         setShowPlayerInfoModal(false)
         setShowTripleCaptainModal(false)
-        setCurrentGameWeekInfo(clone(getCurrentWeekInfo()))
+
+        // Setting-Info-Board-State
+        setCurrentGameWeekInfo({
+            toggleAnimation: false,
+            data: clone(getCurrentWeekInfo())
+        })
     }, [])
 
     if (pickedPlayers.length === 0) {

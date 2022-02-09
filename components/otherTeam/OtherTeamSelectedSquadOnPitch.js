@@ -75,7 +75,7 @@ const getStyles = (R) => {
 
 export default function OtherTeamSelectedSquadOnPitch({
   pickedPlayers,
-  changeFormation,
+  playersFormationAnimation,
 }) {
 
     const STYLES = {...getStyles(R)}
@@ -84,18 +84,18 @@ export default function OtherTeamSelectedSquadOnPitch({
     // Run-Animation
     useEffect(() => {
         if (!pickedPlayers.length) return
-        if (changeFormation === ANIMATE) {
+        if (playersFormationAnimation === ANIMATE) {
             controls.start('p6Animation')
             controls.start('p7Animation')
             controls.start('p8Animation')
             controls.start('p9Animation')
-        } else if (changeFormation === INITIAL) {
+        } else if (playersFormationAnimation === INITIAL) {
             controls.start('p6Initial')
             controls.start('p7Initial')
             controls.start('p8Initial')
             controls.start('p9Initial')
         }
-    }, [changeFormation])
+    }, [playersFormationAnimation])
 
     if (!pickedPlayers.length) return null
 
@@ -250,7 +250,7 @@ export default function OtherTeamSelectedSquadOnPitch({
             <motion.div variants={animationVariants} animate={controls}>
                 <SelectedPlayerOnPitch
                     player={player}
-                    changed={player.animationState}
+                    changed={player.toggleAnimation}
                     style={{
                         ...style,
                         opacity: player.opacity,
@@ -266,9 +266,9 @@ export default function OtherTeamSelectedSquadOnPitch({
             animationVariants,
             player,
             style,
-            changeFormation
+            playersFormationAnimation
         } = props
-        if (changeFormation === ANIMATE) {
+        if (playersFormationAnimation === ANIMATE) {
             return (
                 <AnimatePresence>
                     <motion.div
@@ -280,7 +280,7 @@ export default function OtherTeamSelectedSquadOnPitch({
                     >
                         <SelectedPlayerOnPitch
                             player={player}
-                            changed={player.animationState}
+                            changed={player.toggleAnimation}
                             style={{
                                 ...style,
                                 opacity: player.opacity
@@ -289,13 +289,13 @@ export default function OtherTeamSelectedSquadOnPitch({
                     </motion.div>
                 </AnimatePresence>
             )
-        } else if(changeFormation === INITIAL) {
+        } else if(playersFormationAnimation === INITIAL) {
             return (<AnimatePresence/>)
         }
     }
 
-    const renderForthRow = ({changeFormation}) => {
-        if(changeFormation === ANIMATE) {
+    const renderForthRow = ({playersFormationAnimation}) => {
+        if(playersFormationAnimation === ANIMATE) {
             return (<AnimatePresence>
                 <motion.div
                     variants={fadeInAndOutAnimation()}
@@ -311,7 +311,7 @@ export default function OtherTeamSelectedSquadOnPitch({
                     </Div>
                 </motion.div>
             </AnimatePresence>)
-        } else if (changeFormation === INITIAL) {
+        } else if (playersFormationAnimation === INITIAL) {
             return (<AnimatePresence>
                 <motion.div
                     variants={fadeInAndOutAnimation()}
@@ -353,7 +353,7 @@ export default function OtherTeamSelectedSquadOnPitch({
             {/*3*/}
             <Div style={STYLES.container} mt={24} position={'relative'}>
                 <Div position={'absolute'} top={0} left={190}>
-                    {renderPlayerType1(p9type1({changeFormation}))}
+                    {renderPlayerType1(p9type1({playersFormationAnimation}))}
                 </Div>
                 {renderPlayer(p6())}
                 {renderPlayer(p7())}
@@ -361,7 +361,7 @@ export default function OtherTeamSelectedSquadOnPitch({
             </Div>
             {/*4*/}
             <Div className={'grid'}>
-                {renderForthRow({changeFormation})}
+                {renderForthRow({playersFormationAnimation})}
             </Div>
             {/*5*/}
             <Div style={STYLES.container} mt={45}>

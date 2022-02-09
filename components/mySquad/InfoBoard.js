@@ -48,7 +48,7 @@ export default function InfoBoard({
 
     const router = useRouter()
 
-    const { data, animationChange } = gameWeekInfo
+    const { data, toggleAnimation } = gameWeekInfo
     const { leaguesInfo, weeklyPoints, totalPoints } = data
     const { publicLeagues } = leaguesInfo
     const [showLeagueCreationModal, setShowLeagueCreationModal] = useState(false);
@@ -128,7 +128,7 @@ export default function InfoBoard({
             <InfoBoardPoints
                 weeklyPoints={weeklyPoints}
                 totalPoints={totalPoints}
-                toggleAnimation={animationChange}
+                toggleAnimation={toggleAnimation}
             />
             {/*Leagues-And-Rankings*/}
             <Div maxH={502} className={'flex flex-col justify-between'} bs={SHADOW_WHITE_SMOKE} mt={24} p={24} br={12}>
@@ -149,6 +149,7 @@ export default function InfoBoard({
                                             league={league}
                                             pt={24}
                                             pb={24}
+                                            toggleAnimation={toggleAnimation}
                                             onClick={disableClick ? false : handleLeagueClick}
                                         />
                                         {index !== publicLeagues.length - 1 && <BorderHorizontal/>}
@@ -171,6 +172,7 @@ export default function InfoBoard({
                                                     league={league}
                                                     pt={24}
                                                     pb={24}
+                                                    toggleAnimation={toggleAnimation}
                                                     onClick={disableClick ? false: handleLeagueClick}
                                                 />
                                                 {index !== privateLeagues.length - 1 && <BorderHorizontal/>}

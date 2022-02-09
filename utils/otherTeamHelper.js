@@ -11,12 +11,12 @@ export const setInitialSettings = ({
     const $otherTeamDataInitial = clone(otherTeamDataInitial)
     $otherTeamDataInitial.map((item) => {
         item.active = item.week === 10;  // TODO:BACKEND send initial active from backend
-        item.changeFormation = INITIAL
+        item.playersFormationAnimation = INITIAL
         return item
     })
     setActiveTab({
         data: {...$otherTeamDataInitial.find((item) => item.active)},
-        animationChange: false
+        toggleAnimation: false
     })
     setOtherTeamData([...$otherTeamDataInitial])
 }
@@ -75,10 +75,10 @@ export const scrollRenderer = (props) => {
 }
 
 const changeAnimationFormation = (item) => {
-    if (item.changeFormation === ANIMATE) {
-        item.changeFormation = INITIAL
+    if (item.playersFormationAnimation === ANIMATE) {
+        item.playersFormationAnimation = INITIAL
     } else {
-        item.changeFormation = ANIMATE
+        item.playersFormationAnimation = ANIMATE
     }
     return item
 }
@@ -97,7 +97,7 @@ export const tabClickHandler = ({
         if (item.active) {
             setActiveTab({
                 data: {...item},
-                animationChange: !activeTab.animationChange
+                toggleAnimation: !activeTab.toggleAnimation
             })
         }
         return item

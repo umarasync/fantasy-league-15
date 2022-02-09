@@ -19,20 +19,20 @@ export default function OtherTeam() {
     const [otherTeamData, setOtherTeamData] = useState([])
     const [pickedPlayers, setPickedPlayers] = useState([])
     const [selectedWeek, setSelectedWeek] = useState({})
-    const [changeFormation, setChangeFormation] = useState(INITIAL)
+    const [playersFormationAnimation, setPlayersFormationAnimation] = useState(INITIAL)
 
     const onSelectWeek = ($selectedWeek) => {
 
         const {data} = $selectedWeek
-        
+
         const $pickedPlayers = data.players.map((p) => {
-            p.animationState = $selectedWeek.animationChange
+            p.toggleAnimation = $selectedWeek.toggleAnimation
             return p
         })
 
         setSelectedWeek($selectedWeek)
         setPickedPlayers([...$pickedPlayers])
-        setChangeFormation(data.changeFormation)
+        setPlayersFormationAnimation(data.playersFormationAnimation)
     }
 
     useEffect(() => {
@@ -49,13 +49,12 @@ export default function OtherTeam() {
                             otherTeamData.length > 0 && (
                                 <OtherTeamMySquadLeftSection
                                     pickedPlayers={pickedPlayers}
-                                    changeFormation={changeFormation}
+                                    playersFormationAnimation={playersFormationAnimation}
                                     onSelectWeek={onSelectWeek}
                                     otherTeamData={otherTeamData}
                                 />
                             )
                         }
-
                     </Div>
                     <Div className={'w-[38%] flex justify-center'}>
                         {

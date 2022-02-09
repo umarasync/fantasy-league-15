@@ -16,7 +16,7 @@ import colors from "constants/colors";
 
 export default function OtherTeamMySquadLeftSection({
    pickedPlayers,
-   changeFormation,
+   playersFormationAnimation,
    onSelectWeek,
    otherTeamData
 }) {
@@ -72,7 +72,7 @@ export default function OtherTeamMySquadLeftSection({
                         {
                             pickedPlayers.length ? (
                                 <OtherTeamSelectedSquadOnPitch
-                                    changeFormation={changeFormation}
+                                    playersFormationAnimation={playersFormationAnimation}
                                     pickedPlayers={pickedPlayers}
                                 />
                             ) : null
