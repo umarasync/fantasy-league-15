@@ -213,8 +213,6 @@ export default function SignUp(props) {
     }
   }, [isLoginPage]);
 
-  console.log('1=========', dateOfBirth)
-
   return (
     <Layout title="Sign Up">
       <ToastContainer
