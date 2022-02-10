@@ -130,7 +130,7 @@ export default function PlayerImage(props) {
                     <Div h={16} w={16} position={'absolute'} left={0} top={0} cursor={!player.disableIconClick ? 'pointer' : 'auto'}
                          onClick={() => !player.disableIconClick && onIconClick ? onIconClick() : false}
                     >
-                        <Image src={`/images/${clickedIcon}`}/>
+                        <Image src={`${clickedIcon}`}/>
                     </Div>
 
                 )
