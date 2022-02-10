@@ -9,7 +9,7 @@ import {
 export function createApolloClient() {
   const AUTH_TOKEN_NAME = `fe-auth-token`;
   const httpLink = new HttpLink({
-    uri: "http://localhost:3333/graphql",//process.env.REACT_APP_GRAPHQL_ENDPOINT,
+    uri: process.env.NEXT_PUBLIC_BACKEND_SERVER,
     credentials: `include`,
   });
 
