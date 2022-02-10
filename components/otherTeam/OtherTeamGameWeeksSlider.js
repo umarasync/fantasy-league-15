@@ -114,7 +114,7 @@ export default function OtherTeamGameWeeksSlider({
                     setMoved,
                     setBorderData,
                 })
-            }, 50)
+            }, 100)
         }
     }, [otherTeamData, initialRenderDone])
 

@@ -136,7 +136,7 @@ export default function MatchBoard () {
                     setMoved,
                     setBorderWidth,
                 })
-         }, 50)
+         }, 100)
         }
     }, [matches, initialRenderDone])
 
@@ -151,8 +151,6 @@ export default function MatchBoard () {
     const onAnimationComplete = (definition) => {
         if(definition === 'borderWidth') {
             setAnimationInProgress(false)
-            setTimeout(()=> {
-            }, 300)
         }
     }
 
@@ -233,7 +231,7 @@ export default function MatchBoard () {
                 </Div>
                 <Div position='absolute' top={1} right={40}>
                     <Image w={60} h={60} src={'/images/arrow-next.png'} cursor={'pointer'}
-                           onClick={() => handleControls(true)}/>
+                           onClick={() => handleControls(true)} alt={'arrow-next'}/>
                 </Div>
 
                 <motion.div

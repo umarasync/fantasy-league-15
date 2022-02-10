@@ -30,6 +30,7 @@ import { clone } from "utils/helpers";
 // Constants
 import { GENDERS } from "constants/data/user";
 import colors from "constants/colors";
+import MyDatepicker from "../datePicker/MyDatePicker";
 
 const testEmail = "martine.bakkergmail.com";
 const testPassword = testEmail;
@@ -90,93 +91,6 @@ export default function SignUp(props) {
     },
   };
 
-  const Datepicker = () => {
-    const range = (start, end) => {
-      return new Array(end - start).fill().map((d, i) => i + start);
-    };
-    const years = range(1990, getYear(new Date()));
-    const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-    const CustomInputPicker = React.forwardRef(({ value, onClick }, ref) => (
-      <Input
-        value={value}
-        name="dateOfBirth"
-        id="dateOfBirth"
-        placeholder="Date of birth"
-        // onChange={(v) => setDateOfBirth(v)}
-        onClick={onClick}
-        innerRef={ref}
-      />
-    ));
-    CustomInputPicker.displayName = "DatePickerInput";
-    return (
-      <DatePicker
-        renderCustomHeader={({
-          date,
-          changeYear,
-          changeMonth,
-          decreaseMonth,
-          increaseMonth,
-          prevMonthButtonDisabled,
-          nextMonthButtonDisabled,
-        }) => (
-          <div
-            style={{
-              margin: 10,
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
-              {"<"}
-            </button>
-            <select
-              value={getYear(date)}
-              onChange={({ target: { value } }) => changeYear(value)}
-            >
-              {years.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-
-            <select
-              value={months[getMonth(date)]}
-              onChange={({ target: { value } }) =>
-                changeMonth(months.indexOf(value))
-              }
-            >
-              {months.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-
-            <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
-              {">"}
-            </button>
-          </div>
-        )}
-        selected={dateOfBirth}
-        onChange={(date) => setDateOfBirth(date)}
-        customInput={<CustomInputPicker />}
-      />
-    );
-  };
 
   /*** Sign Up Flow:Starts ****/
   const validateSignUp = () => {
@@ -298,6 +212,8 @@ export default function SignUp(props) {
       setInitialOpacity(0);
     }
   }, [isLoginPage]);
+
+  console.log('1=========', dateOfBirth)
 
   return (
     <Layout title="Sign Up">
@@ -488,7 +404,10 @@ export default function SignUp(props) {
                       onOptionChange={(option) => setSelectedGender(option)}
                     />
 
-                    <Datepicker />
+                    <MyDatepicker
+                        dateOfBirth={dateOfBirth}
+                        setDateOfBirth={(dob) => setDateOfBirth(dob)}
+                    />
                   </div>
                   <Input
                     value={password}
