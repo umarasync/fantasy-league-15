@@ -128,6 +128,7 @@ const PlayerInsideField = ({player}) => {
 
     const {onPlayerChange, onPlayerClick} = player
 
+
     return (
         <div className={'flex flex-col items-center'}>
             <PlayerImage
@@ -148,7 +149,7 @@ const PlayerInsideField = ({player}) => {
                 {
                     player.status === STATUS_INJURED || player.status === STATUS_SUSPENDED && (
                         <div className={'flex items-center justify-center'} style={STYLES.statusImage}>
-                            <Image src={`/images/${player.statusImage}`} alt="statusImage" w={10} h={10}/>
+                            <Image src={`${player.statusImage}`} alt="statusImage" w={10} h={10}/>
                         </div>
                     )
                 }
