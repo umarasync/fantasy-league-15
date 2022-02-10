@@ -4,10 +4,14 @@ import thunk from "redux-thunk";
 import { combineReducers } from "redux";
 import authReducer from "../Auth/reducers";
 import teamsReducer from "../Teams/reducers";
+import playersReducer from "../Players/reducers";
+import fantasyTeamReducer from "../FantasyTeams/reducers";
 
 let rootReducer = combineReducers({
   auth: authReducer,
   teams: teamsReducer,
+  players: playersReducer,
+  fantasyTeam: fantasyTeamReducer,
 });
 
 

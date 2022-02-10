@@ -75,7 +75,9 @@ export default function BuildTeamRightSection({
     // Player-Selection
     handlePlayerSelection,
     // Search
-    onSearch
+    onSearch,
+    //user Object
+    user
 }) {
 
     const STYLES = {...getStyles(R)}
@@ -103,7 +105,8 @@ export default function BuildTeamRightSection({
         <div className={'relative'} style={{width: R(488), paddingTop: R(35)}}>
             {/*username*/}
             <div className={'flex flex-row-reverse'} style={{marginBottom: R(46)}}>
-                <Username username={'martine.bakker'}/>
+                <Username username={user.username}/>
+
             </div>
 
             {/*search*/}

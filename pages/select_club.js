@@ -79,10 +79,10 @@ export default function SelectClub() {
               name: Teams.logo,
             },
             heading: {
-              title: Teams.name,
+              title: Teams.officalName,
             },
             subHeading: {
-              title: Teams.area,
+              title: Teams.venue,
             },
           };
         })

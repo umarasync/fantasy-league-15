@@ -144,7 +144,8 @@ export default function SelectSearchInput ({
             key={option.label}
             style={{...STYLES.tagImages, ...tagImagesStyle}}
         >
-            <img src={`/images/${option.image}`} alt="" width={'100%'} height={'100%'}/>
+            {/* <img src={`/images/${option.image}`} alt="" width={'100%'} height={'100%'}/> */}
+            <img src={option.image} alt="" width={'100%'} height={'100%'}/>
         </div>)
     }
 
@@ -230,7 +231,8 @@ export default function SelectSearchInput ({
                                                         key={option.label}
                                                         style={{...STYLES.optionImage, ...optionImageStyle}}
                                                     >
-                                                        <img src={`/images/${option.image}`} alt="" width={'100%'} height={'100%'}/>
+                                                        {/* <img src={`/images/${option.image}`} alt="" width={'100%'} height={'100%'}/> */}
+                                                        <img src={option.image} alt="" width={'100%'} height={'100%'}/>
                                                     </div>
                                                 ) : null
                                             }

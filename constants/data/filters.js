@@ -228,7 +228,7 @@ export const SORTING_OPTIONS = [
         value: PRICE_FROM_LOW_TO_HIGH
     },
     {
-        id: 3,
+        id: 4,
         label: MOST_TRANSFERRED,
         value: MOST_TRANSFERRED
     },

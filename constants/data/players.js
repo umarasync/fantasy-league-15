@@ -46,7 +46,7 @@ export const PLAYERS_INITIAL = [
         nextMatch: {
             club: 'GRO',
             vs: 'BEN',
-            matchType: 'H'
+            matchType: 'H' //A-away H-home
         },
         price: PLAYER1_PRICE,
         formattedPrice: nFormatter(PLAYER1_PRICE),
