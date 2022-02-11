@@ -6,6 +6,7 @@ import Div from "components/html/Div";
 import Layout from "components/layout";
 import InfoBoard from "components/mySquad/InfoBoard";
 import OtherTeamMySquadLeftSection from "components/otherTeam/OtherTeamMySquadLeftSection";
+import SideDrawer from "components/sideDrawers/SideDrawer";
 
 // constants
 import {INITIAL} from "constants/animations";
@@ -13,6 +14,7 @@ import {getOtherTeamData} from "constants/data/otherTeam";
 
 // Utils
 import {clone, isEmpty} from "utils/helpers";
+import {useSelector} from "react-redux";
 
 export default function OtherTeam() {
 
@@ -20,6 +22,7 @@ export default function OtherTeam() {
     const [pickedPlayers, setPickedPlayers] = useState([])
     const [selectedWeek, setSelectedWeek] = useState({})
     const [playersFormationAnimation, setPlayersFormationAnimation] = useState(INITIAL)
+    const showSideDrawer = useSelector(({sideDrawer}) => sideDrawer.showSideDrawer)
 
     const onSelectWeek = ($selectedWeek) => {
 
@@ -65,6 +68,11 @@ export default function OtherTeam() {
                                     disableClick
                                 />
                             )
+                        }
+                        {
+                            showSideDrawer ? (
+                                <SideDrawer/>
+                            ): null
                         }
                     </Div>
                 </Div>
