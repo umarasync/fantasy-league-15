@@ -19,18 +19,50 @@ export default function PlayerAll() {
 
   useEffect(() => {
     if (filterData) {
-      // console.log("filterData", filterData);
+      console.log("filterData", filterData);
       const where = {};
       const sortBy = {};
       //Team Filters
       if (
         filterData.selectedClubs.length > 0 &&
+        filterData.selectedClubs.length < 2 &&
         filterData.selectedClubs[0].id != 1
       ) {
+        //means only on team is selected
         where.teamId = { eq: filterData.selectedClubs[0].id };
       }
+      if (
+        filterData.selectedClubs.length > 0 &&
+        filterData.selectedClubs.length > 1
+      ) {
+        //means more than one team is selected
+        where.teamId = {
+          in: filterData.selectedClubs.map((SEL, i) => {
+            return SEL.id;
+          }),
+        };
+      }
       if (filterData.selectedPrice.value != "All prices") {
-        where.value = { lte: parseFloat(filterData.selectedPrice.value.to) };
+        if (
+          filterData.selectedPrice.value.from == 0 &&
+          filterData.selectedPrice.value.to > 0
+        ) {
+          where.value = { lte: parseInt(filterData.selectedPrice.value.to) };
+        } else if (
+          filterData.selectedPrice.value.from > 0 &&
+          filterData.selectedPrice.value.to > 0
+        ) {
+          where.value = {
+            lte: parseInt(filterData.selectedPrice.value.to),
+            gte: parseInt(filterData.selectedPrice.value.from),
+          };
+        } else if (
+          filterData.selectedPrice.value.from > 0 &&
+          (filterData.selectedPrice.value.to == 0 ||
+            filterData.selectedPrice.value.to == null)
+        ) {
+          where.value = { gt: parseInt(filterData.selectedPrice.value.from) };
+        }
       }
       switch (filterData.activePosition) {
         case "All":
@@ -67,7 +99,6 @@ export default function PlayerAll() {
           case 4: //MOST_TRANSFERRED
             sortBy.value = "ASC";
             break;
-
         }
       }
       // if (searchText) {
@@ -76,7 +107,7 @@ export default function PlayerAll() {
 
       console.log("where", where);
       //Query API with Filter values
-      dispatch(getPlayers(30, 0, where, sortBy));
+      dispatch(getPlayers(50, 0, where, sortBy));
     }
   }, [filterData]);
 
