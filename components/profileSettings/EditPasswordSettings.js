@@ -15,13 +15,16 @@ import EditSuccessBox from "components/profileSettings/EditSuccessBox";
 import {SHADOW_DARK_INDIGO} from "constants/boxShadow";
 import colors from "constants/colors";
 
-export default function EditEmailSettings() {
+export default function EditPasswordSettings() {
 
-    // Email
-    const [email, setEmail] = useState("");
     // Password
     const [password, setPassword] = useState("");
     const [isInputTypePassword, setIsInputTypePassword] = useState(true);
+    const [nPassword, setNPassword] = useState("");
+    const [isNPasswordTypePassword, setIsNPasswordTypePassword] = useState(true);
+    const [cPassword, setCPassword] = useState("");
+    const [isCPasswordTypePassword, setIsCPasswordTypePassword] = useState(true);
+
     // Success-Box
     const [successBoxHidden, setSuccessBoxHidden] = useState(true);
     // Reset Password Modal
@@ -35,14 +38,22 @@ export default function EditEmailSettings() {
     }
 
     const initialStates = () => {
-        setEmail("")
+        // Password
         setPassword("")
         setIsInputTypePassword(true)
-
+        // New-Password
+        setNPassword("")
+        setIsNPasswordTypePassword(true)
+        // Confirm-Password
+        setCPassword("")
+        setIsCPasswordTypePassword(true)
+        // Success-Box
         setSuccessBoxHidden(true)
-        setDisableCancel(true)
-        setDisableCancel(true)
+        // Modal
         setShowResetPasswordModal(false)
+        // Buttons
+        setDisableCancel(true)
+        setDisableCancel(true)
     }
     const onCancel = () => {
         initialStates()
@@ -50,8 +61,7 @@ export default function EditEmailSettings() {
 
     const validate = () => {
         if (
-            email &&
-            password
+            password && nPassword && cPassword
         ) {
             setDisableSave(false);
             setDisableCancel(false);
@@ -63,39 +73,26 @@ export default function EditEmailSettings() {
 
     useEffect(() => {
         validate()
-    }, [email, password])
+    }, [password, nPassword, cPassword])
 
     useEffect(() => {
         initialStates()
     }, [])
-
 
     return (
         <Div h={'100%'}>
             <Animated
                 toggleAnimation={successBoxHidden}
                 h={'100%'}
-                children2={<EditSuccessBox title={<span>your email <br/>successfully changed</span>}/>}
+                children2={<EditSuccessBox title={<span>your password <br/>successfully changed</span>}/>}
             >
                 <div>
-                    <Text text={'Change Email'} fs={22} lh={26} fw={900} fst={'italic'} tt={'uppercase'}
+                    <Text text={'Change password'} fs={22} lh={26} fw={900} fst={'italic'} tt={'uppercase'}
                           color={colors.black_rock}
                           mb={24}/>
                     <BorderHorizontal/>
                     <Div mt={24}>
-
-                        <Div mb={24}>
-                            <Input
-                                name="email"
-                                id="email"
-                                placeholder=" New email address"
-                                onChange={(v) => {
-                                    setEmail(v);
-                                }}
-                                value={email}
-                                mb={0}
-                            />
-                        </Div>
+                        {/*Current-Password*/}
                         <Div>
                             <Input
                                 name="password"
@@ -126,26 +123,54 @@ export default function EditEmailSettings() {
                                 />
                             </Div>
                         </Div>
-                        <Div justifyBetween>
-                            <Button
-                                title={'save'}
-                                color={colors.white}
-                                mr={8}
-                                h={50}
-                                disabled={disableSave}
-                                onClick={onSave}
-                            />
-                            <Button
-                                title={'Cancel'}
-                                color={colors.white}
-                                ml={8}
-                                h={50}
-                                disabled={disableCancel}
-                                bs={SHADOW_DARK_INDIGO}
-                                bg={colors.dark_indigo}
-                                onClick={onCancel}
-                            />
-                        </Div>
+                        {/*Create-New-Password*/}
+                        <Input
+                            name="nPassword"
+                            type={isNPasswordTypePassword ? "password" : "text"}
+                            placeholder="Create new password"
+                            icon={isNPasswordTypePassword ? "eye.png" : "hide.png"}
+                            onChange={(v) => setNPassword(v)}
+                            onIconClick={() =>
+                                setIsNPasswordTypePassword(!isNPasswordTypePassword)
+                            }
+                            value={nPassword}
+                            pr={70}
+                            mb={24}
+                        />
+                        {/*Confirm-New-Password*/}
+                        <Input
+                            name="cPassword"
+                            type={isCPasswordTypePassword ? "password" : "text"}
+                            placeholder="Confirm new password"
+                            icon={isCPasswordTypePassword ? "eye.png" : "hide.png"}
+                            onChange={(v) => setCPassword(v)}
+                            onIconClick={() =>
+                                setIsCPasswordTypePassword(!isCPasswordTypePassword)
+                            }
+                            value={cPassword}
+                            pr={70}
+                            mb={24}
+                        />
+                    </Div>
+                    <Div justifyBetween>
+                        <Button
+                            title={'save'}
+                            color={colors.white}
+                            mr={8}
+                            h={50}
+                            disabled={disableSave}
+                            onClick={onSave}
+                        />
+                        <Button
+                            title={'Cancel'}
+                            color={colors.white}
+                            ml={8}
+                            h={50}
+                            disabled={disableCancel}
+                            bs={SHADOW_DARK_INDIGO}
+                            bg={colors.dark_indigo}
+                            onClick={onCancel}
+                        />
                     </Div>
                 </div>
             </Animated>

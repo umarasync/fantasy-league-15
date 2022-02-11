@@ -7,6 +7,7 @@ import Div from "components/html/Div";
 import BackDrop from "components/misc/BackDrop";
 import ProfileSettingsHeader from "components/profileSettings/ProfileSettingsHeader";
 import EditPersonalInfoSettings from "components/profileSettings/EditPersonalInfoSettings";
+import EditPasswordSettings from "components/profileSettings/EditPasswordSettings";
 import EditEmailSettings from "components/profileSettings/EditEmailSettings";
 
 // Constants
@@ -33,11 +34,11 @@ const getStyles = (R) => {
             right: R(-540),
             background: colors.white,
             paddingTop: R(40),
-            paddingBottom: R(40),
         },
         body: {
             flexGrow: 1,
-            overflow: 'scroll'
+            overflow: 'scroll',
+            paddingBottom: R(20),
         }
     }
 }
@@ -72,11 +73,21 @@ export default function ProfileSettingsSideDrawer(){
                             </Div>
                             <Div style={STYLES.body}>
                                 <Div mb={40}/>
+
+                                {/*Personal-Settings*/}
                                 <Div bs={SHADOW_WHITE_SMOKE} bg={colors.white} p={24} br={12} ml={40} mr={40} mb={24}>
                                     <EditPersonalInfoSettings/>
                                 </Div>
+
+                                {/*Email-Settings*/}
                                 <Div bs={SHADOW_WHITE_SMOKE} bg={colors.white} h={400} p={24} br={12} ml={40} mr={40} mb={24} mt={24}>
                                     <EditEmailSettings/>
+                                </Div>
+
+                                {/*Password-Settings*/}
+                                <Div bs={SHADOW_WHITE_SMOKE} bg={colors.white} h={495} p={24} br={12} ml={40} mr={40}
+                                     mb={24} mt={24}>
+                                    <EditPasswordSettings/>
                                 </Div>
                             </Div>
                         </motion.div>
