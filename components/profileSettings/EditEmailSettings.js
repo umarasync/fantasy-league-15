@@ -9,6 +9,7 @@ import Input from "components/inputs/input";
 import Button from "components/html/Button";
 import ResetPasswordModal from "components/modals/ResetPasswordModal";
 import Animated from "components/animation/Animated";
+import EditSuccessBox from "components/profileSettings/EditSuccessBox";
 
 // Constants
 import {SHADOW_DARK_INDIGO} from "constants/boxShadow";
@@ -16,12 +17,15 @@ import colors from "constants/colors";
 
 export default function EditEmailSettings() {
 
+    // Email
     const [email, setEmail] = useState("");
+    // Password
     const [password, setPassword] = useState("");
     const [isInputTypePassword, setIsInputTypePassword] = useState(true);
-    const [successBoxHidden, setSuccessBoxHidden] = useState(false);
+    // Success-Box
+    const [successBoxHidden, setSuccessBoxHidden] = useState(true);
+    // Reset Password Modal
     const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
-
     // Buttons
     const [disableSave, setDisableSave] = useState(true);
     const [disableCancel, setDisableCancel] = useState(true);
@@ -61,11 +65,13 @@ export default function EditEmailSettings() {
         initialStates()
     }, [])
 
+
     return (
-        <div>
+        <Div h={'100%'}>
             <Animated
                 toggleAnimation={successBoxHidden}
-                children2={<span>Hello world</span>}
+                h={'100%'}
+                children2={<EditSuccessBox title={<span>your email <br/>successfully changed</span>}/>}
             >
                 <div>
                     <Text text={'Change Email'} fs={22} lh={26} fw={900} fst={'italic'} tt={'uppercase'}
@@ -139,6 +145,6 @@ export default function EditEmailSettings() {
                     </Div>
                 </div>
             </Animated>
-        </div>
+        </Div>
     )
 }
