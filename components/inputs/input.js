@@ -62,6 +62,7 @@ export default function Input (props) {
         classes,
         value,
         onKeyDown = (v) => false,
+        ref=null
     } = props
 
     const [focused, setFocused] = useState(false)
@@ -107,6 +108,7 @@ export default function Input (props) {
             onKeyDown={onKeyDown}
             value={value}
             style={{ ...STYLES.input, ...style }}
+            ref={ref}
             className={`w-[100%] font-[600] ${classes}`}
         />
     </div>

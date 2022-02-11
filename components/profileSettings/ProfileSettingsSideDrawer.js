@@ -3,13 +3,14 @@ import {useDispatch, useSelector} from "react-redux";
 import {motion, AnimatePresence} from "framer-motion";
 
 // Components
-import Text from "components/html/Text";
 import Div from "components/html/Div";
-import Image from "components/html/Image";
 import BackDrop from "components/misc/BackDrop";
+import ProfileSettingsHeader from "components/profileSettings/ProfileSettingsHeader";
+import PersonalInfo from "components/profileSettings/PersonalInfo";
 
 // Constants
 import colors from "constants/colors";
+import {SHADOW_WHITE_SMOKE} from "constants/boxShadow";
 
 // Actions
 import {toggleSideDrawer} from "redux/SideDrawer/actions";
@@ -19,7 +20,6 @@ import R from "utils/getResponsiveValue";
 
 // Animations
 import {getSideDrawerAnimation} from "Animations/ProfileSettings/ProfileSettingsSideDrawerAnimation";
-
 
 // Styles
 const getStyles = (R) => {
@@ -31,7 +31,12 @@ const getStyles = (R) => {
             bottom: 0,
             right: R(-540),
             background: colors.white,
-            padding: R(40)
+            paddingTop: R(40),
+            paddingBottom: R(40),
+        },
+        body: {
+            flexGrow: 1,
+            overflow: 'scroll'
         }
     }
 }
@@ -59,21 +64,17 @@ export default function ProfileSettingsSideDrawer(){
                             exit={"exit"}
                             key={1}
                             style={STYLES.container}
+                            className={'flex flex-col justify-between'}
                         >
-                            <Div className={'flex items-center justify-between'}>
-                                <Text
-                                    text={'Account settings'}
-                                    fs={28}
-                                    lh={32}
-                                    fw={900}
-                                    tt={'uppercase'}
-                                    fst={'italic'}
-                                    color={colors.black_rock}
-                                />
-                                <Image src={'/images/close_rounded.png'} w={32} h={32}
-                                       onClick={handleToggleSideDrawer}/>
+                            <Div ml={40} mr={40}>
+                                <ProfileSettingsHeader handleToggleSideDrawer={handleToggleSideDrawer}/>
                             </Div>
-
+                            <Div style={STYLES.body}>
+                                <Div mb={40}/>
+                                <Div bs={SHADOW_WHITE_SMOKE} bg={colors.white} p={24} br={12} ml={40} mr={40} mb={24}>
+                                    <PersonalInfo/>
+                                </Div>
+                            </Div>
                         </motion.div>
                     </AnimatePresence>
                 ) : <AnimatePresence/>
