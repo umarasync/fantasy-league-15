@@ -11,28 +11,38 @@ import MyDatepicker from "components/datePicker/MyDatePicker";
 import Button from "components/html/Button";
 
 // Constants
-import {SHADOW_DARK_INDIGO, SHADOW_WHITE_SMOKE} from "constants/boxShadow";
+import {SHADOW_DARK_INDIGO} from "constants/boxShadow";
 import colors from "constants/colors";
 import {GENDERS} from "constants/data/user";
 
 // Utils
-import {clone} from "utils/helpers";
+import {clone, isEmpty} from "utils/helpers";
 
-export default function PersonalInfo() {
+export default function EditPersonalInfoSettings() {
 
     const GENDERS_INITIAL = clone(GENDERS);
 
-    const [fullName, setFullName] = useState("Martine Bakker");
+    const [fullName, setFullName] = useState("");
     const [dateOfBirth, setDateOfBirth] = useState("");
-    const [genders, setGenders] = useState([...GENDERS_INITIAL]);
-    const [selectedGender, setSelectedGender] = useState(GENDERS_INITIAL[0]);
+    const [genders, setGenders] = useState([]);
+    const [selectedGender, setSelectedGender] = useState({});
 
     // Buttons
     const [disableConfirm, setDisableConfirm] = useState(true);
     const [disableCancel, setDisableCancel] = useState(true);
 
     const onSave = () => {}
-    const onCancel = () => {}
+
+    const initialStates = () => {
+        setFullName("")
+        setDateOfBirth("")
+        setGenders([...GENDERS_INITIAL])
+        setSelectedGender({...GENDERS_INITIAL[1]})
+    }
+
+    const onCancel = () => {
+        initialStates()
+    }
 
     const validate = () => {
         if (
@@ -53,6 +63,9 @@ export default function PersonalInfo() {
         validate()
     }, [fullName, selectedGender.value, dateOfBirth])
 
+    useEffect(() => {
+        initialStates()
+    }, [])
     return (
         <>
             <Text text={'Personal info'} fs={22} lh={26} fw={900} fst={'italic'} tt={'uppercase'} color={colors.black_rock}
@@ -71,22 +84,31 @@ export default function PersonalInfo() {
                 />
                 <Div className={'flex items-center justify-between'} mb={32}>
                     <Div w={'50%'} mr={12}>
-                        <SelectInput
-                            name="gender"
-                            id="gender"
-                            placeholder="Gender"
-                            options={genders}
-                            selectedOption={selectedGender}
-                            default
-                            skipFirstOption={true}
-                            onOptionChange={(option) => setSelectedGender(option)}
-                        />
+                        {
+                            genders.length > 0 && (
+                                <SelectInput
+                                    name="gender"
+                                    id="gender"
+                                    placeholder="Gender"
+                                    options={genders}
+                                    selectedOption={selectedGender}
+                                    default
+                                    skipFirstOption={true}
+                                    onOptionChange={(option) => setSelectedGender({...option})}
+                                />
+                            )
+                        }
                     </Div>
                     <Div w={'50%'} ml={12} h={'70%'}>
-                        <MyDatepicker
-                            dateOfBirth={dateOfBirth}
-                            setDateOfBirth={(dob) => setDateOfBirth(dob)}
-                        />
+                        {
+                            !isEmpty(selectedGender) && (
+                                <MyDatepicker
+                                    dateOfBirth={dateOfBirth}
+                                    setDateOfBirth={(dob) => setDateOfBirth(dob)}
+                                />
+                            )
+                        }
+
                     </Div>
                 </Div>
                 <Div justifyBetween>

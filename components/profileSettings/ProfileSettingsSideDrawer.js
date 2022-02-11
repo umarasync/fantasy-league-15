@@ -6,7 +6,8 @@ import {motion, AnimatePresence} from "framer-motion";
 import Div from "components/html/Div";
 import BackDrop from "components/misc/BackDrop";
 import ProfileSettingsHeader from "components/profileSettings/ProfileSettingsHeader";
-import PersonalInfo from "components/profileSettings/PersonalInfo";
+import EditPersonalInfoSettings from "components/profileSettings/EditPersonalInfoSettings";
+import EditEmailSettings from "components/profileSettings/EditEmailSettings";
 
 // Constants
 import colors from "constants/colors";
@@ -72,7 +73,10 @@ export default function ProfileSettingsSideDrawer(){
                             <Div style={STYLES.body}>
                                 <Div mb={40}/>
                                 <Div bs={SHADOW_WHITE_SMOKE} bg={colors.white} p={24} br={12} ml={40} mr={40} mb={24}>
-                                    <PersonalInfo/>
+                                    <EditPersonalInfoSettings/>
+                                </Div>
+                                <Div bs={SHADOW_WHITE_SMOKE} bg={colors.white} h={400} p={24} br={12} ml={40} mr={40} mb={24} mt={24}>
+                                    <EditEmailSettings/>
                                 </Div>
                             </Div>
                         </motion.div>

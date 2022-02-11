@@ -24,14 +24,15 @@ const Animated = ({
     variants,
     toggleAnimation,
     children,
-    children2
+    children2,
+    animationSpeed = 0.5
 }) => {
 
     const STYLES = {...getStyles(R)}
 
     // Set default animation
     if(!variants){
-        variants = fadeInAndOutAnimation()
+        variants = fadeInAndOutAnimation(animationSpeed)
     }
 
     return (
