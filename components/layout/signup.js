@@ -390,23 +390,26 @@ export default function SignUp(props) {
                     placeholder="Email address"
                     onChange={(v) => setEmail(v)}
                   />
-                  <div className="grid grid-cols-2 gap-[2.4rem]">
-                    <SelectInput
-                      name="gender"
-                      id="gender"
-                      placeholder="Gender"
-                      options={genders}
-                      selectedOption={selectedGender}
-                      default
-                      skipFirstOption={true}
-                      onOptionChange={(option) => setSelectedGender(option)}
-                    />
-
-                    <MyDatepicker
-                        dateOfBirth={dateOfBirth}
-                        setDateOfBirth={(dob) => setDateOfBirth(dob)}
-                    />
-                  </div>
+                  <Div className="flex items-center justify-center" mb={32}>
+                    <Div w={'50%'} mr={12}>
+                      <SelectInput
+                          name="gender"
+                          id="gender"
+                          placeholder="Gender"
+                          options={genders}
+                          selectedOption={selectedGender}
+                          default
+                          skipFirstOption={true}
+                          onOptionChange={(option) => setSelectedGender(option)}
+                      />
+                    </Div>
+                    <Div w={'50%'} ml={12}>
+                      <MyDatepicker
+                          dateOfBirth={dateOfBirth}
+                          setDateOfBirth={(dob) => setDateOfBirth(dob)}
+                      />
+                    </Div>
+                  </Div>
                   <Input
                     value={password}
                     name="password"
@@ -420,7 +423,6 @@ export default function SignUp(props) {
                   />
                 </Div>
               )}
-
               {signUpError && (
                   <Text
                       text={signUpError}
