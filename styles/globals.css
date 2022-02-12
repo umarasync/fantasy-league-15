@@ -44,9 +44,14 @@
     @apply mb-[3.2rem] text-regent_grey text-[1.8rem];
   }
 }
-.select-options:hover {
-  background-color: red;
+.select-options {
+  color: #0C0C2D;
 }
+.select-options:hover {
+  background-color: #E9426A;
+  color: #FFFFFF !important;
+}
+
 input.disable-input-outline[type="text"]:focus {
   -webkit-box-shadow: none;
   box-shadow: none;

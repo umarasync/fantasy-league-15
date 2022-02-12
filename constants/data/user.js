@@ -1,7 +1,7 @@
 // Gender
 export const GENDERS = [
     {
-        label: 'Select',
+        label: 'Gender',
         value: 'select'
     },
     {

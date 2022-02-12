@@ -21,12 +21,12 @@ const animation = {
 };
 
 
-export const getDropDownAnimation = () => {
+export const getDropDownAnimation = ( y = '-50px') => {
     const transition = {duration}
     return {
         initial: {
             opacity: 0,
-            y: '-50px'
+            y
         },
         animate: {
             opacity: 1,
@@ -35,7 +35,7 @@ export const getDropDownAnimation = () => {
         },
         exit: {
             opacity: 0,
-            y: '-50px',
+            y,
             transition: transition,
         },
     }

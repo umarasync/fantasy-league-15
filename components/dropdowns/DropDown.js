@@ -1,5 +1,5 @@
 // Packages
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {AnimatePresence, motion} from "framer-motion";
 
 // Components
@@ -24,9 +24,9 @@ const getStyles = (R) => {
     }
 }
 
-const DropDownsArrows = ({opened}) => {
+const DropDownsArrows = ({opened, style}) => {
     return (
-        <Div className={'flex items-center justify-center'}>
+        <Div className={'flex items-center justify-center'} style={{...style}}>
             <Image
                 src={opened ? '/images/arrow_up.png' : '/images/arrow_down.png'}
                 w={24}
@@ -44,8 +44,14 @@ export default function DropDown ({
     li,
     onSelect,
     // Optional
-    styles,
-    directionRight
+    directionRight,
+    onToggle,
+    hideDropDownArrows,
+    styles = {
+        container: {},
+        arrowsBox: {}
+    },
+    animationY = '-50px'
 }) {
 
     const STYLES = {...getStyles(R)}
@@ -62,22 +68,26 @@ export default function DropDown ({
         onSelect({...item})
     }
 
+    useEffect(() => {
+        if(!onToggle) return
+        onToggle(opened)
+    }, [opened])
     return (
         <div className={`relative w-full z-[1]`}>
-            <Div className={'flex items-center cursor-pointer'} onClick={handleHeaderClick}>
+            <Div className={'flex items-center cursor-pointer justify-between relative'} onClick={handleHeaderClick}>
                 {header(selectedItem)}
-                <DropDownsArrows opened={opened}/>
+                {!hideDropDownArrows && (<DropDownsArrows opened={opened} style={styles.arrowsBox}/>)}
             </Div>
             {
                 opened ? (
                     <AnimatePresence>
                         <motion.div
-                            variants={getDropDownAnimation()}
+                            variants={getDropDownAnimation(animationY)}
                             initial="initial"
                             animate="animate"
                             exit="exit"
                         >
-                            <Div position={'absolute'} right={directionRight}>
+                            <Div position={'absolute'} right={directionRight} w={'100%'}>
                                 <div style={{...STYLES.container, ...styles.container}}>
                                     {
                                         data.length > 0 && data.map((item, index) => {
