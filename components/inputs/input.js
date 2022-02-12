@@ -98,7 +98,7 @@ export default function Input (props) {
             )}
 
         <input
-            autocomplete={autocomplete}
+            autoComplete={autocomplete}
             placeholder={placeholder}
             type={type}
             name={name}
