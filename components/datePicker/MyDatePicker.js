@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
 import range from "lodash/range";
+import "react-datepicker/dist/react-datepicker.css";
 
 // Components
 import Input from "components/inputs/input";

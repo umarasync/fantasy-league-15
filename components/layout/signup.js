@@ -5,10 +5,6 @@ import { motion } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import getYear from "date-fns/getYear";
-import getMonth from "date-fns/getYear";
 
 // Components
 import Layout from "components/layout";
