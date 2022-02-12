@@ -54,6 +54,8 @@ export default function ProfileSettingsSideDrawer(){
         dispatch(toggleSideDrawer())
     }
 
+    return null
+
     return (
         <>
             <BackDrop show={showSideDrawer}/>
