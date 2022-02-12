@@ -36,7 +36,8 @@ const MyDatepicker = ({
             id="dateOfBirth"
             placeholder="Date of birth"
             onClick={onClick}
-            innerRef={ref}
+            ref={ref}
+            mb={0}
         />
     ));
     CustomInputPicker.displayName = "DatePickerInput";

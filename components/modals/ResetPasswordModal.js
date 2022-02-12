@@ -2,14 +2,22 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Components
-import Modal from "components/modals";
 import Input from "components/inputs/input";
 import Button from "components/html/Button";
+import Image from "components/html/Image";
+import Div from "components/html/Div";
+import Text from "components/html/Text";
+import ModalWithBackDrop from "components/modals/ModalWithBackDrop";
+
+// Api
 import { resetPasswordRequest } from "redux/Auth/api";
+
+// Constants
+import colors from "constants/colors";
 
 export default function ResetPasswordModal({ show, onClose }) {
   const router = useRouter();
@@ -47,43 +55,47 @@ export default function ResetPasswordModal({ show, onClose }) {
     }
   };
 
-
   useEffect(() => {
     validate();
   }, [email]);
 
   return (
-    <Modal>
-      <div
-        className={`${
-          !show && "hidden"
-        } fixed z-10 overflow-auto top-0 left-0 w-full h-full bg-backdrop flex items-center justify-center`}
-      >
-        <div className="bg-white w-[48.2rem] rounded-[1.2rem] p-[2.4rem] pt-[2.8rem]">
-          <div className="flex justify-between items-center">
-            <p className="italic uppercase text-black_rock text-[2.8rem] font-[800] leading-[3.2rem]">
-              Reset password
-            </p>
-            <img src="/images/close.png" alt="" onClick={onClose} />
-          </div>
-          <p className="text-regent_grey text-[1.8rem] leading-[2.6rem] mt-[2.4rem] mb-[3.2rem]">
-            Enter your email address and we’ll send you instructions on how to
-            reset your password.
-          </p>
-          <Input
-            value={email}
-            name="email"
-            id="email"
-            placeholder="Email address"
-            onChange={(v) => setEmail(v)}
-          />
-          <Button
-            title={"Next"}
-            disabled={disabled}
-            onClick={() => !disabled && requestResetPassword()}
-          />
-        </div>
-      </div>
-    </Modal>
+        <ModalWithBackDrop show={show} animationSpeed={0.3}>
+            <Div className="bg-white" w={482} br={12} p={24} pt={28}>
+                <Div className="flex justify-between items-center">
+                    <Text
+                        text={`Reset password`}
+                        fs={28}
+                        lh={32}
+                        fw={800}
+                        fst={'italic'}
+                        tt={'uppercase'}
+                        color={colors.black_rock}
+                    />
+                    <Image src="/images/close.png" alt="close" onClick={onClose}/>
+                </Div>
+                <Text
+                    text={`Enter your email address and we’ll send you instructions on how to
+                  reset your password.`}
+                    fs={18}
+                    lh={26}
+                    mt={24}
+                    mb={32}
+                    color={colors.regent_grey}
+                />
+                <Input
+                    value={email}
+                    name="email"
+                    id="email"
+                    placeholder="Email address"
+                    onChange={(v) => setEmail(v)}
+                />
+                <Button
+                    title={"Next"}
+                    disabled={disabled}
+                    onClick={() => !disabled && requestResetPassword()}
+                />
+            </Div>
+        </ModalWithBackDrop>
   );
 }

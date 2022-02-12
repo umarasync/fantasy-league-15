@@ -10,9 +10,6 @@ import Layout from "components/layout";
 import Button from "components/html/Button";
 import Div from "components/html/Div";
 
-// Constants
-import colors from "constants/colors";
-
 // Utils
 import R from "utils/getResponsiveValue";
 

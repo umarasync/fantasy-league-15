@@ -41,7 +41,11 @@ const getStyles = (R) => {
 export default function SelectClub() {
   const STYLES = { ...getStyles(R) };
 
+  // Router
   const router = useRouter();
+  const {query} = router
+  let {fromSettings} = query
+
   const dispatch = useDispatch();
   const [cardsDataI, setCardsDataI] = useState();
   const [cardsData, setCardsData] = useState();
@@ -138,7 +142,12 @@ export default function SelectClub() {
   useEffect(() => {
     if (updateTeamToProfileSuccess) {
       toast.success(updateTeamToProfileSuccess, {
-        onClose: () => router.push("/build_team_all_players"),
+        onClose: () => {
+          if(fromSettings) {
+            return router.back()
+          }
+          return router.push("/build_team_all_players")
+        },
       });
     }else if(updateTeamToProfileError){
       toast.success("Error updating club.");

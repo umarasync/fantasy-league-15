@@ -20,7 +20,7 @@ const getStyles = (R) => {
         container: {
             height: R(70),
             fontSize: R(18),
-            marginBottom: R(7),
+            // marginBottom: R(7),
             borderRadius: R(12),
             paddingLeft: R(24),
             paddingRight: R(10)

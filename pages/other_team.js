@@ -6,6 +6,7 @@ import Div from "components/html/Div";
 import Layout from "components/layout";
 import InfoBoard from "components/mySquad/InfoBoard";
 import OtherTeamMySquadLeftSection from "components/otherTeam/OtherTeamMySquadLeftSection";
+import ProfileSettingsSideDrawer from "components/profileSettings/ProfileSettingsSideDrawer";
 
 // constants
 import {INITIAL} from "constants/animations";
@@ -13,6 +14,7 @@ import {getOtherTeamData} from "constants/data/otherTeam";
 
 // Utils
 import {clone, isEmpty} from "utils/helpers";
+import {useSelector} from "react-redux";
 
 export default function OtherTeam() {
 
@@ -66,6 +68,7 @@ export default function OtherTeam() {
                                 />
                             )
                         }
+                        <ProfileSettingsSideDrawer/>
                     </Div>
                 </Div>
             </Div>

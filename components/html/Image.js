@@ -38,7 +38,11 @@ export default function Image(props) {
     const { src, alt, onClick, disabled } = props
 
     return (
-        <div style={STYLES.container} onClick={() => (disabled || !onClick) ? false : onClick()}>
+        <div
+            style={STYLES.container}
+            onClick={() => (disabled || !onClick) ? false : onClick()}
+            className={`${(!disabled || onClick) && 'cursor-pointer'}`}
+        >
             <div style={STYLES.image}>
                 <img src={`${src}`} alt={alt} width={'100%'} height={'100%'}/>
             </div>
