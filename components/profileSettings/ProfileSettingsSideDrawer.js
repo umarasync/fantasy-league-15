@@ -9,6 +9,7 @@ import ProfileSettingsHeader from "components/profileSettings/ProfileSettingsHea
 import EditPersonalInfoSettings from "components/profileSettings/EditPersonalInfoSettings";
 import EditPasswordSettings from "components/profileSettings/EditPasswordSettings";
 import EditEmailSettings from "components/profileSettings/EditEmailSettings";
+import EditClubSettings from "components/profileSettings/EditClubSettings";
 
 // Constants
 import colors from "constants/colors";
@@ -79,16 +80,21 @@ export default function ProfileSettingsSideDrawer(){
                                     <EditPersonalInfoSettings/>
                                 </Div>
 
-                                {/*Email-Settings*/}
-                                <Div bs={SHADOW_WHITE_SMOKE} bg={colors.white} h={400} p={24} br={12} ml={40} mr={40} mb={24} mt={24}>
-                                    <EditEmailSettings/>
+                                {/*Club-Selection*/}
+                                <Div bs={SHADOW_WHITE_SMOKE} bg={colors.white} h={455} p={24} br={12} ml={40} mr={40} mb={24} mt={24}>
+                                    <EditClubSettings/>
                                 </Div>
 
+                                {/*Email-Settings*/}
+                                {/*<Div bs={SHADOW_WHITE_SMOKE} bg={colors.white} h={400} p={24} br={12} ml={40} mr={40} mb={24} mt={24}>*/}
+                                {/*    <EditEmailSettings/>*/}
+                                {/*</Div>*/}
+
                                 {/*Password-Settings*/}
-                                <Div bs={SHADOW_WHITE_SMOKE} bg={colors.white} h={495} p={24} br={12} ml={40} mr={40}
-                                     mb={24} mt={24}>
-                                    <EditPasswordSettings/>
-                                </Div>
+                                {/*<Div bs={SHADOW_WHITE_SMOKE} bg={colors.white} h={495} p={24} br={12} ml={40} mr={40}*/}
+                                {/*     mb={24} mt={24}>*/}
+                                {/*    <EditPasswordSettings/>*/}
+                                {/*</Div>*/}
                             </Div>
                         </motion.div>
                     </AnimatePresence>
