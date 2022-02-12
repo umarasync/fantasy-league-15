@@ -18,6 +18,7 @@ const colors = {
     "white": '#FFFFFF',
     "dark_indigo": '#1B1853',
     "hibiscus": '#B6315B',
+    "gallery": '#F0F0F0',
 }
 
 module.exports = colors
