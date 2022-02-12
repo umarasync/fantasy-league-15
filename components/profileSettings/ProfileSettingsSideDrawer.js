@@ -76,7 +76,7 @@ export default function ProfileSettingsSideDrawer(){
                                 <Div mb={40}/>
 
                                 {/*Personal-Settings*/}
-                                <Div bs={SHADOW_WHITE_SMOKE} bg={colors.white} p={24} br={12} ml={40} mr={40} mb={24}>
+                                <Div bs={SHADOW_WHITE_SMOKE} bg={colors.white} h={390} p={24} br={12} ml={40} mr={40} mb={24}>
                                     <EditPersonalInfoSettings/>
                                 </Div>
 
@@ -86,15 +86,18 @@ export default function ProfileSettingsSideDrawer(){
                                 </Div>
 
                                 {/*Email-Settings*/}
+
                                 {/*<Div bs={SHADOW_WHITE_SMOKE} bg={colors.white} h={400} p={24} br={12} ml={40} mr={40} mb={24} mt={24}>*/}
                                 {/*    <EditEmailSettings/>*/}
                                 {/*</Div>*/}
 
                                 {/*Password-Settings*/}
+
                                 {/*<Div bs={SHADOW_WHITE_SMOKE} bg={colors.white} h={495} p={24} br={12} ml={40} mr={40}*/}
                                 {/*     mb={24} mt={24}>*/}
                                 {/*    <EditPasswordSettings/>*/}
                                 {/*</Div>*/}
+
                             </Div>
                         </motion.div>
                     </AnimatePresence>
