@@ -8,9 +8,9 @@ import {clone} from "utils/helpers";
 import {ELEVEN, ZERO} from "constants/arrayIndexes";
 import {ANIMATE} from "constants/animations";
 
-export const TRANSFER_ICON = 'transfer.png'
-export const DIAMOND_UP_GREEN = 'diamond_up_green.png'
-export const DIAMOND_DOWN_RED = 'diamond_down_red.png'
+export const TRANSFER_ICON = '/images/transfer.png'
+export const DIAMOND_UP_GREEN = '/images/diamond_up_green.png'
+export const DIAMOND_DOWN_RED = '/images/diamond_down_red.png'
 export const TOTAL_POINTS = 'Total pts'
 export const PRICES = 'Price'
 export const MATCHES = 'Matches'
