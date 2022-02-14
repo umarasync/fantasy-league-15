@@ -57,6 +57,7 @@ const MyDatepicker = ({
             onClick={onClick}
             ref={ref}
             mb={0}
+            autoCompleteOff
         />
     ));
 
