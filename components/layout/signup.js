@@ -5,21 +5,20 @@ import { motion } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import getYear from "date-fns/getYear";
-import getMonth from "date-fns/getYear";
 
 // Components
 import Layout from "components/layout";
 import Button from "components/html/Button";
 import { useRouter } from "next/router";
 import Input from "components/inputs/input";
-import SelectInput from "components/inputs/SelectInput";
 import Text from "components/html/Text"
 import Div from "components/html/Div"
 import Image from "components/html/Image";
 import ResetPasswordModal from "components/modals/ResetPasswordModal";
+import MyDatepicker from "components/datePicker/MyDatePicker";
+import GenderDropDown from "components/signUp/GenderDropDown";
+
+// Redux
 import { createUser, loginUser } from "redux/Auth/api";
 import { RESET_PAGE } from "redux/Auth/actions";
 
@@ -28,9 +27,8 @@ import R from "utils/getResponsiveValue";
 import { clone } from "utils/helpers";
 
 // Constants
-import { GENDERS } from "constants/data/user";
 import colors from "constants/colors";
-import MyDatepicker from "../datePicker/MyDatePicker";
+
 
 const testEmail = "martine.bakkergmail.com";
 const testPassword = testEmail;
@@ -45,8 +43,6 @@ export default function SignUp(props) {
 
   const successLogin = useSelector(({ auth }) => auth.loginSuccess);
   const errorLogin = useSelector(({ auth }) => auth.loginError);
-
-  const GENDERS_INITIAL = clone(GENDERS);
 
   const [isLoginPage, setIsLoginPage] = useState(props.isLoginPage);
   const [initialOpacity, setInitialOpacity] = useState(1);
@@ -68,8 +64,7 @@ export default function SignUp(props) {
   const [signUpError, setSignUpError] = useState(false);
 
   // Gender States
-  const [genders, setGenders] = useState([...GENDERS_INITIAL]);
-  const [selectedGender, setSelectedGender] = useState(GENDERS_INITIAL[0]);
+  const [selectedGender, setSelectedGender] = useState({value: ''});
 
   const duration = 0.2;
 
@@ -98,7 +93,6 @@ export default function SignUp(props) {
       fullName &&
       email &&
       selectedGender.value &&
-      selectedGender.value !== GENDERS_INITIAL[0].value &&
       dateOfBirth &&
       password
     ) {
@@ -390,23 +384,21 @@ export default function SignUp(props) {
                     placeholder="Email address"
                     onChange={(v) => setEmail(v)}
                   />
-                  <div className="grid grid-cols-2 gap-[2.4rem]">
-                    <SelectInput
-                      name="gender"
-                      id="gender"
-                      placeholder="Gender"
-                      options={genders}
-                      selectedOption={selectedGender}
-                      default
-                      skipFirstOption={true}
-                      onOptionChange={(option) => setSelectedGender(option)}
-                    />
+                  <Div className="flex items-center justify-center" mb={32}>
+                    <Div w={'50%'} mr={12}>
 
-                    <MyDatepicker
-                        dateOfBirth={dateOfBirth}
-                        setDateOfBirth={(dob) => setDateOfBirth(dob)}
-                    />
-                  </div>
+                      <GenderDropDown
+                          selectedGender={selectedGender}
+                          setSelectedGender={setSelectedGender}
+                      />
+                    </Div>
+                    <Div w={'50%'} ml={12}>
+                      <MyDatepicker
+                          dateOfBirth={dateOfBirth}
+                          setDateOfBirth={(dob) => setDateOfBirth(dob)}
+                      />
+                    </Div>
+                  </Div>
                   <Input
                     value={password}
                     name="password"
@@ -420,7 +412,6 @@ export default function SignUp(props) {
                   />
                 </Div>
               )}
-
               {signUpError && (
                   <Text
                       text={signUpError}

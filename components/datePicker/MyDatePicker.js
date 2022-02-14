@@ -1,20 +1,38 @@
 // Packages
 import React from "react";
-import getYear from "date-fns/getYear";
 import DatePicker from "react-datepicker";
-import getMonth from "date-fns/getYear";
+import getYear from "date-fns/getYear";
+import getMonth from "date-fns/getMonth";
+import range from "lodash/range";
+import "react-datepicker/dist/react-datepicker.css";
 
 // Components
 import Input from "components/inputs/input";
+import Div from "components/html/Div";
+
+// Utils
+import R from "utils/getResponsiveValue";
+
+// Constants
+import colors from "constants/colors";
+
+// Styles
+const getStyles = (R) => {
+    return {
+        select: {
+            background: colors.gallery,
+            cursor: 'pointer'
+        }
+    }
+}
 
 const MyDatepicker = ({
-    dateOfBirth,
-    setDateOfBirth
+  dateOfBirth,
+  setDateOfBirth
 }) => {
-    const range = (start, end) => {
-        return new Array(end - start).fill().map((d, i) => i + start);
-    };
-    const years = range(1990, getYear(new Date()));
+
+    const STYLES = {...getStyles(R)}
+    const years = range(1990, getYear(new Date()) + 1, 1);
     const months = [
         "January",
         "February",
@@ -29,6 +47,7 @@ const MyDatepicker = ({
         "November",
         "December",
     ];
+
     const CustomInputPicker = React.forwardRef(({value, onClick}, ref) => (
         <Input
             value={value}
@@ -40,57 +59,58 @@ const MyDatepicker = ({
             mb={0}
         />
     ));
+
     CustomInputPicker.displayName = "DatePickerInput";
+
     return (
         <DatePicker
-            renderCustomHeader={({
-             date,
-             changeYear,
-             changeMonth,
-             decreaseMonth,
-             increaseMonth,
-             prevMonthButtonDisabled,
-             nextMonthButtonDisabled,
-         }) => (
-                <div
-                    style={{
-                        margin: 10,
-                        display: "flex",
-                        justifyContent: "center",
-                    }}
-                >
-                    <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
-                        {"<"}
-                    </button>
-                    <select
-                        value={getYear(date)}
-                        onChange={({target: {value}}) => changeYear(value)}
-                    >
-                        {years.map((option) => (
-                            <option key={option} value={option}>
-                                {option}
-                            </option>
-                        ))}
-                    </select>
+            renderCustomHeader={(props) => {
 
-                    <select
-                        value={months[getMonth(date)]}
-                        onChange={({target: {value}}) =>
-                            changeMonth(months.indexOf(value))
-                        }
-                    >
-                        {months.map((option) => (
-                            <option key={option} value={option}>
-                                {option}
-                            </option>
-                        ))}
-                    </select>
+                const {
+                    date,
+                    changeYear,
+                    changeMonth,
+                    decreaseMonth,
+                    increaseMonth,
+                    prevMonthButtonDisabled,
+                    nextMonthButtonDisabled,
+                } = props
 
-                    <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
-                        {">"}
-                    </button>
-                </div>
-            )}
+                return (
+                    <Div className={'flex items-center justify-between'} pl={10} pr={10} pb={10}>
+                        <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
+                            {"<"}
+                        </button>
+                        <select
+                            value={getYear(date)}
+                            onChange={({target: {value}}) => changeYear(value)}
+                            style={STYLES.select}
+                        >
+                            {years.map((option) => (
+                                <option key={option} value={option}>
+                                    {option}
+                                </option>
+                            ))}
+                        </select>
+                        <select
+                            value={months[getMonth(date)]}
+                            onChange={({target: {value}}) =>
+                                changeMonth(months.indexOf(value))
+                            }
+                            style={STYLES.select}
+                        >
+                            {months.map((option) => (
+                                <option key={option} value={option}>
+                                    {option}
+                                </option>
+                            ))}
+                        </select>
+                        <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
+                            {">"}
+                        </button>
+                    </Div>
+                )
+            }}
             selected={dateOfBirth}
             onChange={(date) => setDateOfBirth(date)}
             customInput={<CustomInputPicker/>}

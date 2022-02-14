@@ -42,7 +42,7 @@ const POSITIONING = {
     left: v => {
         if(v === 0) {
             return {left: 0}
-        }else if(v > 0) {
+        }else if(v > 0 || v < 0) {
             return {left: R(v)}
         }
         return {}
@@ -51,7 +51,7 @@ const POSITIONING = {
     right: v => {
         if (v === 0) {
             return {right: 0}
-        } else if (v > 0) {
+        } else if (v > 0 || v < 0) {
             return {right: R(v)}
         }
         return {}
@@ -60,7 +60,7 @@ const POSITIONING = {
     top: v => {
         if (v === 0) {
             return {top: 0}
-        } else if (v > 0) {
+        } else if (v > 0 || v < 0) {
             return {top: R(v)}
         }
         return {}
@@ -69,7 +69,7 @@ const POSITIONING = {
     bottom: v => {
         if (v === 0) {
             return {bottom: 0}
-        } else if (v > 0) {
+        } else if (v > 0 || v < 0) {
             return {bottom: R(v)}
         }
         return {}
