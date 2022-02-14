@@ -44,7 +44,7 @@ const PlayerComponent = ({
                 player={player}
                 ciw={18}
                 cih={18}
-                clickedIcon={'close1.png'}
+                clickedIcon={'/images/close1.png'}
                 onIconClick={onDeselectPlayer}
             />
             <PlayerOnPitchText player={player} mt={4}/>

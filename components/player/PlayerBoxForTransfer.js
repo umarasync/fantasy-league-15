@@ -22,7 +22,7 @@ export default function PlayerBoxForTransfer({
                 initialOpacity={initialOpacity}
                 ciw={18}
                 cih={18}
-                clickedIcon={'transfer1.png'}
+                clickedIcon={'/images/transfer1.png'}
                 onIconClick={false}
             />
             <motion.div
