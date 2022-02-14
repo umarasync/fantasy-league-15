@@ -376,6 +376,7 @@ export default function SignUp(props) {
                       setFullName(v);
                     }}
                     value={fullName}
+                    autoCompleteOff
                   />
                   <Input
                     value={email}
@@ -383,6 +384,7 @@ export default function SignUp(props) {
                     id="email"
                     placeholder="Email address"
                     onChange={(v) => setEmail(v)}
+                    autoCompleteOff
                   />
                   <Div className="flex items-center justify-center" mb={32}>
                     <Div w={'50%'} mr={12}>
@@ -409,6 +411,7 @@ export default function SignUp(props) {
                     onChange={(v) => setPassword(v)}
                     onIconClick={() => setIsPasswordType(!isPasswordType)}
                     style={{ paddingRight: R(70) }}
+                    autoCompleteOff
                   />
                 </Div>
               )}

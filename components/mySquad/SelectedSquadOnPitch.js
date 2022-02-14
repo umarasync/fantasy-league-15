@@ -271,37 +271,37 @@ export default function SelectedSquadOnPitch ({
     const getAllPlayersWithBenchBoostApplied = () => {
         return (
             <div style={STYLES.topContainer}>
-                             {/*1*/}
-                             <Div style={STYLES.container}>
-                                 {renderPlayer(p1())}
-                             </Div>
-                             {/*2*/}
-                             <Div style={STYLES.container} mt={24}>
-                                 {renderPlayer(p2())}
-                                 {renderPlayer(p3())}
-                                 {renderPlayer(p4())}
-                             </Div>
-                             {/*3*/}
-                             <Div style={STYLES.container} mt={24}>
-                                 {renderPlayer(p5())}
-                                 {renderPlayer(p6())}
-                                 {renderPlayer(p7())}
-                                 {renderPlayer(p8())}
-                             </Div>
-                             {/*4*/}
-                             <Div style={STYLES.container} mt={24}>
-                                 {renderPlayer(p9())}
-                                 {renderPlayer(p10())}
-                                 {renderPlayer(p11())}
-                             </Div>
-                             {/*5*/}
-                             <Div style={STYLES.container} mt={50}>
-                                 {renderPlayer(p12())}
-                                 {renderPlayer(p13())}
-                                 {renderPlayer(p14())}
-                                 {renderPlayer(p15())}
-                             </Div>
-                         </div>
+                 {/*1*/}
+                 <Div style={STYLES.container}>
+                     {renderPlayer(p1())}
+                     {renderPlayer(p12())}
+                 </Div>
+                 {/*2*/}
+                 <Div style={STYLES.container} mt={24}>
+                     {renderPlayer(p2())}
+                     {renderPlayer(p3())}
+                     {renderPlayer(p4())}
+                 </Div>
+                 {/*3*/}
+                 <Div style={STYLES.container} mt={24}>
+                     {renderPlayer(p5())}
+                     {renderPlayer(p6())}
+                     {renderPlayer(p7())}
+                     {renderPlayer(p8())}
+                 </Div>
+                 {/*4*/}
+                 <Div style={STYLES.container} mt={24}>
+                     {renderPlayer(p9())}
+                     {renderPlayer(p10())}
+                     {renderPlayer(p11())}
+                 </Div>
+                 {/*5*/}
+                 <Div style={STYLES.container} mt={50}>
+                     {renderPlayer(p13())}
+                     {renderPlayer(p14())}
+                     {renderPlayer(p15())}
+                 </Div>
+             </div>
         )
     }
 
