@@ -1,5 +1,5 @@
 // Packages
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 // Components
 import DropDown from "components/dropdowns/DropDown";
@@ -14,7 +14,7 @@ import {GENDERS} from "constants/data/user";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import {clone} from "utils/helpers";
+import {clone, isEmpty} from "utils/helpers";
 
 // Styles
 const getStyles = (R) => {
@@ -40,13 +40,22 @@ const getStyles = (R) => {
     }
 }
 export default function GenderDropDown({
-                                           selectedGender,
+   selectedGender,
    setSelectedGender
 }) {
 
     const STYLES = {...getStyles(R)}
 
     const GENDERS_INITIAL = clone(GENDERS);
+
+    let defaultSelectedState = {}
+
+    if(selectedGender.value === '') {
+        defaultSelectedState = {...GENDERS_INITIAL[0]}
+    }else {
+        defaultSelectedState = {...selectedGender}
+    }
+
     // Gender States
     const [genders, setGenders] = useState([...GENDERS_INITIAL]);
     const [isOpened, setIsOpened] = useState(false);
@@ -122,7 +131,7 @@ export default function GenderDropDown({
             }}
             directionRight={false}
             animationY={'-20px'}
-            selectedObj={selectedGender}
+            defaultSelectedItem={defaultSelectedState}
         />
     )
 }

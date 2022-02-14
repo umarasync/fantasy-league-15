@@ -74,6 +74,7 @@ export default function LeagueSettingsDropDown() {
             data={dropdownData}
             styles={{container: STYLES.container}}
             directionRight
+            defaultSelectedItem={{...DROPDOWN_DATA_INITIAL[0]}}
         />
     )
 }

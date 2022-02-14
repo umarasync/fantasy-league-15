@@ -43,7 +43,9 @@ const getStyles = (R) => {
         }
     }
 }
-export default function ProfileSettingsSideDrawer(){
+export default function ProfileSettingsSideDrawer({
+    containerStyle
+}){
 
     const STYLES = {...getStyles(R)};
 
@@ -66,7 +68,7 @@ export default function ProfileSettingsSideDrawer(){
                             animate={"animate"}
                             exit={"exit"}
                             key={1}
-                            style={STYLES.container}
+                            style={{...STYLES.container, ...containerStyle}}
                             className={'flex flex-col justify-between'}
                         >
                             <Div ml={40} mr={40}>

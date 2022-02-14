@@ -13,6 +13,9 @@ import R from "utils/getResponsiveValue";
 // Constants
 import colors from "constants/colors";
 
+// Utils
+import {isEmpty} from "utils/helpers";
+
 // Styles
 const getStyles = (R) => {
     return {
@@ -43,6 +46,7 @@ export default function DropDown ({
     header,
     li,
     onSelect,
+    defaultSelectedItem,
     // Optional
     directionRight,
     onToggle,
@@ -52,13 +56,12 @@ export default function DropDown ({
         arrowsBox: {}
     },
     animationY = '-50px',
-    selectedObj = {...data[0]},
 }) {
 
     const STYLES = {...getStyles(R)}
 
     const [opened, setOpened] = useState(false)
-    const [selectedItem, setSelectedItem] = useState({...selectedObj})
+    const [selectedItem, setSelectedItem] = useState({...defaultSelectedItem})
 
     const handleHeaderClick = () => {
         setOpened(!opened)

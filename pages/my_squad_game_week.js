@@ -23,15 +23,28 @@ import {
     makeCaptain
 } from "utils/mySquadHelper";
 import {handlePlayerTransfer as HPT, DIAMOND_UP_GREEN} from "utils/mySquadHelper";
+import R from "utils/getResponsiveValue";
 
 // Constants
 import {INITIAL} from "constants/animations";
 import {getCurrentWeekInfo, getPublicLeagues} from "constants/data/leaguesAndRanking";
 import ProfileSettingsSideDrawer from "../components/profileSettings/ProfileSettingsSideDrawer";
 
+// Styles
+const getStyles = (R) => {
+    return {
+        sideDrawerContainer: {
+            paddingBottom: R(100)
+        }
+    }
+}
+
 export default function MySquadGameWeek () {
 
     const router = useRouter()
+
+    const STYLES = {...getStyles(R)}
+
 
     const [pickedPlayers, setPickedPlayers] = useState([])
     const [savedPlayers, setSavedPlayers] = useState([])
@@ -227,7 +240,9 @@ export default function MySquadGameWeek () {
                                 <InfoBoard gameWeekInfo={currentGameWeekInfo}/>
                             )
                         }
-                        <ProfileSettingsSideDrawer/>
+                        <ProfileSettingsSideDrawer
+                            containerStyle={STYLES.sideDrawerContainer}
+                        />
                     </Div>
                 </div>
 
