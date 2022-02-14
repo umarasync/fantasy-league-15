@@ -5,21 +5,22 @@ import {motion, useAnimation} from "framer-motion";
 // Components
 import SelectedPlayerOnPitch from "components/mySquad/SelectedPlayerOnPitch";
 import Div from "components/html/Div";
+import Animated from "components/animation/Animated";
 
 // Utils
 import R from "utils/getResponsiveValue";
 
 // Constants
 import {ZERO, ONE,TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE, THIRTEEN, FOURTEEN} from "constants/arrayIndexes";
+import {ANIMATE, INITIAL} from "constants/animations";
 
 // Animations
 import {Player5Animation, Player6Animation, Player9Animation, Player10Animation, Player11Animation} from "Animations/mySquad/PlayersFormationAnimation";
-import {ANIMATE, INITIAL} from "constants/animations";
-import Animated from "../animation/Animated";
 
 // Styles
 const getStyles = (R) => {
     return {
+        // Styles for Without Bench Boost Applied
         topContainer: {
             paddingTop: R(22)
         },
@@ -36,6 +37,7 @@ const getStyles = (R) => {
             flexFlow: 'row',
             justifyContent: 'center'
         }
+        // Styles if bench Boost applied
     }
 }
 
@@ -49,6 +51,7 @@ export default function SelectedSquadOnPitch ({
 }){
 
     const STYLES =  { ... getStyles(R) }
+
     const controls = useAnimation()
 
     useEffect(() => {
@@ -228,10 +231,9 @@ export default function SelectedSquadOnPitch ({
         )
     }
 
-    
-
-    return(
-        <div style={STYLES.topContainer}>
+    const getAllPlayersWithoutBenchBoostApplied = () => {
+        return (
+            <div style={STYLES.topContainer}>
                              {/*1*/}
                              <Div style={STYLES.container}>
                                  {renderPlayer(p1())}
@@ -263,5 +265,49 @@ export default function SelectedSquadOnPitch ({
                                  {renderPlayer(p15())}
                              </Div>
                          </div>
+        )
+    }
+
+    const getAllPlayersWithBenchBoostApplied = () => {
+        return (
+            <div style={STYLES.topContainer}>
+                             {/*1*/}
+                             <Div style={STYLES.container}>
+                                 {renderPlayer(p1())}
+                             </Div>
+                             {/*2*/}
+                             <Div style={STYLES.container} mt={24}>
+                                 {renderPlayer(p2())}
+                                 {renderPlayer(p3())}
+                                 {renderPlayer(p4())}
+                             </Div>
+                             {/*3*/}
+                             <Div style={STYLES.container} mt={24}>
+                                 {renderPlayer(p5())}
+                                 {renderPlayer(p6())}
+                                 {renderPlayer(p7())}
+                                 {renderPlayer(p8())}
+                             </Div>
+                             {/*4*/}
+                             <Div style={STYLES.container} mt={24}>
+                                 {renderPlayer(p9())}
+                                 {renderPlayer(p10())}
+                                 {renderPlayer(p11())}
+                             </Div>
+                             {/*5*/}
+                             <Div style={STYLES.container} mt={50}>
+                                 {renderPlayer(p12())}
+                                 {renderPlayer(p13())}
+                                 {renderPlayer(p14())}
+                                 {renderPlayer(p15())}
+                             </Div>
+                         </div>
+        )
+    }
+
+    return(
+        <Animated toggleAnimation={!benchBoostApplied} children2={getAllPlayersWithBenchBoostApplied()}>
+            {getAllPlayersWithoutBenchBoostApplied()}
+        </Animated>
     )
 }
