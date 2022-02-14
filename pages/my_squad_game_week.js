@@ -27,6 +27,7 @@ import {handlePlayerTransfer as HPT, DIAMOND_UP_GREEN} from "utils/mySquadHelper
 // Constants
 import {INITIAL} from "constants/animations";
 import {getCurrentWeekInfo, getPublicLeagues} from "constants/data/leaguesAndRanking";
+import ProfileSettingsSideDrawer from "../components/profileSettings/ProfileSettingsSideDrawer";
 
 export default function MySquadGameWeek () {
 
@@ -226,6 +227,7 @@ export default function MySquadGameWeek () {
                                 <InfoBoard gameWeekInfo={currentGameWeekInfo}/>
                             )
                         }
+                        <ProfileSettingsSideDrawer/>
                     </Div>
                 </div>
 

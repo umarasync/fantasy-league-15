@@ -6,11 +6,11 @@ import Div from "components/html/Div";
 import Text from "components/html/Text";
 import BorderHorizontal from "components/borders/BorderHorizontal";
 import Input from "components/inputs/input";
-import SelectInput from "components/inputs/SelectInput";
 import MyDatepicker from "components/datePicker/MyDatePicker";
 import Button from "components/html/Button";
 import Animated from "components/animation/Animated";
 import EditSuccessBox from "components/profileSettings/EditSuccessBox";
+import GenderDropDown from "components/signUp/GenderDropDown";
 
 // Constants
 import {SHADOW_DARK_INDIGO} from "constants/boxShadow";
@@ -26,7 +26,6 @@ export default function EditPersonalInfoSettings() {
 
     const [fullName, setFullName] = useState("");
     const [dateOfBirth, setDateOfBirth] = useState("");
-    const [genders, setGenders] = useState([]);
     const [selectedGender, setSelectedGender] = useState({});
 
     // Success-Box
@@ -43,7 +42,6 @@ export default function EditPersonalInfoSettings() {
     const initialStates = () => {
         setFullName("Martine Bakker")
         setDateOfBirth("")
-        setGenders([...GENDERS_INITIAL])
         setSelectedGender({...GENDERS_INITIAL[1]})
     }
 
@@ -55,7 +53,6 @@ export default function EditPersonalInfoSettings() {
         if (
             fullName &&
             selectedGender.value &&
-            selectedGender.value !== GENDERS_INITIAL[0].value &&
             dateOfBirth
         ) {
             setDisableConfirm(false);
@@ -100,17 +97,11 @@ export default function EditPersonalInfoSettings() {
                         <Div className={'flex items-center justify-between'} mb={32}>
                             <Div w={'50%'} mr={12}>
                                 {
-                                    genders.length > 0 && (
-                                        <SelectInput
-                                            name="gender"
-                                            id="gender"
-                                            placeholder="Gender"
-                                            options={genders}
-                                            selectedOption={selectedGender}
-                                            default
-                                            skipFirstOption={true}
-                                            onOptionChange={(option) => setSelectedGender({...option})}
-                                        />
+                                    !(isEmpty(selectedGender)) && (
+                                        <GenderDropDown
+                                              selectedGender={selectedGender}
+                                              setSelectedGender={setSelectedGender}
+                                          />
                                     )
                                 }
                             </Div>

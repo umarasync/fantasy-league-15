@@ -51,13 +51,14 @@ export default function DropDown ({
         container: {},
         arrowsBox: {}
     },
-    animationY = '-50px'
+    animationY = '-50px',
+    selectedObj = {...data[0]},
 }) {
 
     const STYLES = {...getStyles(R)}
 
     const [opened, setOpened] = useState(false)
-    const [selectedItem, setSelectedItem] = useState({...data[0]})
+    const [selectedItem, setSelectedItem] = useState({...selectedObj})
 
     const handleHeaderClick = () => {
         setOpened(!opened)
