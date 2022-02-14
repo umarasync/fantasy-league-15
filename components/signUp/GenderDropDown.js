@@ -122,6 +122,7 @@ export default function GenderDropDown({
             }}
             directionRight={false}
             animationY={'-20px'}
+            selectedObj={selectedGender}
         />
     )
 }

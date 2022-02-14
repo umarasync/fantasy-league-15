@@ -5,20 +5,25 @@ import {motion, useAnimation} from "framer-motion";
 // Components
 import SelectedPlayerOnPitch from "components/mySquad/SelectedPlayerOnPitch";
 import Div from "components/html/Div";
+import Animated from "components/animation/Animated";
 
 // Utils
 import R from "utils/getResponsiveValue";
 
 // Constants
 import {ZERO, ONE,TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE, THIRTEEN, FOURTEEN} from "constants/arrayIndexes";
+import {ANIMATE, INITIAL} from "constants/animations";
 
 // Animations
 import {Player5Animation, Player6Animation, Player9Animation, Player10Animation, Player11Animation} from "Animations/mySquad/PlayersFormationAnimation";
-import {ANIMATE, INITIAL} from "constants/animations";
 
 // Styles
 const getStyles = (R) => {
     return {
+        // Styles for Without Bench Boost Applied
+        topContainer: {
+            paddingTop: R(22)
+        },
         commonPlayersStyle: {
             minWidth: R(120)
         },
@@ -31,11 +36,8 @@ const getStyles = (R) => {
             display: 'flex',
             flexFlow: 'row',
             justifyContent: 'center'
-        },
-        commonWidth: {
-
         }
-
+        // Styles if bench Boost applied
     }
 }
 
@@ -49,6 +51,7 @@ export default function SelectedSquadOnPitch ({
 }){
 
     const STYLES =  { ... getStyles(R) }
+
     const controls = useAnimation()
 
     useEffect(() => {
@@ -75,175 +78,236 @@ export default function SelectedSquadOnPitch ({
         }
     }
 
-    const p1 = buildPlayer(ZERO)
-    const p2 = buildPlayer(ONE)
-    const p3 = buildPlayer(TWO)
-    const p4 = buildPlayer(THREE)
-    const p5 = buildPlayer(FOUR)
-    const p6 = buildPlayer(FIVE)
-    const p7 = buildPlayer(SIX)
-    const p8 = buildPlayer(SEVEN)
-    const p9 = buildPlayer(EIGHT)
-    const p10 = buildPlayer(NINE)
-    const p11 = buildPlayer(TEN)
-    const p12 = buildPlayer(ELEVEN)
-    const p13 = buildPlayer(TWELVE)
-    const p14 = buildPlayer(THIRTEEN)
-    const p15 = buildPlayer(FOURTEEN)
+// All-Players
+    const p1 = () => {
+        return {
+            animationVariants: null,
+            player: {...buildPlayer(ZERO)},
+            style: {...STYLES.commonPlayersStyle}
+        }
+    }
+
+    const p2 = () => {
+        return {
+            animationVariants: null,
+            player: {...buildPlayer(ONE)},
+            style: {...STYLES.commonPlayersStyle},
+        }
+    }
+
+    const p3 = () => {
+        return {
+            animationVariants: null,
+            player: {...buildPlayer(TWO)},
+            style: {...STYLES.commonPlayersStyle},
+        }
+    }
+
+    const p4 = () => {
+        return {
+            animationVariants: null,
+            player: {...buildPlayer(THREE)},
+            style: {...STYLES.commonPlayersStyle},
+        }
+    }
+
+    const p5 = () => {
+        return {
+            animationVariants: Player5Animation,
+            player: {...buildPlayer(FOUR)},
+            style: {...STYLES.commonPlayersStyle},
+        }
+    }
+
+    const p6 = () => {
+        return {
+            animationVariants: Player6Animation,
+            player: {...buildPlayer(FIVE)},
+            style: {...STYLES.commonPlayersStyle},
+        }
+    }
+
+    const p7 = () => {
+        return {
+            animationVariants: Player6Animation,
+            player: {...buildPlayer(SIX)},
+            style: {
+                ...STYLES.commonPlayersStyle,
+            }
+        }
+    }
+
+    const p8 = () => {
+        return {
+            animationVariants: Player6Animation,
+            player: {...buildPlayer(SEVEN)},
+            style: {...STYLES.commonPlayersStyle,}
+        }
+    }
+
+    const p9 = () => {
+        return {
+            animationVariants: Player9Animation,
+            player: {...buildPlayer(EIGHT)},
+            style: {...STYLES.commonPlayersStyle1,}
+        }
+    }
+    const p9type1 = (payload) => {
+        return {
+            animationVariants: Player9Animation,
+            player: {...buildPlayer(EIGHT)},
+            style: {...STYLES.commonPlayersStyle1,},
+            ...payload
+        }
+    }
+
+    const p10 = () => {
+        return {
+            animationVariants: Player10Animation,
+            player: {...buildPlayer(NINE)},
+            style: {...STYLES.commonPlayersStyle1,}
+        }
+    }
+
+    const p11 = () => {
+        return {
+            animationVariants: Player11Animation,
+            player: {...buildPlayer(TEN)},
+            style: {...STYLES.commonPlayersStyle1,}
+        }
+    }
+
+    const p12 = () => {
+        return {
+            animationVariants: null,
+            player: {...buildPlayer(ELEVEN)},
+            style: {...STYLES.commonPlayersStyle,}
+        }
+    }
+
+    const p13 = () => {
+        return {
+            animationVariants: null,
+            player: {...buildPlayer(TWELVE)},
+            style: {...STYLES.commonPlayersStyle,}
+        }
+    }
+
+    const p14 = () => {
+        return {
+            animationVariants: null,
+            player: {...buildPlayer(THIRTEEN)},
+            style: {...STYLES.commonPlayersStyle,}
+        }
+    }
+
+    const p15 = () => {
+        return {
+            animationVariants: null,
+            player: {...buildPlayer(FOURTEEN)},
+            style: {...STYLES.commonPlayersStyle,}
+        }
+    }
+
+    // Player-JSX
+    const renderPlayer = (props) => {
+        const {
+            animationVariants,
+            player,
+            style,
+        } = props
+
+        return (
+            <motion.div variants={animationVariants} animate={controls}>
+                <SelectedPlayerOnPitch
+                    player={player}
+                    changed={player.animationState}
+                    style={{
+                        ...style,
+                        opacity: player.opacity,
+                    }}
+                />
+            </motion.div>
+        )
+    }
+
+    const getAllPlayersWithoutBenchBoostApplied = () => {
+        return (
+            <div style={STYLES.topContainer}>
+                             {/*1*/}
+                             <Div style={STYLES.container}>
+                                 {renderPlayer(p1())}
+                             </Div>
+                             {/*2*/}
+                             <Div style={STYLES.container} mt={24}>
+                                 {renderPlayer(p2())}
+                                 {renderPlayer(p3())}
+                                 {renderPlayer(p4())}
+                             </Div>
+                             {/*3*/}
+                             <Div style={STYLES.container} mt={24}>
+                                 {renderPlayer(p5())}
+                                 {renderPlayer(p6())}
+                                 {renderPlayer(p7())}
+                                 {renderPlayer(p8())}
+                             </Div>
+                             {/*4*/}
+                             <Div style={STYLES.container} mt={24}>
+                                 {renderPlayer(p9())}
+                                 {renderPlayer(p10())}
+                                 {renderPlayer(p11())}
+                             </Div>
+                             {/*5*/}
+                             <Div style={STYLES.container} mt={50}>
+                                 {renderPlayer(p12())}
+                                 {renderPlayer(p13())}
+                                 {renderPlayer(p14())}
+                                 {renderPlayer(p15())}
+                             </Div>
+                         </div>
+        )
+    }
+
+    const getAllPlayersWithBenchBoostApplied = () => {
+        return (
+            <div style={STYLES.topContainer}>
+                 {/*1*/}
+                 <Div style={STYLES.container}>
+                     {renderPlayer(p1())}
+                     {renderPlayer(p12())}
+                 </Div>
+                 {/*2*/}
+                 <Div style={STYLES.container} mt={24}>
+                     {renderPlayer(p2())}
+                     {renderPlayer(p3())}
+                     {renderPlayer(p4())}
+                 </Div>
+                 {/*3*/}
+                 <Div style={STYLES.container} mt={24}>
+                     {renderPlayer(p5())}
+                     {renderPlayer(p6())}
+                     {renderPlayer(p7())}
+                     {renderPlayer(p8())}
+                 </Div>
+                 {/*4*/}
+                 <Div style={STYLES.container} mt={24}>
+                     {renderPlayer(p9())}
+                     {renderPlayer(p10())}
+                     {renderPlayer(p11())}
+                 </Div>
+                 {/*5*/}
+                 <Div style={STYLES.container} mt={50}>
+                     {renderPlayer(p13())}
+                     {renderPlayer(p14())}
+                     {renderPlayer(p15())}
+                 </Div>
+             </div>
+        )
+    }
 
     return(
-        <div style={{paddingTop: R(22)}}>
-            {/*1*/}
-            <Div style={STYLES.container}>
-                <SelectedPlayerOnPitch
-                    player={p1}
-                    changed={p1.animationState}
-                    style={{
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p1.opacity
-                    }}
-                />
-            </Div>
-            {/*2*/}
-            <Div style={STYLES.container} mt={24}>
-                <SelectedPlayerOnPitch
-                    player={p2}
-                    changed={p2.animationState}
-                    style={{
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p2.opacity
-                    }}
-                />
-                <SelectedPlayerOnPitch
-                    player={p3}
-                    changed={p3.animationState}
-                    style={{
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p3.opacity
-                    }}
-                />
-                    <SelectedPlayerOnPitch
-                        player={p4}
-                        changed={p4.animationState}
-                        style={{
-                            ...STYLES.commonPlayersStyle,
-                            opacity: p4.opacity
-                        }}
-                    />
-            </Div>
-            {/*3*/}
-            <Div style={STYLES.container} mt={24}>
-                <motion.div variants={Player5Animation} animate={controls}>
-                    <SelectedPlayerOnPitch
-                        player={p5}
-                        changed={p5.animationState}
-                        style={{
-                            ...STYLES.commonPlayersStyle,
-                            opacity: p5.opacity
-                        }}
-                    />
-                </motion.div>
-                <motion.div variants={Player6Animation} animate={controls}>
-                    <SelectedPlayerOnPitch
-                        player={p6}
-                        changed={p6.animationState}
-                        style={{
-                            ...STYLES.commonPlayersStyle,
-                            opacity: p6.opacity
-                        }}
-                    />
-                </motion.div>
-                <motion.div variants={Player6Animation} animate={controls}>
-                    <SelectedPlayerOnPitch
-                        player={p7}
-                        changed={p7.animationState}
-                        style={{
-                            ...STYLES.commonPlayersStyle,
-                            opacity: p7.opacity
-                        }}
-                    />
-                </motion.div>
-                <motion.div variants={Player6Animation} animate={controls}>
-                    <SelectedPlayerOnPitch
-                        player={p8}
-                        changed={p8.animationState}
-                        style={{
-                            ...STYLES.commonPlayersStyle,
-                            opacity: p8.opacity
-                        }}
-                    />
-                </motion.div>
-            </Div>
-            {/*4*/}
-            <Div style={STYLES.container} mt={24}>
-                <motion.div variants={Player9Animation} animate={controls}>
-                    <SelectedPlayerOnPitch
-                        player={p9}
-                        changed={p9.animationState}
-                        style={{
-                            ...STYLES.commonPlayersStyle1,
-                            opacity: p9.opacity
-                        }}
-                    />
-                </motion.div>
-
-                <motion.div variants={Player10Animation} animate={controls}>
-                    <SelectedPlayerOnPitch
-                        player={p10}
-                        changed={p10.animationState}
-                        style={{
-                            ...STYLES.commonPlayersStyle1,
-                            opacity: p10.opacity
-                        }}
-                    />
-                </motion.div>
-
-                <motion.div variants={Player11Animation} animate={controls}>
-                    <SelectedPlayerOnPitch
-                        player={p11}
-                        changed={p11.animationState}
-                        style={{
-                            ...STYLES.commonPlayersStyle1,
-                            opacity: p11.opacity
-                        }}
-                    />
-                </motion.div>
-            </Div>
-            {/*5*/}
-            <Div style={STYLES.container} mt={50}>
-                <SelectedPlayerOnPitch
-                    player={p12}
-                    changed={p12.animationState}
-                    style={{
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p12.opacity
-                    }}
-                />
-                <SelectedPlayerOnPitch
-                    player={p13}
-                    changed={p13.animationState}
-                    style={{
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p13.opacity
-                    }}
-                />
-                <SelectedPlayerOnPitch
-                    player={p14}
-                    changed={p14.animationState}
-                    style={{
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p14.opacity
-                    }}
-                />
-                <SelectedPlayerOnPitch
-                    player={p15}
-                    changed={p15.animationState}
-                    style={{
-                        ...STYLES.commonPlayersStyle,
-                        opacity: p15.opacity
-                    }}
-                />
-            </Div>
-        </div>
+        <Animated toggleAnimation={!benchBoostApplied} children2={getAllPlayersWithBenchBoostApplied()}>
+            {getAllPlayersWithoutBenchBoostApplied()}
+        </Animated>
     )
 }

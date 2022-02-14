@@ -18,6 +18,9 @@ const getStyles = (R) => {
         backgroundSlider: {
             backgroundColor: colors.white,
             borderRadius: R(100)
+        },
+        container: {
+            zIndex: 0
         }
     }
 }
@@ -44,8 +47,8 @@ export default function MySquadFilterButtons({
     }
 
     return (
-        <Div center mt={64} >
-            <Div className={'bg-red-200 inline-flex relative'} br={100} bg={colors.gloomy_blue}>
+        <Div center mt={64}>
+            <Div className={'bg-red-200 inline-flex relative'} br={100} bg={colors.gloomy_blue} style={STYLES.container}>
                 <div
                     style={STYLES.backgroundSlider}
                     className={`w-1/3 top-0 absolute h-full duration-200 transition-all ${leftOffsets[clickedButton]}`}

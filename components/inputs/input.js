@@ -63,7 +63,7 @@ export default function Input (props) {
         value,
         onKeyDown = (v) => false,
         ref=null,
-        autocomplete='off'
+        autoCompleteOff
     } = props
 
     const [focused, setFocused] = useState(false)
@@ -98,7 +98,7 @@ export default function Input (props) {
             )}
 
         <input
-            autoComplete={autocomplete}
+            autoComplete={autoCompleteOff ? 'off' : 'on'}
             placeholder={placeholder}
             type={type}
             name={name}
