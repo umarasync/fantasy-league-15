@@ -1,5 +1,5 @@
 // Packages
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
@@ -24,19 +24,16 @@ import { RESET_PAGE } from "redux/Auth/actions";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import { clone } from "utils/helpers";
 
 // Constants
 import colors from "constants/colors";
 
-
-const testEmail = "martine.bakkergmail.com";
-const testPassword = testEmail;
+// Animation
+import {signupHeadingAnimation} from "Animations/signUp/SignupAnimation";
 
 export default function SignUp(props) {
   const router = useRouter();
   const dispatch = useDispatch();
-
   
   const successSignUp = useSelector(({ auth }) => auth.signUpSuccess);
   const errorSignUp = useSelector(({ auth }) => auth.signUpError);
@@ -45,7 +42,6 @@ export default function SignUp(props) {
   const errorLogin = useSelector(({ auth }) => auth.loginError);
 
   const [isLoginPage, setIsLoginPage] = useState(props.isLoginPage);
-  const [initialOpacity, setInitialOpacity] = useState(1);
   const [disabled, setDisabled] = useState(true);
   const [isPasswordType, setIsPasswordType] = useState(true);
   const [email, setEmail] = useState("");
@@ -65,27 +61,6 @@ export default function SignUp(props) {
 
   // Gender States
   const [selectedGender, setSelectedGender] = useState({value: ''});
-
-  const duration = 0.2;
-
-  const fadeInOutAnimation = {
-    initial: {
-      opacity: initialOpacity, // Starting point we set initial opacity in state, so that on initial render it is one, but after the subsequent click we want it to be 0, to have fade in effect
-    },
-    animate: {
-      opacity: 1,
-      transition: {
-        duration: duration,
-      },
-    },
-    exit: {
-      opacity: 0,
-      transition: {
-        duration: duration,
-      },
-    },
-  };
-
 
   /*** Sign Up Flow:Starts ****/
   const validateSignUp = () => {
@@ -146,19 +121,13 @@ export default function SignUp(props) {
       password: loginPassword,
     };
     dispatch(loginUser(loginObj));
-    // if (loginEmail === testEmail && loginPassword === testPassword) {
-    //   setError(false);
-    //   router.push("/select_club");
-    // } else {
-    //   setError(true);
-    // }
   };
 
   useEffect(() => {
     //Login Query API response
     if (successLogin) {
       setError(false);
-      toast.success("Login successfull! Redirecting...", {
+      toast.success("Login successfully! Redirecting...", {
         onClose: () => router.push("/select_club"),
       });
     } else if (errorLogin) {
@@ -201,11 +170,6 @@ export default function SignUp(props) {
     loginPassword,
   ]);
 
-  useEffect(() => {
-    if (initialOpacity) {
-      setInitialOpacity(0);
-    }
-  }, [isLoginPage]);
 
   return (
     <Layout title="Sign Up">
@@ -252,7 +216,7 @@ export default function SignUp(props) {
                 <AnimatePresence>
                   <motion.p
                     className="in-up"
-                    variants={fadeInOutAnimation}
+                    variants={signupHeadingAnimation()}
                     initial="initial"
                     animate="animate"
                     exit="exit"
@@ -267,7 +231,7 @@ export default function SignUp(props) {
                 <AnimatePresence>
                   <motion.p
                     className="in-up"
-                    variants={fadeInOutAnimation}
+                    variants={signupHeadingAnimation()}
                     initial="initial"
                     animate="animate"
                     exit="exit"
@@ -285,7 +249,7 @@ export default function SignUp(props) {
                 <AnimatePresence>
                   <motion.p
                     className="absolute signup-heading"
-                    variants={fadeInOutAnimation}
+                    variants={signupHeadingAnimation()}
                     initial="initial"
                     animate="animate"
                     exit="exit"
@@ -299,7 +263,7 @@ export default function SignUp(props) {
                 <AnimatePresence>
                   <motion.p
                     className="absolute signup-heading"
-                    variants={fadeInOutAnimation}
+                    variants={signupHeadingAnimation()}
                     initial="initial"
                     animate="animate"
                     exit="exit"

@@ -8,7 +8,7 @@ export default gql`
       profile {
         id
         dob
-        fullName
+#        fullName
         gender
         fantasyTeams {
           id
