@@ -20,8 +20,8 @@ import { getAllTeams, addFavouriteTeam } from "redux/Teams/api";
 import R from "utils/getResponsiveValue";
 
 // Constants
-// import cardsDataI from "constants/data/cardsData";
 import colors from "constants/colors";
+// import cardsDataI from "constants/data/cardsData";
 
 // Styles
 const getStyles = (R) => {
@@ -74,6 +74,7 @@ export default function SelectClub() {
   }, []);
 
   useEffect(() => {
+
     if (teamsData) {
       setCardsDataI(
         teamsData.map((Teams, i) => {
@@ -94,12 +95,14 @@ export default function SelectClub() {
     }
   }, [teamsData]);
 
+
   useEffect(() => {
     if (teamsData) {
       setCardsData(cardsDataI);
       setCardsNextData(cardsDataI);
     }
   }, [cardsDataI]);
+
 
   useEffect(() => {
     //Mutation API response

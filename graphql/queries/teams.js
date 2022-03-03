@@ -5,7 +5,6 @@ export default gql`
     teams(_first: 100, _offset: 0) {
       data {
         id
-        officalName
         logo
         venue
       }

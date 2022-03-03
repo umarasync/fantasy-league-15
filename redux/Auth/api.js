@@ -69,7 +69,9 @@ export const createUser = (data) => {
           data: {
             dob: isoDate,
             favouriteTeamId: null,
-            fullName: data.fullName,
+            // fullName: data.fullName,
+            firstName: data.fullName,
+            lastName: data.fullName,
             gender: data.gender,
             password: data.password,
             username: data.email,

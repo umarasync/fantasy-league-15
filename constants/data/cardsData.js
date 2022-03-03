@@ -1,7 +1,7 @@
 const cardsData = [
     {
         image: {
-            name: 'gronigen.png',
+            name: '/images/gronigen.png',
         },
         heading: {
             title: 'FEYENOORD',
@@ -12,7 +12,7 @@ const cardsData = [
     },
     {
         image: {
-            name: 'fortuna.png',
+            name: '/images/fortuna.png',
         },
         heading: {
             title: 'FORTUNA SITTARD',
@@ -23,7 +23,7 @@ const cardsData = [
     },
     {
         image: {
-            name: 'sparta.png',
+            name: '/images/sparta.png',
         },
         heading: {
             title: 'ajax',
@@ -34,7 +34,7 @@ const cardsData = [
     },
     {
         image: {
-            name: 'fortuna.png'
+            name: '/images/fortuna.png'
         },
         heading: {
             title: 'SPARTA ROTTERDAM',
@@ -45,7 +45,7 @@ const cardsData = [
     },
     {
         image: {
-            name: 'sparta.png'
+            name: '/images/sparta.png'
         },
         heading: {
             title: 'Groningen'
