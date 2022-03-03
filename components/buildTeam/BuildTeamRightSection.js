@@ -42,8 +42,6 @@ export default function BuildTeamRightSection({
     // Positions
     activePosition,
     setActivePosition,
-    // Initial-Opacity
-    initialOpacity,
     // Clubs
     selectedClubs,
     clubs,
@@ -140,7 +138,6 @@ export default function BuildTeamRightSection({
                             initial="initial"
                             animate="animate"
                             exit="exit"
-                            custom={{initialOpacity}}
                             className={'absolute w-full'}
                             style={STYLES.allFiltersBox}
                         >

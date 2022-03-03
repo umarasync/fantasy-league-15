@@ -1,16 +1,18 @@
 // Packages
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 
 // Components
 import BuildTeamPlayers from "components/layout/BuildTeamPlayers";
 
 // Constants
-import  { PLAYERS } from "constants/data/players"
 import {CLUBS} from "constants/data/filters";
 
 // Redux
 import {getPlayers} from "redux/Players/api";
+
+// Loaders
+import Loader from "components/loaders/Loader";
 
 export default function (){
 
@@ -24,8 +26,7 @@ export default function (){
       dispatch(getPlayers(50, 0, { teamId: { eq: "" } }, { value: "DESC" }));
     }, []);
 
-
-    if(!playersData) return null
+    if(!playersData) return (<Loader/>)
 
     return (
         <BuildTeamPlayers

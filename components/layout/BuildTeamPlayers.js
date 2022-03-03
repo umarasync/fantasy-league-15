@@ -38,10 +38,8 @@ import {
 } from "constants/data/filters";
 
 import {
-    ALL_PLAYERS_INDEXES,
     SELECTED_PLAYERS
 } from "constants/data/players";
-import  { PLAYERS } from "constants/data/players"
 
 export default function BuildTeamPlayers ({
     players: $players,
@@ -51,9 +49,9 @@ export default function BuildTeamPlayers ({
     const router= useRouter()
 
     // Initial States
+
     const CLUBS_INITIAL = clone($clubs)
     const PLAYERS_INITIAL = clone($players)
-
     const PRICES_INITIAL = clone(PRICES)
     const STATUSES_INITIAL = clone(STATUSES)
     const RECOMMENDATIONS_INITIAL = clone(RECOMMENDATIONS)
@@ -114,9 +112,6 @@ export default function BuildTeamPlayers ({
 
     const [showTransferWindowModal, setShowTransferWindowModal] = useState(false)
 
-    // Opacity-State
-    const [initialOpacity, setInitialOpacity] = useState(1)
-
     // Initial Settings for Build Your Team & Transfer windows
     const initiateInitialSettings = () => {
         const teamData = JSON.parse(localStorage.getItem('teamData'))
@@ -175,7 +170,9 @@ export default function BuildTeamPlayers ({
 
     // Filters-And-Sorting
     const runFiltersOnPlayersData = () => {
-        
+
+        console.log('in runFiltersOnPlayersData', playersDataInitial)
+
         let $playersData = [ ...playersDataInitial ]
 
         $playersData = $playersData.filter(player => {
@@ -197,17 +194,12 @@ export default function BuildTeamPlayers ({
         setPlayersData([...$playersData])
     }
 
-    // Initialize-Opacity
-    const initialOpacityHandler = () => {
-        if (initialOpacity) {
-            setInitialOpacity(0)
-        }
-    }
-
     useEffect(() => {
             runFiltersOnPlayersData()
-            initialOpacityHandler()
-    }, [clubs, playersDataInitial, statuses, selectedRecommendation, selectedPrice, activePosition, selectedSortingOption, playersDataInitial])
+    }, [clubs, statuses, selectedRecommendation, selectedPrice, activePosition, selectedSortingOption,
+
+        // playersDataInitial
+    ])
 
 
     // Player-Selection
@@ -330,7 +322,6 @@ export default function BuildTeamPlayers ({
             players: playersI
         } = handleAutoPick({
             players: PLAYERS_INITIAL,
-            allPlayersObjectIndexes: ALL_PLAYERS_INDEXES,
             totalBudget: TOTAL_BUDGET
         })
 
@@ -338,20 +329,21 @@ export default function BuildTeamPlayers ({
         setRemainingBudget(remainingBudget)
         setTotalChosenPlayers(totalChosenPlayersI)
         setPlayersDataInitial(playersI)
+        setPlayersData(playersI)
 
         setAutoPickDisabled(true)
         setResetDisabled(false)
     }
 
     const handleResetClick = () => {
-        setPickedPlayers(SELECTED_PLAYERS_INITIAL)
+        setPickedPlayers({...SELECTED_PLAYERS_INITIAL})
         setTotalChosenPlayers(0)
         setRemainingBudget(totalBudget)
         setAutoPickDisabled(false)
         setResetDisabled(true)
         setContinueDisabled(true)
-        setPlayersData(PLAYERS_INITIAL)
-        setPlayersDataInitial(PLAYERS_INITIAL)
+        setPlayersData([...PLAYERS_INITIAL])
+        setPlayersDataInitial([...PLAYERS_INITIAL])
     }
 
     const sendToServer = () => {
@@ -400,8 +392,6 @@ export default function BuildTeamPlayers ({
                             // Positions
                             activePosition={activePosition}
                             setActivePosition={setActivePosition}
-                            // Initial-Opacity
-                            initialOpacity={initialOpacity}
                             // Clubs
                             selectedClubs={selectedClubs}
                             clubs={clubs}

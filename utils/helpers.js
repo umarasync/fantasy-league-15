@@ -31,7 +31,10 @@ export const nFormatterWOSign = (n) => {
     return `${convertToInternationalCurrencySystem(n)}`
 }
 
-export const clone = (v) => JSON.parse(JSON.stringify(v))
+export const clone = (v) => {
+    console.log('2==============', v)
+    return  JSON.parse(JSON.stringify(v))
+}
 
 export const shuffle = (a) => {
     for (let i = a.length - 1; i > 0; i--) {

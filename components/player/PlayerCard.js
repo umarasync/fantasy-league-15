@@ -61,7 +61,9 @@ export default function PlayerCard (props){
     const {player, onSelectPlayer} = props
     const [chosen, setChosen] = useState(false)
 
-    const selected = chosen || hover
+    // const selected = chosen || hover
+
+    const selected = chosen
 
     const STYLES =  { ...getStyles(R, { ...props, selected}) }
 
