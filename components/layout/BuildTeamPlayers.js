@@ -193,9 +193,7 @@ export default function BuildTeamPlayers ({
 
     useEffect(() => {
             runFiltersOnPlayersData()
-    }, [clubs, statuses, selectedRecommendation, selectedPrice, activePosition, selectedSortingOption,
-
-        playersDataInitial
+    }, [clubs, statuses, selectedRecommendation, selectedPrice, activePosition, selectedSortingOption,playersDataInitial
     ])
 
     // Player-Selection
@@ -337,7 +335,6 @@ export default function BuildTeamPlayers ({
         setAutoPickDisabled(false)
         setResetDisabled(true)
         setContinueDisabled(true)
-        setPlayersData([...PLAYERS_INITIAL])
         setPlayersDataInitial([...PLAYERS_INITIAL])
     }
 
