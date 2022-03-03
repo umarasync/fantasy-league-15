@@ -105,8 +105,8 @@ export default function BuildTeamRightSection({
         <div className={'relative'} style={{width: R(488), paddingTop: R(35)}}>
             {/*username*/}
             <div className={'flex flex-row-reverse'} style={{marginBottom: R(46)}}>
-                <Username username={user.username}/>
-
+                {/*<Username username={user.username}/>*/}
+                <Username username={'john doe'}/>
             </div>
 
             {/*search*/}

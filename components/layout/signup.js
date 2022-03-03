@@ -19,7 +19,7 @@ import MyDatepicker from "components/datePicker/MyDatePicker";
 import GenderDropDown from "components/signUp/GenderDropDown";
 
 // Redux
-import { createUser, loginUser } from "redux/Auth/api";
+import { signup, login } from "redux/Auth/api";
 import { RESET_PAGE } from "redux/Auth/actions";
 
 // Utils
@@ -30,6 +30,7 @@ import colors from "constants/colors";
 
 // Animation
 import {signupHeadingAnimation} from "Animations/signUp/SignupAnimation";
+import Animated from "../animation/Animated";
 
 export default function SignUp(props) {
   const router = useRouter();
@@ -38,7 +39,7 @@ export default function SignUp(props) {
   const successSignUp = useSelector(({ auth }) => auth.signUpSuccess);
   const errorSignUp = useSelector(({ auth }) => auth.signUpError);
 
-  const successLogin = useSelector(({ auth }) => auth.loginSuccess);
+  const user = useSelector(({ auth }) => auth.user);
   const errorLogin = useSelector(({ auth }) => auth.loginError);
 
   const [isLoginPage, setIsLoginPage] = useState(props.isLoginPage);
@@ -86,7 +87,7 @@ export default function SignUp(props) {
       dob: dateOfBirth,
       password: password,
     };
-    dispatch(createUser(userObj));
+    dispatch(signup(userObj));
   };
 
   useEffect(() => {
@@ -120,12 +121,11 @@ export default function SignUp(props) {
       email: loginEmail,
       password: loginPassword,
     };
-    dispatch(loginUser(loginObj));
+    dispatch(login(loginObj));
   };
 
   useEffect(() => {
-    //Login Query API response
-    if (successLogin) {
+    if (user) {
       setError(false);
       toast.success("Login successfully! Redirecting...", {
         onClose: () => router.push("/select_club"),
@@ -139,8 +139,8 @@ export default function SignUp(props) {
           }),
       });
     }
-  }, [successLogin, errorLogin]);
-  /*** Sign Up Flow:Ends ****/
+  }, [user, errorLogin]);
+  /*** Sign In Flow:Ends ****/
 
   const validate = () => {
     if (isLoginPage) {
@@ -210,38 +210,20 @@ export default function SignUp(props) {
             <Image src={'/images/fantasy_15.png'} alt={''} w={107} h={26} mb={40}/>
 
             <Div className="flex justify-center relative" mb={20}>
-              <Text fs={32}  lh={40} text={'sign'} tt={'uppercase'} fst={'italic'} fw={800} ml={-50} color={colors.black_rock}/>
-
-              {isLoginPage ? (
-                <AnimatePresence>
-                  <motion.p
-                    className="in-up"
-                    variants={signupHeadingAnimation()}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    key={1} // This key thing is important for simultaneous fadein & fadeout
-                  >
-                    <Text fs={32} lh={40} text={'IN'} tt={'uppercase'} fst={'italic'} fw={800}
-                          color={colors.black_rock}/>
-
-                  </motion.p>
-                </AnimatePresence>
-              ) : (
-                <AnimatePresence>
-                  <motion.p
-                    className="in-up"
-                    variants={signupHeadingAnimation()}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    key={2}
-                  >
-                    <Text fs={32} lh={40} text={'up'} tt={'uppercase'} fst={'italic'} fw={800}
-                          color={colors.black_rock}/>
-                  </motion.p>
-                </AnimatePresence>
-              )}
+              <Text fs={32}  lh={40} text={'sign'} tt={'uppercase'} fst={'italic'} fw={800} color={colors.black_rock}/>
+              <Animated toggleAnimation={isLoginPage} animationSpeed={0.2}>
+                  <Text
+                      w={50}
+                      fs={32}
+                      lh={40}
+                      text={`${isLoginPage ? 'IN': 'UP'}`}
+                      tt={'uppercase'}
+                      fst={'italic'}
+                      fw={800}
+                      color={colors.black_rock}
+                      ml={7}
+                  />
+              </Animated>
             </Div>
 
             <Div className="flex justify-center relative w-full" mb={55}>

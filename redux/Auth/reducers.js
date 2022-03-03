@@ -15,7 +15,6 @@ import {
 function authReducer(
   state = {
     loading: false,
-    loginSuccess: "",
     loginError: "",
     signUpSuccess: "",
     signUpError: "",
@@ -25,7 +24,7 @@ function authReducer(
     resetRequestError:"",
     resetPasswordSuccess:"",
     resetPasswordError:"",
-    user: {},
+    user: null,
   },
   action
 ) {
@@ -34,7 +33,7 @@ function authReducer(
       return {
         ...state,
         loading: false,
-        loginSuccess: action.payload,
+        user: { ...action.payload },
       };
     case LOGIN_FAILED:
       return {
@@ -93,7 +92,6 @@ function authReducer(
     case RESET_PAGE:
       return {
         loading: false,
-        loginSuccess: "",
         loginError: "",
         signUpSuccess: "",
         signUpError: "",
@@ -103,7 +101,7 @@ function authReducer(
         resetRequestError:"",
         resetPasswordSuccess:"",
         resetPasswordError:"",
-        user: {},
+        user: null,
       };
     default:
       return state;

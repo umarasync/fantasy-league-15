@@ -15,6 +15,7 @@ import Image from "components/html/Image";
 import Text from "components/html/Text";
 
 import { getAllTeams, addFavouriteTeam } from "redux/Teams/api";
+import { me } from "redux/Auth/api";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -71,6 +72,7 @@ export default function SelectClub() {
   useEffect(() => {
     //Query API
     dispatch(getAllTeams());
+    dispatch(me());
   }, []);
 
   useEffect(() => {
@@ -84,7 +86,7 @@ export default function SelectClub() {
               name: Teams.logo,
             },
             heading: {
-              title: Teams.officalName,
+              title: Teams.name,
             },
             subHeading: {
               title: Teams.venue,

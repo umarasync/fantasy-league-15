@@ -19,8 +19,12 @@ import DO_SIGNUP from "graphql/mutations/createProfile";
 import CONFIRM_EMAIL from "graphql/mutations/emailConfirmation";
 import RESET_REQUEST from "graphql/mutations/resetPasswordRequest";
 import UPDATE_PASSWORD from "graphql/mutations/updatePassword";
+import ME from "graphql/queries/me";
+import {signupSuccess, signupFailed, loginSuccess, loginFailed} from "./actionCreators";
+import GET_ALL_TEAMS from "../../graphql/queries/teams";
+import {GET_ALL_TEAMS_FAILED, GET_ALL_TEAMS_SUCCESS} from "../Teams/actions";
 
-export const loginUser = (data) => {
+export const login = (data) => {
   return async (dispatch) => {
     try {
       const apolloClient = createApolloClient();
@@ -28,22 +32,15 @@ export const loginUser = (data) => {
         mutation: DO_LOGIN,
         variables: { username: data.email, password: data.password },
       });
-      console.log(result);
+
       if (result && result.data.login != null) {
         //Store data for processing
         localStorage.setItem("user", JSON.stringify(result.data.login));
-        dispatch({
-          type: LOGIN_SUCCESS,
-          loading: false,
-          payload: result.data.login,
-        });
-      } else {
-        dispatch({
-          type: LOGIN_FAILED,
-          loading: false,
-          payload: result.data.errors[0].message,
-        });
+        return dispatch(loginSuccess(result.data.login));
       }
+
+      dispatch(loginFailed(result.data.errors[0].message))
+
     } catch (e) {
       console.log(e.message);
       dispatch({
@@ -57,11 +54,12 @@ export const loginUser = (data) => {
   };
 };
 
-export const createUser = (data) => {
+export const signup = (data) => {
   return async (dispatch) => {
     try {
       const d = data.dob;
       let isoDate = d.toISOString();
+
       const apolloClient = createApolloClient();
       const result = await apolloClient.mutate({
         mutation: DO_SIGNUP,
@@ -69,36 +67,19 @@ export const createUser = (data) => {
           data: {
             dob: isoDate,
             favouriteTeamId: null,
-            // fullName: data.fullName,
-            firstName: data.fullName,
-            lastName: data.fullName,
+            fullName: data.fullName,
             gender: data.gender,
             password: data.password,
             username: data.email,
           },
         },
       });
-      console.log(result);
-      if (result && result.data.createProfile != null) {
-        dispatch({
-          type: SIGNUP_SUCCESS,
-          loading: false,
-          payload: result.data.createProfile,
-        });
-      } else {
-        dispatch({
-          type: SIGNUP_FAILED,
-          loading: false,
-          payload: result.data.errors[0].message,
-        });
+      if (result && result.data.createProfile !== null) {
+       return  dispatch(signupSuccess(result.data.createProfile))
       }
+      dispatch(signupFailed(result.data.errors[0].message))
     } catch (e) {
-      console.log(e.message);
-      dispatch({
-        type: SIGNUP_FAILED,
-        loading: false,
-        payload: e.message,
-      });
+      dispatch(signupFailed(e.message))
     }
   };
 };
@@ -211,6 +192,22 @@ export const updatePassword = (data) => {
         loading: false,
         payload: e.message,
       });
+    }
+  };
+};
+
+export const me = () => {
+  console.log('3--------');
+  return async (dispatch) => {
+    try {
+      const apolloClient = createApolloClient();
+      const result = await apolloClient.query({
+        query: ME,
+        variables: {},
+      });
+      console.log('2========== ME',result);
+    } catch (e) {
+      console.log("Response Error: ============", e.message);
     }
   };
 };
