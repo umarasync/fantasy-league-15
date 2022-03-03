@@ -1,9 +1,9 @@
-import axios from "utils/axiosInstance";
+// Packages
+import { createApolloClient } from "graphql/apollo";
+
+// Actions
 import {
-  SIGNUP_FAILED,
-  SIGNUP_SUCCESS,
   LOGIN_FAILED,
-  LOGIN_SUCCESS,
   CONFIRMATION_FAILED,
   CONFIRMATION_SUCCESS,
   RESET_PASSWORD_REQUEST_FAILED,
@@ -11,19 +11,21 @@ import {
   RESET_PASSWORD_FAILED,
   RESET_PASSWORD_SUCCESS,
   RESET_PAGE,
-} from "./actions";
+  signupSuccess,
+  signupFailed,
+  loginSuccess,
+  loginFailed
+} from "./actionCreators";
 
-import { createApolloClient } from "graphql/apollo";
+// GraphQL
 import DO_LOGIN from "graphql/mutations/login";
 import DO_SIGNUP from "graphql/mutations/createProfile";
 import CONFIRM_EMAIL from "graphql/mutations/emailConfirmation";
 import RESET_REQUEST from "graphql/mutations/resetPasswordRequest";
 import UPDATE_PASSWORD from "graphql/mutations/updatePassword";
 import ME from "graphql/queries/me";
-import {signupSuccess, signupFailed, loginSuccess, loginFailed} from "./actionCreators";
-import GET_ALL_TEAMS from "../../graphql/queries/teams";
-import {GET_ALL_TEAMS_FAILED, GET_ALL_TEAMS_SUCCESS} from "../Teams/actions";
 
+// Login
 export const login = (data) => {
   return async (dispatch) => {
     try {
@@ -54,6 +56,7 @@ export const login = (data) => {
   };
 };
 
+// Signup
 export const signup = (data) => {
   return async (dispatch) => {
     try {
@@ -84,6 +87,7 @@ export const signup = (data) => {
   };
 };
 
+// Email Confirmation
 export const emailConfirmation = (data) => {
   return async (dispatch) => {
     try {
@@ -121,6 +125,7 @@ export const emailConfirmation = (data) => {
   };
 };
 
+// Reset Password Request
 export const resetPasswordRequest = (data) => {
   return async (dispatch) => {
     try {
@@ -158,6 +163,8 @@ export const resetPasswordRequest = (data) => {
   };
 };
 
+
+// Updated Password
 export const updatePassword = (data) => {
   return async (dispatch) => {
     try {
@@ -196,8 +203,8 @@ export const updatePassword = (data) => {
   };
 };
 
+// ME
 export const me = () => {
-  console.log('3--------');
   return async (dispatch) => {
     try {
       const apolloClient = createApolloClient();
@@ -205,9 +212,9 @@ export const me = () => {
         query: ME,
         variables: {},
       });
-      console.log('2========== ME',result);
+      console.log('ME=============:',result);
     } catch (e) {
-      console.log("Response Error: ============", e.message);
+      console.log("ME============= Error:", e.message);
     }
   };
 };

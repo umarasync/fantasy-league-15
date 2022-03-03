@@ -10,7 +10,7 @@ import {
   RESET_PASSWORD_FAILED,
   RESET_PASSWORD_SUCCESS,
   RESET_PAGE,
-} from "./actions";
+} from "./actionCreators";
 
 function authReducer(
   state = {

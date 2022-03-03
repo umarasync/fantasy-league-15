@@ -4,7 +4,7 @@ import {
   UPDATE_TEAM_TO_PROFILE_SUCCESS,
   UPDATE_TEAM_TO_PROFILE_FAILED,
   RESET_PAGE,
-} from "./actions";
+} from "./actionCreators";
 
 function teamsReducer(
   state = {

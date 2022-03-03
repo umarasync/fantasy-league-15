@@ -67,6 +67,8 @@ export default function SelectClub() {
     ({ teams }) => teams.getAllTeamsSuccess
   );
   const getAllTeamsError = useSelector(({ teams }) => teams.getAllTeamsError);
+  const user = useSelector(({ auth }) => auth.user);
+
 
   /**** Fetching All Teams Data From Server ****/
   useEffect(() => {
@@ -129,9 +131,10 @@ export default function SelectClub() {
   };
 
   const onNextClick = () => {
-    let user = localStorage.getItem("user");
-    user = JSON.parse(user) || [];
-    if (user && user != "") {
+
+    console.log('user======', user)
+
+    if (user && user !== "") {
       let data = {
         profileId: user.profile.id,
         accountId: user.id,
