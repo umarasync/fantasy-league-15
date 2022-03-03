@@ -171,10 +171,7 @@ export default function BuildTeamPlayers ({
     // Filters-And-Sorting
     const runFiltersOnPlayersData = () => {
 
-        console.log('in runFiltersOnPlayersData', playersDataInitial)
-
         let $playersData = [ ...playersDataInitial ]
-
         $playersData = $playersData.filter(player => {
             return filtersHandler({
                 player,
@@ -198,9 +195,8 @@ export default function BuildTeamPlayers ({
             runFiltersOnPlayersData()
     }, [clubs, statuses, selectedRecommendation, selectedPrice, activePosition, selectedSortingOption,
 
-        // playersDataInitial
+        playersDataInitial
     ])
-
 
     // Player-Selection
     const handlePlayerSelection = (player) => {
@@ -329,7 +325,6 @@ export default function BuildTeamPlayers ({
         setRemainingBudget(remainingBudget)
         setTotalChosenPlayers(totalChosenPlayersI)
         setPlayersDataInitial(playersI)
-        setPlayersData(playersI)
 
         setAutoPickDisabled(true)
         setResetDisabled(false)

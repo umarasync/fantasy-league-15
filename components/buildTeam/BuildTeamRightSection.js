@@ -225,7 +225,7 @@ export default function BuildTeamRightSection({
                     >
                         {
                             playersData.map((player, index) => <PlayerCard
-                                key={index}
+                                key={player.id}
                                 player={player}
                                 onSelectPlayer={handlePlayerSelection}
                             />)
