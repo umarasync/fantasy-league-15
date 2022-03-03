@@ -80,11 +80,11 @@ export default function BuildTeamPlayers ({
     const [activePosition, setActivePosition] = useState(POSITION_ALL)
 
     // Clubs States
-    const [clubs, setClubs] = useState([... CLUBS_INITIAL])
+    const [clubs, setClubs] = useState([...CLUBS_INITIAL])
     const [selectedClubs, setSelectedClubs] = useState([CLUBS_INITIAL[0]])
 
     // Statuses Statuses
-    const [statuses, setStatuses] = useState([... STATUSES_INITIAL])
+    const [statuses, setStatuses] = useState([...STATUSES_INITIAL])
     const [selectedStatuses, setSelectedStatuses] = useState([STATUSES_INITIAL[0]])
 
     // Prices States

@@ -16,7 +16,7 @@ const getStyles = (R) => {
 export default function CheckBox({
      checked
  }) {
-    const STYLES =  { ... getStyles(R) }
+    const STYLES =  { ...getStyles(R) }
 
     return (
         <div className={'cursor-pointer'}>

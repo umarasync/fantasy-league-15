@@ -32,8 +32,9 @@ export const nFormatterWOSign = (n) => {
 }
 
 export const clone = (v) => {
-    console.log('2==============', v)
-    return  JSON.parse(JSON.stringify(v))
+    // console.log('2==============', v)
+    if(!v) return v
+    return JSON.parse(JSON.stringify(v))
 }
 
 export const shuffle = (a) => {

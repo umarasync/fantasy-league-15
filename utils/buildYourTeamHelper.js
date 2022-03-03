@@ -80,7 +80,6 @@ export const handleAutoPick = ({
   let playersI = clone(players);
 
   const allPlayersObjectIndexes = getAllPlayersIndex(playersI)
-  // let playersI = [...players];
 
   const GKsIndexes = shuffle(allPlayersObjectIndexes[POSITION_GK]);
   const FWDsIndexes = shuffle(allPlayersObjectIndexes[POSITION_FWD]);
@@ -136,7 +135,7 @@ export const handleAutoPick = ({
       chosenPlayersWithinBudget[player.position].push(false);
     }
   }
-  
+
   return {
     chosenPlayersWithinBudget,
     remainingBudget,

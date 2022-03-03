@@ -48,7 +48,7 @@ export default function SelectedSquadOnPitch ({
     benchBoostApplied
 }){
 
-    const STYLES =  { ... getStyles(R) }
+    const STYLES =  { ...getStyles(R) }
     const controls = useAnimation()
 
     useEffect(() => {
