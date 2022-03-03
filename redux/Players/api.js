@@ -1,8 +1,17 @@
-import axios from "utils/axiosInstance";
-import { GET_PLAYERS_SUCCESS, GET_PLAYERS_FAILED, RESET_PAGE } from "./actions";
-
+// Packages
 import { createApolloClient } from "graphql/apollo";
+
+// Actions
+import {
+  getPlayersSuccess,
+  getPlayersFailed
+} from "./actionsCreators";
+
+// GraphQL
 import QUERY_PLAYERS from "graphql/queries/players";
+
+// Utils
+import {buildPlayers} from "utils/playersHelper";
 
 export const getPlayers = (first, offset, where, sortBy) => {
   return async (dispatch) => {
@@ -14,25 +23,13 @@ export const getPlayers = (first, offset, where, sortBy) => {
       });
       console.log(result);
       if (result && result.data.players != null) {
-        dispatch({
-          type: GET_PLAYERS_SUCCESS,
-          loading: false,
-          payload: result.data.players.data,
-        });
-      } else {
-        dispatch({
-          type: GET_PLAYERS_FAILED,
-          loading: false,
-          payload: result.data.errors[0].message,
-        });
+        const playersData = buildPlayers(result.data.players.data)
+       return dispatch(getPlayersSuccess([...playersData]))
       }
+      dispatch(getPlayersFailed(result.data.errors[0].message))
+
     } catch (e) {
-      console.log(e.message);
-      dispatch({
-        type: GET_PLAYERS_FAILED,
-        loading: false,
-        payload: e.message,
-      });
+      dispatch(getPlayersFailed(e.message))
     }
   };
 };

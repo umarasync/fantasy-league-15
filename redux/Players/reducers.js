@@ -1,18 +1,14 @@
 import {
   GET_PLAYERS_SUCCESS,
   GET_PLAYERS_FAILED,
-  // UPDATE_TEAM_TO_PROFILE_SUCCESS,
-  // UPDATE_TEAM_TO_PROFILE_FAILED,
   RESET_PAGE,
-} from "./actions";
+} from "./actionsCreators";
 
 function playersReducer(
   state = {
     loading: false,
-    getPlayersSuccess: "",
+    playersData: null,
     getPlayersError: "",
-    // updateTeamToProfileSuccess:"",
-    // updateTeamToProfileError:"",
   },
   action
 ) {
@@ -21,7 +17,7 @@ function playersReducer(
       return {
         ...state,
         loading: false,
-        getPlayersSuccess: action.payload,
+        playersData: action.payload,
       };
     case GET_PLAYERS_FAILED:
       return {
@@ -29,25 +25,11 @@ function playersReducer(
         loading: false,
         getPlayersError: action.payload,
       };
-    // case UPDATE_TEAM_TO_PROFILE_SUCCESS:
-    //   return {
-    //     ...state,
-    //     loading: false,
-    //     updateTeamToProfileSuccess: action.payload,
-    //   };
-    // case UPDATE_TEAM_TO_PROFILE_FAILED:
-    //   return {
-    //     ...state,
-    //     loading: false,
-    //     updateTeamToProfileError: action.payload,
-    //   };
     case RESET_PAGE:
       return {
         loading: false,
-        getPlayersSuccess: "",
+        playersData: null,
         getPlayersError: "",
-        // updateTeamToProfileSuccess:"",
-        // updateTeamToProfileError:"",
       };
     default:
       return state;

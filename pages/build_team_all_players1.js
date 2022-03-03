@@ -1,4 +1,4 @@
-import BuildTeamAllPlayer from "components/layout/build_team_players";
+import BuildTeamAllPlayer from "components/layout/BuildTeamPlayers";
 
 // Packages
 import { useEffect, useState } from "react";
@@ -112,8 +112,8 @@ export default function PlayerAll() {
   }, [filterData]);
 
   /***** Fetching and Building Players Array ****/
-  const getPlayersSuccess = useSelector(
-    ({ players }) => players.getPlayersSuccess
+  const playersData = useSelector(
+    ({ players }) => players.playersData
   );
   const getPlayersError = useSelector(({ players }) => players.getPlayersError);
   /****** Helper Methods *****/
@@ -146,10 +146,10 @@ export default function PlayerAll() {
   /**** Initial Query Response ****/
   useEffect(() => {
     //Query API response
-    if (getPlayersSuccess) {
+    if (playersData) {
       //building Players array
       SETPLAYERS(
-        getPlayersSuccess.map((p, i) => {
+        playersData.map((p, i) => {
           return {
             id: p.id,
             image: p.photo,
@@ -176,7 +176,7 @@ export default function PlayerAll() {
       );
 
       //building Clubs array
-      const clubData = getPlayersSuccess.map((p, i) => {
+      const clubData = playersData.map((p, i) => {
         return { team: p.team };
       });
       const uniqueClubs = [
@@ -209,7 +209,7 @@ export default function PlayerAll() {
     } else if (getPlayersError) {
       console.log("getPlayersError", getPlayersError);
     }
-  }, [getPlayersSuccess, getPlayersError]);
+  }, [playersData, getPlayersError]);
 
   return (
     <>
