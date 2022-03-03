@@ -12,10 +12,8 @@ import {useEffect, useState} from "react";
 // Styles
 const getStyles = (R, props) => {
 
-    const { chosen, hover } = props
-    const selected = chosen || hover
-
-    const { disablePlayerCard } = props.player
+    const { selected, player } = props
+    const { disablePlayerCard } = player
 
     return {
         container: {
@@ -63,7 +61,9 @@ export default function PlayerCard (props){
     const {player, onSelectPlayer} = props
     const [chosen, setChosen] = useState(false)
 
-    const STYLES =  { ...getStyles(R, { ...props, chosen, hover}) }
+    const selected = chosen || hover
+
+    const STYLES =  { ...getStyles(R, { ...props, selected}) }
 
     const onMouseEnter = () => {
         if(player.disablePlayerCard) return
@@ -96,7 +96,7 @@ export default function PlayerCard (props){
             {/*left side*/}
             <div className={'flex items-center'}>
                 <div style={STYLES.infoImage}>
-                    <img src={`/images/${chosen ? 'info_light.png' : 'info_grey.png'}`} width={'100%'} height={'100%'} alt=""/></div>
+                    <img src={`/images/${selected ? 'info_light.png' : 'info_grey.png'}`} width={'100%'} height={'100%'} alt=""/></div>
                 <Border/>
                 <PlayerImage player={player} ml={16} mr={16} w={70} h={70} />
                 <div>
