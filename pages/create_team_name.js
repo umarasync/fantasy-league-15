@@ -17,6 +17,9 @@ import R from "utils/getResponsiveValue";
 // API
 import { createFantasyTeam } from "redux/FantasyTeams/api";
 
+// Loader
+import Loader from "components/loaders/Loader";
+
 // Styles
 const getStyles = (R) => {
   return {
@@ -69,28 +72,24 @@ export default function ConfirmAccount() {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const [teamName, setTeamName] = useState("Champions FC");
-  const [teamData, setTeamData] = useState([]);
+  // const [teamName, setTeamName] = useState("Champions FC");
+  const [teamName, setTeamName] = useState("");
+
   const createFantasyTeamSuccess = useSelector(
     ({ fantasyTeam }) => fantasyTeam.createFantasyTeamSuccess);
   const createFantasyTeamError = useSelector(
     ({ fantasyTeam }) => fantasyTeam.createFantasyTeamError);
-
-  /**** Fetching User Picked(Selected) Team Data ****/
-  useEffect(() => {
-    const teamData = JSON.parse(localStorage.getItem("teamData"));
-    if (teamData) {
-      setTeamData(teamData);
-    } else {
-      toast.error("Unable to create team. Please re-select team.", {
-        onClose: () => router.push("/build_team_all_players"),
-      });
-    }
-  }, []);
+  const teamData = useSelector(
+    ({ fantasyTeam }) => fantasyTeam.chosenFantasyTeamData);
 
   /***** Create Team Handler *******/
   const handleOnClick = () => {
-    const { pickedPlayers } = teamData
+
+    if(!teamName) {
+      return toast.error("Please enter team name !!!")
+    }
+
+    const { pickedPlayers } = JSON.parse(teamData)
 
     const data = {
       goalkeepers: pickedPlayers.GK.map((p, pitchIndex) => {
@@ -120,9 +119,10 @@ export default function ConfirmAccount() {
       name: teamName,
     };
 
-    if (teamName && !isEmpty(data)) {
+    if (!isEmpty(data)) {
       dispatch(createFantasyTeam(data));
     }
+
   };
 
   /**** Team Creation Response ****/
@@ -135,6 +135,15 @@ export default function ConfirmAccount() {
       toast.error(createFantasyTeamError);
     }
   }, [createFantasyTeamSuccess, createFantasyTeamError]);
+
+
+  useEffect(() => {
+    if(!teamData) {
+      router.push("/build_team_all_players")
+    }
+  }, [])
+
+  if(!teamData) return <Loader/>
 
   return (
     <Layout title="Create Your Team Name">
@@ -182,6 +191,7 @@ export default function ConfirmAccount() {
               className={"disable-input-outline font-[900] italic"}
               type="text"
               style={STYLES.input}
+              placeholder={'Champions FC'}
               value={teamName}
               onChange={(e) => setTeamName(e.target.value)}
             />

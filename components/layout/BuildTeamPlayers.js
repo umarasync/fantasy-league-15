@@ -1,6 +1,7 @@
 // Packages
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
+import {useDispatch} from "react-redux";
 
 // Components
 import Layout from "components/layout/index";
@@ -8,10 +9,11 @@ import FooterBar from "components/footer/FooterBar";
 import BuildTeamLeftSection from "components/buildTeam/BuildTeamLeftSection";
 import BuildTeamRightSection from "components/buildTeam/BuildTeamRightSection";
 import TransferWindowModal from "components/transferWindow/TransferWindowModal";
+import {isEmpty} from "lodash"
 
 // Utils
 import R from "utils/getResponsiveValue";
-import {clone, isEmpty} from "utils/helpers";
+import {clone} from "utils/helpers";
 import {
     handleAutoPick,
     playerSelectionHandler,
@@ -41,15 +43,18 @@ import {
     SELECTED_PLAYERS
 } from "constants/data/players";
 
+// Actions
+import {fantasyTeamChosen} from "redux/FantasyTeams/actionCreators";
+
 export default function BuildTeamPlayers ({
     players: $players,
     clubs: $clubs,
 }) {
 
+    const dispatch = useDispatch()
     const router= useRouter()
 
     // Initial States
-
     const CLUBS_INITIAL = clone($clubs)
     const PLAYERS_INITIAL = clone($players)
     const PRICES_INITIAL = clone(PRICES)
@@ -112,42 +117,7 @@ export default function BuildTeamPlayers ({
 
     const [showTransferWindowModal, setShowTransferWindowModal] = useState(false)
 
-    // Initial Settings for Build Your Team & Transfer windows
-    const initiateInitialSettings = () => {
-        const teamData = JSON.parse(localStorage.getItem('teamData'))
-        if (teamData) {
-            return initialSettingsForTransferWindows({
-                // Team Data
-                teamData,
-                // Picked Players
-                setPickedPlayers,
-                // Budget
-                setRemainingBudget,
-                // Players-Data
-                setPlayersData,
-                playersDataInitial,
-                setPlayersDataInitial,
-                // Transfer Window
-                setIsOneFreeTransferWindow,
-                setTransferInProgress,
-                setCurrentTransferredToBePlayer,
-                setNoOfFreeTransfersLeft,
-                setAdditionalTransferredPlayers,
-                setTransferResetDisabled,
-                setTransferConfirmDisabled,
-                setTransferredPlayers,
-                // Footer
-                setShowFooterBar,
-            })
-        }
 
-        return initialSettingsForBuildYourTeam({
-            setPlayersData,
-            playersDataInitial,
-            setPlayersDataInitial,
-            setShowFooterBar
-        })
-    }
 
     // OnSearch
     const onSearch = () => false
@@ -292,7 +262,7 @@ export default function BuildTeamPlayers ({
     }
 
     const onTransferModalConfirmed = () => {
-        sendToServer()
+        // updateTeamData() : update team data in DB
         router.push('/my_squad_game_week')
     }
 
@@ -309,6 +279,7 @@ export default function BuildTeamPlayers ({
     }, [totalChosenPlayers])
 
     const onAutoPick = () => {
+
         const {
             chosenPlayersWithinBudget,
             remainingBudget,
@@ -338,30 +309,75 @@ export default function BuildTeamPlayers ({
         setPlayersDataInitial([...PLAYERS_INITIAL])
     }
 
-    const sendToServer = () => {
-        // TODO:LOCAL_STORAGE_FOR_TESTING:START
+    const saveToLocalStorageOnlyForTesting = () => {
         localStorage.setItem("teamData", JSON.stringify({
             pickedPlayers,
             remainingBudget,
-            totalChosenPlayers,
             // Only for transfer windows
             noOfFreeTransfersLeft,
             additionalTransferredPlayers
-
         }))
-        // TODO:LOCAL_STORAGE_FOR_TESTING:ENDS
+    }
+
+    const persistDataToReduxStore = () => {
+        const teamData = JSON.stringify({
+            pickedPlayers,
+            remainingBudget,
+            // Only for transfer windows
+            noOfFreeTransfersLeft,
+            additionalTransferredPlayers
+        })
+        dispatch(fantasyTeamChosen(teamData))
     }
 
     const handleContinueClick = () => {
-        sendToServer()
+        // saveToLocalStorageOnlyForTesting()
+        persistDataToReduxStore()
         router.push('/create_team_name')
+    }
+
+    // Initial Settings for Build Your Team & Transfer windows
+    const initiateInitialSettings = () => {
+        // For Transfer Window
+        const teamDataFromDB = {} // Fetch team data from backend database
+        if (!isEmpty(teamDataFromDB)) {
+            return initialSettingsForTransferWindows({
+                // Team Data
+                teamData: teamDataFromDB,
+                // Picked Players
+                setPickedPlayers,
+                // Budget
+                setRemainingBudget,
+                // Players-Data
+                setPlayersData,
+                playersDataInitial,
+                setPlayersDataInitial,
+                // Transfer Window
+                setIsOneFreeTransferWindow,
+                setTransferInProgress,
+                setCurrentTransferredToBePlayer,
+                setNoOfFreeTransfersLeft,
+                setAdditionalTransferredPlayers,
+                setTransferResetDisabled,
+                setTransferConfirmDisabled,
+                setTransferredPlayers,
+                // Footer
+                setShowFooterBar,
+            })
+        }
+
+        return initialSettingsForBuildYourTeam({
+            playersDataInitial,
+            setPlayersDataInitial,
+            setPlayersData,
+            setShowFooterBar
+        })
     }
 
     // Did-Mount
     useEffect(() => {
         initiateInitialSettings()
     }, [])
-
 
     return (
         <Layout title="Build Team All Player">

@@ -29,15 +29,13 @@ export default function (){
         // Fetch-Players
         dispatch(getPlayers(50, 0, { teamId: { eq: "" } }, { value: "DESC" }));
 
-        // Fetch-Teams-If-Not-Already-In-State
+        /** Fetch teams if not already in state **/
         if(!allTeams){
             dispatch(getAllTeams());
         }else {
             setClubs(buildClubs(allTeams))
         }
-
     }, []);
-
 
     useEffect(() => {
         if(!allTeams) return
