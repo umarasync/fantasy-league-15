@@ -2,7 +2,7 @@ import {
   CREATE_FANTASY_TEAM_SUCCESS,
   CREATE_FANTASY_TEAM_ERROR,
   RESET_PAGE,
-} from "./actions";
+} from "./actionCreators";
 
 function fantasyTeamReducer(
   state = {

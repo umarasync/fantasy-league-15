@@ -176,7 +176,6 @@ export default function BuildTeamRightSection({
 
                                 // Reset Filters
                                 onResetFilterClicked={handleResetFilter}
-
                             />
                         </motion.div>
                     </AnimatePresence>

@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
+import {isEmpty} from "lodash";
 
 // Components
 import Layout from "components/layout";
@@ -13,6 +14,7 @@ import Div from "components/html/Div";
 // Utils
 import R from "utils/getResponsiveValue";
 
+// API
 import { createFantasyTeam } from "redux/FantasyTeams/api";
 
 // Styles
@@ -61,21 +63,18 @@ const getStyles = (R) => {
 };
 
 export default function ConfirmAccount() {
-  const router = useRouter();
-  const dispatch = useDispatch();
 
   const STYLES = { ...getStyles(R) };
 
+  const router = useRouter();
+  const dispatch = useDispatch();
+
   const [teamName, setTeamName] = useState("Champions FC");
   const [teamData, setTeamData] = useState([]);
-
-  /***** Redux Listeners ****/
   const createFantasyTeamSuccess = useSelector(
-    ({ fantasyTeam }) => fantasyTeam.createFantasyTeamSuccess
-  );
+    ({ fantasyTeam }) => fantasyTeam.createFantasyTeamSuccess);
   const createFantasyTeamError = useSelector(
-    ({ fantasyTeam }) => fantasyTeam.createFantasyTeamError
-  );
+    ({ fantasyTeam }) => fantasyTeam.createFantasyTeamError);
 
   /**** Fetching User Picked(Selected) Team Data ****/
   useEffect(() => {
@@ -83,40 +82,36 @@ export default function ConfirmAccount() {
     if (teamData) {
       setTeamData(teamData);
     } else {
-      toast.error("Unable to create team. Please re-select team", {
+      toast.error("Unable to create team. Please re-select team.", {
         onClose: () => router.push("/build_team_all_players"),
       });
     }
   }, []);
 
-  /***** Handling Create Team Dispatch *******/
-
+  /***** Create Team Handler *******/
   const handleOnClick = () => {
-    const goalkeepers = teamData.pickedPlayers.GK;
-    const defenders = teamData.pickedPlayers.DEF;
-    const midfielders = teamData.pickedPlayers.MID;
-    const forwards = teamData.pickedPlayers.FWD;
+    const { pickedPlayers } = teamData
 
-    const variables = {
-      goalkeepers: goalkeepers.map((p, pitchIndex) => {
+    const data = {
+      goalkeepers: pickedPlayers.GK.map((p, pitchIndex) => {
         return {
           id: p.id,
           pitchIndex,
         };
       }),
-      defenders: defenders.map((p, pitchIndex) => {
+      defenders: pickedPlayers.GK.map((p, pitchIndex) => {
         return {
           id: p.id,
           pitchIndex,
         };
       }),
-      midfielders: midfielders.map((p, pitchIndex) => {
+      midfielders: pickedPlayers.MID.map((p, pitchIndex) => {
         return {
           id: p.id,
           pitchIndex,
         };
       }),
-      forwards: forwards.map((p, pitchIndex) => {
+      forwards: pickedPlayers.FWD.map((p, pitchIndex) => {
         return {
           id: p.id,
           pitchIndex,
@@ -125,13 +120,12 @@ export default function ConfirmAccount() {
       name: teamName,
     };
 
-    if (teamName && variables && Object.keys(variables).length > 0) {
-      //Calling Fantasy Team Mutation API
-      dispatch(createFantasyTeam(variables));
+    if (teamName && !isEmpty(data)) {
+      dispatch(createFantasyTeam(data));
     }
   };
 
-  /**** Response From Redux Store after calling API ****/
+  /**** Team Creation Response ****/
   useEffect(() => {
     if (createFantasyTeamSuccess) {
       toast.success("Fantasy Team Created Successfully!", {

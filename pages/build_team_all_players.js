@@ -5,16 +5,15 @@ import {useDispatch, useSelector} from "react-redux";
 // Components
 import BuildTeamPlayers from "components/layout/BuildTeamPlayers";
 
-// Constants
-import {CLUBS} from "constants/data/filters";
-
 // Actions
 import {getPlayers} from "redux/Players/api";
 import {getAllTeams} from "redux/Teams/api";
 
 // Loaders
 import Loader from "components/loaders/Loader";
-import {buildClubs} from "../utils/playersHelper";
+
+// Utils
+import {buildClubs} from "utils/playersHelper";
 
 export default function (){
 
@@ -46,11 +45,6 @@ export default function (){
     }, [allTeams])
 
     if(!playersData || !clubs.length) return (<Loader/>)
-
-    console.log({
-        playersData,
-        clubs
-    })
 
     return (
         <BuildTeamPlayers

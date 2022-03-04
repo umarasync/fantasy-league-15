@@ -42,7 +42,7 @@ const buildLeague = ({
         points,
     }
 }
-const getPublicLeagues = () => {
+export const getPublicLeagues = () => {
     return [
         {
             ...buildLeague({

@@ -28,7 +28,7 @@ import R from "utils/getResponsiveValue";
 // Constants
 import {INITIAL} from "constants/animations";
 import {getCurrentWeekInfo, getPublicLeagues} from "constants/data/leaguesAndRanking";
-import ProfileSettingsSideDrawer from "../components/profileSettings/ProfileSettingsSideDrawer";
+import ProfileSettingsSideDrawer from "components/profileSettings/ProfileSettingsSideDrawer";
 
 // Styles
 const getStyles = (R) => {
