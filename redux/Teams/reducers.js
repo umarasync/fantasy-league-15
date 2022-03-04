@@ -9,7 +9,7 @@ import {
 function teamsReducer(
   state = {
     loading: false,
-    getAllTeamsSuccess: "",
+    allTeams: null,
     getAllTeamsError: "",
     updateTeamToProfileSuccess:"",
     updateTeamToProfileError:"",
@@ -21,7 +21,7 @@ function teamsReducer(
       return {
         ...state,
         loading: false,
-        getAllTeamsSuccess: action.payload,
+        allTeams: action.payload,
       };
     case GET_ALL_TEAMS_FAILED:
       return {
@@ -44,7 +44,7 @@ function teamsReducer(
     case RESET_PAGE:
       return {
         loading: false,
-        getAllTeamsSuccess: "",
+        allTeams: null,
         getAllTeamsError: "",
         updateTeamToProfileSuccess:"",
         updateTeamToProfileError:"",

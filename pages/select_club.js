@@ -63,10 +63,9 @@ export default function SelectClub() {
   );
 
   /***** Fetching and Building Teams Array ****/
-  const getAllTeamsSuccess = useSelector(
-    ({ teams }) => teams.getAllTeamsSuccess
+  const allTeams = useSelector(
+    ({ teams }) => teams.allTeams
   );
-  const getAllTeamsError = useSelector(({ teams }) => teams.getAllTeamsError);
   const user = useSelector(({ auth }) => auth.user);
 
 
@@ -109,13 +108,8 @@ export default function SelectClub() {
 
 
   useEffect(() => {
-    //Mutation API response
-    if (getAllTeamsSuccess) {
-      setTeamsData(getAllTeamsSuccess);
-    } else if (getAllTeamsError) {
-      console.log("getAllTeamsError", getAllTeamsError);
-    }
-  }, [getAllTeamsSuccess, getAllTeamsError]);
+    if (allTeams) { setTeamsData(allTeams); }
+  }, [allTeams]);
 
   const onControlsClick = (isLeftPressed = false) => {
     let dataI = [];
@@ -131,9 +125,6 @@ export default function SelectClub() {
   };
 
   const onNextClick = () => {
-
-    console.log('user======', user)
-
     if (user && user !== "") {
       let data = {
         profileId: user.profile.id,

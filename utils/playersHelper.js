@@ -1,5 +1,9 @@
+// Packages
+import {v4 as uuidv4} from 'uuid';
+
 import {nFormatter} from "./helpers";
 
+// Players
 const getPlayerPosition = (position) => {
   let p = "";
   switch (position) {
@@ -44,4 +48,27 @@ export const buildPlayers = (playersData) => {
                   penaltyTaker: false,
             };
           })
+}
+
+// Teams
+export const ALL_TEAMS = 'All Teams'
+export const buildClubs = (teams) => {
+    const $teams = teams.map(team => {
+        return {
+            id: team.id,
+            label: team.name,
+            value: team.name,
+            image: team.logo,
+            checked: false
+        }
+    })
+
+    $teams.unshift({
+        id: uuidv4(),
+        label: ALL_TEAMS,
+        value: ALL_TEAMS,
+        checked: true
+    })
+
+    return $teams
 }

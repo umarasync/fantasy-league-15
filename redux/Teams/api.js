@@ -18,7 +18,6 @@ export const getAllTeams = () => {
         query: GET_ALL_TEAMS,
         variables: {},
       });
-      console.log(result);
       if (result && result.data.teams != null) {
         return dispatch(getAllTeamsSuccess(result.data.teams.data))
       }
