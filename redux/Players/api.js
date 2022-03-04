@@ -21,7 +21,6 @@ export const getPlayers = (first, offset, where, sortBy) => {
         query: QUERY_PLAYERS,
         variables: { first, offset, where, sortBy },
       });
-      console.log(result);
       if (result && result.data.players != null) {
         const playersData = buildPlayers(result.data.players.data)
        return dispatch(getPlayersSuccess([...playersData]))
