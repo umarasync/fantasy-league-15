@@ -17,7 +17,7 @@ import {handleMultiSelectionDropDowns} from "utils/buildYourTeamHelper";
 
 // Animations
 import ShowAllFiltersAnimation from "Animations/buildYourTeam/ShowAllFiltersAnimation";
-import {PlayersCardAnimation, PlayersCardAnimation1} from "Animations/PlayersCardAnimations";
+import {playerPanelAnimation, playersPanelHeightAnimation} from "Animations/PlayersCardAnimations";
 
 // Constants
 import {ALL_PRICES, ALL_STATUSES, ALL_TEAMS, RECOMMENDED_PLAYERS} from "constants/data/filters";
@@ -192,12 +192,12 @@ export default function BuildTeamRightSection({
             }
 
             <motion.div
-                variants={PlayersCardAnimation}
+                variants={playerPanelAnimation()}
                 animate={showAllFilters ? 'slideDown' : 'slideUp'}
             >
 
                 <motion.div
-                    variants={PlayersCardAnimation1}
+                    variants={playersPanelHeightAnimation()}
                     animate={getPlayersContainerHeight()}
                 >
                     <div style={{marginBottom: R(16)}}>
