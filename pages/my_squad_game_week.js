@@ -196,9 +196,7 @@ export default function MySquadGameWeek () {
         const teamData = JSON.parse(localStorage.getItem('teamData'))
         // TODO:LOCAL_STORAGE_FOR_TESTING:ENDS
 
-        if (!teamData) {
-            return router.push('/build_team_all_players')
-        }
+        if (!teamData) {return router.push('/build_team_all_players')}
 
         const players = setPlayersAdditionalData(teamData.pickedPlayers)
         setPickedPlayers(players)
@@ -216,7 +214,6 @@ export default function MySquadGameWeek () {
     if (pickedPlayers.length === 0) {
         return null
     }
-
     return (
         <Layout title="My Squad">
             <Div className="mx-auto relative bg-white">
