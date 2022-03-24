@@ -16,6 +16,7 @@ export default gql`
         photo
         score
         value
+        totalPoints
         currGWPoints {
           totalPoints
           assistPoints

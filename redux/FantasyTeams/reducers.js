@@ -1,14 +1,16 @@
 import {
   CREATE_FANTASY_TEAM_SUCCESS,
   CREATE_FANTASY_TEAM_ERROR,
+  FANTASY_TEAM_CHOSEN,
   RESET_PAGE,
-} from "./actions";
+} from "./actionCreators";
 
 function fantasyTeamReducer(
   state = {
     loading: false,
     createFantasyTeamSuccess: "",
     createFantasyTeamError: "",
+    chosenFantasyTeamData: null
   },
   action
 ) {
@@ -25,6 +27,11 @@ function fantasyTeamReducer(
         loading: false,
         createFantasyTeamError: action.payload,
       };
+    case FANTASY_TEAM_CHOSEN:
+      return {
+        ...state,
+        chosenFantasyTeamData: action.payload,
+      };
     case RESET_PAGE:
       return {
         loading: false,
@@ -32,7 +39,9 @@ function fantasyTeamReducer(
         createFantasyTeamError: "",
       };
     default:
-      return state;
+      return {
+        ...state
+      };
   }
 }
 

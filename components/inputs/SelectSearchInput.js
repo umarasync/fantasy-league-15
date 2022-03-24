@@ -88,7 +88,7 @@ export default function SelectSearchInput ({
        hideSearchBox,
        optionImageStyle,
        tagImagesStyle,
-    offClickOnParent
+       offClickOnParent
    }) {
 
     const OPTIONS = JSON.parse(JSON.stringify(options))

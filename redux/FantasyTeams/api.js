@@ -1,53 +1,41 @@
-import axios from "utils/axiosInstance";
+// Packages
 import {
-  CREATE_FANTASY_TEAM_SUCCESS,
-  CREATE_FANTASY_TEAM_ERROR,
-  RESET_PAGE,
-} from "./actions";
+    createFantasyTeamSuccess,
+    createFantasyTeamFailed,
+} from "./actionCreators";
 
+// GraphQL
 import { createApolloClient } from "graphql/apollo";
 import CREATE_FANTASY_TEAM from "graphql/mutations/createFantasyTeam";
 
-export const createFantasyTeam = (variables) => {
+// Constants
+import {ERROR_MSG} from "constants/universal";
+
+export const createFantasyTeam = (data) => {
+
+  console.log("createFantasyTeam Data=============", data)
+
   return async (dispatch) => {
     try {
       const apolloClient = createApolloClient();
       const result = await apolloClient.mutate({
         mutation: CREATE_FANTASY_TEAM,
         variables: {
-          goalkeepers: variables.goalkeepers,
-          defenders: variables.defenders,
-          midfielders: variables.midfielders,
-          forwards: variables.forwards,
-          name: variables.name,
+          goalkeepers: data.goalkeepers,
+          defenders: data.defenders,
+          midfielders: data.midfielders,
+          forwards: data.forwards,
+          // name: variables.name,
         },
       });
-      console.log(result);
-      if (result && result.data.createFantasyTeam != null) {
-        //Store data for processing
-        localStorage.setItem(
-          "user-fantasy-team",
-          JSON.stringify(result.data.createFantasyTeam)
-        );
-        dispatch({
-          type: CREATE_FANTASY_TEAM_SUCCESS,
-          loading: false,
-          payload: result.data.createFantasyTeam,
-        });
-      } else {
-        dispatch({
-          type: CREATE_FANTASY_TEAM_ERROR,
-          loading: false,
-          payload: result.data.errors[0].message,
-        });
+      console.log("createFantasyTeam result =======", result);
+      if (result && result.data.createFantasyTeam !== null) {
+        localStorage.setItem("user-fantasy-team", JSON.stringify(result.data.createFantasyTeam));
+        dispatch(createFantasyTeamSuccess(result.data.createFantasyTeam))
       }
+      dispatch(createFantasyTeamFailed(ERROR_MSG))
     } catch (e) {
-      console.log(e.message);
-      dispatch({
-        type: CREATE_FANTASY_TEAM_ERROR,
-        loading: false,
-        payload: e.message,
-      });
+      dispatch(createFantasyTeamFailed(ERROR_MSG))
     }
   };
 };

@@ -1,6 +1,6 @@
 // Constants
 import {
-  MOST_TRANSFERRED,
+  MOST_TRANSFERRED, POSITION_ALL,
   POSITION_DEF,
   POSITION_FWD,
   POSITION_GK,
@@ -9,7 +9,7 @@ import {
   PRICE_FROM_LOW_TO_HIGH,
   TOTAL_POINTS,
 } from "constants/data/filters";
-import { SELECTED_PLAYERS } from "constants/data/players";
+import {ALL_PLAYERS_INDEXES, PLAYERS, SELECTED_PLAYERS} from "constants/data/players";
 
 // Utils
 import { clone, shuffle } from "utils/helpers";
@@ -55,13 +55,31 @@ export const handleMultiSelectionDropDowns = (option, data) => {
   setOptions([...newStateI]);
 };
 
+const getAllPlayersIndex = (players) => {
+  const ALL_PLAYERS_INDEXES = {
+      [POSITION_ALL] : [],
+      [POSITION_MID] : [],
+      [POSITION_GK] : [],
+      [POSITION_DEF] : [],
+      [POSITION_FWD] : [],
+  }
+  return players.reduce(function(a, e, i) {
+      ALL_PLAYERS_INDEXES[e.position].push(i);
+      return ALL_PLAYERS_INDEXES;
+  }, []);
+}
+
 export const handleAutoPick = ({
   players,
-  allPlayersObjectIndexes,
+  // allPlayersObjectIndexes,
   totalBudget,
 }) => {
   let remainingBudget = totalBudget;
+
+
   let playersI = clone(players);
+
+  const allPlayersObjectIndexes = getAllPlayersIndex(playersI)
 
   const GKsIndexes = shuffle(allPlayersObjectIndexes[POSITION_GK]);
   const FWDsIndexes = shuffle(allPlayersObjectIndexes[POSITION_FWD]);
@@ -99,7 +117,7 @@ export const handleAutoPick = ({
     fifteenChosenPlayersIndex
   ).filter((x) => x !== undefined);
 
-  let chosenPlayersWithinBudget = clone(SELECTED_PLAYERS);
+  let chosenPlayersWithinBudget = clone(SELECTED_PLAYERS) ;
 
   let totalChosenPlayers = 0;
 
@@ -107,11 +125,12 @@ export const handleAutoPick = ({
     let player = playersI[shuffledFifteenChosenPlayersIndex[i]];
 
     if (player.price < remainingBudget) {
+
       player.chosen = true;
       chosenPlayersWithinBudget[player.position].push(player);
-
       remainingBudget = remainingBudget - player.price;
       totalChosenPlayers += 1;
+
     } else {
       chosenPlayersWithinBudget[player.position].push(false);
     }

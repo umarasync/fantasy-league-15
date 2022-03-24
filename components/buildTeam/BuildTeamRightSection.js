@@ -17,7 +17,7 @@ import {handleMultiSelectionDropDowns} from "utils/buildYourTeamHelper";
 
 // Animations
 import ShowAllFiltersAnimation from "Animations/buildYourTeam/ShowAllFiltersAnimation";
-import {PlayersCardAnimation, PlayersCardAnimation1} from "Animations/PlayersCardAnimations";
+import {playerPanelAnimation, playersPanelHeightAnimation} from "Animations/PlayersCardAnimations";
 
 // Constants
 import {ALL_PRICES, ALL_STATUSES, ALL_TEAMS, RECOMMENDED_PLAYERS} from "constants/data/filters";
@@ -42,8 +42,6 @@ export default function BuildTeamRightSection({
     // Positions
     activePosition,
     setActivePosition,
-    // Initial-Opacity
-    initialOpacity,
     // Clubs
     selectedClubs,
     clubs,
@@ -105,8 +103,8 @@ export default function BuildTeamRightSection({
         <div className={'relative'} style={{width: R(488), paddingTop: R(35)}}>
             {/*username*/}
             <div className={'flex flex-row-reverse'} style={{marginBottom: R(46)}}>
-                <Username username={user.username}/>
-
+                {/*<Username username={user.username}/>*/}
+                <Username username={'john doe'}/>
             </div>
 
             {/*search*/}
@@ -140,7 +138,6 @@ export default function BuildTeamRightSection({
                             initial="initial"
                             animate="animate"
                             exit="exit"
-                            custom={{initialOpacity}}
                             className={'absolute w-full'}
                             style={STYLES.allFiltersBox}
                         >
@@ -179,7 +176,6 @@ export default function BuildTeamRightSection({
 
                                 // Reset Filters
                                 onResetFilterClicked={handleResetFilter}
-
                             />
                         </motion.div>
                     </AnimatePresence>
@@ -195,12 +191,12 @@ export default function BuildTeamRightSection({
             }
 
             <motion.div
-                variants={PlayersCardAnimation}
+                variants={playerPanelAnimation()}
                 animate={showAllFilters ? 'slideDown' : 'slideUp'}
             >
 
                 <motion.div
-                    variants={PlayersCardAnimation1}
+                    variants={playersPanelHeightAnimation()}
                     animate={getPlayersContainerHeight()}
                 >
                     <div style={{marginBottom: R(16)}}>
@@ -228,7 +224,7 @@ export default function BuildTeamRightSection({
                     >
                         {
                             playersData.map((player, index) => <PlayerCard
-                                key={index}
+                                key={player.id}
                                 player={player}
                                 onSelectPlayer={handlePlayerSelection}
                             />)

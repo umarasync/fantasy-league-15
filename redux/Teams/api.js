@@ -1,13 +1,12 @@
-import axios from "utils/axiosInstance";
-import {
-  GET_ALL_TEAMS_SUCCESS,
-  GET_ALL_TEAMS_FAILED,
-  UPDATE_TEAM_TO_PROFILE_SUCCESS,
-  UPDATE_TEAM_TO_PROFILE_FAILED,
-  RESET_PAGE,
-} from "./actions";
-
+// Packages
 import { createApolloClient } from "graphql/apollo";
+
+// Action Creators
+import {
+  getAllTeamsSuccess, getAllTeamsFailed, updateTeamToProfileSuccess
+} from "./actionCreators";
+
+// GraphQL
 import GET_ALL_TEAMS from "graphql/queries/teams";
 import ADD_FAV_TEAM from "graphql/mutations/addFavouriteTeam";
 
@@ -19,27 +18,12 @@ export const getAllTeams = () => {
         query: GET_ALL_TEAMS,
         variables: {},
       });
-      console.log(result);
-      if (result && result.data.teams != null) {
-        dispatch({
-          type: GET_ALL_TEAMS_SUCCESS,
-          loading: false,
-          payload: result.data.teams.data,
-        });
-      } else {
-        dispatch({
-          type: GET_ALL_TEAMS_FAILED,
-          loading: false,
-          payload: result.data.errors[0].message,
-        });
+      if (result && result.data.teams !== null) {
+        return dispatch(getAllTeamsSuccess(result.data.teams.data))
       }
+      dispatch(getAllTeamsFailed(result.data.errors[0].message))
     } catch (e) {
-      console.log(e.message);
-      dispatch({
-        type: GET_ALL_TEAMS_FAILED,
-        loading: false,
-        payload: e.message,
-      });
+      dispatch(getAllTeamsFailed(e.message))
     }
   };
 };
@@ -58,29 +42,16 @@ export const addFavouriteTeam = (data) => {
           },
         },
       });
-      console.log(result);
-      if (result && result.data.updateTeamToProfile != null) {
-        //Store data for processing
+
+      console.log("addFavouriteTeam: ========", result);
+      if (result && result.data.updateTeamToProfile !== null) {
         localStorage.setItem("user-team", JSON.stringify(data.favouriteTeamId));
-        dispatch({
-          type: UPDATE_TEAM_TO_PROFILE_SUCCESS,
-          loading: false,
-          payload: result.data.updateTeamToProfile.message,
-        });
-      } else {
-        dispatch({
-          type: UPDATE_TEAM_TO_PROFILE_FAILED,
-          loading: false,
-          payload: result.data.errors[0].message,
-        });
+        return dispatch(updateTeamToProfileSuccess(result.data.updateTeamToProfile.message))
       }
+      dispatch(updateTeamToProfileSuccess(result.data.errors[0].message))
+
     } catch (e) {
-      console.log(e.message);
-      dispatch({
-        type: UPDATE_TEAM_TO_PROFILE_FAILED,
-        loading: false,
-        payload: e.message,
-      });
+      dispatch(updateTeamToProfileSuccess(e.message))
     }
   };
 };

@@ -6,14 +6,14 @@ export default gql`
     $defenders: [FantasyTeamPlayerInput!]!
     $midfielders: [FantasyTeamPlayerInput!]!
     $forwards: [FantasyTeamPlayerInput!]!
-    $name: String!
+#    $name: String!
   ) {
     createFantasyTeam(
       goalkeepers: $goalkeepers
       defenders: $defenders
       midfielders: $midfielders
       forwards: $forwards
-      name: $name
+#      name: $name
     ) {
       id
       squad {

@@ -6,6 +6,7 @@ export default gql`
       data {
         id
         logo
+        name
         venue
       }
     }

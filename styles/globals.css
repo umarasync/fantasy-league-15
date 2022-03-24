@@ -57,6 +57,11 @@ input.disable-input-outline[type="text"]:focus {
   box-shadow: none;
 }
 
+input.disable-input-outline[type="text"]::placeholder {
+  color: #FFFFFF;
+  font-weight: 900;
+}
+
 .primary-button-color {
   background: linear-gradient(180deg, #ee6384 0%, #d9335b 100%);
 }
@@ -178,3 +183,24 @@ input.disable-input-outline[type="text"]:focus {
   font-size: 1rem !important;
   border-radius: 0.5rem !important;
 }
+
+
+/**** CSS for loader: starts *******/
+.loader div {
+  animation-duration: 0.5s;
+}
+
+.loader div:first-child {
+  animation-delay: 0.1s;
+}
+
+.loader div:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.loader div:nth-child(3) {
+  animation-delay: 0.6s;
+}
+/**** CSS for loader: ends *******/
+
+

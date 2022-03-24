@@ -1,9 +1,9 @@
 const duration = 0.6
 
 const showAllFiltersAnimation = {
-    initial: ({initialOpacity}) => {
+    initial: () => {
         return {
-            opacity: initialOpacity,
+            opacity: 0,
         }
     },
     animate: {

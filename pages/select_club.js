@@ -15,6 +15,7 @@ import Image from "components/html/Image";
 import Text from "components/html/Text";
 
 import { getAllTeams, addFavouriteTeam } from "redux/Teams/api";
+import { me } from "redux/Auth/api";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -62,15 +63,17 @@ export default function SelectClub() {
   );
 
   /***** Fetching and Building Teams Array ****/
-  const getAllTeamsSuccess = useSelector(
-    ({ teams }) => teams.getAllTeamsSuccess
+  const allTeams = useSelector(
+    ({ teams }) => teams.allTeams
   );
-  const getAllTeamsError = useSelector(({ teams }) => teams.getAllTeamsError);
+  const user = useSelector(({ auth }) => auth.user);
+
 
   /**** Fetching All Teams Data From Server ****/
   useEffect(() => {
     //Query API
     dispatch(getAllTeams());
+    dispatch(me());
   }, []);
 
   useEffect(() => {
@@ -84,7 +87,7 @@ export default function SelectClub() {
               name: Teams.logo,
             },
             heading: {
-              title: Teams.officalName,
+              title: Teams.name,
             },
             subHeading: {
               title: Teams.venue,
@@ -105,13 +108,8 @@ export default function SelectClub() {
 
 
   useEffect(() => {
-    //Mutation API response
-    if (getAllTeamsSuccess) {
-      setTeamsData(getAllTeamsSuccess);
-    } else if (getAllTeamsError) {
-      console.log("getAllTeamsError", getAllTeamsError);
-    }
-  }, [getAllTeamsSuccess, getAllTeamsError]);
+    if (allTeams) { setTeamsData(allTeams); }
+  }, [allTeams]);
 
   const onControlsClick = (isLeftPressed = false) => {
     let dataI = [];
@@ -127,9 +125,7 @@ export default function SelectClub() {
   };
 
   const onNextClick = () => {
-    let user = localStorage.getItem("user");
-    user = JSON.parse(user) || [];
-    if (user && user != "") {
+    if (user && user !== "") {
       let data = {
         profileId: user.profile.id,
         accountId: user.id,

@@ -1,3 +1,6 @@
+// Packages
+import cloneDeep from 'lodash/cloneDeep';
+
 // Constants
 import {currencySymbol} from "constants/universal";
 
@@ -31,7 +34,7 @@ export const nFormatterWOSign = (n) => {
     return `${convertToInternationalCurrencySystem(n)}`
 }
 
-export const clone = (v) => JSON.parse(JSON.stringify(v))
+export const clone = (v) => { return cloneDeep(v) }
 
 export const shuffle = (a) => {
     for (let i = a.length - 1; i > 0; i--) {

@@ -1,9 +1,9 @@
-import axios from "utils/axiosInstance";
+// Packages
+import { createApolloClient } from "graphql/apollo";
+
+// Actions
 import {
-  SIGNUP_FAILED,
-  SIGNUP_SUCCESS,
   LOGIN_FAILED,
-  LOGIN_SUCCESS,
   CONFIRMATION_FAILED,
   CONFIRMATION_SUCCESS,
   RESET_PASSWORD_REQUEST_FAILED,
@@ -11,16 +11,22 @@ import {
   RESET_PASSWORD_FAILED,
   RESET_PASSWORD_SUCCESS,
   RESET_PAGE,
-} from "./actions";
+  signupSuccess,
+  signupFailed,
+  loginSuccess,
+  loginFailed
+} from "./actionCreators";
 
-import { createApolloClient } from "graphql/apollo";
+// GraphQL
 import DO_LOGIN from "graphql/mutations/login";
 import DO_SIGNUP from "graphql/mutations/createProfile";
 import CONFIRM_EMAIL from "graphql/mutations/emailConfirmation";
 import RESET_REQUEST from "graphql/mutations/resetPasswordRequest";
 import UPDATE_PASSWORD from "graphql/mutations/updatePassword";
+import ME from "graphql/queries/me";
 
-export const loginUser = (data) => {
+// Login
+export const login = (data) => {
   return async (dispatch) => {
     try {
       const apolloClient = createApolloClient();
@@ -28,22 +34,15 @@ export const loginUser = (data) => {
         mutation: DO_LOGIN,
         variables: { username: data.email, password: data.password },
       });
-      console.log(result);
+
       if (result && result.data.login != null) {
         //Store data for processing
         localStorage.setItem("user", JSON.stringify(result.data.login));
-        dispatch({
-          type: LOGIN_SUCCESS,
-          loading: false,
-          payload: result.data.login,
-        });
-      } else {
-        dispatch({
-          type: LOGIN_FAILED,
-          loading: false,
-          payload: result.data.errors[0].message,
-        });
+        return dispatch(loginSuccess(result.data.login));
       }
+
+      dispatch(loginFailed(result.data.errors[0].message))
+
     } catch (e) {
       console.log(e.message);
       dispatch({
@@ -57,11 +56,13 @@ export const loginUser = (data) => {
   };
 };
 
-export const createUser = (data) => {
+// Signup
+export const signup = (data) => {
   return async (dispatch) => {
     try {
       const d = data.dob;
       let isoDate = d.toISOString();
+
       const apolloClient = createApolloClient();
       const result = await apolloClient.mutate({
         mutation: DO_SIGNUP,
@@ -69,40 +70,24 @@ export const createUser = (data) => {
           data: {
             dob: isoDate,
             favouriteTeamId: null,
-            // fullName: data.fullName,
-            firstName: data.fullName,
-            lastName: data.fullName,
+            fullName: data.fullName,
             gender: data.gender,
             password: data.password,
             username: data.email,
           },
         },
       });
-      console.log(result);
-      if (result && result.data.createProfile != null) {
-        dispatch({
-          type: SIGNUP_SUCCESS,
-          loading: false,
-          payload: result.data.createProfile,
-        });
-      } else {
-        dispatch({
-          type: SIGNUP_FAILED,
-          loading: false,
-          payload: result.data.errors[0].message,
-        });
+      if (result && result.data.createProfile !== null) {
+       return  dispatch(signupSuccess(result.data.createProfile))
       }
+      dispatch(signupFailed(result.data.errors[0].message))
     } catch (e) {
-      console.log(e.message);
-      dispatch({
-        type: SIGNUP_FAILED,
-        loading: false,
-        payload: e.message,
-      });
+      dispatch(signupFailed(e.message))
     }
   };
 };
 
+// Email Confirmation
 export const emailConfirmation = (data) => {
   return async (dispatch) => {
     try {
@@ -140,6 +125,7 @@ export const emailConfirmation = (data) => {
   };
 };
 
+// Reset Password Request
 export const resetPasswordRequest = (data) => {
   return async (dispatch) => {
     try {
@@ -177,6 +163,8 @@ export const resetPasswordRequest = (data) => {
   };
 };
 
+
+// Updated Password
 export const updatePassword = (data) => {
   return async (dispatch) => {
     try {
@@ -211,6 +199,22 @@ export const updatePassword = (data) => {
         loading: false,
         payload: e.message,
       });
+    }
+  };
+};
+
+// ME
+export const me = () => {
+  return async (dispatch) => {
+    try {
+      const apolloClient = createApolloClient();
+      const result = await apolloClient.query({
+        query: ME,
+        variables: {},
+      });
+      console.log('ME=============:',result);
+    } catch (e) {
+      console.log("ME============= Error:", e.message);
     }
   };
 };
