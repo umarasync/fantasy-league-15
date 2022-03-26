@@ -53,7 +53,8 @@ export default function SignUp(props) {
   const [isLoginPasswordType, setIsLoginPasswordType] = useState(true);
   const [loginDisabled, setLoginDisabled] = useState(true);
 
-  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
 
   const [showModal, setShowModal] = useState(false);
@@ -66,7 +67,8 @@ export default function SignUp(props) {
   /*** Sign Up Flow:Starts ****/
   const validateSignUp = () => {
     if (
-      fullName &&
+      firstName &&
+      lastName &&
       email &&
       selectedGender.value &&
       dateOfBirth &&
@@ -81,7 +83,8 @@ export default function SignUp(props) {
   const handleSignUpNext = () => {
     //Calling signup Mutation API
     let userObj = {
-      fullName: fullName,
+      firstName: firstName,
+      lastName: lastName,
       email: email,
       gender: selectedGender.value,
       dob: dateOfBirth,
@@ -161,7 +164,7 @@ export default function SignUp(props) {
   useEffect(() => {
     validate();
   }, [
-    fullName,
+    firstName,
     email,
     selectedGender.value,
     dateOfBirth,
@@ -315,13 +318,23 @@ export default function SignUp(props) {
               {!isLoginPage && (
                 <Div mb={30}>
                   <Input
-                    name="fullName"
-                    id="fullName"
-                    placeholder="Full name"
+                    name="firstName"
+                    id="firstName"
+                    placeholder="First name"
                     onChange={(v) => {
-                      setFullName(v);
+                      setFirstName(v);
                     }}
-                    value={fullName}
+                    value={firstName}
+                    autoCompleteOff
+                  />
+                  <Input
+                    name="lastName"
+                    id="lastName"
+                    placeholder="Last name"
+                    onChange={(v) => {
+                      setLastName(v);
+                    }}
+                    value={lastName}
                     autoCompleteOff
                   />
                   <Input
@@ -379,7 +392,7 @@ export default function SignUp(props) {
                 disabled={isLoginPage ? loginDisabled : disabled}
                 mb={40}
               />
-              <Div center>
+              <Div center mb={60}>
                 <Text fs={16} lh={20} fw={400} text={isLoginPage ? 'Don’t have an account?' : 'Already have an account?'} color={colors.regent_grey}/>
                 <Text fs={16} lh={20} fw={800} ml={5}
                       text={isLoginPage ? 'Sign Up' : 'Sign In'} color={colors.mandy} cursor={'pointer'}

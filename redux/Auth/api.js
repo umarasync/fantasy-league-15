@@ -37,7 +37,6 @@ export const login = (data) => {
 
       if (result && result.data.login != null) {
         //Store data for processing
-        localStorage.setItem("user", JSON.stringify(result.data.login));
         return dispatch(loginSuccess(result.data.login));
       }
 
@@ -69,8 +68,8 @@ export const signup = (data) => {
         variables: {
           data: {
             dob: isoDate,
-            favouriteTeamId: null,
-            fullName: data.fullName,
+            firstName: data.firstName,
+            lastName: data.lastName,
             gender: data.gender,
             password: data.password,
             username: data.email,
@@ -213,8 +212,10 @@ export const me = () => {
         variables: {},
       });
       console.log('ME=============:',result);
+      return result
     } catch (e) {
       console.log("ME============= Error:", e.message);
+      return false
     }
   };
 };

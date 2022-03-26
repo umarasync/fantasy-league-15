@@ -25,7 +25,7 @@ export const createFantasyTeam = (data) => {
           defenders: data.defenders,
           midfielders: data.midfielders,
           forwards: data.forwards,
-          // name: variables.name,
+          name: data.name,
         },
       });
       console.log("createFantasyTeam result =======", result);
@@ -35,6 +35,7 @@ export const createFantasyTeam = (data) => {
       }
       dispatch(createFantasyTeamFailed(ERROR_MSG))
     } catch (e) {
+      console.log("createFantasyTeam error =======", e);
       dispatch(createFantasyTeamFailed(ERROR_MSG))
     }
   };

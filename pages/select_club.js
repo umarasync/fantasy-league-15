@@ -14,15 +14,14 @@ import Div from "components/html/Div";
 import Image from "components/html/Image";
 import Text from "components/html/Text";
 
+// Actions
 import { getAllTeams, addFavouriteTeam } from "redux/Teams/api";
-import { me } from "redux/Auth/api";
 
 // Utils
 import R from "utils/getResponsiveValue";
 
 // Constants
 import colors from "constants/colors";
-// import cardsDataI from "constants/data/cardsData";
 
 // Styles
 const getStyles = (R) => {
@@ -73,7 +72,6 @@ export default function SelectClub() {
   useEffect(() => {
     //Query API
     dispatch(getAllTeams());
-    dispatch(me());
   }, []);
 
   useEffect(() => {

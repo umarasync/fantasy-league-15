@@ -40,6 +40,7 @@ function authReducer(
         ...state,
         loading: false,
         loginError: action.payload,
+        user: null,
       };
     case SIGNUP_SUCCESS:
       return {
