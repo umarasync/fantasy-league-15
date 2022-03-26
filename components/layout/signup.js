@@ -17,10 +17,11 @@ import Image from "components/html/Image";
 import ResetPasswordModal from "components/modals/ResetPasswordModal";
 import MyDatepicker from "components/datePicker/MyDatePicker";
 import GenderDropDown from "components/signUp/GenderDropDown";
+import Animated from "components/animation/Animated";
 
 // Redux
 import { signup, login } from "redux/Auth/api";
-import { RESET_PAGE } from "redux/Auth/actions";
+import { RESET_PAGE } from "redux/Auth/actionCreators";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -30,17 +31,12 @@ import colors from "constants/colors";
 
 // Animation
 import {signupHeadingAnimation} from "Animations/signUp/SignupAnimation";
-import Animated from "../animation/Animated";
+import Loader from "components/loaders/Loader";
+import {useAuth} from "../../context/authContext";
 
 export default function SignUp(props) {
   const router = useRouter();
   const dispatch = useDispatch();
-  
-  const successSignUp = useSelector(({ auth }) => auth.signUpSuccess);
-  const errorSignUp = useSelector(({ auth }) => auth.signUpError);
-
-  const user = useSelector(({ auth }) => auth.user);
-  const errorLogin = useSelector(({ auth }) => auth.loginError);
 
   const [isLoginPage, setIsLoginPage] = useState(props.isLoginPage);
   const [disabled, setDisabled] = useState(true);
@@ -53,7 +49,8 @@ export default function SignUp(props) {
   const [isLoginPasswordType, setIsLoginPasswordType] = useState(true);
   const [loginDisabled, setLoginDisabled] = useState(true);
 
-  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
 
   const [showModal, setShowModal] = useState(false);
@@ -63,10 +60,13 @@ export default function SignUp(props) {
   // Gender States
   const [selectedGender, setSelectedGender] = useState({value: ''});
 
+  const { isAuthenticated } = useAuth();
+
   /*** Sign Up Flow:Starts ****/
   const validateSignUp = () => {
     if (
-      fullName &&
+      firstName &&
+      lastName &&
       email &&
       selectedGender.value &&
       dateOfBirth &&
@@ -78,34 +78,28 @@ export default function SignUp(props) {
     }
   };
 
-  const handleSignUpNext = () => {
-    //Calling signup Mutation API
+  const handleSignUpNext = async () => {
     let userObj = {
-      fullName: fullName,
+      firstName: firstName,
+      lastName: lastName,
       email: email,
       gender: selectedGender.value,
       dob: dateOfBirth,
       password: password,
     };
-    dispatch(signup(userObj));
-  };
+    let {success, msg}  = await dispatch(signup(userObj));
 
-  useEffect(() => {
-    //Mutation API response
-    if (successSignUp) {
+    if (success) {
       setSignUpError(false);
-      //store user email
       localStorage.setItem("email", email);
-      toast.success("Signed Up successfully!", {
+      toast.success(msg, {
         onClose: () => router.push("/confirm_your_account"),
       });
-    } else if (errorSignUp) {
-      setSignUpError(errorSignUp);
-      toast.error(errorSignUp);
+    } else {
+      setSignUpError(msg);
+      toast.error(msg);
     }
-  }, [successSignUp, errorSignUp]);
-
-  /*** Sign Up Flow:Ends ****/
+  };
 
   /*** Sign In Flow:Starts ****/
   const validateSignIn = () => {
@@ -116,32 +110,28 @@ export default function SignUp(props) {
     }
   };
 
-  const handleSignInNext = () => {
+  const handleSignInNext = async () => {
     let loginObj = {
       email: loginEmail,
       password: loginPassword,
     };
-    dispatch(login(loginObj));
-  };
+    let {success, msg} = await dispatch(login(loginObj));
 
-  useEffect(() => {
-    if (user) {
+    if (success) {
       setError(false);
-      toast.success("Login successfully! Redirecting...", {
-        onClose: () => router.push("/select_club"),
-      });
-    } else if (errorLogin) {
-      setError(errorLogin);
-      toast.error(errorLogin, {
+      toast.success( msg, {onClose: () => router.push("/select_club"),});
+    } else {
+      setError(msg);
+      toast.error(msg, {
         onClose: () =>
           dispatch({
             type: RESET_PAGE,
           }),
       });
     }
-  }, [user, errorLogin]);
-  /*** Sign In Flow:Ends ****/
+  };
 
+  // Validations
   const validate = () => {
     if (isLoginPage) {
       validateSignIn();
@@ -161,7 +151,7 @@ export default function SignUp(props) {
   useEffect(() => {
     validate();
   }, [
-    fullName,
+    firstName,
     email,
     selectedGender.value,
     dateOfBirth,
@@ -170,6 +160,7 @@ export default function SignUp(props) {
     loginPassword,
   ]);
 
+  if(isAuthenticated) { return <Loader/> }
 
   return (
     <Layout title="Sign Up">
@@ -315,13 +306,23 @@ export default function SignUp(props) {
               {!isLoginPage && (
                 <Div mb={30}>
                   <Input
-                    name="fullName"
-                    id="fullName"
-                    placeholder="Full name"
+                    name="firstName"
+                    id="firstName"
+                    placeholder="First name"
                     onChange={(v) => {
-                      setFullName(v);
+                      setFirstName(v);
                     }}
-                    value={fullName}
+                    value={firstName}
+                    autoCompleteOff
+                  />
+                  <Input
+                    name="lastName"
+                    id="lastName"
+                    placeholder="Last name"
+                    onChange={(v) => {
+                      setLastName(v);
+                    }}
+                    value={lastName}
                     autoCompleteOff
                   />
                   <Input
@@ -379,7 +380,7 @@ export default function SignUp(props) {
                 disabled={isLoginPage ? loginDisabled : disabled}
                 mb={40}
               />
-              <Div center>
+              <Div center mb={60}>
                 <Text fs={16} lh={20} fw={400} text={isLoginPage ? 'Don’t have an account?' : 'Already have an account?'} color={colors.regent_grey}/>
                 <Text fs={16} lh={20} fw={800} ml={5}
                       text={isLoginPage ? 'Sign Up' : 'Sign In'} color={colors.mandy} cursor={'pointer'}

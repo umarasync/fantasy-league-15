@@ -1,20 +1,18 @@
 // Packages
-import { createApolloClient } from "graphql/apollo";
+import {createApolloClient} from "graphql/apollo";
 
 // Actions
 import {
-  LOGIN_FAILED,
   CONFIRMATION_FAILED,
   CONFIRMATION_SUCCESS,
+  loginFailed,
+  loginSuccess,
+  RESET_PASSWORD_FAILED,
   RESET_PASSWORD_REQUEST_FAILED,
   RESET_PASSWORD_REQUEST_SUCCESS,
-  RESET_PASSWORD_FAILED,
   RESET_PASSWORD_SUCCESS,
-  RESET_PAGE,
-  signupSuccess,
   signupFailed,
-  loginSuccess,
-  loginFailed
+  signupSuccess
 } from "./actionCreators";
 
 // GraphQL
@@ -24,6 +22,9 @@ import CONFIRM_EMAIL from "graphql/mutations/emailConfirmation";
 import RESET_REQUEST from "graphql/mutations/resetPasswordRequest";
 import UPDATE_PASSWORD from "graphql/mutations/updatePassword";
 import ME from "graphql/queries/me";
+
+// Helpers
+import {responseFailed, responseSuccess} from "utils/helpers";
 
 // Login
 export const login = (data) => {
@@ -35,23 +36,18 @@ export const login = (data) => {
         variables: { username: data.email, password: data.password },
       });
 
-      if (result && result.data.login != null) {
-        //Store data for processing
-        localStorage.setItem("user", JSON.stringify(result.data.login));
-        return dispatch(loginSuccess(result.data.login));
+      if (result && result.data.login !== null) {
+        dispatch(loginSuccess(result.data.login));
+        return responseSuccess('Login successfully! Redirecting...')
       }
 
-      dispatch(loginFailed(result.data.errors[0].message))
+      let errorMsg = result.data.errors[0].message
+      dispatch(loginFailed(errorMsg))
+      return responseFailed(errorMsg)
 
     } catch (e) {
-      console.log(e.message);
-      dispatch({
-        type: LOGIN_FAILED,
-        loading: false,
-        payload: e.message,
-      });
-
-      //throw e;
+      dispatch(loginFailed(e.message))
+      return responseFailed(e.message)
     }
   };
 };
@@ -69,8 +65,8 @@ export const signup = (data) => {
         variables: {
           data: {
             dob: isoDate,
-            favouriteTeamId: null,
-            fullName: data.fullName,
+            firstName: data.firstName,
+            lastName: data.lastName,
             gender: data.gender,
             password: data.password,
             username: data.email,
@@ -78,11 +74,16 @@ export const signup = (data) => {
         },
       });
       if (result && result.data.createProfile !== null) {
-       return  dispatch(signupSuccess(result.data.createProfile))
+       dispatch(signupSuccess(result.data.createProfile))
+       return responseSuccess('Signed Up successfully!')
       }
-      dispatch(signupFailed(result.data.errors[0].message))
+
+      let errMsg = result.data.errors[0].message
+      dispatch(signupFailed(errMsg))
+      return responseFailed(errMsg)
     } catch (e) {
       dispatch(signupFailed(e.message))
+      return responseFailed(e.message)
     }
   };
 };
@@ -208,13 +209,12 @@ export const me = () => {
   return async (dispatch) => {
     try {
       const apolloClient = createApolloClient();
-      const result = await apolloClient.query({
+      return await apolloClient.query({
         query: ME,
         variables: {},
-      });
-      console.log('ME=============:',result);
+      })
     } catch (e) {
-      console.log("ME============= Error:", e.message);
+      return false
     }
   };
 };

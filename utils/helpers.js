@@ -2,7 +2,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 
 // Constants
-import {currencySymbol} from "constants/universal";
+import {currencySymbol} from "constants/universalConstants";
 
 export const searchInArray =(searchQuery, array, objectKey=null)=>{
 
@@ -53,3 +53,17 @@ export const isOdd = (num) => num % 2
 export const truncate = (str, n) => {
     return (str.length > n) ? str.substr(0, n - 1) + '...' : str;
 };
+
+export const responseSuccess = (msg) => {
+    return {
+        success: true,
+        msg: msg
+    }
+}
+
+export const responseFailed = (msg) => {
+    return {
+        success: false,
+        msg: msg
+    }
+}

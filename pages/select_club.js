@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {isEmpty} from "lodash";
 
 // Components
 import Layout from "components/layout";
@@ -14,15 +15,14 @@ import Div from "components/html/Div";
 import Image from "components/html/Image";
 import Text from "components/html/Text";
 
+// Actions
 import { getAllTeams, addFavouriteTeam } from "redux/Teams/api";
-import { me } from "redux/Auth/api";
 
 // Utils
 import R from "utils/getResponsiveValue";
 
 // Constants
 import colors from "constants/colors";
-// import cardsDataI from "constants/data/cardsData";
 
 // Styles
 const getStyles = (R) => {
@@ -73,7 +73,6 @@ export default function SelectClub() {
   useEffect(() => {
     //Query API
     dispatch(getAllTeams());
-    dispatch(me());
   }, []);
 
   useEffect(() => {
@@ -125,9 +124,9 @@ export default function SelectClub() {
   };
 
   const onNextClick = () => {
-    if (user && user !== "") {
+    if (!isEmpty(user)) {
       let data = {
-        profileId: user.profile.id,
+        profileId: user.id,
         accountId: user.id,
         favouriteTeamId: cardsData[2].id,
       };

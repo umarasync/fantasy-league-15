@@ -9,9 +9,11 @@ import { createApolloClient } from "graphql/apollo";
 import CREATE_FANTASY_TEAM from "graphql/mutations/createFantasyTeam";
 
 // Constants
-import {ERROR_MSG} from "constants/universal";
+import {ERROR_MSG} from "constants/universalConstants";
 
 export const createFantasyTeam = (data) => {
+
+  return
 
   console.log("createFantasyTeam Data=============", data)
 
@@ -25,7 +27,7 @@ export const createFantasyTeam = (data) => {
           defenders: data.defenders,
           midfielders: data.midfielders,
           forwards: data.forwards,
-          // name: variables.name,
+          name: data.name,
         },
       });
       console.log("createFantasyTeam result =======", result);
@@ -35,6 +37,7 @@ export const createFantasyTeam = (data) => {
       }
       dispatch(createFantasyTeamFailed(ERROR_MSG))
     } catch (e) {
+      console.log("createFantasyTeam error =======", e);
       dispatch(createFantasyTeamFailed(ERROR_MSG))
     }
   };
