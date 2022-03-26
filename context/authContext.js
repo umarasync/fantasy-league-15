@@ -7,13 +7,13 @@ import { me } from "redux/Auth/api"
 import {meFailed, meSuccess} from "redux/Auth/actionCreators";
 
 // Constants
-import {publicRoutes} from "constants/universal";
+import {authRoutes, homeRoute, publicRoutes} from "constants/universalConstants";
+import {isEmpty} from "lodash/lang";
 
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
 
-    // const [user, setUser] = useState(null)
     const user = useSelector(({ auth }) => auth.user);
 
     const [loading, setLoading] = useState(true)
@@ -21,17 +21,26 @@ export const AuthProvider = ({ children }) => {
     const dispatch = useDispatch();
 
     const checkIfTokenIsValid = async () => {
-        const user = await dispatch(me());
-        console.log("in checkIfTokenIsValid ===========", user)
-          if(user) {
-              dispatch(meSuccess(user))
-              setLoading(false)
-              return router.push(router.pathname)
+        const $user = await dispatch(me());
+        if($user) {
+            dispatch(meSuccess($user))
+            setLoading(false)
+
+            // If already signed in and trying to access login/register page, then redirect to some homepage
+            if(authRoutes.includes(router.pathname)){
+                 return router.push(homeRoute)
+            }else {
+                 return router.push(router.pathname)
+            }
         }
-        dispatch(meFailed(null))
+
+        dispatch(meFailed())
         setLoading(false)
 
-        router.replace('/sign_in')
+        if(authRoutes.includes(router.pathname)){
+          return router.push(router.pathname)
+        }
+        return router.push('/sign_in')
     }
     useEffect(() => {
         // if(publicRoutes.includes(router.pathname)) return
@@ -39,7 +48,7 @@ export const AuthProvider = ({ children }) => {
     }, [])
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated: !!user, user, loading }}>
+        <AuthContext.Provider value={{ isAuthenticated: !isEmpty(user), user, loading }}>
             {children}
         </AuthContext.Provider>
     )

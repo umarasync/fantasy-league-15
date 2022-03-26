@@ -9,7 +9,7 @@ import R from "utils/getResponsiveValue";
 
 // Constants
 import colors from "constants/colors";
-import {POINTS_PER_ADDITIONAL_TRANSFER} from "constants/universal";
+import {POINTS_PER_ADDITIONAL_TRANSFER} from "constants/universalConstants";
 
 // Utils
 import {nFormatter} from "utils/helpers";

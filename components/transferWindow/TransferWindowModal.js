@@ -9,7 +9,7 @@ import BorderHorizontal from "components/borders/BorderHorizontal";
 // Constants
 import colors from "constants/colors";
 import {SHADOW_DARK_INDIGO, SHADOW_WHITE_SMOKE} from "constants/boxShadow";
-import {POINTS_PER_ADDITIONAL_TRANSFER} from "constants/universal";
+import {POINTS_PER_ADDITIONAL_TRANSFER} from "constants/universalConstants";
 import {CLUB_FC, POSITION_MID, STATUS_FIT} from "constants/data/filters";
 
 // Utils

@@ -31,6 +31,8 @@ import colors from "constants/colors";
 
 // Animation
 import {signupHeadingAnimation} from "Animations/signUp/SignupAnimation";
+import Loader from "components/loaders/Loader";
+import {useAuth} from "../../context/authContext";
 
 export default function SignUp(props) {
   const router = useRouter();
@@ -57,6 +59,8 @@ export default function SignUp(props) {
 
   // Gender States
   const [selectedGender, setSelectedGender] = useState({value: ''});
+
+  const { isAuthenticated } = useAuth();
 
   /*** Sign Up Flow:Starts ****/
   const validateSignUp = () => {
@@ -156,6 +160,7 @@ export default function SignUp(props) {
     loginPassword,
   ]);
 
+  if(isAuthenticated) { return <Loader/> }
 
   return (
     <Layout title="Sign Up">

@@ -2,7 +2,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 
 // Constants
-import {currencySymbol} from "constants/universal";
+import {currencySymbol} from "constants/universalConstants";
 
 export const searchInArray =(searchQuery, array, objectKey=null)=>{
 

@@ -38,6 +38,8 @@ export const login = (data) => {
         variables: { username: data.email, password: data.password },
       });
 
+      console.log('3========', result)
+
       if (result && result.data.login !== null) {
         dispatch(loginSuccess(result.data.login));
         return responseSuccess('Login successfully! Redirecting...')
@@ -215,7 +217,7 @@ export const me = () => {
         query: ME,
         variables: {},
       });
-      console.log('ME=============:',result);
+      console.log('ME=============:', result);
       return result
     } catch (e) {
       console.log("ME============= Error:", e.message);

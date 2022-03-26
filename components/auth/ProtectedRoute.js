@@ -8,13 +8,14 @@ import Loader from "components/loaders/Loader";
 import {AuthProvider, useAuth} from "context/authContext";
 
 // Constants
-import {publicRoutes} from "constants/universal";
+import {publicRoutes} from "constants/universalConstants";
 
 export const ProtectRoute = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
+
   const router = useRouter();
 
-  if (isLoading || (!isAuthenticated) && !publicRoutes.includes(router.pathname)){
+  if (loading || (!isAuthenticated) && !publicRoutes.includes(router.pathname)){
     return <Loader />;
   }
   return children;

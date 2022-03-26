@@ -4,7 +4,8 @@ export default gql`
   query me {
     me {
       id
-      fullName
+      firstName
+      lastName
       accounts {
         id
         username

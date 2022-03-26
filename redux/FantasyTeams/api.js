@@ -9,7 +9,7 @@ import { createApolloClient } from "graphql/apollo";
 import CREATE_FANTASY_TEAM from "graphql/mutations/createFantasyTeam";
 
 // Constants
-import {ERROR_MSG} from "constants/universal";
+import {ERROR_MSG} from "constants/universalConstants";
 
 export const createFantasyTeam = (data) => {
 
