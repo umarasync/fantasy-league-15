@@ -25,6 +25,9 @@ import RESET_REQUEST from "graphql/mutations/resetPasswordRequest";
 import UPDATE_PASSWORD from "graphql/mutations/updatePassword";
 import ME from "graphql/queries/me";
 
+// Helpers
+import {responseFailed, responseSuccess} from "utils/helpers";
+
 // Login
 export const login = (data) => {
   return async (dispatch) => {
@@ -35,22 +38,18 @@ export const login = (data) => {
         variables: { username: data.email, password: data.password },
       });
 
-      if (result && result.data.login != null) {
-        //Store data for processing
-        return dispatch(loginSuccess(result.data.login));
+      if (result && result.data.login !== null) {
+        dispatch(loginSuccess(result.data.login));
+        return responseSuccess('Login successfully! Redirecting...')
       }
 
-      dispatch(loginFailed(result.data.errors[0].message))
+      let errorMsg = result.data.errors[0].message
+      dispatch(loginFailed(errorMsg))
+      return responseFailed(errorMsg)
 
     } catch (e) {
-      console.log(e.message);
-      dispatch({
-        type: LOGIN_FAILED,
-        loading: false,
-        payload: e.message,
-      });
-
-      //throw e;
+      dispatch(loginFailed(e.message))
+      return responseFailed(e.message)
     }
   };
 };

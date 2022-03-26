@@ -20,7 +20,7 @@ import GenderDropDown from "components/signUp/GenderDropDown";
 
 // Redux
 import { signup, login } from "redux/Auth/api";
-import { RESET_PAGE } from "redux/Auth/actions";
+import { RESET_PAGE } from "redux/Auth/actionCreators";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -38,9 +38,6 @@ export default function SignUp(props) {
   
   const successSignUp = useSelector(({ auth }) => auth.signUpSuccess);
   const errorSignUp = useSelector(({ auth }) => auth.signUpError);
-
-  const user = useSelector(({ auth }) => auth.user);
-  const errorLogin = useSelector(({ auth }) => auth.loginError);
 
   const [isLoginPage, setIsLoginPage] = useState(props.isLoginPage);
   const [disabled, setDisabled] = useState(true);
@@ -119,30 +116,28 @@ export default function SignUp(props) {
     }
   };
 
-  const handleSignInNext = () => {
+  const handleSignInNext = async () => {
     let loginObj = {
       email: loginEmail,
       password: loginPassword,
     };
-    dispatch(login(loginObj));
-  };
+    let {success, msg} = await dispatch(login(loginObj));
 
-  useEffect(() => {
-    if (user) {
+    if (success) {
       setError(false);
-      toast.success("Login successfully! Redirecting...", {
-        onClose: () => router.push("/select_club"),
-      });
-    } else if (errorLogin) {
-      setError(errorLogin);
-      toast.error(errorLogin, {
+      toast.success( msg, {onClose: () => router.push("/select_club"),});
+    } else {
+      setError(msg);
+      toast.error(msg, {
         onClose: () =>
           dispatch({
             type: RESET_PAGE,
           }),
       });
     }
-  }, [user, errorLogin]);
+  };
+
+
   /*** Sign In Flow:Ends ****/
 
   const validate = () => {

@@ -3,6 +3,8 @@ import {
   SIGNUP_SUCCESS,
   LOGIN_FAILED,
   LOGIN_SUCCESS,
+  ME_SUCCESS,
+  ME_FAILED,
   CONFIRMATION_FAILED,
   CONFIRMATION_SUCCESS,
   RESET_PASSWORD_REQUEST_FAILED,
@@ -15,7 +17,6 @@ import {
 function authReducer(
   state = {
     loading: false,
-    loginError: "",
     signUpSuccess: "",
     signUpError: "",
     confirmationError:"",
@@ -39,7 +40,18 @@ function authReducer(
       return {
         ...state,
         loading: false,
-        loginError: action.payload,
+        user: null,
+      };
+    case ME_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        user: { ...action.payload },
+      };
+    case ME_FAILED:
+      return {
+        ...state,
+        loading: false,
         user: null,
       };
     case SIGNUP_SUCCESS:
@@ -93,7 +105,6 @@ function authReducer(
     case RESET_PAGE:
       return {
         loading: false,
-        loginError: "",
         signUpSuccess: "",
         signUpError: "",
         confirmationError:"",

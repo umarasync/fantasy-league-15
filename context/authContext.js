@@ -1,19 +1,21 @@
 import React, { createContext, useState, useContext, useEffect } from 'react'
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useRouter} from "next/router";
 
 // Actions
 import { me } from "redux/Auth/api"
+import {meFailed, meSuccess} from "redux/Auth/actionCreators";
 
 // Constants
 import {publicRoutes} from "constants/universal";
-import {loginFailed} from "../redux/Auth/actionCreators";
 
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
 
-    const [user, setUser] = useState(null)
+    // const [user, setUser] = useState(null)
+    const user = useSelector(({ auth }) => auth.user);
+
     const [loading, setLoading] = useState(true)
     const router = useRouter();
     const dispatch = useDispatch();
@@ -22,17 +24,17 @@ export const AuthProvider = ({ children }) => {
         const user = await dispatch(me());
         console.log("in checkIfTokenIsValid ===========", user)
           if(user) {
-              setUser(user)
+              dispatch(meSuccess(user))
               setLoading(false)
               return router.push(router.pathname)
         }
+        dispatch(meFailed(null))
         setLoading(false)
-        dispatch(loginFailed(''))
 
         router.replace('/sign_in')
     }
     useEffect(() => {
-        if(publicRoutes.includes(router.pathname)) return
+        // if(publicRoutes.includes(router.pathname)) return
         checkIfTokenIsValid()
     }, [])
 
