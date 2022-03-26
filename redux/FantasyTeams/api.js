@@ -13,6 +13,8 @@ import {ERROR_MSG} from "constants/universalConstants";
 
 export const createFantasyTeam = (data) => {
 
+  return
+
   console.log("createFantasyTeam Data=============", data)
 
   return async (dispatch) => {

@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {isEmpty} from "lodash";
 
 // Components
 import Layout from "components/layout";
@@ -123,9 +124,9 @@ export default function SelectClub() {
   };
 
   const onNextClick = () => {
-    if (user && user !== "") {
+    if (!isEmpty(user)) {
       let data = {
-        profileId: user.profile.id,
+        profileId: user.id,
         accountId: user.id,
         favouriteTeamId: cardsData[2].id,
       };

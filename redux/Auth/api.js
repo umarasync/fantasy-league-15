@@ -1,20 +1,18 @@
 // Packages
-import { createApolloClient } from "graphql/apollo";
+import {createApolloClient} from "graphql/apollo";
 
 // Actions
 import {
-  LOGIN_FAILED,
   CONFIRMATION_FAILED,
   CONFIRMATION_SUCCESS,
+  loginFailed,
+  loginSuccess,
+  RESET_PASSWORD_FAILED,
   RESET_PASSWORD_REQUEST_FAILED,
   RESET_PASSWORD_REQUEST_SUCCESS,
-  RESET_PASSWORD_FAILED,
   RESET_PASSWORD_SUCCESS,
-  RESET_PAGE,
-  signupSuccess,
   signupFailed,
-  loginSuccess,
-  loginFailed
+  signupSuccess
 } from "./actionCreators";
 
 // GraphQL
@@ -37,8 +35,6 @@ export const login = (data) => {
         mutation: DO_LOGIN,
         variables: { username: data.email, password: data.password },
       });
-
-      console.log('3========', result)
 
       if (result && result.data.login !== null) {
         dispatch(loginSuccess(result.data.login));
@@ -213,14 +209,11 @@ export const me = () => {
   return async (dispatch) => {
     try {
       const apolloClient = createApolloClient();
-      const result = await apolloClient.query({
+      return await apolloClient.query({
         query: ME,
         variables: {},
-      });
-      console.log('ME=============:', result);
-      return result
+      })
     } catch (e) {
-      console.log("ME============= Error:", e.message);
       return false
     }
   };

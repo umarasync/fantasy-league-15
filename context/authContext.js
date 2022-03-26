@@ -43,7 +43,6 @@ export const AuthProvider = ({ children }) => {
         return router.push('/sign_in')
     }
     useEffect(() => {
-        // if(publicRoutes.includes(router.pathname)) return
         checkIfTokenIsValid()
     }, [])
 
