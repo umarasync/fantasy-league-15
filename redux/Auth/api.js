@@ -76,11 +76,16 @@ export const signup = (data) => {
         },
       });
       if (result && result.data.createProfile !== null) {
-       return  dispatch(signupSuccess(result.data.createProfile))
+       dispatch(signupSuccess(result.data.createProfile))
+       return responseSuccess('Signed Up successfully!')
       }
-      dispatch(signupFailed(result.data.errors[0].message))
+
+      let errMsg = result.data.errors[0].message
+      dispatch(signupFailed(errMsg))
+      return responseFailed(errMsg)
     } catch (e) {
       dispatch(signupFailed(e.message))
+      return responseFailed(e.message)
     }
   };
 };

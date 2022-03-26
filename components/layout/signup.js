@@ -17,6 +17,7 @@ import Image from "components/html/Image";
 import ResetPasswordModal from "components/modals/ResetPasswordModal";
 import MyDatepicker from "components/datePicker/MyDatePicker";
 import GenderDropDown from "components/signUp/GenderDropDown";
+import Animated from "components/animation/Animated";
 
 // Redux
 import { signup, login } from "redux/Auth/api";
@@ -30,14 +31,10 @@ import colors from "constants/colors";
 
 // Animation
 import {signupHeadingAnimation} from "Animations/signUp/SignupAnimation";
-import Animated from "../animation/Animated";
 
 export default function SignUp(props) {
   const router = useRouter();
   const dispatch = useDispatch();
-  
-  const successSignUp = useSelector(({ auth }) => auth.signUpSuccess);
-  const errorSignUp = useSelector(({ auth }) => auth.signUpError);
 
   const [isLoginPage, setIsLoginPage] = useState(props.isLoginPage);
   const [disabled, setDisabled] = useState(true);
@@ -77,8 +74,7 @@ export default function SignUp(props) {
     }
   };
 
-  const handleSignUpNext = () => {
-    //Calling signup Mutation API
+  const handleSignUpNext = async () => {
     let userObj = {
       firstName: firstName,
       lastName: lastName,
@@ -87,25 +83,19 @@ export default function SignUp(props) {
       dob: dateOfBirth,
       password: password,
     };
-    dispatch(signup(userObj));
-  };
+    let {success, msg}  = await dispatch(signup(userObj));
 
-  useEffect(() => {
-    //Mutation API response
-    if (successSignUp) {
+    if (success) {
       setSignUpError(false);
-      //store user email
       localStorage.setItem("email", email);
-      toast.success("Signed Up successfully!", {
+      toast.success(msg, {
         onClose: () => router.push("/confirm_your_account"),
       });
-    } else if (errorSignUp) {
-      setSignUpError(errorSignUp);
-      toast.error(errorSignUp);
+    } else {
+      setSignUpError(msg);
+      toast.error(msg);
     }
-  }, [successSignUp, errorSignUp]);
-
-  /*** Sign Up Flow:Ends ****/
+  };
 
   /*** Sign In Flow:Starts ****/
   const validateSignIn = () => {
@@ -137,9 +127,7 @@ export default function SignUp(props) {
     }
   };
 
-
-  /*** Sign In Flow:Ends ****/
-
+  // Validations
   const validate = () => {
     if (isLoginPage) {
       validateSignIn();
