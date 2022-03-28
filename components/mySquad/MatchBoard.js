@@ -13,7 +13,7 @@ import Button from "components/html/Button";
 // Constants
 import {SHADOW_WHITE_SMOKE} from "constants/boxShadow";
 import colors from "constants/colors";
-import {MATCHES} from "constants/data/matches";
+import {MatchesGameWeeks} from "constants/data/matchesGameWeeks";
 
 // utils
 import {clone} from "utils/helpers";
@@ -29,7 +29,9 @@ import {
 
 // Animations
 import {scrollAnimation, borderAnimation, subHeadingAnimation} from "Animations/matchBoard/MatchBoardAnimation";
-import {getMatchFixtures} from "../../redux/MatchFixtures/api";
+
+// Actions
+import {getMatchFixtures} from "redux/MatchFixtures/api";
 
 // Styles
 const getStyles = (R) => {
@@ -75,9 +77,9 @@ export default function MatchBoard () {
 
     const STYLES =  { ...getStyles(R) }
 
-    const INITIAL_MATCHES = clone(MATCHES)
+    const INITIAL_MATCHES = clone(MatchesGameWeeks)
 
-    const [matches, setMatches] = useState([])
+    const [matchesGameWeeks, setMatchesGameWeeks] = useState([])
 
     const scrollContainerRef = useRef()
     let activeRef = useRef()
@@ -110,8 +112,8 @@ export default function MatchBoard () {
         tabClickHandler({
             match,
             animationInProgress,
-            matches,
-            setMatches,
+            matchesGameWeeks,
+            setMatchesGameWeeks,
             tabChanged,
             setTabChanged,
             setActiveTabContent,
@@ -121,8 +123,8 @@ export default function MatchBoard () {
         controlsHandler({
             animationInProgress,
             isNext,
-            matches,
-            setMatches,
+            matchesGameWeeks,
+            setMatchesGameWeeks,
             tabChanged,
             setTabChanged,
             setActiveTabContent,
@@ -143,13 +145,13 @@ export default function MatchBoard () {
                 })
          }, 100)
         }
-    }, [matches, initialRenderDone])
+    }, [matchesGameWeeks, initialRenderDone])
 
     const runInitialSettings = async () => {
         setInitialSettings({
             initialMatches: INITIAL_MATCHES,
             setActiveTabContent,
-            setMatches
+            setMatchesGameWeeks
         })
     }
 
@@ -191,7 +193,7 @@ export default function MatchBoard () {
                          ref={scrollContainerRef}
                     >
                         {
-                            matches.length > 0 && matches.map((gw, index) => {
+                            matchesGameWeeks.length > 0 && matchesGameWeeks.map((gw, index) => {
                                 return(
                                     <motion.div
                                         variants={scrollAnimation}

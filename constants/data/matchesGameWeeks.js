@@ -206,7 +206,7 @@ const NEXT_GAME_WEEKS = [11,12,13,14,15,16,17,18].map((week, index) => {
     }
 })
 
-export const MATCHES = [
+export const MatchesGameWeeks = [
     ...PREVIOUS_GAME_WEEKS,
     { ...CURRENT_GAME_WEEK },
     ...NEXT_GAME_WEEKS

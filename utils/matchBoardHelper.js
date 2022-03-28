@@ -10,19 +10,19 @@ export const MAKE_TRANSFERS = 'make transfers'
 export const setInitialSettings = ({
   initialMatches,
   setActiveTabContent,
-  setMatches
+  setMatchesGameWeeks
 }) => {
-    const $matches = initialMatches.map((match, index) => {
+    const $matchesGameWeeks = initialMatches.map((gw, index) => {
         // const todayDate = dayjs().format('YYYY-MM-D')
         // if (dayjs(match.gameWeekDate).isSame(todayDate)) {
-        if (match.currentGameWeek) {
-            match.gameWeekDate = MAKE_TRANSFERS
-            match.active = true
-            setActiveTabContent({...match})
+        if (gw.currentGameWeek) {
+            gw.gameWeekDate = MAKE_TRANSFERS
+            gw.active = true
+            setActiveTabContent({...gw})
         }
-        return match
+        return gw
     })
-    setMatches($matches)
+    setMatchesGameWeeks($matchesGameWeeks)
 }
 
 export const getActiveRect = ({
@@ -80,16 +80,16 @@ export const scrollRenderer = (props) => {
 
 export const tabClickHandler = ({
     match,
-    matches,
-    setMatches,
+    matchesGameWeeks,
+    setMatchesGameWeeks,
     tabChanged,
     setTabChanged,
     setActiveTabContent,
     animationInProgress,
 }) => {
     if(animationInProgress) return
-    let currentActive = matches.findIndex((match) => match.active)
-    const $matches = matches.map((item, index) => {
+    let currentActive = matchesGameWeeks.findIndex((match) => match.active)
+    const $matchesGameWeeks = matchesGameWeeks.map((item, index) => {
         item.active = item.id === match.id;
         if (item.active) {
             setActiveTabContent({...item})
@@ -98,30 +98,30 @@ export const tabClickHandler = ({
         item.lastActive = index === currentActive
         return item
     })
-    setMatches($matches)
+    setMatchesGameWeeks($matchesGameWeeks)
 }
 
 
 export const controlsHandler = ({
     animationInProgress,
     isNext,
-    matches,
+    matchesGameWeeks,
     // These props are necessary for tabClickHandler function
-    setMatches,
+    setMatchesGameWeeks,
     tabChanged,
     setTabChanged,
     setActiveTabContent,
 }) => {
     if (animationInProgress) return;
-    const $matches = clone(matches)
-    let objIndex = $matches.findIndex((match) => match.active)
+    const $matchesGameWeeks = clone(matchesGameWeeks)
+    let objIndex = $matchesGameWeeks.findIndex((match) => match.active)
     let nextIndex = isNext ? objIndex + 1 : objIndex - 1
-    if (nextIndex === $matches.length || nextIndex === -1) return
+    if (nextIndex === $matchesGameWeeks.length || nextIndex === -1) return
 
     tabClickHandler({
-        matches,
-        match: $matches[nextIndex],
-        setMatches,
+        matchesGameWeeks,
+        match: $matchesGameWeeks[nextIndex],
+        setMatchesGameWeeks,
         tabChanged,
         setTabChanged,
         setActiveTabContent,
