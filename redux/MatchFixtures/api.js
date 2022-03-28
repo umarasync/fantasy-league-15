@@ -8,6 +8,8 @@ import {
 
 // GraphQL
 import GET_MATCH_FIXTURES from "graphql/queries/matchFixtures";
+import {isEmpty} from "utils/helpers";
+
 
 export const getMatchFixtures = (data) => {
   return async (dispatch) => {
@@ -20,17 +22,16 @@ export const getMatchFixtures = (data) => {
         },
       });
 
-      // if (result && result.data.teams !== null) {
-      //   return dispatch(getAllTeamsSuccess(result.data.teams.data))
-      // }
+      if (result && !isEmpty(result.data.matchFixtures)) {
+        console.log('getMatchFixturesSuccess ========', result)
 
-      console.log('getAllTeamsSuccess ==========', result)
+        return dispatch(getMatchFixturesSuccess(result.data.matchFixtures.data))
+      }
 
-      // dispatch(getMatchFixturesFailed(result.data.errors[0].message))
+      dispatch(getMatchFixturesFailed(result.data.errors[0].message))
+
     } catch (e) {
-      console.log('getMatchFixturesFailed ==========', e)
       dispatch(getMatchFixturesFailed(e.message))
     }
   };
 };
-

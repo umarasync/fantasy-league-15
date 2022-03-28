@@ -2,6 +2,7 @@
 import {motion, useAnimation} from "framer-motion";
 import {createRef, useEffect, useRef, useState} from "react";
 import dayjs from 'dayjs'
+import {useDispatch} from "react-redux";
 
 // Components
 import Div from "components/html/Div";
@@ -28,6 +29,7 @@ import {
 
 // Animations
 import {scrollAnimation, borderAnimation, subHeadingAnimation} from "Animations/matchBoard/MatchBoardAnimation";
+import {getMatchFixtures} from "../../redux/MatchFixtures/api";
 
 // Styles
 const getStyles = (R) => {
@@ -81,6 +83,7 @@ export default function MatchBoard () {
     let activeRef = useRef()
 
     const controls = useAnimation()
+    const dispatch = useDispatch()
     const borderAnimationControls = useAnimation()
 
     const [moved, setMoved] = useState(0)
@@ -101,6 +104,9 @@ export default function MatchBoard () {
     }, [moved])
 
     const handleTabClick = (match) => {
+
+        dispatch(getMatchFixtures({gameWeek: 1}))
+
         tabClickHandler({
             match,
             animationInProgress,
@@ -139,12 +145,16 @@ export default function MatchBoard () {
         }
     }, [matches, initialRenderDone])
 
-    useEffect(() => {
+    const runInitialSettings = async () => {
         setInitialSettings({
             initialMatches: INITIAL_MATCHES,
             setActiveTabContent,
             setMatches
         })
+    }
+
+    useEffect(() => {
+      runInitialSettings()
     }, [])
 
     const onAnimationComplete = (definition) => {
@@ -152,8 +162,6 @@ export default function MatchBoard () {
             setAnimationInProgress(false)
         }
     }
-
-    console.log('1----------', INITIAL_MATCHES)
 
     return (
         <Div
@@ -183,38 +191,37 @@ export default function MatchBoard () {
                          ref={scrollContainerRef}
                     >
                         {
-                            matches.length > 0 && matches.map((match, index) => {
+                            matches.length > 0 && matches.map((gw, index) => {
                                 return(
                                     <motion.div
                                         variants={scrollAnimation}
                                         animate={controls}
                                         custom={{
-                                            match,
+                                            gw,
                                             moved
                                         }}
-                                        key={match.id}
+                                        key={gw.id}
                                         className={'flex flex-col items-center'}
                                         style={{...STYLES.item}}
                                     >
                                         <div
                                             className={'flex flex-col items-center'}
-                                            ref={match.active ? activeRef : null}
-                                            onClick={() => handleTabClick(match)}
-                                            data-lastChild={match.lastChild}
-                                            data-firstChild={match.firstChild}
+                                            ref={gw.active ? activeRef : null}
+                                            onClick={() => handleTabClick(gw)}
+
                                         >
-                                            <Text text={`Gameweek ${match.gameWeek}`} color={colors.regent_grey} fs={18} lh={26}/>
+                                            <Text text={`Gameweek ${gw.gameWeek}`} color={colors.regent_grey} fs={18} lh={26}/>
                                             <motion.p
                                                 variants={subHeadingAnimation}
                                                 animate={controls}
-                                                custom={match}
+                                                custom={gw}
                                                 className={'italic uppercase font-[700]'}
                                                 style={STYLES.subHeading}
                                             >
                                                 {
-                                                    match.gameWeekDate !== MAKE_TRANSFERS
-                                                        ? dayjs(match.gameWeekDate).format('DD MMM')
-                                                        : match.gameWeekDate
+                                                    gw.gameWeekDate !== MAKE_TRANSFERS
+                                                        ? dayjs(gw.gameWeekDate).format('DD MMM')
+                                                        : gw.gameWeekDate
                                                 }
                                             </motion.p>
                                         </div>
