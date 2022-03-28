@@ -8,13 +8,11 @@ import {clone} from "utils/helpers";
 export const MAKE_TRANSFERS = 'make transfers'
 
 export const setInitialSettings = ({
-  initialMatches,
+  initialMatchFixturesGameWeeks,
   setActiveTabContent,
   setMatchesGameWeeks
 }) => {
-    const $matchesGameWeeks = initialMatches.map((gw, index) => {
-        // const todayDate = dayjs().format('YYYY-MM-D')
-        // if (dayjs(match.gameWeekDate).isSame(todayDate)) {
+    const $matchesGameWeeks = initialMatchFixturesGameWeeks.map((gw, index) => {
         if (gw.currentGameWeek) {
             gw.gameWeekDate = MAKE_TRANSFERS
             gw.active = true
@@ -79,7 +77,7 @@ export const scrollRenderer = (props) => {
 }
 
 export const tabClickHandler = ({
-    match,
+    gw,
     matchesGameWeeks,
     setMatchesGameWeeks,
     tabChanged,
@@ -90,7 +88,7 @@ export const tabClickHandler = ({
     if(animationInProgress) return
     let currentActive = matchesGameWeeks.findIndex((match) => match.active)
     const $matchesGameWeeks = matchesGameWeeks.map((item, index) => {
-        item.active = item.id === match.id;
+        item.active = item.id === gw.id;
         if (item.active) {
             setActiveTabContent({...item})
             setTabChanged(!tabChanged)
@@ -120,7 +118,7 @@ export const controlsHandler = ({
 
     tabClickHandler({
         matchesGameWeeks,
-        match: $matchesGameWeeks[nextIndex],
+        gw: $matchesGameWeeks[nextIndex],
         setMatchesGameWeeks,
         tabChanged,
         setTabChanged,

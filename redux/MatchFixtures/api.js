@@ -8,10 +8,14 @@ import {
 
 // GraphQL
 import GET_MATCH_FIXTURES from "graphql/queries/matchFixtures";
-import {isEmpty} from "utils/helpers";
+// import GET_MATCH_FIXTURES_GAME_WEEKS from "graphql/queries/getMatchFixturesGameWeeks";
+import {isEmpty, responseSuccess} from "utils/helpers";
+
+// Constants
+import {MatchesGameWeeks} from "constants/data/matchesGameWeeks";
 
 
-export const getMatchFixtures = (data) => {
+export const getMatchFixturesForGameWeek = (data) => {
   return async (dispatch) => {
     try {
       const apolloClient = createApolloClient();
@@ -23,9 +27,9 @@ export const getMatchFixtures = (data) => {
       });
 
       if (result && !isEmpty(result.data.matchFixtures)) {
-        console.log('getMatchFixturesSuccess ========', result)
-
-        return dispatch(getMatchFixturesSuccess(result.data.matchFixtures.data))
+        let { data } = result.data.matchFixtures
+        dispatch(getMatchFixturesSuccess(data))
+        return responseSuccess('', data)
       }
 
       dispatch(getMatchFixturesFailed(result.data.errors[0].message))
@@ -35,3 +39,32 @@ export const getMatchFixtures = (data) => {
     }
   };
 };
+
+export const getAllMatchFixturesGameWeeks = () => {
+
+  return async (dispatch) => {
+    try {
+
+      return MatchesGameWeeks
+
+
+      const apolloClient = createApolloClient();
+      const result = await apolloClient.query({
+        // query: GET_MATCH_FIXTURES_GAME_WEEKS,
+        query: '',
+        variables: {},
+      });
+
+      if (result && !isEmpty(result.data.matchFixtures)) {
+        let { data } = result.data.matchFixtures
+        dispatch(getMatchFixturesSuccess(data))
+        return responseSuccess('', data)
+      }
+
+      dispatch(getMatchFixturesFailed(result.data.errors[0].message))
+
+    } catch (e) {
+      dispatch(getMatchFixturesFailed(e.message))
+    }
+  };
+}

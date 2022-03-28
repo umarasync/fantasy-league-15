@@ -31,7 +31,7 @@ import {
 import {scrollAnimation, borderAnimation, subHeadingAnimation} from "Animations/matchBoard/MatchBoardAnimation";
 
 // Actions
-import {getMatchFixtures} from "redux/MatchFixtures/api";
+import {getAllMatchFixturesGameWeeks, getMatchFixturesForGameWeek} from "redux/MatchFixtures/api";
 
 // Styles
 const getStyles = (R) => {
@@ -105,12 +105,13 @@ export default function MatchBoard () {
         }
     }, [moved])
 
-    const handleTabClick = (match) => {
+    const handleTabClick = async (gw) => {
 
-        dispatch(getMatchFixtures({gameWeek: 1}))
+        const res = await dispatch(getMatchFixturesForGameWeek({gameWeek: 1}))
+        console.log('getMatchFixturesForGameWeek Success ========', res)
 
         tabClickHandler({
-            match,
+            gw,
             animationInProgress,
             matchesGameWeeks,
             setMatchesGameWeeks,
@@ -119,6 +120,8 @@ export default function MatchBoard () {
             setActiveTabContent,
         })
     }
+
+    // TODO:need to implement logic to fetch next/previous game week data
     const handleControls = (isNext = false) => {
         controlsHandler({
             animationInProgress,
@@ -148,8 +151,10 @@ export default function MatchBoard () {
     }, [matchesGameWeeks, initialRenderDone])
 
     const runInitialSettings = async () => {
+        const $matchFixturesGameWeeks = await dispatch(getAllMatchFixturesGameWeeks())
+        // const $matchFixturesGameWeeks = getAllMatchFixturesGameWeeks()
         setInitialSettings({
-            initialMatches: INITIAL_MATCHES,
+            initialMatchFixturesGameWeeks: $matchFixturesGameWeeks,
             setActiveTabContent,
             setMatchesGameWeeks
         })
