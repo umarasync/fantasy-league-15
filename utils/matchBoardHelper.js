@@ -13,9 +13,10 @@ export const setInitialSettings = ({
   setMatches
 }) => {
     const $matches = initialMatches.map((match, index) => {
-        const todayDate = dayjs().format('YYYY-MM-D')
-        if (dayjs(match.date).isSame(todayDate)) {
-            match.date = MAKE_TRANSFERS
+        // const todayDate = dayjs().format('YYYY-MM-D')
+        // if (dayjs(match.gameWeekDate).isSame(todayDate)) {
+        if (match.currentGameWeek) {
+            match.gameWeekDate = MAKE_TRANSFERS
             match.active = true
             setActiveTabContent({...match})
         }

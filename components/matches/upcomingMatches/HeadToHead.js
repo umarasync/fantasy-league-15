@@ -26,7 +26,7 @@ export default function HeadToHead({
                     <Div className={'flex flex-col'}>
                        <Div className={'flex items-center justify-end'} mb={28}>
                             <Text text={team1.label} fs={18} lh={22} fw={600} color={colors.black_rock} mr={12}/>
-                            <Image src={`/images/${team1.image}`} alt={'team_logo'} w={40} h={40}/>
+                            <Image src={`${team1.image}`} alt={'team_logo'} w={40} h={40}/>
                        </Div>
 
                         <MatchProgressBar
@@ -61,7 +61,7 @@ export default function HeadToHead({
                 <Div w={'42.5%'}>
                     <Div className={'flex flex-col'}>
                         <Div className={'flex items-center'} mb={28}>
-                            <Image src={`/images/${team2.image}`} alt={'team_logo'} w={40} h={40}/>
+                            <Image src={`${team2.image}`} alt={'team_logo'} w={40} h={40}/>
                             <Text text={team2.label} fs={18} lh={22} fw={600} color={colors.black_rock} ml={12}/>
                         </Div>
                         <MatchProgressBar

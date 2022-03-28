@@ -154,6 +154,8 @@ export default function MatchBoard () {
         }
     }
 
+    console.log('1----------', INITIAL_MATCHES)
+
     return (
         <Div
             minH={720}
@@ -202,7 +204,7 @@ export default function MatchBoard () {
                                             data-lastChild={match.lastChild}
                                             data-firstChild={match.firstChild}
                                         >
-                                            <Text text={match.week} color={colors.regent_grey} fs={18} lh={26}/>
+                                            <Text text={`Gameweek ${match.gameWeek}`} color={colors.regent_grey} fs={18} lh={26}/>
                                             <motion.p
                                                 variants={subHeadingAnimation}
                                                 animate={controls}
@@ -211,9 +213,9 @@ export default function MatchBoard () {
                                                 style={STYLES.subHeading}
                                             >
                                                 {
-                                                    match.date !== MAKE_TRANSFERS
-                                                        ? dayjs(match.date).format('DD MMM')
-                                                        : match.date
+                                                    match.gameWeekDate !== MAKE_TRANSFERS
+                                                        ? dayjs(match.gameWeekDate).format('DD MMM')
+                                                        : match.gameWeekDate
                                                 }
                                             </motion.p>
                                         </div>

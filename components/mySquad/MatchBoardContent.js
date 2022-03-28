@@ -11,7 +11,7 @@ export default function MatchBoardContent({
     tabChanged
 }){
 
-    const { matchesDates } = activeTabContent
+    const { matchesOnDates } = activeTabContent
 
     const [initialOpacity, setInitialOpacity] = useState(1)
 
@@ -24,7 +24,7 @@ export default function MatchBoardContent({
     return (
         <div className={'w-full'}>
             {
-               matchesDates && matchesDates.length > 0 && matchesDates.map((matchDate, index) => {
+               matchesOnDates && matchesOnDates.length > 0 && matchesOnDates.map((matchDate, index) => {
                    const parentIndex = index
                     return (
                         <div key={parentIndex} >

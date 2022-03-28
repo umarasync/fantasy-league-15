@@ -65,7 +65,7 @@ export default function MatchRow({
                         <TeamName
                             tabChanged={tabChanged}
                             match={match}
-                            club={match.club1}
+                            club={match.team1}
                             index={index}
                             parentIndex={parentIndex}
                             initialOpacity={initialOpacity}
@@ -77,7 +77,7 @@ export default function MatchRow({
                                 fadeInOutAnimation={ClubImageAnimation}
                                 custom={{initialOpacity}}
                                 changeCard={tabChanged}
-                                image={{...STYLES.teamImage, name: `/images/${match.club1.logo}`}}
+                                image={{...STYLES.teamImage, name: `/images/${match.team1.logo}`}}
                             />
                         </div>
                         <div className={'relative'}>
@@ -106,13 +106,13 @@ export default function MatchRow({
                                 fadeInOutAnimation={ClubImageAnimation}
                                 custom={{initialOpacity}}
                                 changeCard={tabChanged}
-                                image={{...STYLES.teamImage, name: `/images/${match.club2.logo}`}}
+                                image={{...STYLES.teamImage, name: `/images/${match.team2.logo}`}}
                             />
                         </div>
                         <TeamName
                             tabChanged={tabChanged}
                             match={match}
-                            club={match.club2}
+                            club={match.team2}
                             index={index}
                             parentIndex={parentIndex}
                             initialOpacity={initialOpacity}

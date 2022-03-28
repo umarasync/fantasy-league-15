@@ -317,6 +317,7 @@ export default function BuildTeamPlayers ({
             noOfFreeTransfersLeft,
             additionalTransferredPlayers
         }))
+        router.push('/my_squad_game_week')
     }
 
     const persistDataToReduxStore = () => {
@@ -328,12 +329,12 @@ export default function BuildTeamPlayers ({
             additionalTransferredPlayers
         })
         dispatch(fantasyTeamChosen(teamData))
+        router.push('/create_team_name')
     }
 
     const handleContinueClick = () => {
-        // saveToLocalStorageOnlyForTesting()
-        persistDataToReduxStore()
-        router.push('/create_team_name')
+        saveToLocalStorageOnlyForTesting()
+        // persistDataToReduxStore()
     }
 
     // Initial Settings for Build Your Team & Transfer windows
