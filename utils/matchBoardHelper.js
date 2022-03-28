@@ -17,7 +17,14 @@ export const setInitialSettings = ({
         if (gw.currentGameWeek) {
             gw.gameWeekDate = MAKE_TRANSFERS
             gw.active = true
-            setActiveTabContent({...gw})
+            // setActiveTabContent({...gw})
+            setActiveTabContent({
+                toggleAnimation: false,
+                data: {...gw}
+            })
+
+        }else {
+            gw.active = false
         }
         return gw
     })
@@ -66,10 +73,12 @@ export const scrollRenderer = (props) => {
         setBorderWidth,
     } = props
 
+
     const $activeRectObj = getActiveRect({
         itemRef: activeRef,
         scrollContainerRef
     })
+
     if ($activeRectObj) {
         const {activeRect} = $activeRectObj
         setBorderWidth(activeRect.width)
@@ -81,8 +90,7 @@ export const tabClickHandler = ({
     matchFixturesObj,
     matchesGameWeeks,
     setMatchesGameWeeks,
-    tabChanged,
-    setTabChanged,
+    activeTabContent,
     setActiveTabContent,
     animationInProgress,
 }) => {
@@ -90,13 +98,16 @@ export const tabClickHandler = ({
     let currentActive = matchesGameWeeks.findIndex((match) => match.active)
     const $matchesGameWeeks = matchesGameWeeks.map((item, index) => {
         item.active = item.id === matchFixturesObj.id;
-        if (item.active) {
-            setActiveTabContent({...item})
-            setTabChanged(!tabChanged)
-        }
         item.lastActive = index === currentActive
         return item
     })
+
+    // setActiveTabContent({...$matchesGameWeeks.find((gw) => gw.active)})
+    setActiveTabContent({
+        toggleAnimation: !activeTabContent.toggleAnimation,
+        data: {...$matchesGameWeeks.find((gw) => gw.active)}
+    })
+
     setMatchesGameWeeks($matchesGameWeeks)
 }
 
@@ -108,8 +119,7 @@ export const controlsHandler = async ({
     dispatch,
     // These props are necessary for tabClickHandler function
     setMatchesGameWeeks,
-    tabChanged,
-    setTabChanged,
+    activeTabContent,
     setActiveTabContent,
 }) => {
     if (animationInProgress) return;
@@ -126,8 +136,7 @@ export const controlsHandler = async ({
         // matchFixturesObj: res.data,
         matchFixturesObj: nextGw,
         setMatchesGameWeeks,
-        tabChanged,
-        setTabChanged,
+        activeTabContent,
         setActiveTabContent,
     })
 }

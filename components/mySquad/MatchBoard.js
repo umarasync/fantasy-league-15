@@ -33,6 +33,7 @@ import {
     getAllMatchFixturesGameWeeks,
     getMatchFixturesForGameWeek
 } from "redux/MatchFixtures/api";
+import {isEmpty} from "../../utils/helpers";
 
 // Styles
 const getStyles = (R) => {
@@ -90,7 +91,6 @@ export default function MatchBoard () {
     const [moved, setMoved] = useState(0)
     const [initialRenderDone, setInitialRenderDone] = useState(false)
     const [animationInProgress, setAnimationInProgress] = useState(false)
-    const [tabChanged, setTabChanged] = useState(false)
     const [borderWidth, setBorderWidth] = useState(0)
     const [activeTabContent, setActiveTabContent] = useState({})
     const scrollBoxOriginPointForBorder = R(517.421)
@@ -105,7 +105,6 @@ export default function MatchBoard () {
     }, [moved])
 
     const handleTabClick = async (gw) => {
-        console.log('3================', gw)
 
         const res = await dispatch(getMatchFixturesForGameWeek({gameWeek: gw.gameWeek}))
 
@@ -115,8 +114,7 @@ export default function MatchBoard () {
             animationInProgress,
             matchesGameWeeks,
             setMatchesGameWeeks,
-            tabChanged,
-            setTabChanged,
+            activeTabContent,
             setActiveTabContent,
         })
     }
@@ -127,8 +125,7 @@ export default function MatchBoard () {
             isNext,
             matchesGameWeeks,
             setMatchesGameWeeks,
-            tabChanged,
-            setTabChanged,
+            activeTabContent,
             setActiveTabContent,
             dispatch
         })
@@ -152,7 +149,6 @@ export default function MatchBoard () {
 
     const runInitialSettings = async () => {
         const $matchFixturesGameWeeks = await dispatch(getAllMatchFixturesGameWeeks())
-        // const $matchFixturesGameWeeks = getGameWeeks()
         setInitialSettings({
             initialMatchFixturesGameWeeks: $matchFixturesGameWeeks,
             setActiveTabContent,
@@ -264,12 +260,12 @@ export default function MatchBoard () {
             </Div>
 
             {/*Content*/}
-            <Div mt={30} center>
-                <MatchBoardContent
-                    tabChanged={tabChanged}
-                    activeTabContent={activeTabContent}
-                />
-            </Div>
+            {
+                !isEmpty(activeTabContent) && (
+                    <Div mt={30} center><MatchBoardContent activeTabContent={activeTabContent}/></Div>
+                )
+            }
+
         </Div>
     )
 
