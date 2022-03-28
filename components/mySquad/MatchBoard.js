@@ -13,10 +13,8 @@ import Button from "components/html/Button";
 // Constants
 import {SHADOW_WHITE_SMOKE} from "constants/boxShadow";
 import colors from "constants/colors";
-import {MatchesGameWeeks} from "constants/data/matchesGameWeeks";
 
 // utils
-import {clone} from "utils/helpers";
 import R from "utils/getResponsiveValue";
 import MatchBoardContent from "components/mySquad/MatchBoardContent";
 import {
@@ -31,7 +29,10 @@ import {
 import {scrollAnimation, borderAnimation, subHeadingAnimation} from "Animations/matchBoard/MatchBoardAnimation";
 
 // Actions
-import {getAllMatchFixturesGameWeeks, getMatchFixturesForGameWeek} from "redux/MatchFixtures/api";
+import {
+    getAllMatchFixturesGameWeeks,
+    getMatchFixturesForGameWeek
+} from "redux/MatchFixtures/api";
 
 // Styles
 const getStyles = (R) => {
@@ -77,8 +78,6 @@ export default function MatchBoard () {
 
     const STYLES =  { ...getStyles(R) }
 
-    const INITIAL_MATCHES = clone(MatchesGameWeeks)
-
     const [matchesGameWeeks, setMatchesGameWeeks] = useState([])
 
     const scrollContainerRef = useRef()
@@ -106,12 +105,13 @@ export default function MatchBoard () {
     }, [moved])
 
     const handleTabClick = async (gw) => {
+        console.log('3================', gw)
 
-        const res = await dispatch(getMatchFixturesForGameWeek({gameWeek: 1}))
-        console.log('getMatchFixturesForGameWeek Success ========', res)
+        const res = await dispatch(getMatchFixturesForGameWeek({gameWeek: gw.gameWeek}))
 
         tabClickHandler({
-            gw,
+            // matchFixturesObj: res.data,
+            matchFixturesObj: gw,
             animationInProgress,
             matchesGameWeeks,
             setMatchesGameWeeks,
@@ -121,7 +121,6 @@ export default function MatchBoard () {
         })
     }
 
-    // TODO:need to implement logic to fetch next/previous game week data
     const handleControls = (isNext = false) => {
         controlsHandler({
             animationInProgress,
@@ -131,6 +130,7 @@ export default function MatchBoard () {
             tabChanged,
             setTabChanged,
             setActiveTabContent,
+            dispatch
         })
     }
 
@@ -152,7 +152,7 @@ export default function MatchBoard () {
 
     const runInitialSettings = async () => {
         const $matchFixturesGameWeeks = await dispatch(getAllMatchFixturesGameWeeks())
-        // const $matchFixturesGameWeeks = getAllMatchFixturesGameWeeks()
+        // const $matchFixturesGameWeeks = getGameWeeks()
         setInitialSettings({
             initialMatchFixturesGameWeeks: $matchFixturesGameWeeks,
             setActiveTabContent,

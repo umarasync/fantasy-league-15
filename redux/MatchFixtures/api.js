@@ -29,6 +29,9 @@ export const getMatchFixturesForGameWeek = (data) => {
       if (result && !isEmpty(result.data.matchFixtures)) {
         let { data } = result.data.matchFixtures
         dispatch(getMatchFixturesSuccess(data))
+
+        // console.log('getMatchFixturesForGameWeek success =========', data)
+
         return responseSuccess('', data)
       }
 

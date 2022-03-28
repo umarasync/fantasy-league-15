@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 
 // Utils
 import {clone} from "utils/helpers";
+import {getMatchFixturesForGameWeek} from "../redux/MatchFixtures/api";
 
 // Constants
 export const MAKE_TRANSFERS = 'make transfers'
@@ -77,7 +78,7 @@ export const scrollRenderer = (props) => {
 }
 
 export const tabClickHandler = ({
-    gw,
+    matchFixturesObj,
     matchesGameWeeks,
     setMatchesGameWeeks,
     tabChanged,
@@ -88,7 +89,7 @@ export const tabClickHandler = ({
     if(animationInProgress) return
     let currentActive = matchesGameWeeks.findIndex((match) => match.active)
     const $matchesGameWeeks = matchesGameWeeks.map((item, index) => {
-        item.active = item.id === gw.id;
+        item.active = item.id === matchFixturesObj.id;
         if (item.active) {
             setActiveTabContent({...item})
             setTabChanged(!tabChanged)
@@ -100,10 +101,11 @@ export const tabClickHandler = ({
 }
 
 
-export const controlsHandler = ({
+export const controlsHandler = async ({
     animationInProgress,
     isNext,
     matchesGameWeeks,
+    dispatch,
     // These props are necessary for tabClickHandler function
     setMatchesGameWeeks,
     tabChanged,
@@ -115,10 +117,14 @@ export const controlsHandler = ({
     let objIndex = $matchesGameWeeks.findIndex((match) => match.active)
     let nextIndex = isNext ? objIndex + 1 : objIndex - 1
     if (nextIndex === $matchesGameWeeks.length || nextIndex === -1) return
+    let nextGw = $matchesGameWeeks[nextIndex]
+
+    const res = await dispatch(getMatchFixturesForGameWeek({gameWeek: nextGw.gameWeek}))
 
     tabClickHandler({
         matchesGameWeeks,
-        gw: $matchesGameWeeks[nextIndex],
+        // matchFixturesObj: res.data,
+        matchFixturesObj: nextGw,
         setMatchesGameWeeks,
         tabChanged,
         setTabChanged,
