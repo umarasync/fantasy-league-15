@@ -89,7 +89,6 @@ export default function MatchBoard () {
     const [tabChanged, setTabChanged] = useState(false)
     const [borderWidth, setBorderWidth] = useState(0)
     const [activeTabContent, setActiveTabContent] = useState({})
-    const elementsRef = useRef(INITIAL_MATCHES.map(() => createRef()));
     const scrollBoxOriginPointForBorder = R(517.421)
     const scrollBoxOriginPoint = R(417)
 
@@ -199,7 +198,7 @@ export default function MatchBoard () {
                                     >
                                         <div
                                             className={'flex flex-col items-center'}
-                                            ref={match.active ? activeRef : elementsRef.current[index]}
+                                            ref={match.active ? activeRef : null}
                                             onClick={() => handleTabClick(match)}
                                             data-lastChild={match.lastChild}
                                             data-firstChild={match.firstChild}
