@@ -11,11 +11,10 @@ import CREATE_FANTASY_TEAM from "graphql/mutations/createFantasyTeam";
 // Constants
 import {ERROR_MSG} from "constants/universalConstants";
 
+// Utils
+import {responseFailed, responseSuccess} from "utils/helpers";
+
 export const createFantasyTeam = (data) => {
-
-  return
-
-  console.log("createFantasyTeam Data=============", data)
 
   return async (dispatch) => {
     try {
@@ -30,15 +29,13 @@ export const createFantasyTeam = (data) => {
           name: data.name,
         },
       });
-      console.log("createFantasyTeam result =======", result);
+
       if (result && result.data.createFantasyTeam !== null) {
-        localStorage.setItem("user-fantasy-team", JSON.stringify(result.data.createFantasyTeam));
-        dispatch(createFantasyTeamSuccess(result.data.createFantasyTeam))
+        return responseSuccess('Fantasy Team Created Successfully!', result.data.createFantasyTeam)
       }
-      dispatch(createFantasyTeamFailed(ERROR_MSG))
+      return responseFailed(ERROR_MSG)
     } catch (e) {
-      console.log("createFantasyTeam error =======", e);
-      dispatch(createFantasyTeamFailed(ERROR_MSG))
+      return responseFailed(ERROR_MSG)
     }
   };
 };

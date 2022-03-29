@@ -83,22 +83,23 @@ export default function ConfirmAccount() {
     ({ fantasyTeam }) => fantasyTeam.chosenFantasyTeamData);
 
   /***** Create Team Handler *******/
-  const handleOnClick = () => {
+  const handleOnClick = async () => {
 
     if(!teamName) {
       return toast.error("Please enter team name !!!")
     }
 
+
     const { pickedPlayers } = JSON.parse(teamData)
 
-    const data = {
+    const dataInput = {
       goalkeepers: pickedPlayers.GK.map((p, pitchIndex) => {
         return {
           id: p.id,
           pitchIndex,
         };
       }),
-      defenders: pickedPlayers.GK.map((p, pitchIndex) => {
+      defenders: pickedPlayers.DEF.map((p, pitchIndex) => {
         return {
           id: p.id,
           pitchIndex,
@@ -119,8 +120,14 @@ export default function ConfirmAccount() {
       name: teamName,
     };
 
-    if (!isEmpty(data)) {
-      dispatch(createFantasyTeam(data));
+    if (!isEmpty(dataInput)) {
+      const {success, msg, data } = await dispatch(createFantasyTeam(dataInput));
+      console.log('data ==========', data)
+      if (success) {
+        toast.success(msg, {
+          onClose: () => router.push("/team_created"),
+        });
+      } else{ toast.error(msg); }
     }
 
   };
@@ -138,9 +145,7 @@ export default function ConfirmAccount() {
 
 
   useEffect(() => {
-    if(!teamData) {
-      router.push("/build_team_all_players")
-    }
+    if(!teamData) { router.push("/build_team_all_players") }
   }, [])
 
   if(!teamData) return <Loader/>

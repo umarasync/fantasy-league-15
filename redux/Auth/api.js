@@ -44,7 +44,6 @@ export const login = (data) => {
       let errorMsg = result.data.errors[0].message
       dispatch(loginFailed(errorMsg))
       return responseFailed(errorMsg)
-
     } catch (e) {
       dispatch(loginFailed(e.message))
       return responseFailed(e.message)
