@@ -6,6 +6,7 @@ export default gql`
       id
       firstName
       lastName
+      currentGameweek
       accounts {
         id
         username

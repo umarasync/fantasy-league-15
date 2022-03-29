@@ -208,10 +208,16 @@ export const me = () => {
   return async (dispatch) => {
     try {
       const apolloClient = createApolloClient();
-      return await apolloClient.query({
+      const res = await apolloClient.query({
         query: ME,
         variables: {},
       })
+
+      if(res && res.data.me) {
+        return res.data.me
+      }
+
+      return false
     } catch (e) {
       return false
     }

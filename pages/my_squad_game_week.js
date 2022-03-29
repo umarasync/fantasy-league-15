@@ -1,6 +1,7 @@
 // Packages
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
+import {useDispatch, useSelector} from "react-redux";
 
 // Components
 import Layout from "components/layout/index";
@@ -11,6 +12,7 @@ import MySquadFooterBar from "components/mySquad/MySquadFooterBar";
 import PlayerInfoModal from "components/playerInfo/PlayerInfoModal";
 import TripleCaptainModal from "components/playerInfo/TripleCaptainModal";
 import BenchBoostModal from "components/playerInfo/BenchBoostModal";
+import ProfileSettingsSideDrawer from "components/profileSettings/ProfileSettingsSideDrawer";
 
 // Utils
 import {clone, isEmpty} from "utils/helpers";
@@ -28,7 +30,9 @@ import R from "utils/getResponsiveValue";
 // Constants
 import {INITIAL} from "constants/animations";
 import {getCurrentWeekInfo, getPublicLeagues} from "constants/data/leaguesAndRanking";
-import ProfileSettingsSideDrawer from "components/profileSettings/ProfileSettingsSideDrawer";
+
+// Actions
+import {getFantasyTeamById} from "redux/FantasyTeams/api";
 
 // Styles
 const getStyles = (R) => {
@@ -41,10 +45,11 @@ const getStyles = (R) => {
 
 export default function MySquadGameWeek () {
 
-    const router = useRouter()
-
     const STYLES = {...getStyles(R)}
 
+    const router = useRouter()
+
+    const dispatch = useDispatch()
 
     const [pickedPlayers, setPickedPlayers] = useState([])
     const [savedPlayers, setSavedPlayers] = useState([])
@@ -70,6 +75,9 @@ export default function MySquadGameWeek () {
 
     // Info-Board
     const [currentGameWeekInfo, setCurrentGameWeekInfo] = useState({})
+
+    // Global States
+    const user = useSelector(({ auth }) => auth.user);
 
     //Player-Transfer
     const handlePlayerTransfer = (player, arrayIndex) => {
@@ -190,15 +198,19 @@ export default function MySquadGameWeek () {
         handleBenchBoostDisable()
     }, [pickedPlayers])
 
-    // Did-Mount
-    useEffect(() => {
-        // TODO:LOCAL_STORAGE_FOR_TESTING:START
-        const teamData = JSON.parse(localStorage.getItem('teamData'))
-        // TODO:LOCAL_STORAGE_FOR_TESTING:ENDS
+    const runDidMount = async () => {
 
-        if (!teamData) {return router.push('/build_team_all_players')}
+        // const teamData = JSON.parse(localStorage.getItem('teamData'))
+        // if (!teamData) {return router.push('/build_team_all_players')}
+        // const players = setPlayersAdditionalData(teamData.pickedPlayers)
 
-        const players = setPlayersAdditionalData(teamData.pickedPlayers)
+        const squad = await dispatch(getFantasyTeamById({
+            // TODO: replace hardcode id with user.fantasyTeam.id
+            gameWeek: user.currentGameweek , fantasyTeamId: '6074b3d1-444b-4ae6-bdb2-f51e29307fcf'}
+        ))
+        if (!squad) {return router.push('/build_team_all_players')}
+        const players = setPlayersAdditionalData(squad)
+
         setPickedPlayers(players)
         setSavedPlayers(players)
         setShowPlayerInfoModal(false)
@@ -209,6 +221,11 @@ export default function MySquadGameWeek () {
             toggleAnimation: false,
             data: clone(getCurrentWeekInfo())
         })
+    }
+
+    // Did-Mount
+    useEffect(() => {
+        runDidMount()
     }, [])
 
     if (pickedPlayers.length === 0) {

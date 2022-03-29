@@ -122,7 +122,6 @@ export default function ConfirmAccount() {
 
     if (!isEmpty(dataInput)) {
       const {success, msg, data } = await dispatch(createFantasyTeam(dataInput));
-      console.log('data ==========', data)
       if (success) {
         toast.success(msg, {
           onClose: () => router.push("/team_created"),
