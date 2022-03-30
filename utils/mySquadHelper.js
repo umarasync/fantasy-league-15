@@ -117,9 +117,18 @@ export const setPlayersAdditionalData = ($squad) => {
 
 
     return [
-        ...squadNew.filter(p => !p.isSubstitute),
+
+        // Playing 11
+        ...squadNew.filter(p => !p.isSubstitute && p.position ===  POSITION_GK),
+        ...squadNew.filter(p => !p.isSubstitute && p.position ===  POSITION_DEF),
+        ...squadNew.filter(p => !p.isSubstitute && p.position ===  POSITION_MID),
+        ...squadNew.filter(p => !p.isSubstitute && p.position ===  POSITION_FWD),
+
+        // Substitutes
         ...squadNew.filter(p => p.isSubstitute && p.position ===  POSITION_GK),
-        ...squadNew.filter(p => p.isSubstitute && p.position !==  POSITION_GK),
+        ...squadNew.filter(p => p.isSubstitute && p.position ===  POSITION_DEF),
+        ...squadNew.filter(p => p.isSubstitute && p.position ===  POSITION_MID),
+        ...squadNew.filter(p => p.isSubstitute && p.position ===  POSITION_FWD),
     ]
 }
 
