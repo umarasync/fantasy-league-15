@@ -15,7 +15,7 @@ import {ZERO, ONE,TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, 
 import {ANIMATE, INITIAL} from "constants/animations";
 
 // Animations
-import {Player5Animation, Player6Animation, Player9Animation, Player10Animation, Player11Animation} from "Animations/mySquad/PlayersFormationAnimation";
+import {player5Animation, player6Animation, player9Animation, player10Animation, player11Animation} from "Animations/mySquad/PlayersFormationAnimation";
 
 // Styles
 const getStyles = (R) => {
@@ -113,7 +113,7 @@ export default function SelectedSquadOnPitch ({
 
     const p5 = () => {
         return {
-            animationVariants: Player5Animation,
+            animationVariants: player5Animation(),
             player: {...buildPlayer(FOUR)},
             style: {...STYLES.commonPlayersStyle},
         }
@@ -121,7 +121,7 @@ export default function SelectedSquadOnPitch ({
 
     const p6 = () => {
         return {
-            animationVariants: Player6Animation,
+            animationVariants: player6Animation(),
             player: {...buildPlayer(FIVE)},
             style: {...STYLES.commonPlayersStyle},
         }
@@ -129,7 +129,7 @@ export default function SelectedSquadOnPitch ({
 
     const p7 = () => {
         return {
-            animationVariants: Player6Animation,
+            animationVariants: player6Animation(),
             player: {...buildPlayer(SIX)},
             style: {
                 ...STYLES.commonPlayersStyle,
@@ -139,7 +139,7 @@ export default function SelectedSquadOnPitch ({
 
     const p8 = () => {
         return {
-            animationVariants: Player6Animation,
+            animationVariants: player6Animation(),
             player: {...buildPlayer(SEVEN)},
             style: {...STYLES.commonPlayersStyle,}
         }
@@ -147,14 +147,14 @@ export default function SelectedSquadOnPitch ({
 
     const p9 = () => {
         return {
-            animationVariants: Player9Animation,
+            animationVariants: player9Animation(),
             player: {...buildPlayer(EIGHT)},
             style: {...STYLES.commonPlayersStyle1,}
         }
     }
     const p9type1 = (payload) => {
         return {
-            animationVariants: Player9Animation,
+            animationVariants: player9Animation(),
             player: {...buildPlayer(EIGHT)},
             style: {...STYLES.commonPlayersStyle1,},
             ...payload
@@ -163,7 +163,7 @@ export default function SelectedSquadOnPitch ({
 
     const p10 = () => {
         return {
-            animationVariants: Player10Animation,
+            animationVariants: player10Animation(),
             player: {...buildPlayer(NINE)},
             style: {...STYLES.commonPlayersStyle1,}
         }
@@ -171,7 +171,7 @@ export default function SelectedSquadOnPitch ({
 
     const p11 = () => {
         return {
-            animationVariants: Player11Animation,
+            animationVariants: player11Animation(),
             player: {...buildPlayer(TEN)},
             style: {...STYLES.commonPlayersStyle1,}
         }
