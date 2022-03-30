@@ -1,13 +1,18 @@
 // Packages
 import {useRouter} from "next/router";
+import {useEffect, useState} from "react";
+import {useSelector} from "react-redux";
 
 // Components
 import Layout from "components/layout";
 import Button from "components/html/Button";
+import Loader from "components/loaders/Loader";
 
 // Utils
 import R from "utils/getResponsiveValue";
 
+// Utils
+import {isEmpty} from "utils/helpers";
 
 // Styles
 const getStyles = (R) => {
@@ -58,13 +63,25 @@ const getStyles = (R) => {
 
 export default function ConfirmAccount() {
 
-    const router = useRouter()
-
     const STYLES =  { ... getStyles(R) }
+
+    const router = useRouter()
+    const { teamCreated } = router.query
+    const teamAlreadyExists = useSelector(({ auth }) => auth.user.fantasyTeamId);
+    const [showLoader, setShowLoader] = useState(true);
+
 
     const handleOnClick = () => {
         router.push('/my_squad_game_week')
     }
+
+    useEffect(() => {
+        if(!teamAlreadyExists) {return router.push('/build_team_all_players')}
+        if(!teamCreated) {return router.push('/my_squad_game_week')}
+        setShowLoader(isEmpty(router.query.teamCreated))
+    }, [])
+
+    if(showLoader) return <Loader/>
 
     return (
         <Layout title="Team Created">

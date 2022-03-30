@@ -55,7 +55,7 @@ export const getFantasyTeamById = (data) => {
       });
 
       if (result && result.data.fantasyTeamById !== null) {
-        return mapSquadToPositions(buildPlayers(result.data.fantasyTeamById.squad))
+        return buildPlayers(result.data.fantasyTeamById.squad)
       }
       return false
     } catch (e) {

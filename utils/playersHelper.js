@@ -40,6 +40,9 @@ export const buildPlayers = (playersData) => {
                   formattedPrice: nFormatter(p.value),
                   position: getPlayerPosition(p.position),
                   points: p.totalPoints,
+                  captain: p.captain,
+                  viceCaptain: p.viceCaptain,
+                  isSubstitute: p.isSubstitute,
                   nextMatch: {
                     club: 'GRO',
                     vs: "BEN",

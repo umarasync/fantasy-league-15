@@ -74,6 +74,7 @@ export default function ConfirmAccount() {
 
   // const [teamName, setTeamName] = useState("Champions FC");
   const [teamName, setTeamName] = useState("");
+  const teamAlreadyExists = useSelector(({ auth }) => auth.user.fantasyTeamId);
 
   const createFantasyTeamSuccess = useSelector(
     ({ fantasyTeam }) => fantasyTeam.createFantasyTeamSuccess);
@@ -124,30 +125,23 @@ export default function ConfirmAccount() {
       const {success, msg, data } = await dispatch(createFantasyTeam(dataInput));
       if (success) {
         toast.success(msg, {
-          onClose: () => router.push("/team_created"),
+          onClose: () => router.push({
+            pathname: "/team_created",
+                query: {
+                  teamCreated: true
+                }
+          }),
         });
       } else{ toast.error(msg); }
     }
-
   };
 
-  /**** Team Creation Response ****/
   useEffect(() => {
-    if (createFantasyTeamSuccess) {
-      toast.success("Fantasy Team Created Successfully!", {
-        onClose: () => router.push("/team_created"),
-      });
-    } else if (createFantasyTeamError) {
-      toast.error(createFantasyTeamError);
-    }
-  }, [createFantasyTeamSuccess, createFantasyTeamError]);
-
-
-  useEffect(() => {
+    if (teamAlreadyExists) {return router.push('/my_squad_game_week')}
     if(!teamData) { router.push("/build_team_all_players") }
   }, [])
 
-  if(!teamData) return <Loader/>
+  if(!teamData || teamAlreadyExists) return <Loader/>
 
   return (
     <Layout title="Create Your Team Name">

@@ -13,6 +13,7 @@ import PlayerInfoModal from "components/playerInfo/PlayerInfoModal";
 import TripleCaptainModal from "components/playerInfo/TripleCaptainModal";
 import BenchBoostModal from "components/playerInfo/BenchBoostModal";
 import ProfileSettingsSideDrawer from "components/profileSettings/ProfileSettingsSideDrawer";
+import Loader from "components/loaders/Loader";
 
 // Utils
 import {clone, isEmpty} from "utils/helpers";
@@ -200,16 +201,14 @@ export default function MySquadGameWeek () {
 
     const runDidMount = async () => {
 
-        // const teamData = JSON.parse(localStorage.getItem('teamData'))
-        // if (!teamData) {return router.push('/build_team_all_players')}
-        // const players = setPlayersAdditionalData(teamData.pickedPlayers)
+        if (!user.fantasyTeamId) {return router.push('/build_team_all_players')}
 
         const squad = await dispatch(getFantasyTeamById({
-            // TODO: replace hardcode id with user.fantasyTeam.id
-            gameWeek: user.currentGameweek , fantasyTeamId: '6074b3d1-444b-4ae6-bdb2-f51e29307fcf'}
-        ))
-        if (!squad) {return router.push('/build_team_all_players')}
-        const players = setPlayersAdditionalData(squad)
+                gameWeek: user.currentGameweek ,
+                fantasyTeamId: user.fantasyTeamId,
+        }))
+
+        const players = [ ...setPlayersAdditionalData(squad) ]
 
         setPickedPlayers(players)
         setSavedPlayers(players)
@@ -228,9 +227,7 @@ export default function MySquadGameWeek () {
         runDidMount()
     }, [])
 
-    if (pickedPlayers.length === 0) {
-        return null
-    }
+    if (pickedPlayers.length === 0) {return <Loader/>}
     return (
         <Layout title="My Squad">
             <Div className="mx-auto relative bg-white">

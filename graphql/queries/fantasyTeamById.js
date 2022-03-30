@@ -13,6 +13,9 @@ export default gql`
         score
         value
         totalPoints
+        captain
+        viceCaptain
+        isSubstitute
         team {
           id
           name
