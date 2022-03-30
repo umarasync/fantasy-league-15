@@ -1,5 +1,6 @@
 // Packages
 import cloneDeep from 'lodash/cloneDeep';
+import {isEmpty as isEmptyLodash} from 'lodash';
 
 // Constants
 import {currencySymbol} from "constants/universalConstants";
@@ -45,8 +46,10 @@ export const shuffle = (a) => {
 }
 
 export const isEmpty = (obj) => {
-    return Object.keys(obj).length === 0;
+    // return Object.keys(obj).length === 0;
+    return isEmptyLodash(obj)
 }
+
 
 export const isOdd = (num) => num % 2
 
@@ -54,10 +57,11 @@ export const truncate = (str, n) => {
     return (str.length > n) ? str.substr(0, n - 1) + '...' : str;
 };
 
-export const responseSuccess = (msg) => {
+export const responseSuccess = (msg,  data = {}) => {
     return {
         success: true,
-        msg: msg
+        msg: msg,
+        data: {...data}
     }
 }
 

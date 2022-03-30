@@ -17,22 +17,22 @@ export const MATCHES = 'Matches'
 export const CAPTAIN = 'captain'
 export const VICE_CAPTAIN = 'viceCaptain'
 
-export const setPlayersAdditionalData = (pickedPlayersObject) => {
+export const setPlayersAdditionalData1 = ($squad) => {
 
-    const $pickedPlayersObject = clone(pickedPlayersObject)
+    const squad = clone($squad)
 
     // Set icon for GKs
-    const GKs = $pickedPlayersObject[POSITION_GK].map((player, index) => {
-        if(index === $pickedPlayersObject[POSITION_GK].length - 1){
+    const GKs = squad[POSITION_GK].map((player, index) => {
+        if(index === squad[POSITION_GK].length - 1){
             player.clickedIcon = TRANSFER_ICON
         }else{ player.clickedIcon = false }
         return player
     })
 
     // Set icon for DEFS
-    const DEFs = $pickedPlayersObject[POSITION_DEF].map((player, index) => {
+    const DEFs = squad[POSITION_DEF].map((player, index) => {
 
-        if(index === $pickedPlayersObject[POSITION_DEF].length - 1 || index === $pickedPlayersObject[POSITION_DEF].length - 2){
+        if(index === squad[POSITION_DEF].length - 1 || index === squad[POSITION_DEF].length - 2){
             player.clickedIcon = TRANSFER_ICON
         }else{
             player.clickedIcon = false
@@ -42,9 +42,9 @@ export const setPlayersAdditionalData = (pickedPlayersObject) => {
     })
 
     // Set icon for MIDs
-    const MIDs = $pickedPlayersObject[POSITION_MID].map((player, index) => {
+    const MIDs = squad[POSITION_MID].map((player, index) => {
 
-        if(index === $pickedPlayersObject[POSITION_MID].length - 1){
+        if(index === squad[POSITION_MID].length - 1){
             player.clickedIcon = TRANSFER_ICON
         }else{
             player.clickedIcon = false
@@ -53,7 +53,7 @@ export const setPlayersAdditionalData = (pickedPlayersObject) => {
     })
 
     // Set icon for FWDs
-    const FWDs = $pickedPlayersObject[POSITION_FWD].map((player) => {
+    const FWDs = squad[POSITION_FWD].map((player) => {
         player.clickedIcon = false
         return player
     })
@@ -93,6 +93,43 @@ export const setPlayersAdditionalData = (pickedPlayersObject) => {
 
         return player
     })
+}
+
+export const setPlayersAdditionalData = ($squad) => {
+
+    const squad = clone($squad)
+
+    const squadNew = squad.map((player, index) => {
+
+        if(player.isSubstitute) {
+            player.clickedIcon = TRANSFER_ICON
+        }else {
+            player.clickedIcon = false
+        }
+
+        player.opacity = 1
+        player.animationState = true
+        player.activeFilter = TOTAL_POINTS
+        player.disableIconClick = false
+
+        return player
+    })
+
+
+    return [
+
+        // Playing 11
+        ...squadNew.filter(p => !p.isSubstitute && p.position ===  POSITION_GK),
+        ...squadNew.filter(p => !p.isSubstitute && p.position ===  POSITION_DEF),
+        ...squadNew.filter(p => !p.isSubstitute && p.position ===  POSITION_MID),
+        ...squadNew.filter(p => !p.isSubstitute && p.position ===  POSITION_FWD),
+
+        // Substitutes
+        ...squadNew.filter(p => p.isSubstitute && p.position ===  POSITION_GK),
+        ...squadNew.filter(p => p.isSubstitute && p.position ===  POSITION_DEF),
+        ...squadNew.filter(p => p.isSubstitute && p.position ===  POSITION_MID),
+        ...squadNew.filter(p => p.isSubstitute && p.position ===  POSITION_FWD),
+    ]
 }
 
 const readyPlayerBeforeTransfer = (p1, p2) => {

@@ -3,25 +3,32 @@ import dayjs from "dayjs";
 
 // Utils
 import {clone} from "utils/helpers";
+import {getMatchFixturesForGameWeek} from "../redux/MatchFixtures/api";
 
 // Constants
 export const MAKE_TRANSFERS = 'make transfers'
 
 export const setInitialSettings = ({
-  initialMatches,
+  initialMatchFixturesGameWeeks,
   setActiveTabContent,
-  setMatches
+  setMatchesGameWeeks
 }) => {
-    const $matches = initialMatches.map((match, index) => {
-        const todayDate = dayjs().format('YYYY-MM-D')
-        if (dayjs(match.date).isSame(todayDate)) {
-            match.date = MAKE_TRANSFERS
-            match.active = true
-            setActiveTabContent({...match})
+    const $matchesGameWeeks = initialMatchFixturesGameWeeks.map((gw, index) => {
+        if (gw.currentGameWeek) {
+            gw.gameWeekDate = MAKE_TRANSFERS
+            gw.active = true
+            // setActiveTabContent({...gw})
+            setActiveTabContent({
+                toggleAnimation: false,
+                data: {...gw}
+            })
+
+        }else {
+            gw.active = false
         }
-        return match
+        return gw
     })
-    setMatches($matches)
+    setMatchesGameWeeks($matchesGameWeeks)
 }
 
 export const getActiveRect = ({
@@ -66,10 +73,12 @@ export const scrollRenderer = (props) => {
         setBorderWidth,
     } = props
 
+
     const $activeRectObj = getActiveRect({
         itemRef: activeRef,
         scrollContainerRef
     })
+
     if ($activeRectObj) {
         const {activeRect} = $activeRectObj
         setBorderWidth(activeRect.width)
@@ -78,51 +87,53 @@ export const scrollRenderer = (props) => {
 }
 
 export const tabClickHandler = ({
-    match,
-    matches,
-    setMatches,
-    tabChanged,
-    setTabChanged,
+    matchFixturesObj,
+    matchesGameWeeks,
+    setMatchesGameWeeks,
+    activeTabContent,
     setActiveTabContent,
-    animationInProgress,
 }) => {
-    if(animationInProgress) return
-    let currentActive = matches.findIndex((match) => match.active)
-    const $matches = matches.map((item, index) => {
-        item.active = item.id === match.id;
-        if (item.active) {
-            setActiveTabContent({...item})
-            setTabChanged(!tabChanged)
-        }
+
+    let currentActive = matchesGameWeeks.findIndex((match) => match.active)
+    const $matchesGameWeeks = matchesGameWeeks.map((item, index) => {
+        item.active = item.id === matchFixturesObj.id;
         item.lastActive = index === currentActive
         return item
     })
-    setMatches($matches)
+
+    // setActiveTabContent({...$matchesGameWeeks.find((gw) => gw.active)})
+    setActiveTabContent({
+        toggleAnimation: !activeTabContent.toggleAnimation,
+        data: {...$matchesGameWeeks.find((gw) => gw.active)}
+    })
+
+    setMatchesGameWeeks($matchesGameWeeks)
 }
 
 
-export const controlsHandler = ({
-    animationInProgress,
+export const controlsHandler = async ({
     isNext,
-    matches,
+    matchesGameWeeks,
+    dispatch,
     // These props are necessary for tabClickHandler function
-    setMatches,
-    tabChanged,
-    setTabChanged,
+    setMatchesGameWeeks,
+    activeTabContent,
     setActiveTabContent,
 }) => {
-    if (animationInProgress) return;
-    const $matches = clone(matches)
-    let objIndex = $matches.findIndex((match) => match.active)
+    const $matchesGameWeeks = clone(matchesGameWeeks)
+    let objIndex = $matchesGameWeeks.findIndex((match) => match.active)
     let nextIndex = isNext ? objIndex + 1 : objIndex - 1
-    if (nextIndex === $matches.length || nextIndex === -1) return
+    if (nextIndex === $matchesGameWeeks.length || nextIndex === -1) return
+    let nextGw = $matchesGameWeeks[nextIndex]
+
+    const res = await dispatch(getMatchFixturesForGameWeek({gameWeek: nextGw.gameWeek}))
 
     tabClickHandler({
-        matches,
-        match: $matches[nextIndex],
-        setMatches,
-        tabChanged,
-        setTabChanged,
+        matchesGameWeeks,
+        // matchFixturesObj: res.data,
+        matchFixturesObj: nextGw,
+        setMatchesGameWeeks,
+        activeTabContent,
         setActiveTabContent,
     })
 }

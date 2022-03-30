@@ -44,7 +44,6 @@ export const login = (data) => {
       let errorMsg = result.data.errors[0].message
       dispatch(loginFailed(errorMsg))
       return responseFailed(errorMsg)
-
     } catch (e) {
       dispatch(loginFailed(e.message))
       return responseFailed(e.message)
@@ -209,10 +208,16 @@ export const me = () => {
   return async (dispatch) => {
     try {
       const apolloClient = createApolloClient();
-      return await apolloClient.query({
+      const res = await apolloClient.query({
         query: ME,
         variables: {},
       })
+
+      if(res && res.data.me) {
+        return res.data.me
+      }
+
+      return false
     } catch (e) {
       return false
     }

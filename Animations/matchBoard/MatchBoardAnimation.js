@@ -4,10 +4,10 @@ import colors from "constants/colors";
 const duration = 0.7
 
 export const scrollAnimation = {
-    scroll: ({match, moved}) => {
+    scroll: ({gw, moved}) => {
         return {
             x: -moved,
-            opacity: match.active || match.lastActive ? 1 : 0.5,
+            opacity: gw.active || gw.lastActive ? 1 : 0.5,
             transition: {
                 duration: duration,
             },
@@ -27,9 +27,9 @@ export const borderAnimation = {
 };
 
 export const subHeadingAnimation = {
-    changeTextColor: (match) => {
+    changeTextColor: (gw) => {
         return {
-            color: match.active ? colors.black_rock : colors.regent_grey,
+            color: gw.active ? colors.black_rock : colors.regent_grey,
             transition: {
                 duration: duration
             }

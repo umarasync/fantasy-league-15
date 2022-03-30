@@ -60,7 +60,7 @@ const GoalAndMatchTime = (props) => {
                         style={STYLES.goalsBox}
                         key={1}
                     >
-                        <Goals team1Goals={match.club1.goals} team2Goals={match.club2.goals}/>
+                        <Goals team1Goals={match.team1.goals} team2Goals={match.team2.goals}/>
                     </motion.div>
                 </AnimatePresence>
             )
@@ -76,7 +76,7 @@ const GoalAndMatchTime = (props) => {
                         style={STYLES.goalsBox}
                         key={2}
                     >
-                        <Goals team1Goals={match.club1.goals} team2Goals={match.club2.goals}/>
+                        <Goals team1Goals={match.team1.goals} team2Goals={match.team2.goals}/>
                     </motion.div>
                 </AnimatePresence>
             )

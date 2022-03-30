@@ -38,8 +38,8 @@ export default function MatchHighlights({
                 <thead>
                     <th>
                         <Div className={'flex items-center'} mb={24}>
-                            <Text text={match.club1.name} fs={18} lh={22} fw={600} color={colors.black_rock} mr={12}/>
-                            <Image src={`/images/${match.club1.logo}`} w={40} h={40}/>
+                            <Text text={match.team1.name} fs={18} lh={22} fw={600} color={colors.black_rock} mr={12}/>
+                            <Image src={`/images/${match.team1.logo}`} w={40} h={40}/>
                         </Div>
                     </th>
                     <th>
@@ -47,8 +47,8 @@ export default function MatchHighlights({
                     </th>
                     <th>
                         <Div className={'flex items-center'} mb={24}>
-                            <Image src={`/images/${match.club2.logo}`} w={40} h={40}/>
-                            <Text text={match.club2.name} fs={18} lh={22} fw={600} color={colors.black_rock} ml={12}/>
+                            <Image src={`/images/${match.team2.logo}`} w={40} h={40}/>
+                            <Text text={match.team2.name} fs={18} lh={22} fw={600} color={colors.black_rock} ml={12}/>
                         </Div>
                     </th>
                 </thead>

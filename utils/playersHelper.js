@@ -1,7 +1,11 @@
 // Packages
 import {v4 as uuidv4} from 'uuid';
 
-import {nFormatter} from "./helpers";
+// Helpers
+import {nFormatter} from "utils/helpers";
+
+// Constants
+import {POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID} from "constants/data/filters";
 
 // Players
 const getPlayerPosition = (position) => {
@@ -36,6 +40,9 @@ export const buildPlayers = (playersData) => {
                   formattedPrice: nFormatter(p.value),
                   position: getPlayerPosition(p.position),
                   points: p.totalPoints,
+                  captain: p.captain,
+                  viceCaptain: p.viceCaptain,
+                  isSubstitute: p.isSubstitute,
                   nextMatch: {
                     club: 'GRO',
                     vs: "BEN",
@@ -48,6 +55,15 @@ export const buildPlayers = (playersData) => {
                   penaltyTaker: false,
             };
           })
+}
+
+export const mapSquadToPositions = (squad) => {
+    return {
+        [POSITION_GK]: squad.filter(p => p.position === POSITION_GK),
+        [POSITION_FWD]: squad.filter(p => p.position === POSITION_FWD),
+        [POSITION_DEF]: squad.filter(p => p.position === POSITION_DEF),
+        [POSITION_MID]: squad.filter(p => p.position === POSITION_MID),
+    }
 }
 
 // Teams
