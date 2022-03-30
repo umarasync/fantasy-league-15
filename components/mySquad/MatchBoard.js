@@ -96,6 +96,7 @@ export default function MatchBoard () {
     const scrollBoxOriginPointForBorder = R(517.421)
     const scrollBoxOriginPoint = R(417)
 
+
     useEffect(() => {
         if(initialRenderDone){
             controls.start('scroll')
@@ -105,13 +106,11 @@ export default function MatchBoard () {
     }, [moved])
 
     const handleTabClick = async (gw) => {
-
+        if(animationInProgress) return
         const res = await dispatch(getMatchFixturesForGameWeek({gameWeek: gw.gameWeek}))
-
         tabClickHandler({
             // matchFixturesObj: res.data,
             matchFixturesObj: gw,
-            animationInProgress,
             matchesGameWeeks,
             setMatchesGameWeeks,
             activeTabContent,
@@ -120,8 +119,8 @@ export default function MatchBoard () {
     }
 
     const handleControls = (isNext = false) => {
+        if(animationInProgress) return
         controlsHandler({
-            animationInProgress,
             isNext,
             matchesGameWeeks,
             setMatchesGameWeeks,
@@ -133,7 +132,7 @@ export default function MatchBoard () {
 
     useEffect(() => {
         setInitialRenderDone(true)
-        if(initialRenderDone){
+        if(!isEmpty(activeTabContent)){
          setTimeout(() => {
                 scrollRenderer({
                     activeRef,
@@ -145,7 +144,7 @@ export default function MatchBoard () {
                 })
          }, 100)
         }
-    }, [matchesGameWeeks, initialRenderDone])
+    }, [activeTabContent, initialRenderDone])
 
     const runInitialSettings = async () => {
         const $matchFixturesGameWeeks = await dispatch(getAllMatchFixturesGameWeeks())

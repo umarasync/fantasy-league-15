@@ -95,6 +95,7 @@ export default function MySquadGameWeek () {
     }
     // Player-Info-Modal
     const handleShowPlayerInfoModal = (player, arrayIndex) => {
+        return
         setPlayerInfoPlayer({...player})
     }
 

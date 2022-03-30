@@ -92,9 +92,8 @@ export const tabClickHandler = ({
     setMatchesGameWeeks,
     activeTabContent,
     setActiveTabContent,
-    animationInProgress,
 }) => {
-    if(animationInProgress) return
+
     let currentActive = matchesGameWeeks.findIndex((match) => match.active)
     const $matchesGameWeeks = matchesGameWeeks.map((item, index) => {
         item.active = item.id === matchFixturesObj.id;
@@ -113,7 +112,6 @@ export const tabClickHandler = ({
 
 
 export const controlsHandler = async ({
-    animationInProgress,
     isNext,
     matchesGameWeeks,
     dispatch,
@@ -122,7 +120,6 @@ export const controlsHandler = async ({
     activeTabContent,
     setActiveTabContent,
 }) => {
-    if (animationInProgress) return;
     const $matchesGameWeeks = clone(matchesGameWeeks)
     let objIndex = $matchesGameWeeks.findIndex((match) => match.active)
     let nextIndex = isNext ? objIndex + 1 : objIndex - 1
