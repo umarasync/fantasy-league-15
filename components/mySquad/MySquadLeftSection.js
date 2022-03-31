@@ -42,7 +42,7 @@ const getStyles = (R) => {
     }
 }
 export default function MySquadLeftSection({
-     pickedPlayers,
+     squad,
      onPlayerChange,
      transferInProgress,
      changeFormation,
@@ -69,11 +69,11 @@ export default function MySquadLeftSection({
                 <div style={STYLES.fieldImage}>
                     <div className="bg-[url('/images/field2.png')] bg-[length:100%_100%] bg-no-repeat h-full w-full" >
                         {
-                            pickedPlayers.length ? (
+                            squad.length ? (
                                 <SelectedSquadOnPitch
                                     changeFormation={changeFormation}
                                     transferInProgress={transferInProgress}
-                                    pickedPlayers={pickedPlayers}
+                                    squad={squad}
                                     onPlayerChange={onPlayerChange}
                                     onPlayerClick={onPlayerClick}
                                     tripleCaptainApplied={tripleCaptainApplied}

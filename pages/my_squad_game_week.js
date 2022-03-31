@@ -25,7 +25,7 @@ import {
     VICE_CAPTAIN,
     makeCaptain
 } from "utils/mySquadHelper";
-import {handlePlayerTransfer as HPT, DIAMOND_UP_GREEN} from "utils/mySquadHelper";
+import {playerSwapHandler, DIAMOND_UP_GREEN} from "utils/mySquadHelper";
 import R from "utils/getResponsiveValue";
 
 // Constants
@@ -81,9 +81,9 @@ export default function MySquadGameWeek () {
     const user = useSelector(({ auth }) => auth.user);
 
     //Player-Transfer
-    const handlePlayerTransfer = (player, arrayIndex) => {
+    const handlePlayerSwap = (player, arrayIndex) => {
         if(player.clickedIcon === DIAMOND_UP_GREEN) return
-        const players = HPT({
+        const players = playerSwapHandler({
             player,
             arrayIndex,
             pickedPlayers,
@@ -239,8 +239,8 @@ export default function MySquadGameWeek () {
                             handleFilterButtonClick={(v) => setActiveFilter(v)}
                             tripleCaptainApplied={tripleCaptainApplied}
                             benchBoostApplied={benchBoostApplied}
-                            pickedPlayers={pickedPlayers}
-                            onPlayerChange={handlePlayerTransfer}
+                            squad={pickedPlayers}
+                            onPlayerChange={handlePlayerSwap}
                             changeFormation={changeFormation}
                             onPlayerClick={handleShowPlayerInfoModal}
                         />

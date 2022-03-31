@@ -6,16 +6,40 @@ import {motion, useAnimation} from "framer-motion";
 import SelectedPlayerOnPitch from "components/mySquad/SelectedPlayerOnPitch";
 import Div from "components/html/Div";
 import Animated from "components/animation/Animated";
+import PlayersFormation from "components/mySquad/formation/PlayersFormation";
 
 // Utils
 import R from "utils/getResponsiveValue";
 
 // Constants
-import {ZERO, ONE,TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE, THIRTEEN, FOURTEEN} from "constants/arrayIndexes";
+import {
+    EIGHT,
+    ELEVEN,
+    FIVE,
+    FOUR,
+    FOURTEEN,
+    NINE,
+    ONE,
+    SEVEN,
+    SIX,
+    TEN,
+    THIRTEEN,
+    THREE,
+    TWELVE,
+    TWO,
+    ZERO
+} from "constants/arrayIndexes";
 import {ANIMATE, INITIAL} from "constants/animations";
 
 // Animations
-import {player5Animation, player6Animation, player9Animation, player10Animation, player11Animation} from "Animations/mySquad/PlayersFormationAnimation";
+import {
+    player10Animation,
+    player11Animation,
+    player5Animation,
+    player6Animation,
+    player9Animation
+} from "Animations/mySquad/PlayersFormationAnimation";
+import {POSITION_DEF, POSITION_FWD, POSITION_MID} from "../../constants/data/filters";
 
 // Styles
 const getStyles = (R) => {
@@ -42,12 +66,12 @@ const getStyles = (R) => {
 }
 
 export default function SelectedSquadOnPitch ({
-    pickedPlayers,
+    squad,
     onPlayerChange,
     onPlayerClick,
     changeFormation,
     tripleCaptainApplied,
-    benchBoostApplied
+    benchBoostApplied,
 }){
 
     const STYLES =  { ... getStyles(R) }
@@ -55,7 +79,7 @@ export default function SelectedSquadOnPitch ({
     const controls = useAnimation()
 
     useEffect(() => {
-        if(!pickedPlayers.length) return
+        if(!squad.length) return
         if(changeFormation === ANIMATE) {
             controls.start('p5Animation')
             controls.start('p6Animation')
@@ -66,11 +90,11 @@ export default function SelectedSquadOnPitch ({
 
     }, [changeFormation])
 
-    if(!pickedPlayers.length) return null
+    if(!squad.length) return null
 
     const buildPlayer = (index) => {
         return {
-            ...pickedPlayers[index],
+            ...squad[index],
             onPlayerChange: (player) => onPlayerChange(player, index),
             onPlayerClick: (player) => onPlayerClick(player, index),
             tripleCaptainApplied,
@@ -113,7 +137,8 @@ export default function SelectedSquadOnPitch ({
 
     const p5 = () => {
         return {
-            animationVariants: player5Animation(),
+            // animationVariants: player5Animation(),
+            animationVariants: null,
             player: {...buildPlayer(FOUR)},
             style: {...STYLES.commonPlayersStyle},
         }
@@ -121,7 +146,8 @@ export default function SelectedSquadOnPitch ({
 
     const p6 = () => {
         return {
-            animationVariants: player6Animation(),
+            // animationVariants: player6Animation(),
+            animationVariants: null,
             player: {...buildPlayer(FIVE)},
             style: {...STYLES.commonPlayersStyle},
         }
@@ -129,7 +155,8 @@ export default function SelectedSquadOnPitch ({
 
     const p7 = () => {
         return {
-            animationVariants: player6Animation(),
+            // animationVariants: player6Animation(),
+            animationVariants: null,
             player: {...buildPlayer(SIX)},
             style: {
                 ...STYLES.commonPlayersStyle,
@@ -139,7 +166,8 @@ export default function SelectedSquadOnPitch ({
 
     const p8 = () => {
         return {
-            animationVariants: player6Animation(),
+            // animationVariants: player6Animation(),
+            animationVariants: null,
             player: {...buildPlayer(SEVEN)},
             style: {...STYLES.commonPlayersStyle,}
         }
@@ -147,14 +175,16 @@ export default function SelectedSquadOnPitch ({
 
     const p9 = () => {
         return {
-            animationVariants: player9Animation(),
+            // animationVariants: player9Animation(),
+            animationVariants: null,
             player: {...buildPlayer(EIGHT)},
             style: {...STYLES.commonPlayersStyle1,}
         }
     }
     const p9type1 = (payload) => {
         return {
-            animationVariants: player9Animation(),
+            // animationVariants: player9Animation(),
+            animationVariants: null,
             player: {...buildPlayer(EIGHT)},
             style: {...STYLES.commonPlayersStyle1,},
             ...payload
@@ -163,7 +193,8 @@ export default function SelectedSquadOnPitch ({
 
     const p10 = () => {
         return {
-            animationVariants: player10Animation(),
+            // animationVariants: player10Animation(),
+            animationVariants: null,
             player: {...buildPlayer(NINE)},
             style: {...STYLES.commonPlayersStyle1,}
         }
@@ -171,7 +202,8 @@ export default function SelectedSquadOnPitch ({
 
     const p11 = () => {
         return {
-            animationVariants: player11Animation(),
+            // animationVariants: player11Animation(),
+            animationVariants: null,
             player: {...buildPlayer(TEN)},
             style: {...STYLES.commonPlayersStyle1,}
         }
@@ -221,7 +253,7 @@ export default function SelectedSquadOnPitch ({
             <motion.div variants={animationVariants} animate={controls}>
                 <SelectedPlayerOnPitch
                     player={player}
-                    changed={player.animationState}
+                    changed={player.toggleAnimation}
                     style={{
                         ...style,
                         opacity: player.opacity,
@@ -231,42 +263,7 @@ export default function SelectedSquadOnPitch ({
         )
     }
 
-    const getAllPlayersWithoutBenchBoostApplied = () => {
-        return (
-            <div style={STYLES.topContainer}>
-                             {/*1*/}
-                             <Div style={STYLES.container}>
-                                 {renderPlayer(p1())}
-                             </Div>
-                             {/*2*/}
-                             <Div style={STYLES.container} mt={24}>
-                                 {renderPlayer(p2())}
-                                 {renderPlayer(p3())}
-                                 {renderPlayer(p4())}
-                             </Div>
-                             {/*3*/}
-                             <Div style={STYLES.container} mt={24}>
-                                 {renderPlayer(p5())}
-                                 {renderPlayer(p6())}
-                                 {renderPlayer(p7())}
-                                 {renderPlayer(p8())}
-                             </Div>
-                             {/*4*/}
-                             <Div style={STYLES.container} mt={24}>
-                                 {renderPlayer(p9())}
-                                 {renderPlayer(p10())}
-                                 {renderPlayer(p11())}
-                             </Div>
-                             {/*5*/}
-                             <Div style={STYLES.container} mt={50}>
-                                 {renderPlayer(p12())}
-                                 {renderPlayer(p13())}
-                                 {renderPlayer(p14())}
-                                 {renderPlayer(p15())}
-                             </Div>
-                         </div>
-        )
-    }
+
 
     const getAllPlayersWithBenchBoostApplied = () => {
         return (
@@ -305,9 +302,28 @@ export default function SelectedSquadOnPitch ({
         )
     }
 
+    const getPlayersFormation = (squad) => {
+
+        let DEFs = squad.filter((p) => !p.isSubstitutePlayer && p.position === POSITION_DEF).length
+        let MIDs = squad.filter((p) => !p.isSubstitutePlayer && p.position === POSITION_MID).length
+        let FWDs = squad.filter((p) => !p.isSubstitutePlayer && p.position === POSITION_FWD).length
+
+        return `${DEFs}${MIDs}${FWDs}`
+    }
+
     return(
         <Animated toggleAnimation={!benchBoostApplied} children2={getAllPlayersWithBenchBoostApplied()}>
-            {getAllPlayersWithoutBenchBoostApplied()}
+            {/*{getAllPlayersWithoutBenchBoostApplied()}*/}
+
+
+            {/*Replace null with appropriate condition*/}
+            <Animated toggleAnimation={null}>
+                <PlayersFormation
+                    playersFormation={getPlayersFormation(squad)}
+                    renderPlayer={renderPlayer}
+                    players={{p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15}}
+                />
+            </Animated>
         </Animated>
     )
 }
