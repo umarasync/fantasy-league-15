@@ -66,7 +66,7 @@ const getStyles = (R) => {
 }
 
 export default function SelectedSquadOnPitch ({
-    squad,
+    squadInfo,
     onPlayerChange,
     onPlayerClick,
     changeFormation,
@@ -75,6 +75,7 @@ export default function SelectedSquadOnPitch ({
 }){
 
     const STYLES =  { ... getStyles(R) }
+    const { squad, formation, toggleFormation } = squadInfo
 
     const controls = useAnimation()
 
@@ -302,24 +303,15 @@ export default function SelectedSquadOnPitch ({
         )
     }
 
-    const getPlayersFormation = (squad) => {
-
-        let DEFs = squad.filter((p) => !p.isSubstitutePlayer && p.position === POSITION_DEF).length
-        let MIDs = squad.filter((p) => !p.isSubstitutePlayer && p.position === POSITION_MID).length
-        let FWDs = squad.filter((p) => !p.isSubstitutePlayer && p.position === POSITION_FWD).length
-
-        return `${DEFs}${MIDs}${FWDs}`
-    }
-
     return(
         <Animated toggleAnimation={!benchBoostApplied} children2={getAllPlayersWithBenchBoostApplied()}>
             {/*{getAllPlayersWithoutBenchBoostApplied()}*/}
 
 
             {/*Replace null with appropriate condition*/}
-            <Animated toggleAnimation={null}>
+            <Animated toggleAnimation={toggleFormation} animationSpeed={1.2}>
                 <PlayersFormation
-                    playersFormation={getPlayersFormation(squad)}
+                    playersFormation={formation}
                     renderPlayer={renderPlayer}
                     players={{p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15}}
                 />

@@ -52,8 +52,8 @@ export default function MySquadGameWeek () {
 
     const dispatch = useDispatch()
 
-    const [pickedPlayers, setPickedPlayers] = useState([])
-    const [savedPlayers, setSavedPlayers] = useState([])
+    const [squadInfo, setSquadInfo] = useState({})
+    const [savedSquad, setSavedSquadInfo] = useState({})
     const [transferInProgress, setTransferInProgress] = useState(false)
     const [activeFilter, setActiveFilter] = useState(TOTAL_POINTS)
     const [changeFormation, setChangeFormation] = useState(INITIAL)
@@ -83,20 +83,19 @@ export default function MySquadGameWeek () {
     //Player-Transfer
     const handlePlayerSwap = (player, arrayIndex) => {
         if(player.clickedIcon === DIAMOND_UP_GREEN) return
-        const players = playerSwapHandler({
+        const $squadInfo = playerSwapHandler({
             player,
             arrayIndex,
-            pickedPlayers,
+            squadInfo,
             setChangeFormation,
             setTransferInProgress,
             tripleCaptainApplied
         })
-        setPickedPlayers(players)
+        setSquadInfo($squadInfo)
     }
     // Player-Info-Modal
     const handleShowPlayerInfoModal = (player, arrayIndex) => {
-        return
-        setPlayerInfoPlayer({...player})
+        // setPlayerInfoPlayer({...player})
     }
 
     useEffect(() => {
@@ -106,46 +105,46 @@ export default function MySquadGameWeek () {
 
     // Filter-Buttons-(ex: Total pts, Price, Match)
     useEffect(() => {
-            if(!pickedPlayers.length) return
-            const $pickedPlayers = pickedPlayers.map((player) => {
+            if(isEmpty(squadInfo)) return
+            const squad = squadInfo.squad.map((player) => {
                 player.activeFilter = activeFilter
                 return player
             })
-            setPickedPlayers($pickedPlayers)
+            setSquadInfo({...squadInfo, squad})
     }, [activeFilter])
-
 
     // Transfer_Edit-Cancel
     const handleCancel = () => {
-        setPickedPlayers(savedPlayers)
+        setSquadInfo(savedSquad)
         setTransferInProgress(false)
     }
 
     // Transfer_Edit-Save
     const handleSave = () => {
-        const players = resetPlayers({players: pickedPlayers, activeFilter})
-        setPickedPlayers(players)
-        setSavedPlayers(players)
+        const squad = resetPlayers({squad: squadInfo.squad, activeFilter})
+        setSquadInfo({...squadInfo, squad})
+        setSavedSquadInfo({...squadInfo, squad})
         setTransferInProgress(false)
     }
+
     // Player info
     const handleMakeCaptain = (player) => handleCaptainChange(player, CAPTAIN)
     const handleMakeViceCaptain = (player) => handleCaptainChange(player, VICE_CAPTAIN)
     const handleCaptainChange = (player, captainType) => {
-        const $pickedPlayers = makeCaptain(
+        const squad = makeCaptain(
             {
-                $pickedPlayers: pickedPlayers,
+                $squadInfo: squadInfo,
                 player,
                 captainType,
             })
-        setPickedPlayers($pickedPlayers)
-        setSavedPlayers($pickedPlayers)
+        setSquadInfo({...squadInfo, squad})
+        setSavedSquadInfo({...squadInfo, squad})
         setShowPlayerInfoModal(false)
     }
 
     // Triple Captain
     const handleShowTripleCaptainModal = () => {
-        const captain = pickedPlayers.find(p => p.captain === true)
+        const captain = squadInfo.squad.find(p => p.captain === true)
         if(captain === undefined) return
         setTripleCaptainPlayer([{...captain}])
         setShowTripleCaptainModal(true)
@@ -158,7 +157,7 @@ export default function MySquadGameWeek () {
 
     useEffect(() => {
             if(!tripleCaptainApplied) return
-            handleMakeCaptain(pickedPlayers.find(p => p.captain === true))
+            handleMakeCaptain(squadInfo.squad.find(p => p.captain === true))
     }, [tripleCaptainApplied])
 
     const handleTripleCaptainDisable = () => {
@@ -171,7 +170,7 @@ export default function MySquadGameWeek () {
 
     // Bench-Boost
     const handleBenchBoostModal = () => {
-        const substitutePlayer = pickedPlayers.filter(p => p.isSubstitutePlayer)
+        const substitutePlayer = squadInfo.squad.filter(p => p.isSubstitutePlayer)
         setBenchBoostPlayers([...substitutePlayer])
         setShowBenchBoostModal(true)
     }
@@ -198,7 +197,7 @@ export default function MySquadGameWeek () {
     useEffect(() => {
         handleTripleCaptainDisable()
         handleBenchBoostDisable()
-    }, [pickedPlayers])
+    }, [squadInfo])
 
     const runDidMount = async () => {
 
@@ -209,10 +208,10 @@ export default function MySquadGameWeek () {
                 fantasyTeamId: user.fantasyTeamId,
         }))
 
-        const players = [ ...setPlayersAdditionalData(squad) ]
+        const $squadInfo = setPlayersAdditionalData(squad)
+        setSquadInfo($squadInfo)
+        setSavedSquadInfo($squadInfo)
 
-        setPickedPlayers(players)
-        setSavedPlayers(players)
         setShowPlayerInfoModal(false)
         setShowTripleCaptainModal(false)
 
@@ -228,7 +227,7 @@ export default function MySquadGameWeek () {
         runDidMount()
     }, [])
 
-    if (pickedPlayers.length === 0) {return <Loader/>}
+    if (squadInfo.length === 0) {return <Loader/>}
     return (
         <Layout title="My Squad">
             <Div className="mx-auto relative bg-white">
@@ -239,7 +238,7 @@ export default function MySquadGameWeek () {
                             handleFilterButtonClick={(v) => setActiveFilter(v)}
                             tripleCaptainApplied={tripleCaptainApplied}
                             benchBoostApplied={benchBoostApplied}
-                            squad={pickedPlayers}
+                            squadInfo={squadInfo}
                             onPlayerChange={handlePlayerSwap}
                             changeFormation={changeFormation}
                             onPlayerClick={handleShowPlayerInfoModal}
