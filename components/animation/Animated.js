@@ -28,6 +28,7 @@ const getStyles = (R, RS, props) => {
 }
 
 const Animated = (props) => {
+
     const {
         toggleAnimation,
         children,

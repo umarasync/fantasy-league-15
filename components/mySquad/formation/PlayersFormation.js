@@ -7,7 +7,7 @@ export default function PlayersFormation ({
         renderPlayer,
         players
     }) {
-        switch (playersFormation) {
+        switch (playersFormation.value) {
             case '442':
                 return (<MySquadFormation442 renderPlayer={renderPlayer} players={{...players}} />)
             case '433':

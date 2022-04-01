@@ -102,7 +102,12 @@ const getPlayersFormation = (squad) => {
     let MIDs = squad.filter((p) => !p.isSubstitutePlayer && p.position === POSITION_MID).length
     let FWDs = squad.filter((p) => !p.isSubstitutePlayer && p.position === POSITION_FWD).length
 
-    return `${DEFs}${MIDs}${FWDs}`
+    return {
+        value: `${DEFs}${MIDs}${FWDs}`,
+        def: DEFs,
+        mid: MIDs,
+        fwd: FWDs
+    }
 }
 
 export const setPlayersAdditionalData = ($squad) => {
@@ -131,8 +136,8 @@ export const setPlayersAdditionalData = ($squad) => {
         // Playing 11
         ...squad.filter(p => !p.isSubstitutePlayer && p.position ===  POSITION_GK),
         ...squad.filter(p => !p.isSubstitutePlayer && p.position ===  POSITION_DEF),
-        ...squad.filter(p => !p.isSubstitute && p.position ===  POSITION_MID),
-        ...squad.filter(p => !p.isSubstitute && p.position ===  POSITION_FWD),
+        ...squad.filter(p => !p.isSubstitutePlayer && p.position ===  POSITION_MID),
+        ...squad.filter(p => !p.isSubstitutePlayer && p.position ===  POSITION_FWD),
 
         // Substitutes
         ...squad.filter(p => p.isSubstitutePlayer && p.position ===  POSITION_GK),
@@ -154,7 +159,7 @@ const readyPlayerBeforeSwapping = (p1, p2) => {
     return {
         ...p1,
         toggleAnimation: !p2.toggleAnimation,
-        alreadySwapped: true,
+        latestSwappedInSub: true,
         captain: p2.captain,
         viceCaptain: p2.viceCaptain,
         isSubstitutePlayer: p2.isSubstitutePlayer
@@ -162,6 +167,21 @@ const readyPlayerBeforeSwapping = (p1, p2) => {
 }
 
 // Player Swapping Handling
+
+const makePlayersInOrder = (squad) => {
+    return [
+
+            // Playing 11
+            ...squad.filter(p => !p.isSubstitutePlayer && p.position ===  POSITION_GK),
+            ...squad.filter(p => !p.isSubstitutePlayer && p.position ===  POSITION_DEF),
+            ...squad.filter(p => !p.isSubstitutePlayer && p.position ===  POSITION_MID),
+            ...squad.filter(p => !p.isSubstitutePlayer && p.position ===  POSITION_FWD),
+
+            // Substitutes
+            ...squad.filter(p => p.isSubstitutePlayer),
+        ]
+}
+
 const handlesP11Click = ({
     player,
     arrayIndex,
@@ -171,42 +191,51 @@ const handlesP11Click = ({
     const squad = clone(squadInfo.squad)
 
     const swapOutIndex = squad.findIndex(p => p.id === player.id)
-    const swapInIndex = squad.findIndex(p => p.latestToBeSwappedIn)
+    const swapInIndex = squad.findIndex(p => p.latestSubToBeSwappedIn)
 
-    const swappedPlayers = [...squad]
+    const $squad = [...squad]
 
     const swapOut = readyPlayerBeforeSwapping(squad[swapInIndex], squad[swapOutIndex])
     const swapIn = readyPlayerBeforeSwapping(squad[swapOutIndex], squad[swapInIndex])
 
-    swappedPlayers[swapOutIndex] = swapOut
-    swappedPlayers[swapInIndex] = {
+    $squad[swapOutIndex] = swapOut
+    $squad[swapInIndex] = {
         ...swapIn,
         clickedIcon: TRANSFER_ICON
     }
 
-    // console.log("swappedPlayers ------------", swappedPlayers)
-
     if([4,5,6,7,8,9,10].includes(arrayIndex)) { setChangeFormation(ANIMATE) }
 
-    const swappedSquad = swappedPlayers.map((p, index) => {
+    const $$squad = $squad.map((p, index) => {
         p.opacity = 1;
         p.disableIconClick = false
 
-        if(!p.alreadySwapped && ![11,12,13,14].includes(index)) {
+        // Remove icons from all players except latest swapped substitute &  4 subs
+        if(!p.latestSwappedInSub && !p.isSubstitutePlayer) {
             p.clickedIcon = false
         }
 
         return p
     })
-
+    
     return {
-        formation: getPlayersFormation(swappedSquad),
+        formation: getPlayersFormation($$squad),
         toggleFormation: !squadInfo.toggleFormation,
-        squad: swappedSquad
+        squad: makePlayersInOrder($$squad)
     }
 }
 
+const disablePlayer = ({p, index, player, squadInfo}) => {
 
+    // disableGoalKeepersAndAllSubstitutesExceptClickedOne
+    if((!index || p.isSubstitutePlayer) && (p.id !== player.id)){
+        return true
+    } else if('') {
+
+    }
+
+    return false
+}
 
 const handlesSubstituteClick = ({
     player,
@@ -222,16 +251,16 @@ const handlesSubstituteClick = ({
             if(arrayIndex === ELEVEN && [ZERO, ELEVEN].includes(index)){
                 if(index === ELEVEN) {
                     p.clickedIcon = DIAMOND_UP_GREEN
-                    p.latestToBeSwappedIn = true
+                    p.latestSubToBeSwappedIn = true
                 }else {
                     p.clickedIcon = DIAMOND_DOWN_RED
-                    p.latestToBeSwappedIn = false
+                    p.latestSubToBeSwappedIn = false
                 }
                 p.opacity = 1
             }else {
                 p.opacity = 0.5
                 p.disableIconClick = true
-                p.latestToBeSwappedIn = false
+                p.latestSubToBeSwappedIn = false
             }
             return p
         })
@@ -249,23 +278,20 @@ const handlesSubstituteClick = ({
     const $squad = squad.map((p, index) => {
 
         /***** Disabling Players ******/
-        const disableGoalKeepersAndAllSubstitutesExceptClickedOne =
-            [0, 11, 12, 13, 14].includes(index) && (p.id !== player.id)
-
-        if(disableGoalKeepersAndAllSubstitutesExceptClickedOne){
+        if(disablePlayer({p, index, player, squadInfo})){
             p.opacity = 0.5
             p.disableIconClick = true
-            p.latestToBeSwappedIn = false
+            p.latestSubToBeSwappedIn = false
 
         } else { // Attach Icons & other data to clicked substitute and relevant p11
             if(p.id === player.id) {
                 p.clickedIcon = DIAMOND_UP_GREEN
-                p.latestToBeSwappedIn = true
+                p.latestSubToBeSwappedIn = true
             }else {
                 p.clickedIcon = DIAMOND_DOWN_RED
-                p.latestToBeSwappedIn = false
+                p.latestSubToBeSwappedIn = false
                 p.disableIconClick = false
-                p.alreadySwapped = false
+                p.latestSwappedInSub = false
                 p.toggleAnimation = true
             }
             p.opacity = 1
@@ -311,8 +337,8 @@ export const resetPlayers = ({squad, activeFilter}) => {
         p.toggleAnimation = true
         p.activeFilter = activeFilter
         p.disableIconClick = false
-        p.alreadySwapped = false
-        p.latestToBeSwappedIn = false
+        p.latestSwappedInSub = false
+        p.latestSubToBeSwappedIn = false
 
         return p
     })
