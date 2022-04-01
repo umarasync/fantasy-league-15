@@ -11,7 +11,7 @@ import MySquadFormation541 from "./MySquadFormation541";
 import {formations} from "constants/universalConstants";
 
 export default function PlayersFormation ({
-    playersFormation,
+    formationInfo,
     renderPlayer,
     players
 }) {
@@ -19,7 +19,7 @@ export default function PlayersFormation ({
         F442,F433,F352,F451,F343,F532,F541
     } = formations
 
-        switch (playersFormation.value) {
+        switch (formationInfo.formation) {
             case F442:
                 return (<MySquadFormation442 renderPlayer={renderPlayer} players={{...players}} />)
             case F433:

@@ -25,8 +25,11 @@ const getPlayersFormation = (squad) => {
     let MIDs = squad.filter((p) => !p.isSubstitutePlayer && p.position === POSITION_MID).length
     let FWDs = squad.filter((p) => !p.isSubstitutePlayer && p.position === POSITION_FWD).length
 
+    let formationValue = `${DEFs}${MIDs}${FWDs}`
     return {
-        value: `${DEFs}${MIDs}${FWDs}`,
+        formation: formationValue,
+        previousFormation: formationValue,
+        toggleFormation: true,
         def: DEFs,
         mid: MIDs,
         fwd: FWDs
@@ -69,11 +72,8 @@ export const setPlayersAdditionalData = ($squad) => {
         ...squad.filter(p => p.isSubstitutePlayer && p.position ===  POSITION_FWD),
     ]
 
-    let formation = getPlayersFormation($$squad)
-
     return {
-        formation,
-        toggleFormation: true,
+        formationInfo: getPlayersFormation($$squad),
         squad: $$squad
     }
 }
@@ -143,26 +143,29 @@ const handlesP11Click = ({
     })
 
     return {
-        formation: getPlayersFormation($$squad),
-        toggleFormation: !squadInfo.toggleFormation,
+        formationInfo: {
+            ...getPlayersFormation($$squad),
+            previousFormation: squadInfo.formationInfo.formation,
+            toggleFormation: !squadInfo.formationInfo.toggleFormation,
+        },
         squad: makePlayersInOrder($$squad)
     }
 }
 
 const disablePlayer = ({p, index, player, squadInfo}) => {
 
-    const {formation} = squadInfo
+    const {formationInfo} = squadInfo
 
     return (
 
         // Disable non-clicked substitutes as well goal keeper from p11
         (!index || p.isSubstitutePlayer) && (p.id !== player.id)
         // Disable DEFs if Just 3 Left
-        || formation.def === 3 && !p.isSubstitutePlayer && p.position === POSITION_DEF
+        || formationInfo.def === 3 && !p.isSubstitutePlayer && p.position === POSITION_DEF
         // Disable MIDs if Just 3 Left
-        || formation.mid === 3 && !p.isSubstitutePlayer && p.position === POSITION_MID
+        || formationInfo.mid === 3 && !p.isSubstitutePlayer && p.position === POSITION_MID
         // Disable FWDs if Just 1 Left
-        || formation.fwd === 1 && !p.isSubstitutePlayer && p.position === POSITION_FWD
+        || formationInfo.fwd === 1 && !p.isSubstitutePlayer && p.position === POSITION_FWD
     )
 
 }

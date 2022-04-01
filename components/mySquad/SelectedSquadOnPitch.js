@@ -75,7 +75,8 @@ export default function SelectedSquadOnPitch ({
 }){
 
     const STYLES =  { ... getStyles(R) }
-    const { squad, formation, toggleFormation } = squadInfo
+    const { squad, formationInfo } = squadInfo
+    const { toggleFormation } = formationInfo
 
     const controls = useAnimation()
 
@@ -264,8 +265,6 @@ export default function SelectedSquadOnPitch ({
         )
     }
 
-
-
     const getAllPlayersWithBenchBoostApplied = () => {
         return (
             <div style={STYLES.topContainer}>
@@ -310,7 +309,7 @@ export default function SelectedSquadOnPitch ({
             {/*Replace null with appropriate condition*/}
             <Animated toggleAnimation={toggleFormation} animationSpeed={1.2}>
                 <PlayersFormation
-                    playersFormation={formation}
+                    formationInfo={formationInfo}
                     renderPlayer={renderPlayer}
                     players={{p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15}}
                 />
