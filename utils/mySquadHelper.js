@@ -183,6 +183,8 @@ const handlesP11Click = ({
     })
 }
 
+
+
 const handlesSubstituteClick = ({
     player,
     arrayIndex,
@@ -191,7 +193,7 @@ const handlesSubstituteClick = ({
 
     const squad = clone(pickedPlayers)
 
-    /**** If Goalkeeper **/
+    /**** If clicked sub is a goalkeeper **/
     if(arrayIndex === ELEVEN) {
        return squad.map((p, index) => {
             if(arrayIndex === ELEVEN && [ZERO, ELEVEN].includes(index)){
@@ -210,32 +212,39 @@ const handlesSubstituteClick = ({
             }
             return p
         })
-    }else {
-        /**** Non-Goal Keeper *******/
-        return squad.map((p, index) => {
-
-            /***** Disable Goal-Keeper and Other non-clicked Substitutes ******/
-            if([0, 11, 12, 13, 14].includes(index) && (p.id !== player.id)){
-                p.opacity = 0.5
-                p.disableIconClick = true
-                p.latestToBeSwappedIn = false
-            } else { // Attach Icons & other data to clicked substitute and relevant p11
-                if(p.id === player.id) {
-                    p.clickedIcon = DIAMOND_UP_GREEN
-                    p.latestToBeSwappedIn = true
-                }else {
-                    p.clickedIcon = DIAMOND_DOWN_RED
-                    p.latestToBeSwappedIn = false
-                    p.disableIconClick = false
-                    p.alreadySwapped = false
-                    p.toggleAnimation = true
-                }
-                p.opacity = 1
-            }
-
-            return p
-        })
     }
+
+    /**** If clicked sub is a non-goalkeeper:
+     * disable certain players &
+     * attach data to others players who can be clicked or interacted with
+     * *******/
+    return squad.map((p, index) => {
+
+        /***** Disabling Players ******/
+        const disableGoalKeepersAndAllSubstitutesExceptClickedOne =
+            [0, 11, 12, 13, 14].includes(index) && (p.id !== player.id)
+
+        if(disableGoalKeepersAndAllSubstitutesExceptClickedOne){
+            p.opacity = 0.5
+            p.disableIconClick = true
+            p.latestToBeSwappedIn = false
+
+        } else { // Attach Icons & other data to clicked substitute and relevant p11
+            if(p.id === player.id) {
+                p.clickedIcon = DIAMOND_UP_GREEN
+                p.latestToBeSwappedIn = true
+            }else {
+                p.clickedIcon = DIAMOND_DOWN_RED
+                p.latestToBeSwappedIn = false
+                p.disableIconClick = false
+                p.alreadySwapped = false
+                p.toggleAnimation = true
+            }
+            p.opacity = 1
+        }
+
+        return p
+    })
 }
 
 export const playerSwapHandler = (props) => {
@@ -252,6 +261,7 @@ export const playerSwapHandler = (props) => {
     return handlesSubstituteClick({...props})
 }
 
+// Resetting Players
 export const resetPlayers = ({players, activeFilter}) => {
     return players.map((player, index) => {
 
