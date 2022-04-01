@@ -17,83 +17,6 @@ export const MATCHES = 'Matches'
 export const CAPTAIN = 'captain'
 export const VICE_CAPTAIN = 'viceCaptain'
 
-export const setPlayersAdditionalData1 = ($squad) => {
-
-    const squad = clone($squad)
-
-    // Set icon for GKs
-    const GKs = squad[POSITION_GK].map((player, index) => {
-        if(index === squad[POSITION_GK].length - 1){
-            player.clickedIcon = TRANSFER_ICON
-        }else{ player.clickedIcon = false }
-        return player
-    })
-
-    // Set icon for DEFS
-    const DEFs = squad[POSITION_DEF].map((player, index) => {
-
-        if(index === squad[POSITION_DEF].length - 1 || index === squad[POSITION_DEF].length - 2){
-            player.clickedIcon = TRANSFER_ICON
-        }else{
-            player.clickedIcon = false
-        }
-
-        return player
-    })
-
-    // Set icon for MIDs
-    const MIDs = squad[POSITION_MID].map((player, index) => {
-
-        if(index === squad[POSITION_MID].length - 1){
-            player.clickedIcon = TRANSFER_ICON
-        }else{
-            player.clickedIcon = false
-        }
-        return player
-    })
-
-    // Set icon for FWDs
-    const FWDs = squad[POSITION_FWD].map((player) => {
-        player.clickedIcon = false
-        return player
-    })
-
-    const players = [
-        GKs[0],
-        DEFs[0],
-        DEFs[1],
-        DEFs[2],
-        MIDs[0],
-        MIDs[1],
-        MIDs[2],
-        MIDs[3],
-        FWDs[0],
-        FWDs[1],
-        FWDs[2],
-        GKs[1],
-        DEFs[3],
-        DEFs[4],
-        MIDs[4],
-    ]
-
-    return players.map((player, index) => {
-
-        player.isSubstitutePlayer = !!player.clickedIcon;
-
-        player.opacity = 1
-        player.toggleAnimation = true
-        player.activeFilter = TOTAL_POINTS
-        player.disableIconClick = false
-        player.captain = false
-        player.viceCaptain = false
-
-        // making a captain and vice captain, eventually it will come from backend
-        if (index === 5) {player.captain = true}
-        if(index === 6) {player.viceCaptain = true}
-
-        return player
-    })
-}
 
 // Initializing Initial State
 const getPlayersFormation = (squad) => {
@@ -156,6 +79,7 @@ export const setPlayersAdditionalData = ($squad) => {
 }
 
 const readyPlayerBeforeSwapping = (p1, p2) => {
+
     return {
         ...p1,
         toggleAnimation: !p2.toggleAnimation,
@@ -217,7 +141,7 @@ const handlesP11Click = ({
 
         return p
     })
-    
+
     return {
         formation: getPlayersFormation($$squad),
         toggleFormation: !squadInfo.toggleFormation,
@@ -227,14 +151,20 @@ const handlesP11Click = ({
 
 const disablePlayer = ({p, index, player, squadInfo}) => {
 
-    // disableGoalKeepersAndAllSubstitutesExceptClickedOne
-    if((!index || p.isSubstitutePlayer) && (p.id !== player.id)){
-        return true
-    } else if('') {
+    const {formation} = squadInfo
 
-    }
+    return (
 
-    return false
+        // Disable non-clicked substitutes as well goal keeper from p11
+        (!index || p.isSubstitutePlayer) && (p.id !== player.id)
+        // Disable DEFs if Just 3 Left
+        || formation.def === 3 && !p.isSubstitutePlayer && p.position === POSITION_DEF
+        // Disable MIDs if Just 3 Left
+        || formation.mid === 3 && !p.isSubstitutePlayer && p.position === POSITION_MID
+        // Disable FWDs if Just 1 Left
+        || formation.fwd === 1 && !p.isSubstitutePlayer && p.position === POSITION_FWD
+    )
+
 }
 
 const handlesSubstituteClick = ({
@@ -275,6 +205,7 @@ const handlesSubstituteClick = ({
      * disable certain players &
      * attach data to others players who can be clicked or interacted with
      * *******/
+
     const $squad = squad.map((p, index) => {
 
         /***** Disabling Players ******/

@@ -16,15 +16,10 @@ const getStyles = (R) => {
             flexFlow: 'row',
             justifyContent: 'center'
         },
-        container1: {
-            display: 'flex',
-            flexFlow: 'row',
-            justifyContent: 'space-between',
-        }
     }
 }
 
-export default function MySquadFormation352 ({
+export default function MySquadFormation343 ({
     renderPlayer,
     players,
 }) {
@@ -65,13 +60,11 @@ export default function MySquadFormation352 ({
                      {renderPlayer(p5())}
                      {renderPlayer(p6())}
                      {renderPlayer(p7())}
-                 </Div>
-                 <Div style={STYLES.container1} mt={-24} pl={40} pr={40}>
                      {renderPlayer(p8())}
-                     {renderPlayer(p9())}
                  </Div>
                  {/*4*/}
-                 <Div style={STYLES.container} mt={-43}>
+                 <Div style={STYLES.container} mt={24}>
+                     {renderPlayer(p9())}
                      {renderPlayer(p10())}
                      {renderPlayer(p11())}
                  </Div>

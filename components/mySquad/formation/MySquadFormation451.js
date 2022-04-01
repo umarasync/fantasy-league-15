@@ -59,20 +59,20 @@ export default function MySquadFormation352 ({
                      {renderPlayer(p2())}
                      {renderPlayer(p3())}
                      {renderPlayer(p4())}
+                     {renderPlayer(p5())}
                  </Div>
                  {/*3*/}
                  <Div style={STYLES.container} mt={24}>
-                     {renderPlayer(p5())}
                      {renderPlayer(p6())}
                      {renderPlayer(p7())}
+                     {renderPlayer(p8())}
                  </Div>
                  <Div style={STYLES.container1} mt={-24} pl={40} pr={40}>
-                     {renderPlayer(p8())}
                      {renderPlayer(p9())}
+                     {renderPlayer(p10())}
                  </Div>
                  {/*4*/}
                  <Div style={STYLES.container} mt={-43}>
-                     {renderPlayer(p10())}
                      {renderPlayer(p11())}
                  </Div>
                  {/*5*/}
