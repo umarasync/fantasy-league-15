@@ -20,6 +20,7 @@ export default function PlayersFormation ({
         F442,F433,F352,F451,F343,F532,F541
     } = formations
 
+        // For Running ZigZag Animation
         if(formationInfo.previousFormation === F343 && formationInfo.formation === F352) {
             return (<MySquadFormation352_1 renderPlayer={renderPlayer} players={{...players}} />)
         }

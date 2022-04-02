@@ -1,6 +1,6 @@
 // Packages
 import {useAnimation} from "framer-motion";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 // Components
 import Div from "components/html/Div";
@@ -59,6 +59,8 @@ export default function MySquadFormation352 ({
 
     const controls = useAnimation()
 
+    const [initialRenderDone, setInitialRenderDone] = useState(false)
+
     const getAnimationInfo = (variants) => {
         return {
             animation: {
@@ -68,15 +70,17 @@ export default function MySquadFormation352 ({
         }
     }
 
+    const runAnimation = () => {
+        controls.start('p5Animation')
+        controls.start('p6Animation')
+        controls.start('p9Animation')
+        controls.start('p10Animation')
+        controls.start('p11Animation')
+    }
     useEffect(() => {
-        setTimeout(() => {
-            controls.start('p5Animation')
-            controls.start('p6Animation')
-            controls.start('p9Animation')
-            controls.start('p10Animation')
-            controls.start('p11Animation')
-        }, 100)
-    }, [])
+        setInitialRenderDone(true)
+        runAnimation()
+    }, [initialRenderDone])
 
     return (
             <div style={STYLES.topContainer}>
