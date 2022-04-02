@@ -44,10 +44,6 @@ import {POSITION_DEF, POSITION_FWD, POSITION_MID} from "../../constants/data/fil
 // Styles
 const getStyles = (R) => {
     return {
-        // Styles for Without Bench Boost Applied
-        topContainer: {
-            paddingTop: R(22)
-        },
         commonPlayersStyle: {
             minWidth: R(120)
         },
@@ -56,12 +52,6 @@ const getStyles = (R) => {
             paddingRight: R(10),
             minWidth: R(100)
         },
-        container: {
-            display: 'flex',
-            flexFlow: 'row',
-            justifyContent: 'center'
-        }
-        // Styles if bench Boost applied
     }
 }
 
@@ -104,6 +94,11 @@ export default function SelectedSquadOnPitch ({
         }
     }
 
+    const getPreviousFormation = () => {
+        return formationInfo.formation === '343'
+        return true
+        return formationInfo.previousFormation === '343' || formationInfo.formation === '352'
+    }
 // All-Players
     const p1 = () => {
         return {
@@ -139,8 +134,9 @@ export default function SelectedSquadOnPitch ({
 
     const p5 = () => {
         return {
+            animationVariants: getPreviousFormation() ? player5Animation() : null,
             // animationVariants: player5Animation(),
-            animationVariants: null,
+            // animationVariants: null,
             player: {...buildPlayer(FOUR)},
             style: {...STYLES.commonPlayersStyle},
         }
@@ -148,8 +144,9 @@ export default function SelectedSquadOnPitch ({
 
     const p6 = () => {
         return {
+            animationVariants: getPreviousFormation() ? player6Animation() : null,
             // animationVariants: player6Animation(),
-            animationVariants: null,
+            // animationVariants: null,
             player: {...buildPlayer(FIVE)},
             style: {...STYLES.commonPlayersStyle},
         }
@@ -157,8 +154,9 @@ export default function SelectedSquadOnPitch ({
 
     const p7 = () => {
         return {
+            animationVariants: getPreviousFormation() ? player6Animation() : null,
             // animationVariants: player6Animation(),
-            animationVariants: null,
+            // animationVariants: null,
             player: {...buildPlayer(SIX)},
             style: {
                 ...STYLES.commonPlayersStyle,
@@ -168,8 +166,9 @@ export default function SelectedSquadOnPitch ({
 
     const p8 = () => {
         return {
+            animationVariants: getPreviousFormation() ? player6Animation() : null,
             // animationVariants: player6Animation(),
-            animationVariants: null,
+            // animationVariants: null,
             player: {...buildPlayer(SEVEN)},
             style: {...STYLES.commonPlayersStyle,}
         }
@@ -177,16 +176,18 @@ export default function SelectedSquadOnPitch ({
 
     const p9 = () => {
         return {
+            animationVariants: getPreviousFormation() ? player9Animation() : null,
             // animationVariants: player9Animation(),
-            animationVariants: null,
+            // animationVariants: null,
             player: {...buildPlayer(EIGHT)},
             style: {...STYLES.commonPlayersStyle1,}
         }
     }
     const p9type1 = (payload) => {
         return {
+            animationVariants: getPreviousFormation() ? player9Animation() : null,
             // animationVariants: player9Animation(),
-            animationVariants: null,
+            // animationVariants: null,
             player: {...buildPlayer(EIGHT)},
             style: {...STYLES.commonPlayersStyle1,},
             ...payload
@@ -195,8 +196,9 @@ export default function SelectedSquadOnPitch ({
 
     const p10 = () => {
         return {
+            animationVariants: getPreviousFormation() ? player10Animation() : null,
             // animationVariants: player10Animation(),
-            animationVariants: null,
+            // animationVariants: null,
             player: {...buildPlayer(NINE)},
             style: {...STYLES.commonPlayersStyle1,}
         }
@@ -204,8 +206,9 @@ export default function SelectedSquadOnPitch ({
 
     const p11 = () => {
         return {
+            animationVariants: getPreviousFormation() ? player11Animation() : null,
             // animationVariants: player11Animation(),
-            animationVariants: null,
+            // animationVariants: null,
             player: {...buildPlayer(TEN)},
             style: {...STYLES.commonPlayersStyle1,}
         }
@@ -265,46 +268,9 @@ export default function SelectedSquadOnPitch ({
         )
     }
 
-    const getAllPlayersWithBenchBoostApplied = () => {
-        return (
-            <div style={STYLES.topContainer}>
-                 {/*1*/}
-                 <Div style={STYLES.container}>
-                     {renderPlayer(p1())}
-                     {renderPlayer(p12())}
-                 </Div>
-                 {/*2*/}
-                 <Div style={STYLES.container} mt={24}>
-                     {renderPlayer(p2())}
-                     {renderPlayer(p3())}
-                     {renderPlayer(p4())}
-                 </Div>
-                 {/*3*/}
-                 <Div style={STYLES.container} mt={24}>
-                     {renderPlayer(p5())}
-                     {renderPlayer(p6())}
-                     {renderPlayer(p7())}
-                     {renderPlayer(p8())}
-                 </Div>
-                 {/*4*/}
-                 <Div style={STYLES.container} mt={24}>
-                     {renderPlayer(p9())}
-                     {renderPlayer(p10())}
-                     {renderPlayer(p11())}
-                 </Div>
-                 {/*5*/}
-                 <Div style={STYLES.container} mt={50}>
-                     {renderPlayer(p13())}
-                     {renderPlayer(p14())}
-                     {renderPlayer(p15())}
-                 </Div>
-             </div>
-        )
-    }
 
     return(
         <Animated toggleAnimation={!benchBoostApplied}>
-            {/*Replace null with appropriate condition*/}
             <Animated toggleAnimation={toggleFormation} animationSpeed={1}>
                 <PlayersFormation
                     formationInfo={formationInfo}

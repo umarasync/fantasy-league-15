@@ -19,6 +19,10 @@ export default function PlayersFormation ({
         F442,F433,F352,F451,F343,F532,F541
     } = formations
 
+    if(formationInfo.previousFormation === F343) {
+        return (<MySquadFormation352 renderPlayer={renderPlayer} players={{...players}} />)
+    }
+
         switch (formationInfo.formation) {
             case F442:
                 return (<MySquadFormation442 renderPlayer={renderPlayer} players={{...players}} />)
