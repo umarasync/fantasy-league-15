@@ -10,7 +10,6 @@ import PlayersFormation from "components/mySquad/formation/PlayersFormation";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import {isEmpty} from "utils/helpers";
 
 // Constants
 import {
@@ -31,6 +30,16 @@ import {
     ZERO
 } from "constants/arrayIndexes";
 import {ANIMATE, INITIAL} from "constants/animations";
+
+// Animations
+import {
+    player10Animation,
+    player11Animation,
+    player5Animation,
+    player6Animation,
+    player9Animation
+} from "Animations/mySquad/PlayersFormationAnimation";
+import {POSITION_DEF, POSITION_FWD, POSITION_MID} from "../../constants/data/filters";
 
 // Styles
 const getStyles = (R) => {
@@ -59,23 +68,41 @@ export default function SelectedSquadOnPitch ({
     const { squad, formationInfo } = squadInfo
     const { toggleFormation } = formationInfo
 
+    const controls = useAnimation()
+
+    useEffect(() => {
+        if(!squad.length) return
+        if(changeFormation === ANIMATE) {
+            controls.start('p5Animation')
+            controls.start('p6Animation')
+            controls.start('p9Animation')
+            controls.start('p10Animation')
+            controls.start('p11Animation')
+        }else if(changeFormation === INITIAL) {}
+
+    }, [changeFormation])
+
+    if(!squad.length) return null
+
     const buildPlayer = (index) => {
         return {
             ...squad[index],
             onPlayerChange: (player) => onPlayerChange(player, index),
             onPlayerClick: (player) => onPlayerClick(player, index),
             tripleCaptainApplied,
-            benchBoostApplied,
+            benchBoostApplied
         }
     }
 
     const getPreviousFormation = () => {
         return formationInfo.formation === '343'
+        return true
+        return formationInfo.previousFormation === '343' || formationInfo.formation === '352'
     }
-
 // All-Players
     const p1 = () => {
         return {
+            animationVariants: null,
             player: {...buildPlayer(ZERO)},
             style: {...STYLES.commonPlayersStyle}
         }
@@ -83,6 +110,7 @@ export default function SelectedSquadOnPitch ({
 
     const p2 = () => {
         return {
+            animationVariants: null,
             player: {...buildPlayer(ONE)},
             style: {...STYLES.commonPlayersStyle},
         }
@@ -90,6 +118,7 @@ export default function SelectedSquadOnPitch ({
 
     const p3 = () => {
         return {
+            animationVariants: null,
             player: {...buildPlayer(TWO)},
             style: {...STYLES.commonPlayersStyle},
         }
@@ -97,6 +126,7 @@ export default function SelectedSquadOnPitch ({
 
     const p4 = () => {
         return {
+            animationVariants: null,
             player: {...buildPlayer(THREE)},
             style: {...STYLES.commonPlayersStyle},
         }
@@ -104,6 +134,9 @@ export default function SelectedSquadOnPitch ({
 
     const p5 = () => {
         return {
+            animationVariants: getPreviousFormation() ? player5Animation() : null,
+            // animationVariants: player5Animation(),
+            // animationVariants: null,
             player: {...buildPlayer(FOUR)},
             style: {...STYLES.commonPlayersStyle},
         }
@@ -111,6 +144,9 @@ export default function SelectedSquadOnPitch ({
 
     const p6 = () => {
         return {
+            animationVariants: getPreviousFormation() ? player6Animation() : null,
+            // animationVariants: player6Animation(),
+            // animationVariants: null,
             player: {...buildPlayer(FIVE)},
             style: {...STYLES.commonPlayersStyle},
         }
@@ -118,13 +154,21 @@ export default function SelectedSquadOnPitch ({
 
     const p7 = () => {
         return {
+            animationVariants: getPreviousFormation() ? player6Animation() : null,
+            // animationVariants: player6Animation(),
+            // animationVariants: null,
             player: {...buildPlayer(SIX)},
-            style: { ...STYLES.commonPlayersStyle }
+            style: {
+                ...STYLES.commonPlayersStyle,
+            }
         }
     }
 
     const p8 = () => {
         return {
+            animationVariants: getPreviousFormation() ? player6Animation() : null,
+            // animationVariants: player6Animation(),
+            // animationVariants: null,
             player: {...buildPlayer(SEVEN)},
             style: {...STYLES.commonPlayersStyle,}
         }
@@ -132,13 +176,29 @@ export default function SelectedSquadOnPitch ({
 
     const p9 = () => {
         return {
+            animationVariants: getPreviousFormation() ? player9Animation() : null,
+            // animationVariants: player9Animation(),
+            // animationVariants: null,
             player: {...buildPlayer(EIGHT)},
             style: {...STYLES.commonPlayersStyle1,}
+        }
+    }
+    const p9type1 = (payload) => {
+        return {
+            animationVariants: getPreviousFormation() ? player9Animation() : null,
+            // animationVariants: player9Animation(),
+            // animationVariants: null,
+            player: {...buildPlayer(EIGHT)},
+            style: {...STYLES.commonPlayersStyle1,},
+            ...payload
         }
     }
 
     const p10 = () => {
         return {
+            animationVariants: getPreviousFormation() ? player10Animation() : null,
+            // animationVariants: player10Animation(),
+            // animationVariants: null,
             player: {...buildPlayer(NINE)},
             style: {...STYLES.commonPlayersStyle1,}
         }
@@ -146,6 +206,9 @@ export default function SelectedSquadOnPitch ({
 
     const p11 = () => {
         return {
+            animationVariants: getPreviousFormation() ? player11Animation() : null,
+            // animationVariants: player11Animation(),
+            // animationVariants: null,
             player: {...buildPlayer(TEN)},
             style: {...STYLES.commonPlayersStyle1,}
         }
@@ -153,6 +216,7 @@ export default function SelectedSquadOnPitch ({
 
     const p12 = () => {
         return {
+            animationVariants: null,
             player: {...buildPlayer(ELEVEN)},
             style: {...STYLES.commonPlayersStyle,}
         }
@@ -160,6 +224,7 @@ export default function SelectedSquadOnPitch ({
 
     const p13 = () => {
         return {
+            animationVariants: null,
             player: {...buildPlayer(TWELVE)},
             style: {...STYLES.commonPlayersStyle,}
         }
@@ -167,6 +232,7 @@ export default function SelectedSquadOnPitch ({
 
     const p14 = () => {
         return {
+            animationVariants: null,
             player: {...buildPlayer(THIRTEEN)},
             style: {...STYLES.commonPlayersStyle,}
         }
@@ -174,6 +240,7 @@ export default function SelectedSquadOnPitch ({
 
     const p15 = () => {
         return {
+            animationVariants: null,
             player: {...buildPlayer(FOURTEEN)},
             style: {...STYLES.commonPlayersStyle,}
         }
@@ -182,19 +249,13 @@ export default function SelectedSquadOnPitch ({
     // Player-JSX
     const renderPlayer = (props) => {
         const {
-            animation,
+            animationVariants,
             player,
             style,
         } = props
 
-        let animationVariants = isEmpty(animation) ? null : animation.variants
-        let animationControls = isEmpty(animation) ? null : animation.controls
-
         return (
-            <motion.div
-                variants={animationVariants}
-                animate={animationControls}
-            >
+            <motion.div variants={animationVariants} animate={controls}>
                 <SelectedPlayerOnPitch
                     player={player}
                     changed={player.toggleAnimation}
@@ -212,10 +273,7 @@ export default function SelectedSquadOnPitch ({
         <Animated toggleAnimation={!benchBoostApplied}>
             <Animated toggleAnimation={toggleFormation} animationSpeed={1}>
                 <PlayersFormation
-                    formationInfo={{
-                        ...formationInfo,
-                        changeFormation
-                    }}
+                    formationInfo={formationInfo}
                     renderPlayer={renderPlayer}
                     players={{p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15}}
                 />

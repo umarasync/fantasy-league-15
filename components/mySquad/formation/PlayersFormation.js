@@ -2,6 +2,7 @@
 import MySquadFormation442 from "./MySquadFormation442";
 import MySquadFormation433 from "./MySquadFormation433";
 import MySquadFormation352 from "./MySquadFormation352";
+import MySquadFormation352_1 from "./MySquadFormation352_1";
 import MySquadFormation451 from "./MySquadFormation451";
 import MySquadFormation343 from "./MySquadFormation343";
 import MySquadFormation532 from "./MySquadFormation532";
@@ -19,9 +20,9 @@ export default function PlayersFormation ({
         F442,F433,F352,F451,F343,F532,F541
     } = formations
 
-    if(formationInfo.previousFormation === F343) {
-        return (<MySquadFormation352 renderPlayer={renderPlayer} players={{...players}} />)
-    }
+        if(formationInfo.previousFormation === F343 && formationInfo.formation === F352) {
+            return (<MySquadFormation352_1 renderPlayer={renderPlayer} players={{...players}} />)
+        }
 
         switch (formationInfo.formation) {
             case F442:

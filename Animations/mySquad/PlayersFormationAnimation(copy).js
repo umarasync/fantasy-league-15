@@ -32,8 +32,8 @@ const player8Animation = () => player6Animation()
 
 const player9Animation = () => {
     return {
-        p11Initial: animateTo(0, 0),
-        p11Animation: animateTo(100, -45)
+        p9Initial: animateTo(0, 0),
+        p9Animation: animateTo(40, 0)
     }
 };
 
@@ -46,8 +46,8 @@ const player10Animation = () => {
 
 const player11Animation = () => {
     return {
-        p9Initial: animateTo(0, 0),
-        p9Animation: animateTo(60, 0)
+        p11Initial: animateTo(0, 0),
+        p11Animation: animateTo(100, -45)
     }
 };
 
