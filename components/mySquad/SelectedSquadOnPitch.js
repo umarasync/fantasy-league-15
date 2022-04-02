@@ -303,11 +303,9 @@ export default function SelectedSquadOnPitch ({
     }
 
     return(
-        <Animated toggleAnimation={!benchBoostApplied} children2={getAllPlayersWithBenchBoostApplied()}>
-            {/*{getAllPlayersWithoutBenchBoostApplied()}*/}
-
+        <Animated toggleAnimation={!benchBoostApplied}>
             {/*Replace null with appropriate condition*/}
-            <Animated toggleAnimation={toggleFormation} animationSpeed={1.2}>
+            <Animated toggleAnimation={toggleFormation} animationSpeed={1}>
                 <PlayersFormation
                     formationInfo={formationInfo}
                     renderPlayer={renderPlayer}
