@@ -3,9 +3,11 @@ import Div from 'components/html/Div'
 import MySquadFilterButtons from "components/mySquad/MySquadFilterButtons";
 import MatchBoard from "components/mySquad/MatchBoard";
 import SelectedSquadOnPitch from 'components/mySquad/SelectedSquadOnPitch'
+import Image from "components/html/Image";
 
 // Utils
 import R from "utils/getResponsiveValue";
+import {isEmpty} from "utils/helpers";
 
 // Styles
 const getStyles = (R) => {
@@ -42,7 +44,7 @@ const getStyles = (R) => {
     }
 }
 export default function MySquadLeftSection({
-     pickedPlayers,
+     squadInfo,
      onPlayerChange,
      transferInProgress,
      changeFormation,
@@ -58,10 +60,7 @@ export default function MySquadLeftSection({
     return (
         <div className="bg-[url('/images/bg_my_squad.png')] bg-[length:100%_100%] bg-no-repeat w-full h-full"
              style={STYLES.container}>
-            <div className="" style={STYLES.logo}>
-                <img src="/images/logo_white.png" alt="" width="100%" height="100%"/>
-            </div>
-
+            <Image src={'/images/logo_white.png'} w={164} h={40} ml={-10}/>
             {/*<TestButtons/>*/}
             <MySquadFilterButtons handleClick={(v) => handleFilterButtonClick(v)}/>
 
@@ -69,11 +68,11 @@ export default function MySquadLeftSection({
                 <div style={STYLES.fieldImage}>
                     <div className="bg-[url('/images/field2.png')] bg-[length:100%_100%] bg-no-repeat h-full w-full" >
                         {
-                            pickedPlayers.length ? (
+                            !isEmpty(squadInfo) && squadInfo.squad.length ? (
                                 <SelectedSquadOnPitch
                                     changeFormation={changeFormation}
                                     transferInProgress={transferInProgress}
-                                    pickedPlayers={pickedPlayers}
+                                    squadInfo={squadInfo}
                                     onPlayerChange={onPlayerChange}
                                     onPlayerClick={onPlayerClick}
                                     tripleCaptainApplied={tripleCaptainApplied}
