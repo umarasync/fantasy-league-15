@@ -57,9 +57,10 @@ export default function SelectedSquadOnPitch ({
     const { toggleFormation } = formationInfo
 
     const formPlayerInfo = (index, style) => {
+
         return {
             player: {
-                ...squad[index - 1],
+                ...squad[index],
                 onPlayerChange: (player) => onPlayerChange(player, index),
                 onPlayerClick: (player) => onPlayerClick(player, index),
                 tripleCaptainApplied,
@@ -70,21 +71,21 @@ export default function SelectedSquadOnPitch ({
     }
 
 // All-Players
-    const p1 = () => formPlayerInfo(ONE, {...STYLES.commonPlayersStyle})
-    const p2 = () => formPlayerInfo(TWO, {...STYLES.commonPlayersStyle})
-    const p3 = () => formPlayerInfo(THREE, {...STYLES.commonPlayersStyle})
-    const p4 = () => formPlayerInfo(FOUR, {...STYLES.commonPlayersStyle})
-    const p5 = () => formPlayerInfo(FIVE, {...STYLES.commonPlayersStyle})
-    const p6 = () => formPlayerInfo(SIX, {...STYLES.commonPlayersStyle})
-    const p7 = () => formPlayerInfo(SEVEN, {...STYLES.commonPlayersStyle})
-    const p8 = () => formPlayerInfo(EIGHT, {...STYLES.commonPlayersStyle})
-    const p9 = () => formPlayerInfo(NINE, {...STYLES.commonPlayersStyle1})
-    const p10 = () => formPlayerInfo(TEN, {...STYLES.commonPlayersStyle1})
-    const p11 = () => formPlayerInfo(ELEVEN, {...STYLES.commonPlayersStyle1})
-    const p12 = () => formPlayerInfo(TWELVE, {...STYLES.commonPlayersStyle})
-    const p13 = () => formPlayerInfo(THIRTEEN, {...STYLES.commonPlayersStyle})
-    const p14 = () => formPlayerInfo(FOURTEEN, {...STYLES.commonPlayersStyle})
-    const p15 = () => formPlayerInfo(FIFTEEN, {...STYLES.commonPlayersStyle})
+    const p1 = () => formPlayerInfo(ZERO, {...STYLES.commonPlayersStyle})
+    const p2 = () => formPlayerInfo(ONE, {...STYLES.commonPlayersStyle})
+    const p3 = () => formPlayerInfo(TWO, {...STYLES.commonPlayersStyle})
+    const p4 = () => formPlayerInfo(THREE, {...STYLES.commonPlayersStyle})
+    const p5 = () => formPlayerInfo(FOUR, {...STYLES.commonPlayersStyle})
+    const p6 = () => formPlayerInfo(FIVE, {...STYLES.commonPlayersStyle})
+    const p7 = () => formPlayerInfo(SIX, {...STYLES.commonPlayersStyle})
+    const p8 = () => formPlayerInfo(SEVEN, {...STYLES.commonPlayersStyle})
+    const p9 = () => formPlayerInfo(EIGHT, {...STYLES.commonPlayersStyle1})
+    const p10 = () => formPlayerInfo(NINE, {...STYLES.commonPlayersStyle1})
+    const p11 = () => formPlayerInfo(TEN, {...STYLES.commonPlayersStyle1})
+    const p12 = () => formPlayerInfo(ELEVEN, {...STYLES.commonPlayersStyle})
+    const p13 = () => formPlayerInfo(TWELVE, {...STYLES.commonPlayersStyle})
+    const p14 = () => formPlayerInfo(THIRTEEN, {...STYLES.commonPlayersStyle})
+    const p15 = () => formPlayerInfo(FOURTEEN, {...STYLES.commonPlayersStyle})
 
     // Player-JSX
     const renderPlayer = (props) => {

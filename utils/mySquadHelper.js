@@ -128,7 +128,7 @@ const handlesP11Click = ({
         clickedIcon: TRANSFER_ICON
     }
 
-    if([4,5,6,7,8,9,10].includes(arrayIndex)) { setChangeFormation(ANIMATE) }
+    // if([4,5,6,7,8,9,10].includes(arrayIndex)) { setChangeFormation(ANIMATE) }
 
     const $$squad = $squad.map((p, index) => {
         p.opacity = 1;
@@ -177,9 +177,11 @@ const handlesSubstituteClick = ({
 }) => {
 
     const squad = clone(squadInfo.squad)
+    console.log('in array index ====', arrayIndex)
 
     /**** If clicked sub is a goalkeeper **/
     if(arrayIndex === ELEVEN) {
+
        const $squad = squad.map((p, index) => {
             if(arrayIndex === ELEVEN && [ZERO, ELEVEN].includes(index)){
                 if(index === ELEVEN) {
