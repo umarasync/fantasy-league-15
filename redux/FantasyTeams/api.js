@@ -1,9 +1,3 @@
-// Packages
-import {
-    createFantasyTeamSuccess,
-    createFantasyTeamFailed,
-} from "./actionCreators";
-
 // GraphQL
 import { createApolloClient } from "graphql/apollo";
 import CREATE_FANTASY_TEAM from "graphql/mutations/createFantasyTeam";
@@ -14,7 +8,7 @@ import {ERROR_MSG} from "constants/universalConstants";
 
 // Utils
 import {responseFailed, responseSuccess} from "utils/helpers";
-import {buildPlayers, mapSquadToPositions} from "utils/playersHelper";
+import {buildPlayers} from "utils/playersHelper";
 
 export const createFantasyTeam = (data) => {
 

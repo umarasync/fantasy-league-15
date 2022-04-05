@@ -76,10 +76,6 @@ export default function ConfirmAccount() {
   const [teamName, setTeamName] = useState("");
   const teamAlreadyExists = useSelector(({ auth }) => auth.user.fantasyTeamId);
 
-  const createFantasyTeamSuccess = useSelector(
-    ({ fantasyTeam }) => fantasyTeam.createFantasyTeamSuccess);
-  const createFantasyTeamError = useSelector(
-    ({ fantasyTeam }) => fantasyTeam.createFantasyTeamError);
   const teamData = useSelector(
     ({ fantasyTeam }) => fantasyTeam.chosenFantasyTeamData);
 
