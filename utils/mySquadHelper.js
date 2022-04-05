@@ -295,6 +295,7 @@ export const makeCaptain = ({
 }) => {
 
     const { squad } = $squadInfo
+
     // Previous Captain or Vice Captain Index
     const pIndex = squad.findIndex(p => p[captainType] === true)
     // Next Captain or Vice Captain Index

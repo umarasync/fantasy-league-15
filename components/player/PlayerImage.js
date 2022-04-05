@@ -56,7 +56,6 @@ const ClubImage = ({
                 custom={{initialOpacity}}
             >
                 <Div position='absolute' bottom={0} right={0}>
-                    {/* <Image w={ciw} h={cih} onClick={onPlayerClick} src={`/images/${player.clubImage}`} cursor={cursor}/> */}
                     <Image w={ciw} h={cih} onClick={onPlayerClick} src={player.clubImage} cursor={cursor}/>
                 </Div>
             </motion.div>
@@ -64,7 +63,6 @@ const ClubImage = ({
     }
    return (
        <Div position='absolute' bottom={0} right={0}>
-           {/* <Image w={ciw} h={cih} onClick={onPlayerClick} src={`/images/${player.clubImage}`} cursor={cursor}/> */}
            <Image w={ciw} h={cih} onClick={onPlayerClick} src={player.clubImage} cursor={cursor}/>
        </Div>
    )
@@ -108,7 +106,6 @@ export default function PlayerImage(props) {
                     >
                          <Image
                              onClick={onPlayerClick}
-                            //  src={`/images/${player.image}`}
                              src={player.image}
                              alt={'playerImage'}
                              cursor={cursor}
@@ -117,7 +114,6 @@ export default function PlayerImage(props) {
                 ): (
                     <Image
                         onClick={onPlayerClick}
-                        // src={`/images/${player.image}`}
                         src={player.image}
                         alt={'playerImage'}
                         cursor={cursor}

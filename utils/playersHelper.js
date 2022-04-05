@@ -30,7 +30,7 @@ const getPlayerPosition = (position) => {
 export const buildPlayers = (playersData) => {
   return playersData.map((p, i) => {
             return {
-                  id: p.id,
+                  ...p,
                   image: p.photo,
                   clubImage: p.team.logo,
                   clubName: p.team.name,
@@ -38,11 +38,8 @@ export const buildPlayers = (playersData) => {
                   name: p.matchName,
                   price: parseInt(p.value),
                   formattedPrice: nFormatter(p.value),
-                  position: getPlayerPosition(p.position),
                   points: p.totalPoints,
-                  captain: p.captain,
-                  viceCaptain: p.viceCaptain,
-                  isSubstitute: p.isSubstitute,
+                  position: getPlayerPosition(p.position),
                   nextMatch: {
                     club: 'GRO',
                     vs: "BEN",
