@@ -204,7 +204,12 @@ export default function MySquadGameWeek () {
     }
 
     const handleMakeTransfer = () => {
-        router.push('/build_team_all_players')
+        router.push({
+            pathname: '/build_team_all_players',
+            query: {
+                makeTransfer: true
+            }
+        })
     }
 
     // Picked-Players-Change

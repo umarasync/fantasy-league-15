@@ -85,3 +85,20 @@ export const buildClubs = (teams) => {
 
     return $teams
 }
+
+export const buildClubs1 = (teams) => {
+    return teams.map((t) => {
+        return {
+          id: t.id,
+          image: {
+            name: t.logo,
+          },
+          heading: {
+            title: t.name,
+          },
+          subHeading: {
+            title: t.venue,
+          },
+        };
+    })
+}

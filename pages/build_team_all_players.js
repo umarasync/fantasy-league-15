@@ -14,7 +14,8 @@ import {getAllTeams} from "redux/Teams/api";
 import Loader from "components/loaders/Loader";
 
 // Utils
-import {buildClubs} from "utils/playersHelper";
+import {isEmpty} from "utils/helpers";
+import {buildClubs} from "../utils/playersHelper";
 
 export default function (){
 
@@ -23,34 +24,28 @@ export default function (){
     const dispatch = useDispatch();
     const [clubs, setClubs] = useState([])
     const playersData = useSelector(({ players }) => players.playersData);
-    const allTeams = useSelector(({ teams }) => teams.allTeams);
     const teamAlreadyExists = useSelector(({ auth }) => auth.user.fantasyTeamId);
+    const fromMakeTransfer = router.query.makeTransfer
 
-    // Api-Calling
-    useEffect(() => {
 
-        if (teamAlreadyExists) {return router.push('/my_squad_game_week')}
-        // Fetch-Players
+    const runDidMount = async () => {
+        // if (teamAlreadyExists && !fromMakeTransfer) { return router.push('/my_squad_game_week')}
         dispatch(getPlayers(50, 0, { teamId: { eq: "" } }, { value: "DESC" }));
-
-        /** Fetch teams if not already in state **/
-        if(!allTeams){
-            dispatch(getAllTeams());
-        }else {
-            setClubs(buildClubs(allTeams))
-        }
+        const {success, data} = await dispatch(getAllTeams());
+        if(!success) return
+        setClubs(buildClubs(data))
+    }
+    useEffect(() => {
+        runDidMount()
     }, []);
 
-    useEffect(() => {
-        if(!allTeams || teamAlreadyExists) return
-        setClubs(buildClubs(allTeams))
-    }, [allTeams])
 
-    if(!playersData || !clubs.length || teamAlreadyExists) return (<Loader/>)
-
+    if(isEmpty(playersData) || isEmpty(clubs)) return (<Loader/>)
+    // if(!playersData || !clubs.length || (teamAlreadyExists && !fromMakeTransfer)) return (<Loader/>)
     return (
         <BuildTeamPlayers
             players={playersData}
+            // clubs={clubs}
             clubs={clubs}
         />
     )

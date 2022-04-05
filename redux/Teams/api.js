@@ -1,14 +1,15 @@
 // Packages
 import { createApolloClient } from "graphql/apollo";
 
-// Action Creators
-import {
-  getAllTeamsSuccess, getAllTeamsFailed, updateTeamToProfileSuccess
-} from "./actionCreators";
-
 // GraphQL
 import GET_ALL_TEAMS from "graphql/queries/teams";
 import ADD_FAV_TEAM from "graphql/mutations/addFavouriteTeam";
+
+// Utils
+import {isEmpty, responseFailed, responseSuccess} from "utils/helpers";
+
+// Constants
+import {ERROR_MSG} from "constants/universalConstants";
 
 export const getAllTeams = () => {
   return async (dispatch) => {
@@ -18,12 +19,13 @@ export const getAllTeams = () => {
         query: GET_ALL_TEAMS,
         variables: {},
       });
-      if (result && result.data.teams !== null) {
-        return dispatch(getAllTeamsSuccess(result.data.teams.data))
+
+      if (result && !isEmpty(result.data.teams.data)) {
+        return responseSuccess('', result.data.teams.data)
       }
-      dispatch(getAllTeamsFailed(result.data.errors[0].message))
+      return responseFailed(ERROR_MSG)
     } catch (e) {
-      dispatch(getAllTeamsFailed(e.message))
+      return responseFailed(ERROR_MSG)
     }
   };
 };
@@ -44,14 +46,12 @@ export const addFavouriteTeam = (data) => {
       });
 
       console.log("addFavouriteTeam: ========", result);
-      if (result && result.data.updateTeamToProfile !== null) {
-        localStorage.setItem("user-team", JSON.stringify(data.favouriteTeamId));
-        return dispatch(updateTeamToProfileSuccess(result.data.updateTeamToProfile.message))
+      if (result && !isEmpty(result.data.updateTeamToProfile)) {
+        return responseSuccess('', result.data.updateTeamToProfile)
       }
-      dispatch(updateTeamToProfileSuccess(result.data.errors[0].message))
-
+      return responseFailed(ERROR_MSG)
     } catch (e) {
-      dispatch(updateTeamToProfileSuccess(e.message))
+      return responseFailed(ERROR_MSG)
     }
   };
 };
