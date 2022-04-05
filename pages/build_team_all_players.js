@@ -15,7 +15,7 @@ import Loader from "components/loaders/Loader";
 
 // Utils
 import {isEmpty} from "utils/helpers";
-import {buildClubs} from "../utils/playersHelper";
+import {buildClubs} from "utils/playersHelper";
 
 export default function (){
 
@@ -23,13 +23,15 @@ export default function (){
     const router = useRouter();
     const dispatch = useDispatch();
     const [clubs, setClubs] = useState([])
+    const [fromMakeTransfer, setFromMakeTransfer] = useState(true)
     const playersData = useSelector(({ players }) => players.playersData);
     const teamAlreadyExists = useSelector(({ auth }) => auth.user.fantasyTeamId);
-    const fromMakeTransfer = router.query.makeTransfer
+    const redirectToMySquadPage = teamAlreadyExists && !router.query.makeTransfer
 
 
     const runDidMount = async () => {
-        // if (teamAlreadyExists && !fromMakeTransfer) { return router.push('/my_squad_game_week')}
+        if (redirectToMySquadPage) { return router.push('/my_squad_game_week')}
+        setFromMakeTransfer(false)
         dispatch(getPlayers(50, 0, { teamId: { eq: "" } }, { value: "DESC" }));
         const {success, data} = await dispatch(getAllTeams());
         if(!success) return
@@ -39,13 +41,11 @@ export default function (){
         runDidMount()
     }, []);
 
+    if(isEmpty(playersData) || isEmpty(clubs) || fromMakeTransfer) return (<Loader/>)
 
-    if(isEmpty(playersData) || isEmpty(clubs)) return (<Loader/>)
-    // if(!playersData || !clubs.length || (teamAlreadyExists && !fromMakeTransfer)) return (<Loader/>)
     return (
         <BuildTeamPlayers
             players={playersData}
-            // clubs={clubs}
             clubs={clubs}
         />
     )

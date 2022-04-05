@@ -1,7 +1,8 @@
 // Packages
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import { toast } from "react-toastify"
 
 // Components
 import Layout from "components/layout/index";
@@ -45,6 +46,8 @@ import {
 
 // Actions
 import {fantasyTeamChosen} from "redux/FantasyTeams/actionCreators";
+import {getFantasyTeamById} from "redux/FantasyTeams/api";
+import {doFantasyTeamTransfers} from "redux/FantasyTeams/api";
 
 export default function BuildTeamPlayers ({
     players: $players,
@@ -62,7 +65,7 @@ export default function BuildTeamPlayers ({
     const RECOMMENDATIONS_INITIAL = clone(RECOMMENDATIONS)
     const SORTING_OPTIONS_INITIAL = clone(SORTING_OPTIONS)
     const SELECTED_PLAYERS_INITIAL = clone(SELECTED_PLAYERS)
-    const TOTAL_BUDGET = 100000000;
+    const TOTAL_BUDGET = 200000000;
     // const TOTAL_BUDGET = 1000000;
 
     // Picked-Players
@@ -114,10 +117,10 @@ export default function BuildTeamPlayers ({
     const [transferResetDisabled, setTransferResetDisabled] = useState(true)
     const [transferConfirmDisabled, setTransferConfirmDisabled] = useState(true)
     const [transferredPlayers, setTransferredPlayers] = useState([])
-
     const [showTransferWindowModal, setShowTransferWindowModal] = useState(false)
 
-
+    // Global States
+    const user = useSelector(({ auth }) => auth.user);
 
     // OnSearch
     const onSearch = () => false
@@ -142,6 +145,7 @@ export default function BuildTeamPlayers ({
     const runFiltersOnPlayersData = () => {
 
         let $playersData = [ ...playersDataInitial ]
+
         $playersData = $playersData.filter(player => {
             return filtersHandler({
                 player,
@@ -261,9 +265,23 @@ export default function BuildTeamPlayers ({
         setShowTransferWindowModal(true)
     }
 
-    const onTransferModalConfirmed = () => {
-        // updateTeamData() : update team data in DB
-        router.push('/my_squad_game_week')
+    const onTransferModalConfirmed = async () => {
+        let transfers = []
+        transferredPlayers.forEach(p => {
+            transfers.push({
+                in: { id: p.transferIn.id},
+                out: { id: p.transferOut.id }
+            })
+        })
+
+        const { success, msg } = await dispatch(doFantasyTeamTransfers({ fantasyTeamId: user.fantasyTeamId, transfers}))
+        if (success) {
+          toast.success(msg, { onClose: () => router.push("/my_squad_game_week"),});
+        } else {
+          toast.error(msg);
+        }
+
+        // router.push('/my_squad_game_week')
     }
 
     useEffect(() => {
@@ -339,16 +357,22 @@ export default function BuildTeamPlayers ({
     }
 
     // Initial Settings for Build Your Team & Transfer windows
-    const initiateInitialSettings = () => {
+    const initiateInitialSettings = async () => {
+
         // For Transfer Window
-        const teamDataFromDB = {} // Fetch team data from backend database
-        if (!isEmpty(teamDataFromDB)) {
+        const squad = await dispatch(getFantasyTeamById({
+                   gameWeek: user.currentGameweek ,
+                   fantasyTeamId: user.fantasyTeamId,
+           }))
+        // Fetch team data from backend database
+        if (!isEmpty(squad)) {
             return initialSettingsForTransferWindows({
                 // Team Data
-                teamData: teamDataFromDB,
+                squad,
                 // Picked Players
                 setPickedPlayers,
                 // Budget
+                totalBudget,
                 setRemainingBudget,
                 // Players-Data
                 setPlayersData,
@@ -382,7 +406,7 @@ export default function BuildTeamPlayers ({
     }, [])
 
     return (
-        <Layout title="Build Team All Player">
+        <Layout title="Build Team All Player" showToast={true}>
             <div className="mx-auto flex bg-white">
                     {/*Left-Section*/}
                     <div className="w-[57%]">

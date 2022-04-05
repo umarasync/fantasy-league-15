@@ -36,7 +36,7 @@ export const buildPlayers = (playersData) => {
                   clubName: p.team.name,
                   status: p.state ? p.state : "fit", // Currently checking due to data sync gaps
                   name: p.matchName,
-                  price: parseInt(p.value),
+                  price: parseFloat(p.value),
                   formattedPrice: nFormatter(p.value),
                   points: p.totalPoints,
                   position: getPlayerPosition(p.position),

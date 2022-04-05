@@ -104,12 +104,12 @@ export default function TransferWindowModal({
                                         </Div>
                                         {/*Row*/}
                                         {
-                                            transferredPlayers.map((item, index) => {
+                                            transferredPlayers.map((p, index) => {
                                                 return (
                                                     <TransferInAndOutPlayer
                                                         key={index}
-                                                        transferInPlayer={item.transferIn}
-                                                        transferOutPlayer={item.transferOut}
+                                                        transferInPlayer={p.transferIn}
+                                                        transferOutPlayer={p.transferOut}
                                                         mt={index ? 50 : 0}
                                                     />
                                                 )

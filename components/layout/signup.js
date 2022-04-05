@@ -3,8 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 // Components
 import Layout from "components/layout";
@@ -99,6 +98,7 @@ export default function SignUp(props) {
       setSignUpError(msg);
       toast.error(msg);
     }
+
   };
 
   /*** Sign In Flow:Starts ****/
@@ -163,18 +163,7 @@ export default function SignUp(props) {
   if(isAuthenticated) { return <Loader/> }
 
   return (
-    <Layout title="Sign Up">
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+    <Layout title="Sign Up" showToast>
       <div className="mx-auto bg-white">
         <div className="grid grid-cols-2 flex">
           {/*Left Section*/}
