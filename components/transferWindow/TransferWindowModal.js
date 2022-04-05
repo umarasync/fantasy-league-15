@@ -1,3 +1,6 @@
+// Packages
+import {useSelector} from "react-redux";
+
 // Components
 import Modal from "components/modals";
 import Div from "components/html/Div"
@@ -10,7 +13,6 @@ import BorderHorizontal from "components/borders/BorderHorizontal";
 import colors from "constants/colors";
 import {SHADOW_DARK_INDIGO, SHADOW_WHITE_SMOKE} from "constants/boxShadow";
 import {POINTS_PER_ADDITIONAL_TRANSFER} from "constants/universalConstants";
-import {CLUB_FC, POSITION_MID, STATUS_FIT} from "constants/data/filters";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -42,6 +44,8 @@ export default function TransferWindowModal({
     const noOfFreeTransfers = 1
     const heading = 'You are about to transfer'
     const subHeading = `${transferredPlayers.length} player`
+    const loadingFantasyTeamTransfer = useSelector(
+      ({ fantasyTeam }) => fantasyTeam.loadingFantasyTeamTransfer);
 
     return (
         <Modal>
@@ -133,13 +137,13 @@ export default function TransferWindowModal({
                                 />
                                 <Button
                                     title={'Confirm'}
+                                    disabled={loadingFantasyTeamTransfer}
                                     color={colors.white}
                                     ml={8}
                                     h={70}
                                     onClick={onConfirmed}
                                 />
                             </Div>
-
                         </Div>
                     )
                 }

@@ -11,9 +11,13 @@ import {ERROR_MSG} from "constants/universalConstants";
 import {isEmpty, responseFailed, responseSuccess} from "utils/helpers";
 import {buildPlayers} from "utils/playersHelper";
 
+// Actions
+import {fantasyTeamCreationStart, fantasyTeamTransferStart} from "./actionCreators";
+
 export const createFantasyTeam = (data) => {
   return async (dispatch) => {
     try {
+      dispatch(fantasyTeamCreationStart())
       const apolloClient = createApolloClient();
       const result = await apolloClient.mutate({
         mutation: CREATE_FANTASY_TEAM,
@@ -63,6 +67,7 @@ export const doFantasyTeamTransfers = (data) => {
 
   return async (dispatch) => {
     try {
+      dispatch(fantasyTeamTransferStart())
       const apolloClient = createApolloClient();
       const result = await apolloClient.mutate({
         mutation: DO_FANTASY_TEAM_TRANSFER,

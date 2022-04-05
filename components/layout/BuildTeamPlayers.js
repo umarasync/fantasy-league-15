@@ -45,7 +45,11 @@ import {
 } from "constants/data/players";
 
 // Actions
-import {fantasyTeamChosen} from "redux/FantasyTeams/actionCreators";
+import {
+    saveFantasyTeamToRedux, fantasyTeamTransferFailed,
+    fantasyTeamTransferStart,
+    fantasyTeamTransferSuccess
+} from "redux/FantasyTeams/actionCreators";
 import {getFantasyTeamById} from "redux/FantasyTeams/api";
 import {doFantasyTeamTransfers} from "redux/FantasyTeams/api";
 
@@ -275,13 +279,17 @@ export default function BuildTeamPlayers ({
         })
 
         const { success, msg } = await dispatch(doFantasyTeamTransfers({ fantasyTeamId: user.fantasyTeamId, transfers}))
-        if (success) {
-          toast.success(msg, { onClose: () => router.push("/my_squad_game_week"),});
-        } else {
-          toast.error(msg);
-        }
 
-        // router.push('/my_squad_game_week')
+        /****** Toast ******/
+        if (success) {
+          toast.success(msg, {
+              onClose: () => {
+                  dispatch(fantasyTeamTransferSuccess())
+                  return router.push("/my_squad_game_week")
+              }});
+        } else {
+            toast.error(msg, { onClose: () => dispatch(fantasyTeamTransferFailed())});
+        }
     }
 
     useEffect(() => {
@@ -347,7 +355,7 @@ export default function BuildTeamPlayers ({
             additionalTransferredPlayers
         })
 
-        dispatch(fantasyTeamChosen(teamData))
+        dispatch(saveFantasyTeamToRedux(teamData))
         router.push('/create_team_name')
     }
 

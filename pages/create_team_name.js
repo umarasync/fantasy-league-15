@@ -1,8 +1,7 @@
 // Packages
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import {isEmpty} from "lodash";
 
@@ -19,6 +18,10 @@ import { createFantasyTeam } from "redux/FantasyTeams/api";
 
 // Loader
 import Loader from "components/loaders/Loader";
+import {
+  fantasyTeamCreationFailed,
+  fantasyTeamCreationSuccess,
+} from "redux/FantasyTeams/actionCreators";
 
 // Styles
 const getStyles = (R) => {
@@ -77,7 +80,9 @@ export default function ConfirmAccount() {
   const teamAlreadyExists = useSelector(({ auth }) => auth.user.fantasyTeamId);
 
   const teamData = useSelector(
-    ({ fantasyTeam }) => fantasyTeam.chosenFantasyTeamData);
+    ({ fantasyTeam }) => fantasyTeam.savedFantasyTeamOnRedux);
+  const loadingFantasyTeamCreation = useSelector(
+    ({ fantasyTeam }) => fantasyTeam.loadingFantasyTeamCreation);
 
   /***** Create Team Handler *******/
   const handleOnClick = async () => {
@@ -118,17 +123,25 @@ export default function ConfirmAccount() {
     };
 
     if (!isEmpty(dataInput)) {
-      const {success, msg, data } = await dispatch(createFantasyTeam(dataInput));
+
+      const {success, msg } = await dispatch(createFantasyTeam(dataInput));
+
+      // Toast
       if (success) {
         toast.success(msg, {
-          onClose: () => router.push({
-            pathname: "/team_created",
-                query: {
-                  teamCreated: true
-                }
-          }),
+          onClose: () => {
+            dispatch(fantasyTeamCreationSuccess())
+            return (
+                router.push({
+                    pathname: "/team_created",
+                        query: {
+                          teamCreated: true
+                        }
+                  })
+            )
+          },
         });
-      } else{ toast.error(msg); }
+      } else{ toast.error(msg, {onClose: () => dispatch(fantasyTeamCreationFailed())}); }
     }
   };
 
@@ -140,18 +153,7 @@ export default function ConfirmAccount() {
   if(!teamData || teamAlreadyExists) return <Loader/>
 
   return (
-    <Layout title="Create Your Team Name">
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover={false}
-      />
+    <Layout title="Create Your Team Name" showToast>
       <Div
         className="bg-[url('/images/bg_dark_blue.png')] bg-[length:100%_100%] bg-no-repeat  w-full"
         style={STYLES.container}
@@ -192,7 +194,7 @@ export default function ConfirmAccount() {
             <hr className={"w-full"} style={STYLES.border} />
             <div className="w-full flex items-center justify-center">
               <div style={STYLES.button}>
-                <Button title={"CONFIRM"} onClick={handleOnClick} />
+                <Button title={"CONFIRM"} onClick={handleOnClick} disabled={loadingFantasyTeamCreation} />
               </div>
             </div>
           </div>
