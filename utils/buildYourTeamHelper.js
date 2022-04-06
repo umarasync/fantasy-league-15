@@ -359,12 +359,12 @@ export const initialSettingsForTransferWindows = ({
 
 export const initialSettingsForBuildYourTeam = ({
   setPlayersData,
-  playersDataInitial,
+  players,
   setPlayersDataInitial,
   setShowFooterBar,
 }) => {
   let playersData = [];
-  playersData = playersDataInitial.map((p) => {
+  playersData = players.map((p) => {
     p.chosen = false;
     p.disablePlayerCard = false;
     return p;

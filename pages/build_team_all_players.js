@@ -26,13 +26,16 @@ export default function (){
     const [fromMakeTransfer, setFromMakeTransfer] = useState(true)
     const playersData = useSelector(({ players }) => players.playersData);
     const teamAlreadyExists = useSelector(({ auth }) => auth.user.fantasyTeamId);
+    const playersPerPage = useSelector(({ players }) => players.playersPerPage);
+    const currentPage = useSelector(({ players }) => players.currentPage);
     const redirectToMySquadPage = teamAlreadyExists && !router.query.makeTransfer
 
+    const initialOffsetShouldBeZero = playersPerPage * currentPage
 
     const runDidMount = async () => {
         if (redirectToMySquadPage) { return router.push('/my_squad_game_week')}
         setFromMakeTransfer(false)
-        dispatch(getPlayers(30, 0, { teamId: { eq: "" } }, { value: "DESC" }));
+        dispatch(getPlayers(playersPerPage, initialOffsetShouldBeZero, { teamId: { eq: "" } }, { value: "DESC" }));
         const {success, data} = await dispatch(getAllTeams());
         if(!success) return
         setClubs(buildClubs(data))

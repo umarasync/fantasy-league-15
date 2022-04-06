@@ -27,12 +27,15 @@ export const getPlayers = (first, offset, where, sortBy) => {
         query: QUERY_PLAYERS,
         variables: { first, offset, where, sortBy },
       });
-      if (result && result.data.players != null) {
+
+      if (result && !isEmpty(result.data.players)) {
         const playersData = buildPlayers(result.data.players.data)
-       return dispatch(getPlayersSuccess([...playersData]))
+       return dispatch(getPlayersSuccess({
+         totalPlayers: result.data.players.totalCount,
+         players: [...playersData]
+       }))
       }
       dispatch(getPlayersFailed(result.data.errors[0].message))
-
     } catch (e) {
       dispatch(getPlayersFailed(e.message))
     }

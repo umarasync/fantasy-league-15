@@ -44,8 +44,8 @@ export default gql`
           goalkeeperKit
         }
       }
-      totalCount
       hasNext
+      totalCount
     }
   }
 `
