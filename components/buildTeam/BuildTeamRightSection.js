@@ -34,6 +34,9 @@ const getStyles = (R) => {
         },
         noResultFound: {
             top: R(600)
+        },
+        playerPanel: {
+            paddingBottom: R(200)
         }
     }
 }
@@ -103,35 +106,32 @@ export default function BuildTeamRightSection({
     }
 
     return (
-        <div className={'relative'} style={{width: R(488), paddingTop: R(35)}}>
+        <Div position={'relative'} w={488} pt={35} pb={100}>
             {/*username*/}
-            <div className={'flex flex-row-reverse'} style={{marginBottom: R(46)}}>
+            <Div className={'flex flex-row-reverse'} mb={46}>
                 {/*<Username username={user.username}/>*/}
                 <Username username={'john doe'}/>
-            </div>
+            </Div>
 
             {/*search*/}
-            <div className={'flex'} style={{marginBottom: R(20)}}>
+            <Div className={'flex'} mb={20}>
                 <div className={'w-full'}>
                     <SearchBar onSearch={onSearch}/>
                 </div>
-                <div style={{marginLeft: R(8)}}/>
+                <Div ml={8}/>
                 <FilterIcon
                     showAllFilters={showAllFilters}
                     onClick={() => setShowAllFilters(!showAllFilters)}
                 />
-            </div>
+            </Div>
 
             {/*filter buttons*/}
-            <div style={{
-                marginBottom: R(24)
-            }}>
+            <Div mb={24}>
                 <FilterButtons
                     activePosition={activePosition}
-                    onClick={(activePosition) =>
-                        setActivePosition(activePosition)}
+                    onClick={(activePosition) => setActivePosition(activePosition)}
                 />
-            </div>
+            </Div>
             {/*all filters*/}
             {
                 showAllFilters ? (
@@ -197,16 +197,15 @@ export default function BuildTeamRightSection({
                 variants={playerPanelAnimation()}
                 animate={showAllFilters ? 'slideDown' : 'slideUp'}
             >
-
                 <motion.div
                     variants={playersPanelHeightAnimation()}
                     animate={getPlayersContainerHeight()}
+                    style={STYLES.playerPanel}
                 >
-                    <div style={{marginBottom: R(16)}}>
+                    <Div  mb={16}>
                         {
                             areFiltersApplied() && !playersData.length ? null : (
                                 <Div>
-                                    <BuildYourTeamPlayersPagination/>
                                     <SelectInput
                                        options={sortingOptions}
                                        selectedOption={selectedSortingOption}
@@ -221,14 +220,9 @@ export default function BuildTeamRightSection({
 
                             )
                         }
-                    </div>
+                    </Div>
 
-                    <div style={{
-                        height: '100%',
-                        paddingBottom: getPlayersContainerHeight() === 'hide' ? 0 : 150,
-                        overflow: 'scroll'
-                    }}
-                    >
+                    <Div h={'100%'} overFlowScroll>
                         {
                             !isEmpty(playersData) && playersData.map((player) => <PlayerCard
                                 key={player.id}
@@ -236,10 +230,17 @@ export default function BuildTeamRightSection({
                                 onSelectPlayer={handlePlayerSelection}
                             />)
                         }
-                    </div>
+                    </Div>
+                    {
+                        !isEmpty(playersData) && (
+                            <Div mt={40}>
+                                 <BuildYourTeamPlayersPagination/>
+                            </Div>
+                        )
+                    }
                 </motion.div>
             </motion.div>
 
-        </div>
+        </Div>
     )
 }

@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import Div from "components/html/Div";
 import Text from "components/html/Text";
 import Button from "components/html/Button";
+import Image from "components/html/Image";
 
 // Actions
 import {getPlayers} from "redux/Players/api";
@@ -66,32 +67,52 @@ export default function BuildYourTeamPlayersPagination(){
                   title={'First'}
                   disabled={currentPage < 1 || loadingPlayersGetting}
                   color={colors.white}
-                  ml={8}
+                  mr={8}
                   h={50}
                   w={100}
                   onClick={onFirstPage}
               />
-                <Button
-                  title={'Previous'}
-                  disabled={currentPage < 1 || loadingPlayersGetting}
-                  color={colors.white}
-                  ml={8}
-                  h={50}
-                  w={100}
-                  onClick={onPreviousPage}
-              />
+                <Image
+                    w={60}
+                    h={60}
+                    src={'/images/arrow-prev.png'}
+                    disabled={currentPage < 1 || loadingPlayersGetting}
+                    cursor={'pointer'}
+                    onClick={onPreviousPage}
+                    alt={'arrow-prev.png'}
+                />
+              {/*  <Button*/}
+              {/*    title={'Previous'}*/}
+              {/*    disabled={currentPage < 1 || loadingPlayersGetting}*/}
+              {/*    color={colors.white}*/}
+              {/*    ml={8}*/}
+              {/*    h={50}*/}
+              {/*    w={100}*/}
+              {/*    onClick={onPreviousPage}*/}
+              {/*/>*/}
             </Div>
-            <Text ml={20} text={`${currentPage + 1} of ${totalPages}`} fs={20} nowrap/>
+            <Text ml={20} mr={20} text={`${currentPage + 1} of ${totalPages}`} fs={20} nowrap/>
             <Div center>
-                <Button
-                   title={'Next'}
-                   color={colors.white}
-                   disabled={currentPage === totalPages - 1 || loadingPlayersGetting}
-                   ml={8}
-                   h={50}
-                   w={100}
-                   onClick={onNextPage}
-               />
+
+                <Image
+                    w={60}
+                    h={60}
+                    src={'/images/arrow-next.png'}
+                    disabled={currentPage === totalPages - 1 || loadingPlayersGetting}
+                    cursor={'pointer'}
+                    onClick={onNextPage}
+                    alt={'arrow-next.png'}
+                />
+
+               {/* <Button*/}
+               {/*    title={'Next'}*/}
+               {/*    color={colors.white}*/}
+               {/*    disabled={currentPage === totalPages - 1 || loadingPlayersGetting}*/}
+               {/*    ml={8}*/}
+               {/*    h={50}*/}
+               {/*    w={100}*/}
+               {/*    onClick={onNextPage}*/}
+               {/*/>*/}
                 <Button
                     title={'Last'}
                     color={colors.white}
