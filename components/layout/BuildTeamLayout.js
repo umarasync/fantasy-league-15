@@ -17,7 +17,7 @@ import Loader from "components/loaders/Loader";
 import {isEmpty} from "utils/helpers";
 import {buildClubs} from "utils/playersHelper";
 
-export default function (props){
+export default function ({makeTransfer}){
 
     // States
     const router = useRouter();
@@ -28,12 +28,14 @@ export default function (props){
     const teamAlreadyExists = useSelector(({ auth }) => auth.user.fantasyTeamId);
     const playersPerPage = useSelector(({ players }) => players.playersPerPage);
     const currentPage = useSelector(({ players }) => players.currentPage);
-    const redirectToMySquadPage = teamAlreadyExists && !router.query.makeTransfer
+    const redirectToMySquadPage = teamAlreadyExists && !makeTransfer
 
     const initialOffsetShouldBeZero = playersPerPage * currentPage
 
     const runDidMount = async () => {
+
         if (redirectToMySquadPage) { return router.push('/my_squad_game_week')}
+
         setFromMakeTransfer(false)
         dispatch(getPlayers(playersPerPage, initialOffsetShouldBeZero, { teamId: { eq: "" } }, { value: "DESC" }));
         const {success, data} = await dispatch(getAllTeams());
