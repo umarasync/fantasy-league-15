@@ -105,8 +105,6 @@ export default function BuildTeamRightSection({
         }
     }
 
-    console.log('1=========', playersData)
-
     return (
         <Div position={'relative'} w={488} pt={35} pb={100}>
             {/*username*/}

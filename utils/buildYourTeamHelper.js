@@ -362,23 +362,7 @@ const allPlayersIDs = (pickedPlayers) => getAllSelectedPlayersIDs([
     ...pickedPlayers[POSITION_MID],
     ...pickedPlayers[POSITION_FWD],
   ]);
-export const initialSettingsForBuildYourTeam1 = ({
-  setPlayersData,
-  players,
-  setPlayersDataInitial,
-  setShowFooterBar,
-}) => {
-  let playersData = [];
 
-  playersData = players.map((p) => {
-    p.chosen = false;
-    p.disablePlayerCard = false;
-    return p;
-  });
-  setPlayersData([...playersData]);
-  setPlayersDataInitial([...playersData]);
-  setShowFooterBar(true);
-};
 
 export const initialSettingsForBuildYourTeam = ({
   setPlayersData,
@@ -458,9 +442,12 @@ const updatePlayersDataAfterTransferDeselectionClicked = ({
 
   // Make currently deselected player also disable in list
   const playerIndex = $players.findIndex((p) => p.id === player.id);
-  const $player = $players[playerIndex];
-  $player.chosen = false;
-  $player.disablePlayerCard = true;
+
+  if(playerIndex !== -1){
+    const $player = $players[playerIndex];
+    $player.chosen = false;
+    $player.disablePlayerCard = true;
+  }
 
   return $players;
 };

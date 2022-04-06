@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import { toast } from "react-toastify"
 
 // Components
-import Layout from "components/layout/index";
+import Layout from "components/layout";
 import FooterBar from "components/footer/FooterBar";
 import BuildTeamLeftSection from "components/buildTeam/BuildTeamLeftSection";
 import BuildTeamRightSection from "components/buildTeam/BuildTeamRightSection";
@@ -68,8 +68,6 @@ export default function BuildTeamPlayers ({
     const RECOMMENDATIONS_INITIAL = clone(RECOMMENDATIONS)
     const SORTING_OPTIONS_INITIAL = clone(SORTING_OPTIONS)
     const SELECTED_PLAYERS_INITIAL = clone(SELECTED_PLAYERS)
-    const TOTAL_BUDGET = 200000000;
-    // const TOTAL_BUDGET = 1000000;
 
     // Picked-Players
     const [pickedPlayers, setPickedPlayers] = useState(SELECTED_PLAYERS_INITIAL)
@@ -80,8 +78,6 @@ export default function BuildTeamPlayers ({
     const [showAllFilters, setShowAllFilters] = useState(false)
     const [autoPickDisabled, setAutoPickDisabled] = useState(false)
     const [continueDisabled, setContinueDisabled] = useState(true)
-    const [totalBudget, setTotalBudget] = useState(TOTAL_BUDGET)
-    const [remainingBudget, setRemainingBudget] = useState(TOTAL_BUDGET)
 
     // Players States
     const [playersData, setPlayersData] = useState([])
@@ -124,6 +120,8 @@ export default function BuildTeamPlayers ({
 
     // Global States
     const user = useSelector(({ auth }) => auth.user);
+    const totalBudget = useSelector(({ fantasyTeam }) => fantasyTeam.totalBudget);
+    const [remainingBudget, setRemainingBudget] = useState(totalBudget)
 
     // OnSearch
     const onSearch = () => false
@@ -312,7 +310,7 @@ export default function BuildTeamPlayers ({
             players: playersI
         } = handleAutoPick({
             players: $players,
-            totalBudget: TOTAL_BUDGET
+            totalBudget
         })
 
         setPickedPlayers(chosenPlayersWithinBudget)

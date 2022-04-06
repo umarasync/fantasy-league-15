@@ -1,5 +1,5 @@
 import BuildTeamLayout from 'components/layout/BuildTeamLayout'
 
-export default function BuildTeam() {
+export default function MakePlayersTransfers() {
     return <BuildTeamLayout/>
 }

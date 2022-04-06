@@ -205,7 +205,7 @@ export default function MySquadGameWeek () {
 
     const handleMakeTransfer = () => {
         router.push({
-            pathname: '/build_team_all_players',
+            pathname: '/make_players_transfers',
             query: {
                 makeTransfer: true
             }

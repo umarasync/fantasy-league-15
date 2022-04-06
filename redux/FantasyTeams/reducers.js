@@ -14,7 +14,9 @@ function fantasyTeamReducer(
     loadingFantasyTeamCreation: false,
     loadingFantasyTeamTransfer: false,
     // Data States
-    savedFantasyTeamOnRedux: null
+    savedFantasyTeamOnRedux: null,
+    // Total fantasy team budget
+    totalBudget: 200000000
   },
   action
 ) {
