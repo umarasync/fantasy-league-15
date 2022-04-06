@@ -371,6 +371,7 @@ export default function BuildTeamPlayers ({
                    gameWeek: user.currentGameweek ,
                    fantasyTeamId: user.fantasyTeamId,
            }))
+
         // Fetch team data from backend database
         if (!isEmpty(squad)) {
             return initialSettingsForTransferWindows({
@@ -383,7 +384,7 @@ export default function BuildTeamPlayers ({
                 setRemainingBudget,
                 // Players-Data
                 setPlayersData,
-                playersDataInitial,
+                playersDataInitial: $players,
                 setPlayersDataInitial,
                 // Transfer Window
                 setIsOneFreeTransferWindow,
