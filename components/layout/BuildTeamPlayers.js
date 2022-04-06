@@ -401,6 +401,7 @@ export default function BuildTeamPlayers ({
 
         return initialSettingsForBuildYourTeam({
             players: $players,
+            pickedPlayers,
             setPlayersDataInitial,
             setPlayersData,
             setShowFooterBar

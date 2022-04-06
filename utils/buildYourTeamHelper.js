@@ -76,7 +76,6 @@ export const handleAutoPick = ({
 }) => {
   let remainingBudget = totalBudget;
 
-
   let playersI = clone(players);
 
   const allPlayersObjectIndexes = getAllPlayersIndex(playersI)
@@ -357,15 +356,43 @@ export const initialSettingsForTransferWindows = ({
   setShowFooterBar(true);
 };
 
-export const initialSettingsForBuildYourTeam = ({
+const allPlayersIDs = (pickedPlayers) => getAllSelectedPlayersIDs([
+    ...pickedPlayers[POSITION_GK],
+    ...pickedPlayers[POSITION_DEF],
+    ...pickedPlayers[POSITION_MID],
+    ...pickedPlayers[POSITION_FWD],
+  ]);
+export const initialSettingsForBuildYourTeam1 = ({
   setPlayersData,
   players,
   setPlayersDataInitial,
   setShowFooterBar,
 }) => {
   let playersData = [];
+
   playersData = players.map((p) => {
     p.chosen = false;
+    p.disablePlayerCard = false;
+    return p;
+  });
+  setPlayersData([...playersData]);
+  setPlayersDataInitial([...playersData]);
+  setShowFooterBar(true);
+};
+
+export const initialSettingsForBuildYourTeam = ({
+  setPlayersData,
+  pickedPlayers,
+  players,
+  setPlayersDataInitial,
+  setShowFooterBar,
+}) => {
+  let playersData = [];
+
+  const allPlayerIds = allPlayersIDs(pickedPlayers)
+
+  playersData = players.map((p) => {
+    p.chosen = !!allPlayerIds.includes(p.id);
     p.disablePlayerCard = false;
     return p;
   });
