@@ -10,10 +10,12 @@ import BuildYourTeamFilters from "components/filter/BuildYourTeamFilters";
 import SelectInput from "components/inputs/SelectInput";
 import PlayerCard from "components/player/PlayerCard";
 import NoResultFound from "components/misc/NoResultFound";
+import Div from "components/html/Div";
 
 // utils
 import R from "utils/getResponsiveValue";
 import {handleMultiSelectionDropDowns} from "utils/buildYourTeamHelper";
+import {isEmpty} from "utils/helpers";
 
 // Animations
 import ShowAllFiltersAnimation from "Animations/buildYourTeam/ShowAllFiltersAnimation";
@@ -21,6 +23,7 @@ import {playerPanelAnimation, playersPanelHeightAnimation} from "Animations/Play
 
 // Constants
 import {ALL_PRICES, ALL_STATUSES, ALL_TEAMS, RECOMMENDED_PLAYERS} from "constants/data/filters";
+import BuildYourTeamPlayersPagination from "./BuildYourTeamPlayersPagination";
 
 // Styles
 const getStyles = (R) => {
@@ -202,16 +205,20 @@ export default function BuildTeamRightSection({
                     <div style={{marginBottom: R(16)}}>
                         {
                             areFiltersApplied() && !playersData.length ? null : (
-                                <SelectInput
-                                    options={sortingOptions}
-                                    selectedOption={selectedSortingOption}
-                                    onOptionChange={(s) => setSelectedSortingOption(s)}
-                                    parentContainerStyle={{
-                                        zIndex: 1,
-                                    }}
-                                    hideLabel
-                                    dropDownOfInlineStyle
-                                />
+                                <Div>
+                                    <BuildYourTeamPlayersPagination/>
+                                    <SelectInput
+                                       options={sortingOptions}
+                                       selectedOption={selectedSortingOption}
+                                       onOptionChange={(s) => setSelectedSortingOption(s)}
+                                       parentContainerStyle={{
+                                           zIndex: 1,
+                                       }}
+                                       hideLabel
+                                       dropDownOfInlineStyle
+                                   />
+                                </Div>
+
                             )
                         }
                     </div>
@@ -223,14 +230,13 @@ export default function BuildTeamRightSection({
                     }}
                     >
                         {
-                            playersData.map((player, index) => <PlayerCard
+                            !isEmpty(playersData) && playersData.map((player) => <PlayerCard
                                 key={player.id}
                                 player={player}
                                 onSelectPlayer={handlePlayerSelection}
                             />)
                         }
                     </div>
-
                 </motion.div>
             </motion.div>
 

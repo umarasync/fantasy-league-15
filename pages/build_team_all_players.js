@@ -32,7 +32,7 @@ export default function (){
     const runDidMount = async () => {
         if (redirectToMySquadPage) { return router.push('/my_squad_game_week')}
         setFromMakeTransfer(false)
-        dispatch(getPlayers(50, 0, { teamId: { eq: "" } }, { value: "DESC" }));
+        dispatch(getPlayers(30, 0, { teamId: { eq: "" } }, { value: "DESC" }));
         const {success, data} = await dispatch(getAllTeams());
         if(!success) return
         setClubs(buildClubs(data))

@@ -63,7 +63,6 @@ export default function BuildTeamPlayers ({
 
     // Initial States
     const CLUBS_INITIAL = clone($clubs)
-    const PLAYERS_INITIAL = clone($players)
     const PRICES_INITIAL = clone(PRICES)
     const STATUSES_INITIAL = clone(STATUSES)
     const RECOMMENDATIONS_INITIAL = clone(RECOMMENDATIONS)
@@ -86,7 +85,7 @@ export default function BuildTeamPlayers ({
 
     // Players States
     const [playersData, setPlayersData] = useState([])
-    const [playersDataInitial, setPlayersDataInitial] = useState(PLAYERS_INITIAL) // contains all players
+    const [playersDataInitial, setPlayersDataInitial] = useState([]) // contains all players
 
     // Positions States
     const [activePosition, setActivePosition] = useState(POSITION_ALL)
@@ -312,7 +311,7 @@ export default function BuildTeamPlayers ({
             totalChosenPlayers: totalChosenPlayersI,
             players: playersI
         } = handleAutoPick({
-            players: PLAYERS_INITIAL,
+            players: $players,
             totalBudget: TOTAL_BUDGET
         })
 
@@ -332,7 +331,7 @@ export default function BuildTeamPlayers ({
         setAutoPickDisabled(false)
         setResetDisabled(true)
         setContinueDisabled(true)
-        setPlayersDataInitial([...PLAYERS_INITIAL])
+        setPlayersDataInitial([...$players])
     }
 
     const saveToLocalStorageOnlyForTesting = () => {
@@ -401,7 +400,7 @@ export default function BuildTeamPlayers ({
         }
 
         return initialSettingsForBuildYourTeam({
-            playersDataInitial,
+            playersDataInitial: $players,
             setPlayersDataInitial,
             setPlayersData,
             setShowFooterBar
@@ -411,7 +410,7 @@ export default function BuildTeamPlayers ({
     // Did-Mount
     useEffect(() => {
         initiateInitialSettings()
-    }, [])
+    }, [$players])
 
     return (
         <Layout title="Build Team All Player" showToast={true}>
