@@ -30,19 +30,16 @@ const getPlayerPosition = (position) => {
 export const buildPlayers = (playersData) => {
   return playersData.map((p, i) => {
             return {
-                  id: p.id,
+                  ...p,
                   image: p.photo,
                   clubImage: p.team.logo,
                   clubName: p.team.name,
                   status: p.state ? p.state : "fit", // Currently checking due to data sync gaps
                   name: p.matchName,
-                  price: parseInt(p.value),
+                  price: parseFloat(p.value),
                   formattedPrice: nFormatter(p.value),
-                  position: getPlayerPosition(p.position),
                   points: p.totalPoints,
-                  captain: p.captain,
-                  viceCaptain: p.viceCaptain,
-                  isSubstitute: p.isSubstitute,
+                  position: getPlayerPosition(p.position),
                   nextMatch: {
                     club: 'GRO',
                     vs: "BEN",
@@ -87,4 +84,21 @@ export const buildClubs = (teams) => {
     })
 
     return $teams
+}
+
+export const buildClubs1 = (teams) => {
+    return teams.map((t) => {
+        return {
+          id: t.id,
+          image: {
+            name: t.logo,
+          },
+          heading: {
+            title: t.name,
+          },
+          subHeading: {
+            title: t.venue,
+          },
+        };
+    })
 }

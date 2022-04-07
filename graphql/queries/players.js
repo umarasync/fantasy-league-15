@@ -8,7 +8,7 @@ export default gql`
     $sortBy: PlayersSortByInput!
   ) {
     players(_first: $first, _offset: $offset, where: $where, sortBy: $sortBy) {
-      data {
+      data  {
         id
         name
         matchName
@@ -17,6 +17,9 @@ export default gql`
         score
         value
         totalPoints
+        captain
+        viceCaptain
+        isSubstitute
         currGWPoints {
           totalPoints
           assistPoints
@@ -41,8 +44,8 @@ export default gql`
           goalkeeperKit
         }
       }
-      totalCount
       hasNext
+      totalCount
     }
   }
 `

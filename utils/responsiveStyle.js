@@ -107,7 +107,8 @@ const LAYOUT = {
     display: v => v ? { display: v} : {},
     inline: v => v ? { display: 'inline'} : {},
     zIndex: v => v ? { zIndex: v} : {},
-    overFlowXScroll: v => v ? { overflowX: 'scroll'} : {}
+    overFlowXScroll: v => v ? { overflowX: 'scroll'} : {},
+    overFlowScroll: v => v ? { overflow: 'scroll'} : {}
 }
 
 const ResponsiveStyle = {

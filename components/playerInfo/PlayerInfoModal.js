@@ -47,7 +47,9 @@ export default function PlayerInfoModal({
                                     onMakeViceCaptain={() => onMakeViceCaptain(player)}
                                 />
                             </Div>
-                            <Div style={STYLES.pointsBox}><PointsBoard player={player}/></Div>
+                            <Div style={STYLES.pointsBox}>
+                                {/*<PointsBoard player={player}/>*/}
+                            </Div>
                         </Div>
                     )
                 }

@@ -30,10 +30,11 @@ import R from "utils/getResponsiveValue";
 
 // Constants
 import {INITIAL} from "constants/animations";
-import {getCurrentWeekInfo, getPublicLeagues} from "constants/data/leaguesAndRanking";
+import {getCurrentWeekInfo} from "constants/data/leaguesAndRanking";
 
 // Actions
 import {getFantasyTeamById} from "redux/FantasyTeams/api";
+import {getPlayer, setFantasyTeamRole} from "redux/Players/api";
 
 // Styles
 const getStyles = (R) => {
@@ -94,8 +95,9 @@ export default function MySquadGameWeek () {
         setSquadInfo($squadInfo)
     }
     // Player-Info-Modal
-    const handleShowPlayerInfoModal = (player, arrayIndex) => {
-        // setPlayerInfoPlayer({...player})
+    const handleShowPlayerInfoModal = async (player, arrayIndex) => {
+        const $player = await dispatch(getPlayer({playerId: player.id}))
+        setPlayerInfoPlayer({...$player.data})
     }
 
     useEffect(() => {
@@ -130,13 +132,25 @@ export default function MySquadGameWeek () {
     // Player info
     const handleMakeCaptain = (player) => handleCaptainChange(player, CAPTAIN)
     const handleMakeViceCaptain = (player) => handleCaptainChange(player, VICE_CAPTAIN)
-    const handleCaptainChange = (player, captainType) => {
+    const handleCaptainChange = async (player, captainType) => {
+
         const squad = makeCaptain(
             {
                 $squadInfo: squadInfo,
                 player,
                 captainType,
-            })
+        })
+
+        const res = await dispatch(setFantasyTeamRole({
+                    fantasyTeamId: user.fantasyTeamId,
+                    roles: {
+                      captain: { id: squad.find(p => p.captain).id }  ,
+                      viceCaptain: { id: squad.find(p => p.viceCaptain).id }
+                    },
+                }))
+
+        if(!res.success) return
+
         setSquadInfo({...squadInfo, squad})
         setSavedSquadInfo({...squadInfo, squad})
         setShowPlayerInfoModal(false)
@@ -190,7 +204,12 @@ export default function MySquadGameWeek () {
     }
 
     const handleMakeTransfer = () => {
-        router.push('/build_team_all_players')
+        router.push({
+            pathname: '/make_players_transfers',
+            query: {
+                makeTransfer: true
+            }
+        })
     }
 
     // Picked-Players-Change
@@ -209,6 +228,7 @@ export default function MySquadGameWeek () {
         }))
 
         const $squadInfo = setPlayersAdditionalData(squad)
+
         setSquadInfo($squadInfo)
         setSavedSquadInfo($squadInfo)
 

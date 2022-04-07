@@ -76,7 +76,6 @@ export const handleAutoPick = ({
 }) => {
   let remainingBudget = totalBudget;
 
-
   let playersI = clone(players);
 
   const allPlayersObjectIndexes = getAllPlayersIndex(playersI)
@@ -151,10 +150,10 @@ const updatePlayersDataAfterSelectionOrDeselection = (
 ) => {
   const $players = clone(players);
   const playerIndex = $players.findIndex((p) => p.id === player.id);
-  if (playerIndex) {
+  if (playerIndex !== -1) {
     $players[playerIndex].chosen = value;
-    return $players;
   }
+  return $players;
 };
 
 export const playerSelectionHandler = ({
@@ -289,20 +288,25 @@ export const sortingHandler = ({ playersData, selectedSortingOption }) => {
   return playersDataI;
 };
 
-const getAllSelectedPlayersIDs = (players) => {
-  const gkIds = players[POSITION_GK].map((p) => p.id);
-  const defIds = players[POSITION_DEF].map((p) => p.id);
-  const midIds = players[POSITION_MID].map((p) => p.id);
-  const fwdIds = players[POSITION_FWD].map((p) => p.id);
 
-  return [...gkIds, ...defIds, ...midIds, ...fwdIds];
-};
+const getAllSelectedPlayersIDs = (squad) => squad.map(p => p.id)
+const calculateRemainingBudget = (squad) => squad.reduce((totalBudget, p) => totalBudget + p.price, 0)
+
+const putSquadUnderPositions = (squad) => {
+  return {
+    [POSITION_GK]: squad.filter(p => p.position === POSITION_GK),
+    [POSITION_DEF]: squad.filter(p => p.position === POSITION_DEF),
+    [POSITION_MID]: squad.filter(p => p.position === POSITION_MID),
+    [POSITION_FWD]: squad.filter(p => p.position === POSITION_FWD),
+  }
+}
 
 export const initialSettingsForTransferWindows = ({
-  teamData,
+  squad,
   // Picked Players
   setPickedPlayers,
   // Budget
+  totalBudget,
   setRemainingBudget,
   // Players-Data
   setPlayersData,
@@ -321,9 +325,11 @@ export const initialSettingsForTransferWindows = ({
   setShowFooterBar,
 }) => {
   let playersData = [];
-  const { pickedPlayers, remainingBudget } = teamData;
+  const $squad = clone(squad)
   setIsOneFreeTransferWindow(true);
-  const allPlayerIds = getAllSelectedPlayersIDs(pickedPlayers);
+
+  const remainingBudget = totalBudget - calculateRemainingBudget(squad)
+  const allPlayerIds = getAllSelectedPlayersIDs($squad);
 
   playersData = playersDataInitial.map((p) => {
     p.chosen = !!allPlayerIds.includes(p.id);
@@ -335,7 +341,7 @@ export const initialSettingsForTransferWindows = ({
 
   setPlayersData(playersData);
   setPlayersDataInitial(playersData);
-  setPickedPlayers(pickedPlayers);
+  setPickedPlayers(putSquadUnderPositions($squad));
   setRemainingBudget(remainingBudget);
   setTransferInProgress(false);
   setCurrentTransferredToBePlayer({
@@ -350,20 +356,32 @@ export const initialSettingsForTransferWindows = ({
   setShowFooterBar(true);
 };
 
+const allPlayersIDs = (pickedPlayers) => getAllSelectedPlayersIDs([
+    ...pickedPlayers[POSITION_GK],
+    ...pickedPlayers[POSITION_DEF],
+    ...pickedPlayers[POSITION_MID],
+    ...pickedPlayers[POSITION_FWD],
+  ]);
+
+
 export const initialSettingsForBuildYourTeam = ({
   setPlayersData,
-  playersDataInitial,
+  pickedPlayers,
+  players,
   setPlayersDataInitial,
   setShowFooterBar,
 }) => {
   let playersData = [];
-  playersData = playersDataInitial.map((p) => {
-    p.chosen = false;
+
+  const allPlayerIds = allPlayersIDs(pickedPlayers)
+
+  playersData = players.map((p) => {
+    p.chosen = !!allPlayerIds.includes(p.id);
     p.disablePlayerCard = false;
     return p;
   });
-  setPlayersData(playersData);
-  setPlayersDataInitial(playersData);
+  setPlayersData([...playersData]);
+  setPlayersDataInitial([...playersData]);
   setShowFooterBar(true);
 };
 
@@ -424,9 +442,12 @@ const updatePlayersDataAfterTransferDeselectionClicked = ({
 
   // Make currently deselected player also disable in list
   const playerIndex = $players.findIndex((p) => p.id === player.id);
-  const $player = $players[playerIndex];
-  $player.chosen = false;
-  $player.disablePlayerCard = true;
+
+  if(playerIndex !== -1){
+    const $player = $players[playerIndex];
+    $player.chosen = false;
+    $player.disablePlayerCard = true;
+  }
 
   return $players;
 };

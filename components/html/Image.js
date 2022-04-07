@@ -4,7 +4,7 @@ import RS from "utils/responsiveStyle";
 // Styles
 const getStyles = (RS, style) => {
     const {
-        w, h, p, pl, pr, pb, pt, m, ml, mr, mt, mb, cursor, bg
+        w, h, p, pl, pr, pb, pt, m, ml, mr, mt, mb, cursor, bg, opacity
     } = style
 
     return {
@@ -22,7 +22,9 @@ const getStyles = (RS, style) => {
             ...RS.marginBottom(mb),
 
             ...RS.cursor(cursor),
-            ...RS.background(bg)
+            ...RS.background(bg),
+
+            ...RS.opacity(opacity),
         },
         image: {
             ...RS.width(w),

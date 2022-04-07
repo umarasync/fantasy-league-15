@@ -10,10 +10,12 @@ import BuildYourTeamFilters from "components/filter/BuildYourTeamFilters";
 import SelectInput from "components/inputs/SelectInput";
 import PlayerCard from "components/player/PlayerCard";
 import NoResultFound from "components/misc/NoResultFound";
+import Div from "components/html/Div";
 
 // utils
 import R from "utils/getResponsiveValue";
 import {handleMultiSelectionDropDowns} from "utils/buildYourTeamHelper";
+import {isEmpty} from "utils/helpers";
 
 // Animations
 import ShowAllFiltersAnimation from "Animations/buildYourTeam/ShowAllFiltersAnimation";
@@ -21,6 +23,7 @@ import {playerPanelAnimation, playersPanelHeightAnimation} from "Animations/Play
 
 // Constants
 import {ALL_PRICES, ALL_STATUSES, ALL_TEAMS, RECOMMENDED_PLAYERS} from "constants/data/filters";
+import BuildYourTeamPlayersPagination from "./BuildYourTeamPlayersPagination";
 
 // Styles
 const getStyles = (R) => {
@@ -31,6 +34,9 @@ const getStyles = (R) => {
         },
         noResultFound: {
             top: R(600)
+        },
+        playerPanel: {
+            paddingBottom: R(200)
         }
     }
 }
@@ -100,35 +106,32 @@ export default function BuildTeamRightSection({
     }
 
     return (
-        <div className={'relative'} style={{width: R(488), paddingTop: R(35)}}>
+        <Div position={'relative'} w={488} pt={35} pb={100}>
             {/*username*/}
-            <div className={'flex flex-row-reverse'} style={{marginBottom: R(46)}}>
+            <Div className={'flex flex-row-reverse'} mb={46}>
                 {/*<Username username={user.username}/>*/}
                 <Username username={'john doe'}/>
-            </div>
+            </Div>
 
             {/*search*/}
-            <div className={'flex'} style={{marginBottom: R(20)}}>
+            <Div className={'flex'} mb={20}>
                 <div className={'w-full'}>
                     <SearchBar onSearch={onSearch}/>
                 </div>
-                <div style={{marginLeft: R(8)}}/>
+                <Div ml={8}/>
                 <FilterIcon
                     showAllFilters={showAllFilters}
                     onClick={() => setShowAllFilters(!showAllFilters)}
                 />
-            </div>
+            </Div>
 
             {/*filter buttons*/}
-            <div style={{
-                marginBottom: R(24)
-            }}>
+            <Div mb={24}>
                 <FilterButtons
                     activePosition={activePosition}
-                    onClick={(activePosition) =>
-                        setActivePosition(activePosition)}
+                    onClick={(activePosition) => setActivePosition(activePosition)}
                 />
-            </div>
+            </Div>
             {/*all filters*/}
             {
                 showAllFilters ? (
@@ -194,46 +197,50 @@ export default function BuildTeamRightSection({
                 variants={playerPanelAnimation()}
                 animate={showAllFilters ? 'slideDown' : 'slideUp'}
             >
-
                 <motion.div
                     variants={playersPanelHeightAnimation()}
                     animate={getPlayersContainerHeight()}
+                    style={STYLES.playerPanel}
                 >
-                    <div style={{marginBottom: R(16)}}>
+                    <Div  mb={16}>
                         {
                             areFiltersApplied() && !playersData.length ? null : (
-                                <SelectInput
-                                    options={sortingOptions}
-                                    selectedOption={selectedSortingOption}
-                                    onOptionChange={(s) => setSelectedSortingOption(s)}
-                                    parentContainerStyle={{
-                                        zIndex: 1,
-                                    }}
-                                    hideLabel
-                                    dropDownOfInlineStyle
-                                />
+                                <Div>
+                                    <SelectInput
+                                       options={sortingOptions}
+                                       selectedOption={selectedSortingOption}
+                                       onOptionChange={(s) => setSelectedSortingOption(s)}
+                                       parentContainerStyle={{
+                                           zIndex: 1,
+                                       }}
+                                       hideLabel
+                                       dropDownOfInlineStyle
+                                   />
+                                </Div>
+
                             )
                         }
-                    </div>
+                    </Div>
 
-                    <div style={{
-                        height: '100%',
-                        paddingBottom: getPlayersContainerHeight() === 'hide' ? 0 : 150,
-                        overflow: 'scroll'
-                    }}
-                    >
+                    <Div h={'100%'} overFlowScroll>
                         {
-                            playersData.map((player, index) => <PlayerCard
+                            !isEmpty(playersData) && playersData.map((player) => <PlayerCard
                                 key={player.id}
                                 player={player}
                                 onSelectPlayer={handlePlayerSelection}
                             />)
                         }
-                    </div>
-
+                    </Div>
+                    {
+                        !isEmpty(playersData) && (
+                            <Div mt={40}>
+                                 <BuildYourTeamPlayersPagination/>
+                            </Div>
+                        )
+                    }
                 </motion.div>
             </motion.div>
 
-        </div>
+        </Div>
     )
 }

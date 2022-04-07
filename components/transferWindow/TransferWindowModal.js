@@ -1,3 +1,6 @@
+// Packages
+import {useSelector} from "react-redux";
+
 // Components
 import Modal from "components/modals";
 import Div from "components/html/Div"
@@ -10,7 +13,6 @@ import BorderHorizontal from "components/borders/BorderHorizontal";
 import colors from "constants/colors";
 import {SHADOW_DARK_INDIGO, SHADOW_WHITE_SMOKE} from "constants/boxShadow";
 import {POINTS_PER_ADDITIONAL_TRANSFER} from "constants/universalConstants";
-import {CLUB_FC, POSITION_MID, STATUS_FIT} from "constants/data/filters";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -42,6 +44,8 @@ export default function TransferWindowModal({
     const noOfFreeTransfers = 1
     const heading = 'You are about to transfer'
     const subHeading = `${transferredPlayers.length} player`
+    const loadingFantasyTeamTransfer = useSelector(
+      ({ fantasyTeam }) => fantasyTeam.loadingFantasyTeamTransfer);
 
     return (
         <Modal>
@@ -62,7 +66,7 @@ export default function TransferWindowModal({
                                    <Text
                                        text={
                                            <>
-                                               <Text text={`${heading} `} inline color={colors.regent_grey}/>
+                                               <Text text={`${heading}`} inline color={colors.regent_grey}/>
                                                <Text text={subHeading} inline color={colors.mandy}/>
                                            </>
                                        }
@@ -104,12 +108,12 @@ export default function TransferWindowModal({
                                         </Div>
                                         {/*Row*/}
                                         {
-                                            transferredPlayers.map((item, index) => {
+                                            transferredPlayers.map((p, index) => {
                                                 return (
                                                     <TransferInAndOutPlayer
                                                         key={index}
-                                                        transferInPlayer={item.transferIn}
-                                                        transferOutPlayer={item.transferOut}
+                                                        transferInPlayer={p.transferIn}
+                                                        transferOutPlayer={p.transferOut}
                                                         mt={index ? 50 : 0}
                                                     />
                                                 )
@@ -127,19 +131,20 @@ export default function TransferWindowModal({
                                     color={colors.white}
                                     mr={8}
                                     h={70}
+                                    disabled={loadingFantasyTeamTransfer}
                                     bs={SHADOW_DARK_INDIGO}
                                     bg={colors.dark_indigo}
                                     onClick={onCancel}
                                 />
                                 <Button
                                     title={'Confirm'}
+                                    disabled={loadingFantasyTeamTransfer}
                                     color={colors.white}
                                     ml={8}
                                     h={70}
                                     onClick={onConfirmed}
                                 />
                             </Div>
-
                         </Div>
                     )
                 }

@@ -39,7 +39,7 @@ export const playersPanelHeightAnimation = () => {
             },
         },
         half: {
-            height: R(400),
+            height: R(440),
             transition: {
                 duration: playersCardAnimationDuration,
             },

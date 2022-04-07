@@ -1,25 +1,23 @@
-// Packages
-import {
-    createFantasyTeamSuccess,
-    createFantasyTeamFailed,
-} from "./actionCreators";
-
 // GraphQL
 import { createApolloClient } from "graphql/apollo";
 import CREATE_FANTASY_TEAM from "graphql/mutations/createFantasyTeam";
+import DO_FANTASY_TEAM_TRANSFER from "graphql/mutations/doFantasyTeamTransfers";
 import GET_FANTASY_TEAM from "graphql/queries/fantasyTeamById";
 
 // Constants
 import {ERROR_MSG} from "constants/universalConstants";
 
 // Utils
-import {responseFailed, responseSuccess} from "utils/helpers";
-import {buildPlayers, mapSquadToPositions} from "utils/playersHelper";
+import {isEmpty, responseFailed, responseSuccess} from "utils/helpers";
+import {buildPlayers} from "utils/playersHelper";
+
+// Actions
+import {fantasyTeamCreationStart, fantasyTeamTransferStart} from "./actionCreators";
 
 export const createFantasyTeam = (data) => {
-
   return async (dispatch) => {
     try {
+      dispatch(fantasyTeamCreationStart())
       const apolloClient = createApolloClient();
       const result = await apolloClient.mutate({
         mutation: CREATE_FANTASY_TEAM,
@@ -60,6 +58,31 @@ export const getFantasyTeamById = (data) => {
       return false
     } catch (e) {
       return false
+    }
+  };
+};
+
+export const doFantasyTeamTransfers = (data) => {
+  const { fantasyTeamId, transfers } = data
+
+  return async (dispatch) => {
+    try {
+      dispatch(fantasyTeamTransferStart())
+      const apolloClient = createApolloClient();
+      const result = await apolloClient.mutate({
+        mutation: DO_FANTASY_TEAM_TRANSFER,
+        variables: {
+          fantasyTeamId,
+          transfers
+        },
+      });
+
+      if (result && !isEmpty(result.data.transferPlayers)) {
+        return responseSuccess('Transfer Successful Redirecting!!!', result.data.transferPlayers)
+      }
+      return responseFailed(ERROR_MSG)
+    } catch (e) {
+      return responseFailed(ERROR_MSG)
     }
   };
 };

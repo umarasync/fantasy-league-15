@@ -57,11 +57,11 @@ export const truncate = (str, n) => {
     return (str.length > n) ? str.substr(0, n - 1) + '...' : str;
 };
 
-export const responseSuccess = (msg,  data = {}) => {
+export const responseSuccess = (msg,  data = null) => {
     return {
         success: true,
         msg: msg,
-        data: {...data}
+        data
     }
 }
 

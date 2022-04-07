@@ -3,7 +3,7 @@ import { arrayMoveImmutable } from "array-move";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {isEmpty} from "lodash";
 
@@ -14,12 +14,14 @@ import ClubControls from "components/selectClub/ClubControls";
 import Div from "components/html/Div";
 import Image from "components/html/Image";
 import Text from "components/html/Text";
+import Loader from "components/loaders/Loader";
 
 // Actions
 import { getAllTeams, addFavouriteTeam } from "redux/Teams/api";
 
 // Utils
 import R from "utils/getResponsiveValue";
+import {buildClubs1} from "utils/playersHelper";
 
 // Constants
 import colors from "constants/colors";
@@ -27,6 +29,9 @@ import colors from "constants/colors";
 // Styles
 const getStyles = (R) => {
   return {
+    container: {
+      minHeight: R()
+    },
     gradient: {
       width: R(299),
       height: "100%",
@@ -40,75 +45,19 @@ const getStyles = (R) => {
 };
 
 export default function SelectClub() {
+
   const STYLES = { ...getStyles(R) };
 
-  // Router
   const router = useRouter();
   const {query} = router
   let {fromSettings} = query
 
   const dispatch = useDispatch();
-  const [cardsDataI, setCardsDataI] = useState();
   const [cardsData, setCardsData] = useState();
   const [cardsNextData, setCardsNextData] = useState();
   const [changeCard, setChangeCard] = useState(true);
-  const [teamsData, setTeamsData] = useState();
 
-  /***** Teams Added To Profile ****/
-  const updateTeamToProfileSuccess = useSelector(
-    ({ teams }) => teams.updateTeamToProfileSuccess
-  );
-  const updateTeamToProfileError = useSelector(
-    ({ teams }) => teams.updateTeamToProfileError
-  );
-
-  /***** Fetching and Building Teams Array ****/
-  const allTeams = useSelector(
-    ({ teams }) => teams.allTeams
-  );
   const user = useSelector(({ auth }) => auth.user);
-
-
-  /**** Fetching All Teams Data From Server ****/
-  useEffect(() => {
-    //Query API
-    dispatch(getAllTeams());
-  }, []);
-
-  useEffect(() => {
-
-    if (teamsData) {
-      setCardsDataI(
-        teamsData.map((Teams, i) => {
-          return {
-            id: Teams.id,
-            image: {
-              name: Teams.logo,
-            },
-            heading: {
-              title: Teams.name,
-            },
-            subHeading: {
-              title: Teams.venue,
-            },
-          };
-        })
-      );
-    }
-  }, [teamsData]);
-
-
-  useEffect(() => {
-    if (teamsData) {
-      setCardsData(cardsDataI);
-      setCardsNextData(cardsDataI);
-    }
-  }, [cardsDataI]);
-
-
-  useEffect(() => {
-    if (allTeams) { setTeamsData(allTeams); }
-  }, [allTeams]);
 
   const onControlsClick = (isLeftPressed = false) => {
     let dataI = [];
@@ -123,34 +72,18 @@ export default function SelectClub() {
     setCardsData(dataI);
   };
 
-  const onNextClick = () => {
+  const onNextClick = async () => {
     if (!isEmpty(user)) {
-      let data = {
+      let inputData = {
         profileId: user.id,
         accountId: user.id,
         favouriteTeamId: cardsData[2].id,
       };
-      dispatch(addFavouriteTeam(data));
+      const {success} = await dispatch(addFavouriteTeam(inputData));
+      // if(!success) return
+      router.push('/build_team_all_players')
     }
-
-    // router.push("/build_team_all_players");
   };
-
-  /**** Response from Teams Update to Profile ****/
-  useEffect(() => {
-    if (updateTeamToProfileSuccess) {
-      toast.success(updateTeamToProfileSuccess, {
-        onClose: () => {
-          if(fromSettings) {
-            return router.back()
-          }
-          return router.push("/build_team_all_players")
-        },
-      });
-    }else if(updateTeamToProfileError){
-      toast.success("Error updating club.");
-    }
-  }, [updateTeamToProfileSuccess, updateTeamToProfileError]);
 
   const firstCard = cardsData ? cardsData[0] : "";
   const secondCard = cardsData ? cardsData[1] : "";
@@ -163,6 +96,23 @@ export default function SelectClub() {
   const nextThirdCard = cardsNextData ? cardsNextData[2] : "";
   const nextFourthCard = cardsNextData ? cardsNextData[3] : "";
   const nextFifthCard = cardsNextData ? cardsNextData[4] : "";
+
+
+  const runDidMount = async () => {
+    const { success, data } = await dispatch(getAllTeams());
+
+    if(!success) return
+    const $clubs = buildClubs1(data)
+
+    setCardsData([...$clubs]);
+    setCardsNextData([...$clubs]);
+  }
+
+  useEffect(() => {
+      runDidMount()
+  }, []);
+
+  if(isEmpty(cardsData) || isEmpty(cardsNextData)) return <Loader/>
 
   return (
     <Layout title="Select Club">
@@ -180,7 +130,7 @@ export default function SelectClub() {
       <Div
         className="bg-[url('/images/green_grunge_border_with_halftone_background_2.png')]
                 bg-[length:100%_100%] bg-no-repeat w-full relative"
-        style={{ minHeight: R() }}
+        style={{...STYLES.container}}
         pt={34}
       >
         <div className="absolute" style={STYLES.image}>

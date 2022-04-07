@@ -6,14 +6,12 @@ import { combineReducers } from "redux";
 
 // Reducers
 import authReducer from "../Auth/reducers";
-import teamsReducer from "../Teams/reducers";
 import playersReducer from "../Players/reducers";
 import fantasyTeamReducer from "../FantasyTeams/reducers";
 import sideDrawerReducer from "redux/SideDrawer/reducers";
 
 let rootReducer = combineReducers({
   auth: authReducer,
-  teams: teamsReducer,
   players: playersReducer,
   fantasyTeam: fantasyTeamReducer,
   sideDrawer:sideDrawerReducer

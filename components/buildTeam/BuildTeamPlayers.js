@@ -1,10 +1,11 @@
 // Packages
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import { toast } from "react-toastify"
 
 // Components
-import Layout from "components/layout/index";
+import Layout from "components/layout";
 import FooterBar from "components/footer/FooterBar";
 import BuildTeamLeftSection from "components/buildTeam/BuildTeamLeftSection";
 import BuildTeamRightSection from "components/buildTeam/BuildTeamRightSection";
@@ -44,7 +45,13 @@ import {
 } from "constants/data/players";
 
 // Actions
-import {fantasyTeamChosen} from "redux/FantasyTeams/actionCreators";
+import {
+    saveFantasyTeamToRedux, fantasyTeamTransferFailed,
+    fantasyTeamTransferStart,
+    fantasyTeamTransferSuccess
+} from "redux/FantasyTeams/actionCreators";
+import {getFantasyTeamById} from "redux/FantasyTeams/api";
+import {doFantasyTeamTransfers} from "redux/FantasyTeams/api";
 
 export default function BuildTeamPlayers ({
     players: $players,
@@ -56,14 +63,11 @@ export default function BuildTeamPlayers ({
 
     // Initial States
     const CLUBS_INITIAL = clone($clubs)
-    const PLAYERS_INITIAL = clone($players)
     const PRICES_INITIAL = clone(PRICES)
     const STATUSES_INITIAL = clone(STATUSES)
     const RECOMMENDATIONS_INITIAL = clone(RECOMMENDATIONS)
     const SORTING_OPTIONS_INITIAL = clone(SORTING_OPTIONS)
     const SELECTED_PLAYERS_INITIAL = clone(SELECTED_PLAYERS)
-    const TOTAL_BUDGET = 100000000;
-    // const TOTAL_BUDGET = 1000000;
 
     // Picked-Players
     const [pickedPlayers, setPickedPlayers] = useState(SELECTED_PLAYERS_INITIAL)
@@ -74,12 +78,10 @@ export default function BuildTeamPlayers ({
     const [showAllFilters, setShowAllFilters] = useState(false)
     const [autoPickDisabled, setAutoPickDisabled] = useState(false)
     const [continueDisabled, setContinueDisabled] = useState(true)
-    const [totalBudget, setTotalBudget] = useState(TOTAL_BUDGET)
-    const [remainingBudget, setRemainingBudget] = useState(TOTAL_BUDGET)
 
     // Players States
     const [playersData, setPlayersData] = useState([])
-    const [playersDataInitial, setPlayersDataInitial] = useState(PLAYERS_INITIAL) // contains all players
+    const [playersDataInitial, setPlayersDataInitial] = useState([]) // contains all players
 
     // Positions States
     const [activePosition, setActivePosition] = useState(POSITION_ALL)
@@ -114,10 +116,12 @@ export default function BuildTeamPlayers ({
     const [transferResetDisabled, setTransferResetDisabled] = useState(true)
     const [transferConfirmDisabled, setTransferConfirmDisabled] = useState(true)
     const [transferredPlayers, setTransferredPlayers] = useState([])
-
     const [showTransferWindowModal, setShowTransferWindowModal] = useState(false)
 
-
+    // Global States
+    const user = useSelector(({ auth }) => auth.user);
+    const totalBudget = useSelector(({ fantasyTeam }) => fantasyTeam.totalBudget);
+    const [remainingBudget, setRemainingBudget] = useState(totalBudget)
 
     // OnSearch
     const onSearch = () => false
@@ -142,6 +146,7 @@ export default function BuildTeamPlayers ({
     const runFiltersOnPlayersData = () => {
 
         let $playersData = [ ...playersDataInitial ]
+
         $playersData = $playersData.filter(player => {
             return filtersHandler({
                 player,
@@ -261,9 +266,27 @@ export default function BuildTeamPlayers ({
         setShowTransferWindowModal(true)
     }
 
-    const onTransferModalConfirmed = () => {
-        // updateTeamData() : update team data in DB
-        router.push('/my_squad_game_week')
+    const onTransferModalConfirmed = async () => {
+        let transfers = []
+        transferredPlayers.forEach(p => {
+            transfers.push({
+                in: { id: p.transferIn.id},
+                out: { id: p.transferOut.id }
+            })
+        })
+
+        const { success, msg } = await dispatch(doFantasyTeamTransfers({ fantasyTeamId: user.fantasyTeamId, transfers}))
+
+        /****** Toast ******/
+        if (success) {
+          toast.success(msg, {
+              onClose: () => {
+                  dispatch(fantasyTeamTransferSuccess())
+                  return router.push("/my_squad_game_week")
+              }});
+        } else {
+            toast.error(msg, { onClose: () => dispatch(fantasyTeamTransferFailed())});
+        }
     }
 
     useEffect(() => {
@@ -286,8 +309,8 @@ export default function BuildTeamPlayers ({
             totalChosenPlayers: totalChosenPlayersI,
             players: playersI
         } = handleAutoPick({
-            players: PLAYERS_INITIAL,
-            totalBudget: TOTAL_BUDGET
+            players: $players,
+            totalBudget
         })
 
         setPickedPlayers(chosenPlayersWithinBudget)
@@ -306,7 +329,7 @@ export default function BuildTeamPlayers ({
         setAutoPickDisabled(false)
         setResetDisabled(true)
         setContinueDisabled(true)
-        setPlayersDataInitial([...PLAYERS_INITIAL])
+        setPlayersDataInitial([...$players])
     }
 
     const saveToLocalStorageOnlyForTesting = () => {
@@ -329,7 +352,7 @@ export default function BuildTeamPlayers ({
             additionalTransferredPlayers
         })
 
-        dispatch(fantasyTeamChosen(teamData))
+        dispatch(saveFantasyTeamToRedux(teamData))
         router.push('/create_team_name')
     }
 
@@ -339,20 +362,27 @@ export default function BuildTeamPlayers ({
     }
 
     // Initial Settings for Build Your Team & Transfer windows
-    const initiateInitialSettings = () => {
+    const initiateInitialSettings = async () => {
+
         // For Transfer Window
-        const teamDataFromDB = {} // Fetch team data from backend database
-        if (!isEmpty(teamDataFromDB)) {
+        const squad = await dispatch(getFantasyTeamById({
+                   gameWeek: user.currentGameweek ,
+                   fantasyTeamId: user.fantasyTeamId,
+           }))
+
+        // Fetch team data from backend database
+        if (!isEmpty(squad)) {
             return initialSettingsForTransferWindows({
                 // Team Data
-                teamData: teamDataFromDB,
+                squad,
                 // Picked Players
                 setPickedPlayers,
                 // Budget
+                totalBudget,
                 setRemainingBudget,
                 // Players-Data
                 setPlayersData,
-                playersDataInitial,
+                playersDataInitial: $players,
                 setPlayersDataInitial,
                 // Transfer Window
                 setIsOneFreeTransferWindow,
@@ -369,7 +399,8 @@ export default function BuildTeamPlayers ({
         }
 
         return initialSettingsForBuildYourTeam({
-            playersDataInitial,
+            players: $players,
+            pickedPlayers,
             setPlayersDataInitial,
             setPlayersData,
             setShowFooterBar
@@ -379,10 +410,10 @@ export default function BuildTeamPlayers ({
     // Did-Mount
     useEffect(() => {
         initiateInitialSettings()
-    }, [])
+    }, [$players])
 
     return (
-        <Layout title="Build Team All Player">
+        <Layout title="Build Team All Player" showToast={true}>
             <div className="mx-auto flex bg-white">
                     {/*Left-Section*/}
                     <div className="w-[57%]">
