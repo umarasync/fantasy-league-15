@@ -51,6 +51,8 @@ export default function BuildYourTeamPlayersPagination(){
          await dispatch(getPlayers(playersPerPage, playersPerPage * currentPage, { teamId: { eq: "" } }, { value: "DESC" }));
     }
 
+    const getOpacity = (v) => v ? 0.2 : 1
+
     useEffect(() => {
         if(currentPage === -1 || currentPage === totalPages) {
             return dispatch(getPlayersLoadingOff())
@@ -66,6 +68,7 @@ export default function BuildYourTeamPlayersPagination(){
                     h={20}
                     src={'/images/double-arrow-left.png'}
                     disabled={disablePrev}
+                    opacity={getOpacity(disablePrev)}
                     cursor={'pointer'}
                     onClick={onFirstPage}
                     alt={'double-arrow-left'}
@@ -75,6 +78,7 @@ export default function BuildYourTeamPlayersPagination(){
                     h={50}
                     src={'/images/angle-circle-left.png'}
                     disabled={disablePrev}
+                    opacity={getOpacity(disablePrev)}
                     cursor={'pointer'}
                     onClick={onPreviousPage}
                     alt={'angle-circle-left'}
@@ -88,6 +92,7 @@ export default function BuildYourTeamPlayersPagination(){
                     h={50}
                     src={'/images/angle-circle-right.png'}
                     disabled={disableNext}
+                    opacity={getOpacity(disableNext)}
                     cursor={'pointer'}
                     onClick={onNextPage}
                     alt={'angle-circle-right'}
@@ -98,6 +103,7 @@ export default function BuildYourTeamPlayersPagination(){
                     h={20}
                     src={'/images/double-arrow-right.png'}
                     disabled={disableNext}
+                    opacity={getOpacity(disableNext)}
                     cursor={'pointer'}
                     onClick={onLastPage}
                     alt={'double-arrow-right'}

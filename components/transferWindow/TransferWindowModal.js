@@ -66,7 +66,7 @@ export default function TransferWindowModal({
                                    <Text
                                        text={
                                            <>
-                                               <Text text={`${heading} `} inline color={colors.regent_grey}/>
+                                               <Text text={`${heading}`} inline color={colors.regent_grey}/>
                                                <Text text={subHeading} inline color={colors.mandy}/>
                                            </>
                                        }
@@ -131,6 +131,7 @@ export default function TransferWindowModal({
                                     color={colors.white}
                                     mr={8}
                                     h={70}
+                                    disabled={loadingFantasyTeamTransfer}
                                     bs={SHADOW_DARK_INDIGO}
                                     bg={colors.dark_indigo}
                                     onClick={onCancel}

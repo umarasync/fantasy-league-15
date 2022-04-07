@@ -30,7 +30,7 @@ import R from "utils/getResponsiveValue";
 
 // Constants
 import {INITIAL} from "constants/animations";
-import {getCurrentWeekInfo, getPublicLeagues} from "constants/data/leaguesAndRanking";
+import {getCurrentWeekInfo} from "constants/data/leaguesAndRanking";
 
 // Actions
 import {getFantasyTeamById} from "redux/FantasyTeams/api";
