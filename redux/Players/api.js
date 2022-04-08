@@ -62,9 +62,7 @@ export const getPlayer = ({playerId}) => {
   };
 };
 
-
 export const setFantasyTeamRole = ({fantasyTeamId, captain, viceCaptain}) => {
-
   return async (dispatch) => {
     try {
       const apolloClient = createApolloClient();
@@ -77,7 +75,7 @@ export const setFantasyTeamRole = ({fantasyTeamId, captain, viceCaptain}) => {
         },
       });
       if (result && !isEmpty(result.data.setFantasyTeamRoles)) {
-        return responseSuccess('Role changed successfully !!!', result.data.setFantasyTeamRoles)
+        return responseSuccess('Role has been changed successfully !!!', result.data.setFantasyTeamRoles)
       }
       return responseFailed(ERROR_MSG)
     } catch (e) {

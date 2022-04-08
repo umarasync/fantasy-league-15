@@ -3,6 +3,7 @@ import { createApolloClient } from "graphql/apollo";
 import CREATE_FANTASY_TEAM from "graphql/mutations/createFantasyTeam";
 import DO_FANTASY_TEAM_TRANSFER from "graphql/mutations/doFantasyTeamTransfers";
 import GET_FANTASY_TEAM from "graphql/queries/fantasyTeamById";
+import SWAP_FANTASY_TEAM_PLAYERS from "graphql/mutations/swapFantasyTeamPlayers";
 
 // Constants
 import {ERROR_MSG} from "constants/universalConstants";
@@ -79,6 +80,30 @@ export const doFantasyTeamTransfers = (data) => {
 
       if (result && !isEmpty(result.data.transferPlayers)) {
         return responseSuccess('Transfer Successful Redirecting!!!', result.data.transferPlayers)
+      }
+      return responseFailed(ERROR_MSG)
+    } catch (e) {
+      return responseFailed(ERROR_MSG)
+    }
+  };
+};
+
+
+export const swapFantasyTeamPlayers = ({fantasyTeamId, captain, viceCaptain, substitutes}) => {
+  return async (dispatch) => {
+    try {
+      const apolloClient = createApolloClient();
+      const result = await apolloClient.mutate({
+        mutation: SWAP_FANTASY_TEAM_PLAYERS,
+        variables: {
+          fantasyTeamId,
+          captain,
+          viceCaptain,
+          substitutes,
+        },
+      });
+      if (result && !isEmpty(result.data.swapFantasyTeamPlayers)) {
+        return responseSuccess('Players have been successfully swapped !!!', result.data.swapFantasyTeamPlayers)
       }
       return responseFailed(ERROR_MSG)
     } catch (e) {

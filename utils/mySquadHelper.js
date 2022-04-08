@@ -177,7 +177,6 @@ const handlesSubstituteClick = ({
 }) => {
 
     const squad = clone(squadInfo.squad)
-    console.log('in array index ====', arrayIndex)
 
     /**** If clicked sub is a goalkeeper **/
     if(arrayIndex === ELEVEN) {
