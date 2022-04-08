@@ -1,11 +1,14 @@
 import {
-  SAVE_FANTASY_TEAM_TO_REDUX,
-  FANTASY_TEAM_CREATION_START,
-  FANTASY_TEAM_CREATION_SUCCESS,
-  FANTASY_TEAM_CREATION_FAILED,
-  FANTASY_TEAM_TRANSFER_FAILED,
-  FANTASY_TEAM_TRANSFER_START,
-  FANTASY_TEAM_TRANSFER_SUCCESS,
+    SAVE_FANTASY_TEAM_TO_REDUX,
+    FANTASY_TEAM_CREATION_START,
+    FANTASY_TEAM_CREATION_SUCCESS,
+    FANTASY_TEAM_CREATION_FAILED,
+    FANTASY_TEAM_TRANSFER_FAILED,
+    FANTASY_TEAM_TRANSFER_START,
+    FANTASY_TEAM_TRANSFER_SUCCESS,
+    FANTASY_TEAM_SWAP_START,
+    FANTASY_TEAM_SWAP_SUCCESS,
+    FANTASY_TEAM_SWAP_FAILED,
 } from "./actionCreators";
 
 function fantasyTeamReducer(
@@ -13,6 +16,7 @@ function fantasyTeamReducer(
     // Loading States
     loadingFantasyTeamCreation: false,
     loadingFantasyTeamTransfer: false,
+    loadingFantasyTeamSwapping: false,
     // Data States
     savedFantasyTeamOnRedux: null,
     // Total fantasy team budget
@@ -61,6 +65,22 @@ function fantasyTeamReducer(
           loadingFantasyTeamTransfer: false,
         };
 
+    /** Fantasy Team Swap **/
+    case FANTASY_TEAM_SWAP_START:
+      return {
+        ...state,
+          loadingFantasyTeamSwapping: true,
+      };
+    case FANTASY_TEAM_SWAP_SUCCESS:
+      return {
+        ...state,
+          loadingFantasyTeamSwapping: false,
+      };
+    case FANTASY_TEAM_SWAP_FAILED:
+      return {
+        ...state,
+          loadingFantasyTeamSwapping: false,
+      };
       /** Default State **/
       default:
         return {

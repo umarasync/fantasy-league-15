@@ -36,6 +36,7 @@ import {getCurrentWeekInfo} from "constants/data/leaguesAndRanking";
 // Actions
 import {getFantasyTeamById, swapFantasyTeamPlayers} from "redux/FantasyTeams/api";
 import {getPlayer, setFantasyTeamRole} from "redux/Players/api";
+import {fantasyTeamSwapStart} from "redux/FantasyTeams/actionCreators";
 
 // Styles
 const getStyles = (R) => {
@@ -124,8 +125,9 @@ export default function MySquadGameWeek () {
 
     // Transfer_Edit-Save
     const handleSave = async () => {
-
         // Api Calling
+        dispatch(fantasyTeamSwapStart())
+
         const substitutes = squadInfo.squad
                                 .map(p => {if(p.isSubstitutePlayer){ return { id: p.id}}return false})
                                 .filter(p => p !== false)

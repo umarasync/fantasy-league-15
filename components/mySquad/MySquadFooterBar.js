@@ -1,3 +1,6 @@
+// Packages
+import {useSelector} from "react-redux";
+
 // Components
 import Button from "components/html/Button";
 import Div from "components/html/Div";
@@ -33,6 +36,8 @@ export default function MySquadFooterBar({
 }) {
 
     const STYLES = {...getStyles(R)}
+
+    const loadingFantasyTeamSwapping = useSelector(({ fantasyTeam }) => fantasyTeam.loadingFantasyTeamSwapping);
 
     return (
         <div
@@ -83,12 +88,14 @@ export default function MySquadFooterBar({
                                     mr={16}
                                     h={50}
                                     w={190}
+                                    disabled={loadingFantasyTeamSwapping}
                                     bs={'unset'}
                                     bg={colors.white}
                                     onClick={onCancel}
                                 />
                                 <Button
                                     title={'save changes'}
+                                    disabled={loadingFantasyTeamSwapping}
                                     h={50}
                                     w={190}
                                     color={colors.white}

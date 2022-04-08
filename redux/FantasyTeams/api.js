@@ -13,7 +13,12 @@ import {isEmpty, responseFailed, responseSuccess} from "utils/helpers";
 import {buildPlayers} from "utils/playersHelper";
 
 // Actions
-import {fantasyTeamCreationStart, fantasyTeamTransferStart} from "./actionCreators";
+import {
+  fantasyTeamCreationStart,
+  fantasyTeamSwapFailed, fantasyTeamSwapStart,
+  fantasyTeamSwapSuccess,
+  fantasyTeamTransferStart
+} from "./actionCreators";
 
 export const createFantasyTeam = (data) => {
   return async (dispatch) => {
@@ -103,10 +108,13 @@ export const swapFantasyTeamPlayers = ({fantasyTeamId, captain, viceCaptain, sub
         },
       });
       if (result && !isEmpty(result.data.swapFantasyTeamPlayers)) {
+        dispatch(fantasyTeamSwapSuccess())
         return responseSuccess('Players have been successfully swapped !!!', result.data.swapFantasyTeamPlayers)
       }
+      dispatch(fantasyTeamSwapFailed())
       return responseFailed(ERROR_MSG)
     } catch (e) {
+      dispatch(fantasyTeamSwapFailed())
       return responseFailed(ERROR_MSG)
     }
   };

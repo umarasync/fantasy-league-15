@@ -12,6 +12,7 @@ export default function PlayerInfoControls({
     subHeading,
     action,
 }) {
+
     return (
         <Div
             w={110}
