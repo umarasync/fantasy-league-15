@@ -1,8 +1,8 @@
 import {gql} from '@apollo/client'
 
 export default gql`
-  mutation SetFantasyTeamRole($fantasyTeamId: String!, $player: FantasyTeamPlayerInput!, $role: PlayerRole!) {
-    setFantasyTeamRole(fantasyTeamId: $fantasyTeamId, player: $player, role: $role) {
+  mutation SetFantasyTeamRoles($captain: FantasyTeamPlayerIdInput!, $fantasyTeamId: String!, $viceCaptain: FantasyTeamPlayerIdInput!) {
+    setFantasyTeamRoles(captain: $captain, fantasyTeamId: $fantasyTeamId, viceCaptain: $viceCaptain) {
       id
     }
   }

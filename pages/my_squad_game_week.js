@@ -2,6 +2,7 @@
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
+import {toast} from "react-toastify";
 
 // Components
 import Layout from "components/layout/index";
@@ -141,16 +142,19 @@ export default function MySquadGameWeek () {
                 captainType,
         })
 
-        const res = await dispatch(setFantasyTeamRole({
+        const {success, msg, data} = await dispatch(
+            setFantasyTeamRole({
                     fantasyTeamId: user.fantasyTeamId,
-                    roles: {
-                      captain: { id: squad.find(p => p.captain).id }  ,
-                      viceCaptain: { id: squad.find(p => p.viceCaptain).id }
-                    },
-                }))
+                    captain: { id: squad.find(p => p.captain).id }  ,
+                    viceCaptain: { id: squad.find(p => p.viceCaptain).id }
+                })
+        )
 
-        if(!res.success) return
+        if (!success) {
+         return toast.error(msg);
+        }
 
+        toast.success(msg);
         setSquadInfo({...squadInfo, squad})
         setSavedSquadInfo({...squadInfo, squad})
         setShowPlayerInfoModal(false)
@@ -248,8 +252,9 @@ export default function MySquadGameWeek () {
     }, [])
 
     if (squadInfo.length === 0) {return <Loader/>}
+
     return (
-        <Layout title="My Squad">
+        <Layout title="My Squad" showToast autoClose={2000}>
             <Div className="mx-auto relative bg-white">
                 <div className={'flex'}>
                     <Div className="w-[62%]">

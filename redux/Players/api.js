@@ -63,7 +63,7 @@ export const getPlayer = ({playerId}) => {
 };
 
 
-export const setFantasyTeamRole = ({fantasyTeamId, roles}) => {
+export const setFantasyTeamRole = ({fantasyTeamId, captain, viceCaptain}) => {
 
   return async (dispatch) => {
     try {
@@ -72,12 +72,12 @@ export const setFantasyTeamRole = ({fantasyTeamId, roles}) => {
         mutation: SET_FANTASY_TEAM_ROLE,
         variables: {
           fantasyTeamId,
-          role,
-          player: { id: player.id, pitchIndex: 0 }
+          captain,
+          viceCaptain
         },
       });
-      if (result && !isEmpty(result.data.setFantasyTeamRole)) {
-        return responseSuccess('', result.data.setFantasyTeamRole)
+      if (result && !isEmpty(result.data.setFantasyTeamRoles)) {
+        return responseSuccess('Role changed successfully !!!', result.data.setFantasyTeamRoles)
       }
       return responseFailed(ERROR_MSG)
     } catch (e) {

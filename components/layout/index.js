@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 // Animations
 import {fadeInAndOutAnimation1} from "Animations/universal/FadeInOutAnimation1";
 
-const Layout = ({ children, title, showToast }) => {
+const Layout = ({ children, title, showToast, autoClose = 3000 }) => {
 
     return (
         <motion.div variants={fadeInAndOutAnimation1()} initial="initial" animate="animate" exit="exit">
@@ -17,7 +17,7 @@ const Layout = ({ children, title, showToast }) => {
                 {showToast && (
                     <ToastContainer
                       position="top-center"
-                      autoClose={3000}
+                      autoClose={autoClose}
                       hideProgressBar={false}
                       newestOnTop={false}
                       closeOnClick
