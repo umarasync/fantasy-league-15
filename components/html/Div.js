@@ -7,7 +7,7 @@ const getStyles = (RS, style) => {
         w, h, maxH, minH, p, pl, pr, pt, pb, m, ml, mr, mt, mb, bs, center, justifyBetween, br,
         btlr, btrr, bblr, bbrr, b,
         position, left, right, top, bottom, bg, cursor, display, textCenter, textAlign, zIndex,
-        overFlowXScroll, overFlowScroll
+        overFlowXScroll, overFlowScroll, opacity
     } = style
 
     return {
@@ -49,6 +49,7 @@ const getStyles = (RS, style) => {
             ...RS.background(bg),
 
             ...RS.cursor(cursor),
+            ...RS.opacity(opacity),
 
             ...RS.display(display),
             ...RS.overFlowXScroll(overFlowXScroll),
@@ -63,12 +64,12 @@ const getStyles = (RS, style) => {
 
 export default function Div(props) {
     const STYLES =  { ... getStyles(RS, { ...props })}
-    const { children, style, className, onClick } = props
+    const { children, style, className, onClick, disabled } = props
     return (
         <div
             className={className}
             style={{...STYLES.container, ...style}}
-            onClick={() => onClick ? onClick(): false}
+            onClick={() => onClick && !disabled ? onClick(): false}
         >{children}</div>
     )
 }

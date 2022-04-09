@@ -61,7 +61,7 @@ export default function ResetPassword() {
     dispatch(updatePassword(data));
   };
 
-  //Listening to Redux Reponse
+  //Listening to Redux Response
   useEffect(() => {
     if (success) {
       toast.success(

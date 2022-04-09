@@ -2,6 +2,7 @@
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
+import {toast} from "react-toastify";
 
 // Components
 import Layout from "components/layout/index";
@@ -33,8 +34,9 @@ import {INITIAL} from "constants/animations";
 import {getCurrentWeekInfo} from "constants/data/leaguesAndRanking";
 
 // Actions
-import {getFantasyTeamById} from "redux/FantasyTeams/api";
+import {getFantasyTeamById, swapFantasyTeamPlayers} from "redux/FantasyTeams/api";
 import {getPlayer, setFantasyTeamRole} from "redux/Players/api";
+import {fantasyTeamSwapStart} from "redux/FantasyTeams/actionCreators";
 
 // Styles
 const getStyles = (R) => {
@@ -105,7 +107,7 @@ export default function MySquadGameWeek () {
         setShowPlayerInfoModal(true)
     }, [playerInfoPlayer])
 
-    // Filter-Buttons-(ex: Total pts, Price, Match)
+    /*** Filter Buttons (Total pts, Price, Match) ***/
     useEffect(() => {
             if(isEmpty(squadInfo)) return
             const squad = squadInfo.squad.map((player) => {
@@ -122,10 +124,30 @@ export default function MySquadGameWeek () {
     }
 
     // Transfer_Edit-Save
-    const handleSave = () => {
+    const handleSave = async () => {
+        // Api Calling
+        dispatch(fantasyTeamSwapStart())
+
+        const substitutes = squadInfo.squad
+                                .map(p => {if(p.isSubstitutePlayer){ return { id: p.id}}return false})
+                                .filter(p => p !== false)
+        const inputData = {
+                fantasyTeamId: user.fantasyTeamId,
+                captain: { id: squadInfo.squad.find(p => p.captain).id }  ,
+                viceCaptain: { id: squadInfo.squad.find(p => p.viceCaptain).id },
+                substitutes: substitutes
+        }
+
+        const {success, msg} = await dispatch(swapFantasyTeamPlayers(inputData))
+
+        if (!success) { return toast.error(msg); }
+
+        toast.success(msg);
+
         const squad = resetPlayers({squad: squadInfo.squad, activeFilter})
-        setSquadInfo({...squadInfo, squad})
-        setSavedSquadInfo({...squadInfo, squad})
+
+        setSquadInfo({...squadInfo, squad: [...squad]})
+        setSavedSquadInfo({...squadInfo, squad: [...squad]})
         setTransferInProgress(false)
     }
 
@@ -141,16 +163,17 @@ export default function MySquadGameWeek () {
                 captainType,
         })
 
-        const res = await dispatch(setFantasyTeamRole({
-                    fantasyTeamId: user.fantasyTeamId,
-                    roles: {
-                      captain: { id: squad.find(p => p.captain).id }  ,
-                      viceCaptain: { id: squad.find(p => p.viceCaptain).id }
-                    },
-                }))
+        // Api Calling
+        const inputData = {
+            fantasyTeamId: user.fantasyTeamId,
+            captain: { id: squad.find(p => p.captain).id }  ,
+            viceCaptain: { id: squad.find(p => p.viceCaptain).id }
+        }
+        const {success, msg, data} = await dispatch(setFantasyTeamRole(inputData))
 
-        if(!res.success) return
+        if (!success) { return toast.error(msg); }
 
+        toast.success(msg);
         setSquadInfo({...squadInfo, squad})
         setSavedSquadInfo({...squadInfo, squad})
         setShowPlayerInfoModal(false)
@@ -248,8 +271,9 @@ export default function MySquadGameWeek () {
     }, [])
 
     if (squadInfo.length === 0) {return <Loader/>}
+
     return (
-        <Layout title="My Squad">
+        <Layout title="My Squad" showToast autoClose={2000}>
             <Div className="mx-auto relative bg-white">
                 <div className={'flex'}>
                     <Div className="w-[62%]">
