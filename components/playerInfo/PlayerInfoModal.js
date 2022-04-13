@@ -48,7 +48,7 @@ export default function PlayerInfoModal({
                                 />
                             </Div>
                             <Div style={STYLES.pointsBox}>
-                                {/*<PointsBoard player={player}/>*/}
+                                <PointsBoard player={player}/>
                             </Div>
                         </Div>
                     )

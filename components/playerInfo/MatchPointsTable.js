@@ -1,3 +1,6 @@
+// Packages
+import {upperCase} from "lodash/string";
+
 // Components
 import Div from "components/html/Div"
 import Text from "components/html/Text";
@@ -11,7 +14,15 @@ const MatchPointsTable = ({
     player
 }) => {
 
-    const { matchPoints } = player.pointsInfo
+    const { history } = player.seasonStats
+
+    // Test Data
+    const opp = {
+        clubImage: 'club_ajax.png',
+        clubName: 'GRO',
+        matchType: 'H',
+        matchResult: '3:1'
+    }
 
     const TH = ({title, index}) => {
         return (
@@ -62,7 +73,7 @@ const MatchPointsTable = ({
     }
 
     const renderBody = () => {
-        return matchPoints.length > 0 && matchPoints.map((item, index) => {
+        return history.length > 0 && history.map((h, index) => {
             return (
                 <>
                     <tr className={'relative'}>
@@ -71,22 +82,25 @@ const MatchPointsTable = ({
                         </Div>
                     </tr>
                     <tr key={index}>
-                        <td><TD title={item.gw}/></td>
+                        <td><TD title={index + 1}/></td>
                         <td>
                             <Div className={'flex items-center justify-center'} ml={24}>
-                                <Image src={`/images/${item.opp.clubImage}`} w={18} pt={3} alt={'club image'} h={18}/>
-                                <TD title={`${item.opp.clubName} (${item.opp.matchType}) ${item.opp.matchResult}`} ml={4}/>
+                                <Image src={`/images/${opp.clubImage}`} w={18} pt={3} alt={'club image'} h={18}/>
+                                <TD
+                                    title={`${opp.clubName} (${upperCase(h.opp.location)}) ${h.opp.score1}:${h.opp.score2}`}
+                                    ml={4}
+                                />
                             </Div>
                         </td>
-                        <td><TD title={item.pts}/></td>
-                        <td><TD title={item.mp}/></td>
-                        <td><TD title={item.gs}/></td>
-                        <td><TD title={item.a}/></td>
-                        <td><TD title={item.cs}/></td>
-                        <td><TD title={item.gc}/></td>
-                        <td><TD title={item.og}/></td>
-                        <td><TD title={item.ps}/></td>
-                        <td><TD title={item.pm}/></td>
+                        <td><TD title={h.pts}/></td>
+                        <td><TD title={h.mp}/></td>
+                        <td><TD title={h.gs}/></td>
+                        <td><TD title={h.as}/></td>
+                        <td><TD title={h.cs}/></td>
+                        <td><TD title={h.gc}/></td>
+                        <td><TD title={h.og}/></td>
+                        <td><TD title={h.ps}/></td>
+                        <td><TD title={h.pm}/></td>
                     </tr>
                 </>
 

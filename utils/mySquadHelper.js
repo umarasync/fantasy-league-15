@@ -79,7 +79,6 @@ export const setPlayersAdditionalData = ($squad) => {
 }
 
 const readyPlayerBeforeSwapping = (p1, p2) => {
-
     return {
         ...p1,
         toggleAnimation: !p2.toggleAnimation,
