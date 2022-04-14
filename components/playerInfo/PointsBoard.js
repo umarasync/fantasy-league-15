@@ -92,10 +92,9 @@ export default function PointsBoard({
                         animate={selectedTab === ZERO ? 'moveRight' : 'moveLeft'}
                         style={STYLES.matchPointsBox}
                     >
-                        <div style={{
-                            ...STYLES.content,
-                            display: hideTabsBox ? 'none' : 'block'
-                        }}><MatchPointsTable player={player}/></div>
+                        <div style={{...STYLES.content, display: hideTabsBox ? 'none' : 'block'}}>
+                            <MatchPointsTable player={player}/>
+                        </div>
 
                     </motion.div>
                     <motion.div

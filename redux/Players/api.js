@@ -50,7 +50,6 @@ export const getPlayer = ({playerId}) => {
         query: QUERY_PLAYER,
         variables: { id: playerId },
       });
-
       if (result && !isEmpty(result.data.playerById)) {
         const playerData = buildPlayers([{...result.data.playerById}])
         return responseSuccess('', playerData[0])

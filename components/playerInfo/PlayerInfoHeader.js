@@ -14,7 +14,8 @@ export default function PlayerInfoHeader ({
     onMakeCaptain,
     onMakeViceCaptain
 }) {
-    const { isSubstitutePlayer, captain, viceCaptain } = player
+    const { captain, viceCaptain } = player
+    const isSubstitutePlayer = player.isSubstitute
 
     return (
         <Div h={208} pt={24} pl={24} pr={24} pb={12} btlr={12} btrr={12}

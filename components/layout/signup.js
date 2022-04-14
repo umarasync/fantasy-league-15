@@ -92,7 +92,8 @@ export default function SignUp(props) {
       setSignUpError(false);
       localStorage.setItem("email", email);
       toast.success(msg, {
-        onClose: () => router.push("/confirm_your_account"),
+        // onClose: () => router.push("/confirm_your_account"),
+        onClose: () => router.push("/select_your_club"),
       });
     } else {
       setSignUpError(msg);

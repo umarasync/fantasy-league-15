@@ -98,8 +98,9 @@ export default function MySquadGameWeek () {
     }
     // Player-Info-Modal
     const handleShowPlayerInfoModal = async (player, arrayIndex) => {
-        const $player = await dispatch(getPlayer({playerId: player.id}))
-        setPlayerInfoPlayer({...$player.data})
+        const {success, data} = await dispatch(getPlayer({playerId: player.id}))
+        if(!success) return
+        setPlayerInfoPlayer({...data})
     }
 
     useEffect(() => {
