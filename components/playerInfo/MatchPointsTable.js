@@ -16,14 +16,6 @@ const MatchPointsTable = ({
 
     const { history } = player.seasonStats
 
-    // Test Data
-    const opp = {
-        clubImage: 'club_ajax.png',
-        clubName: 'GRO',
-        matchType: 'H',
-        matchResult: '3:1'
-    }
-
     const TH = ({title, index}) => {
         return (
             <>
@@ -84,10 +76,10 @@ const MatchPointsTable = ({
                     <tr key={index}>
                         <td><TD title={index + 1}/></td>
                         <td>
-                            <Div className={'flex items-center justify-center'} ml={24}>
-                                <Image src={`/images/${opp.clubImage}`} w={18} pt={3} alt={'club image'} h={18}/>
+                            <Div className={'flex items-center'} ml={24}>
+                                <Image src={h.opp.teamLogo} w={18} pt={3} alt={'club image'} h={18}/>
                                 <TD
-                                    title={`${opp.clubName} (${upperCase(h.opp.location)}) ${h.opp.score1}:${h.opp.score2}`}
+                                    title={`${upperCase(h.opp.team)} (${upperCase(h.opp.location)}) ${h.opp.score1}:${h.opp.score2}`}
                                     ml={4}
                                 />
                             </Div>

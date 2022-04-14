@@ -29,6 +29,7 @@ export default gql`
               score1
               score2
               team
+              teamLogo
             } 
             as
             cs
