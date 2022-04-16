@@ -26,8 +26,8 @@ export default function LastMatchUps({
                 {
                     lastMatchUps.map((item, index) => {
 
-                        const team1 = item.awayTeam
-                        const team2 = item.homeTeam
+                        const team1 = item.homeTeam
+                        const team2 = item.awayTeam
 
                         return (
                             <Div key={index} pt={24}>

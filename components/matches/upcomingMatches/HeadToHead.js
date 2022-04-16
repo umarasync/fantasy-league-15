@@ -14,10 +14,13 @@ export default function HeadToHead({
      containerRef
  }) {
 
-    const {matchDetails} = match
+    const {details} = match
 
-    const { headToHead } = matchDetails
-    const {team1, team2, totalMatchPlayed, draws} = headToHead
+    const { headToHead } = details
+    const { totalMatchPlayed, draws} = headToHead
+
+    const team1 = headToHead.homeTeam
+    const team2 = headToHead.awayTeam
 
     return (
         <div ref={containerRef}>
@@ -25,8 +28,8 @@ export default function HeadToHead({
                 <Div w={'57.5%'} className={'flex justify-end'}>
                     <Div className={'flex flex-col'}>
                        <Div className={'flex items-center justify-end'} mb={28}>
-                            <Text text={team1.label} fs={18} lh={22} fw={600} color={colors.black_rock} mr={12}/>
-                            <Image src={`${team1.image}`} alt={'team_logo'} w={40} h={40}/>
+                            <Text text={team1.name} fs={18} lh={22} fw={600} color={colors.black_rock} mr={12}/>
+                            <Image src={`${team1.logo}`} alt={'team_logo'} w={40} h={40}/>
                        </Div>
 
                         <MatchProgressBar
@@ -61,8 +64,8 @@ export default function HeadToHead({
                 <Div w={'42.5%'}>
                     <Div className={'flex flex-col'}>
                         <Div className={'flex items-center'} mb={28}>
-                            <Image src={`${team2.image}`} alt={'team_logo'} w={40} h={40}/>
-                            <Text text={team2.label} fs={18} lh={22} fw={600} color={colors.black_rock} ml={12}/>
+                            <Image src={`${team2.logo}`} alt={'team_logo'} w={40} h={40}/>
+                            <Text text={team2.name} fs={18} lh={22} fw={600} color={colors.black_rock} ml={12}/>
                         </Div>
                         <MatchProgressBar
                             title='Total Wins'

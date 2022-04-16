@@ -38,8 +38,8 @@ export default function MatchHighlights({
             {
                 highlights.map((item, index) => {
 
-                    const team1 = item.away
-                    const team2 = item.home
+                    const team1 = item.home
+                    const team2 = item.away
 
                     return (
                         <Div key={index} pt={24}>
