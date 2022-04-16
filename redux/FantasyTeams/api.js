@@ -54,16 +54,16 @@ export const getFantasyTeamById = (data) => {
         mutation: GET_FANTASY_TEAM,
         variables: {
           "gameweek": data.gameWeek,
-          "fantasyTeamId": data.fantasyTeamId
+          "fantasyTeamId": data.fantasyTeamId,
         },
       });
 
       if (result && result.data.fantasyTeamById !== null) {
-        return buildPlayers(result.data.fantasyTeamById.squad)
+        return responseSuccess('Success !!!', buildPlayers(result.data.fantasyTeamById.squad))
       }
-      return false
+      return responseFailed(ERROR_MSG)
     } catch (e) {
-      return false
+      return responseFailed(ERROR_MSG)
     }
   };
 };

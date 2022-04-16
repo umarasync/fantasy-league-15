@@ -23,7 +23,6 @@ export default gql`
           homeKit
           goalkeeperKit
         }
-        pitchIndex
       }
     }
   }

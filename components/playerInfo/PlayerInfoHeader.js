@@ -3,6 +3,7 @@ import Div from "components/html/Div"
 import Text from "components/html/Text"
 import Image from "components/html/Image"
 import PlayerImage from "components/player/PlayerImage";
+import {upperCase} from "lodash/string";
 
 // Constants
 import colors from "constants/colors";
@@ -14,7 +15,7 @@ export default function PlayerInfoHeader ({
     onMakeCaptain,
     onMakeViceCaptain
 }) {
-    const { captain, viceCaptain } = player
+    const { captain, viceCaptain, clubName, position } = player
     const isSubstitutePlayer = player.isSubstitute
 
     return (
@@ -42,7 +43,7 @@ export default function PlayerInfoHeader ({
                 <Div ml={20}>
                     <Text text={'Naoufal'} fw={600} fs={18} lh={22} mb={2} color={colors.white}/>
                     <Text text={'Bannis'} fw={600} fs={24} lh={28} mb={6} color={colors.white}/>
-                    <Text text={'PEC Zwolle • MID'} fw={'normal'} fs={18} lh={22} color={colors.link_water}/>
+                    <Text text={`${clubName} • ${upperCase(position)}`} fw={'normal'} fs={18} lh={22} color={colors.link_water}/>
                 </Div>
             </Div>
 
