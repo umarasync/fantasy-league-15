@@ -142,32 +142,32 @@ export const finishedMatchDetails = {
     awardedPlayers: getAwardedPlayers(),
     highlights: [
         {
-            heading: 'Goals',
+            title: 'Goals',
             image: 'goals.png',
             data: getGoalsData()
         },
         {
-            heading: 'Misses',
+            title: 'Misses',
             image: 'misses.png',
             data: getMissesData()
         },
         {
-            heading: 'Assists',
+            title: 'Assists',
             image: 'assists.png',
             data: getAssistsData()
         },
         {
-            heading: 'Saves',
+            title: 'Saves',
             image: 'saves.png',
             data: getSavesData()
         },
         {
-            heading: 'Yellow cards',
+            title: 'Yellow cards',
             image: 'yellow_card.png',
             data: getYellowCardData()
         },
         {
-            heading: 'Red cards',
+            title: 'Red cards',
             image: 'red_card.png',
             data: getRedCardData()
         }

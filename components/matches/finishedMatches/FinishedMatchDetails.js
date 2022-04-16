@@ -124,11 +124,11 @@ export default function FinishedMatchDetails({
                             animate={selectedTab === ZERO ? 'moveRight' : 'moveLeft'}
                             style={STYLES.content}
                         >
-                            {/*<MatchHighlights*/}
-                            {/*    selectedTab={selectedTab}*/}
-                            {/*    match={match}*/}
-                            {/*    containerRef={highlightsContentRef}*/}
-                            {/*/>*/}
+                            <MatchHighlights
+                                selectedTab={selectedTab}
+                                match={match}
+                                containerRef={highlightsContentRef}
+                            />
                         </motion.div>
 
                         <motion.div
