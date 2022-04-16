@@ -8,6 +8,18 @@ export default gql`
       lastName
       currentGameweek
       fantasyTeamId
+      totalScore
+      currentSeason
+      fantasyTeamValue
+      fullName
+      freeTransfers
+      dob
+      mobileNumber
+      gender
+      favouriteTeam {
+        id
+        name
+      }
       accounts {
         id
         username

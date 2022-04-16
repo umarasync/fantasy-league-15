@@ -25,7 +25,6 @@ const getStyles = (R) => {
     }
 }
 
-
 export default function FT({index, parentIndex, match, initialOpacity, tabChanged}) {
 
     const STYLES =  { ...getStyles(R) }
