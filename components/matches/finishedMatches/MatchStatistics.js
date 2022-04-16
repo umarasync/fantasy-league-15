@@ -30,8 +30,8 @@ export default function MatchHighlights({
 
     const {details} = match
 
-    const team1 = match.homeTeam
-    const team2 = match.awayTeam
+    const team1 = match.home.team
+    const team2 = match.away.team
 
     const {statistics} = details
 

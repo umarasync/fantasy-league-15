@@ -7,7 +7,7 @@ import { me } from "redux/Auth/api"
 import {meFailed, meSuccess} from "redux/Auth/actionCreators";
 
 // Constants
-import {authRoutes, homeRoute, publicRoutes} from "constants/universalConstants";
+import {authRoutes, homeRoute1, homeRoute2, publicRoutes} from "constants/universalConstants";
 import {isEmpty} from "lodash/lang";
 
 const AuthContext = createContext({});
@@ -28,7 +28,10 @@ export const AuthProvider = ({ children }) => {
 
             // If already signed in and trying to access login/register page, then redirect to some homepage
             if(authRoutes.includes(router.pathname)){
-                 return router.push(homeRoute)
+                 if($user.fantasyTeamId) {
+                     return router.push(homeRoute2)
+                 }
+                 return router.push(homeRoute1)
             }else {
                  return router.push(router.pathname)
             }

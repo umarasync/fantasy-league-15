@@ -8,17 +8,7 @@ export default gql`
         id
         finished
         gameWeek
-        homeTeam {
-          id
-          name
-          logo
-        }
         matchTime
-        awayTeam {
-          id
-          name
-          logo
-        }
         details {
           statistics {
             title
@@ -93,6 +83,30 @@ export default gql`
             image
             title
             type
+          }
+        }
+        home {
+          goals
+          fantasyPlayers {
+            id
+            name
+          }
+          team {
+            id
+            name
+            logo
+          }
+        }
+        away {
+          fantasyPlayers {
+            id
+            name
+          }
+          goals
+          team {
+            id
+            logo
+            name
           }
         }
       }

@@ -45,8 +45,9 @@ export default function MatchRow({
 }) {
     const STYLES = {...getStyles(R)}
     const [showMatchDetails, setShowMatchDetails] = useState(false)
-    const team1 = match.awayTeam
-    const team2 = match.homeTeam
+
+    const team1 = match.home.team
+    const team2 = match.away.team
 
     const handleShowMatchDetails = () => {
         setShowMatchDetails(!showMatchDetails)
