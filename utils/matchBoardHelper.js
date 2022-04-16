@@ -10,19 +10,12 @@ export const MAKE_TRANSFERS = 'make transfers'
 
 export const setInitialSettings = ({
   initialMatchFixturesGameWeeks,
-  setActiveTabContent,
   setMatchesGameWeeks
 }) => {
     const $matchesGameWeeks = initialMatchFixturesGameWeeks.map((gw, index) => {
         if (gw.currentGameWeek) {
             gw.gameWeekDate = MAKE_TRANSFERS
             gw.active = true
-            // setActiveTabContent({...gw})
-            setActiveTabContent({
-                toggleAnimation: false,
-                data: {...gw}
-            })
-
         }else {
             gw.active = false
         }
@@ -86,7 +79,7 @@ export const scrollRenderer = (props) => {
     }
 }
 
-export const tabClickHandler = ({
+export const tabClickHandler1 = ({
     matchFixturesObj,
     matchesGameWeeks,
     setMatchesGameWeeks,
@@ -101,10 +94,33 @@ export const tabClickHandler = ({
         return item
     })
 
-    // setActiveTabContent({...$matchesGameWeeks.find((gw) => gw.active)})
     setActiveTabContent({
         toggleAnimation: !activeTabContent.toggleAnimation,
         data: {...$matchesGameWeeks.find((gw) => gw.active)}
+    })
+
+    setMatchesGameWeeks($matchesGameWeeks)
+}
+
+export const tabClickHandler = ({
+    matchFixturesObj,
+    activeGameWeek,
+    matchesGameWeeks,
+    setMatchesGameWeeks,
+    activeTabContent,
+    setActiveTabContent,
+}) => {
+
+    let currentActive = matchesGameWeeks.findIndex((match) => match.active)
+    const $matchesGameWeeks = matchesGameWeeks.map((item, index) => {
+        item.active = item.id === activeGameWeek;
+        item.lastActive = index === currentActive
+        return item
+    })
+
+    setActiveTabContent({
+        toggleAnimation: !activeTabContent.toggleAnimation,
+        data: matchFixturesObj
     })
 
     setMatchesGameWeeks($matchesGameWeeks)

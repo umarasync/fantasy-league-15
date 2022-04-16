@@ -48,6 +48,8 @@ export default function MatchRow({
 }) {
     const STYLES = {...getStyles(R)}
     const [showMatchDetails, setShowMatchDetails] = useState(false)
+    const team1 = match.awayTeam
+    const team2 = match.homeTeam
 
     const handleShowMatchDetails = () => {
         setShowMatchDetails(!showMatchDetails)
@@ -65,7 +67,7 @@ export default function MatchRow({
                         <TeamName
                             tabChanged={tabChanged}
                             match={match}
-                            club={match.team1}
+                            club={team1}
                             index={index}
                             parentIndex={parentIndex}
                             initialOpacity={initialOpacity}
@@ -77,7 +79,7 @@ export default function MatchRow({
                                 fadeInOutAnimation={ClubImageAnimation}
                                 custom={{initialOpacity}}
                                 changeCard={tabChanged}
-                                image={{...STYLES.teamImage, name: `/images/${match.team1.logo}`}}
+                                image={{...STYLES.teamImage, name: team1.logo}}
                             />
                         </div>
                         <div className={'relative'}>
@@ -106,13 +108,13 @@ export default function MatchRow({
                                 fadeInOutAnimation={ClubImageAnimation}
                                 custom={{initialOpacity}}
                                 changeCard={tabChanged}
-                                image={{...STYLES.teamImage, name: `/images/${match.team2.logo}`}}
+                                image={{...STYLES.teamImage, name: team2.logo}}
                             />
                         </div>
                         <TeamName
                             tabChanged={tabChanged}
                             match={match}
-                            club={match.team2}
+                            club={team2}
                             index={index}
                             parentIndex={parentIndex}
                             initialOpacity={initialOpacity}

@@ -3,6 +3,9 @@ import Div from "components/html/Div"
 import MatchDate from "components/mySquad/MatchDate";
 import MatchRow from "components/matches/MatchRow";
 
+// Utils
+import {isEmpty} from "utils/helpers";
+
 export default function MatchBoardContent({
     activeTabContent,
 }){
@@ -13,7 +16,7 @@ export default function MatchBoardContent({
     return (
         <div className={'w-full'}>
             {
-               matchesOnDates && matchesOnDates.length > 0 && matchesOnDates.map((matchDate, index) => {
+               !isEmpty(matchesOnDates) && matchesOnDates.map((matchDate, index) => {
                    const parentIndex = index
                     return (
                         <div key={parentIndex} >

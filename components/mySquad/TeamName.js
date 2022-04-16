@@ -11,6 +11,9 @@ import R from "utils/getResponsiveValue";
 import colors from "constants/colors";
 import PlayerImage from "components/player/PlayerImage";
 
+// Utils
+import {isEmpty} from "utils/helpers";
+
 // Styles
 const getStyles = (R, props) => {
     const { fromSecondClub } = props
@@ -78,7 +81,7 @@ export default function TeamName({
                         {fromSecondClub && club.name}
                         <div style={STYLES.playerImagesContainer} className={'flex'}>
                             {
-                                club.players.map((player, index) => {
+                               !isEmpty(club.players) && club.players.map((player, index) => {
                                     return (
                                         <div
                                             key={index}
@@ -111,7 +114,7 @@ export default function TeamName({
                         {fromSecondClub && club.name}
                         <div style={STYLES.playerImagesContainer} className={'flex'}>
                             {
-                                club.players.map((player, index) => {
+                                !isEmpty(club.players) && club.players.map((player, index) => {
                                     return (
                                         <div
                                             key={index}
@@ -146,7 +149,7 @@ export default function TeamName({
                        {fromSecondClub && club.name}
                        <div style={STYLES.playerImagesContainer} className={'flex'}>
                            {
-                               club.players.map((player, index) => {
+                               !isEmpty(club.players) && club.players.map((player, index) => {
                                    return (
                                        <div
                                            key={index}
@@ -178,7 +181,7 @@ export default function TeamName({
                        {fromSecondClub && club.name}
                        <div style={STYLES.playerImagesContainer} className={'flex'}>
                            {
-                               club.players.map((player, index) => {
+                               !isEmpty(club.players) &&  club.players.map((player, index) => {
                                    return (
                                        <div
                                            key={index}

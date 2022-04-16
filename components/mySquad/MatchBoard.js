@@ -107,10 +107,13 @@ export default function MatchBoard () {
 
     const handleTabClick = async (gw) => {
         if(animationInProgress) return
-        const res = await dispatch(getMatchFixturesForGameWeek({gameWeek: gw.gameWeek}))
+        const {success, data} = await dispatch(getMatchFixturesForGameWeek({gameWeek: gw.gameWeek}))
+        if(!success)return
+
         tabClickHandler({
-            // matchFixturesObj: res.data,
-            matchFixturesObj: gw,
+            matchFixturesObj: data,
+            activeGameWeek: gw.gameWeek,
+            // matchFixturesObj: gw,
             matchesGameWeeks,
             setMatchesGameWeeks,
             activeTabContent,
@@ -148,11 +151,23 @@ export default function MatchBoard () {
 
     const runInitialSettings = async () => {
         const $matchFixturesGameWeeks = await dispatch(getAllMatchFixturesGameWeeks())
+
         setInitialSettings({
             initialMatchFixturesGameWeeks: $matchFixturesGameWeeks,
-            setActiveTabContent,
+            // setActiveTabContent,
             setMatchesGameWeeks
         })
+
+        const activeWeekId = $matchFixturesGameWeeks.find(gw => gw.currentGameWeek === true).gameWeek
+
+        const {success, data} = await dispatch(getMatchFixturesForGameWeek({gameWeek: activeWeekId}))
+
+        if(!success) return
+
+        setActiveTabContent({
+              toggleAnimation: false,
+              data
+          })
     }
 
     useEffect(() => {
@@ -257,14 +272,12 @@ export default function MatchBoard () {
                     }}
                 />
             </Div>
-
             {/*Content*/}
             {
                 !isEmpty(activeTabContent) && (
                     <Div mt={30} center><MatchBoardContent activeTabContent={activeTabContent}/></Div>
                 )
             }
-
         </Div>
     )
 

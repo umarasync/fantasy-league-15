@@ -48,7 +48,7 @@ export default function FinishedMatchDetails({
 }) {
 
     const STYLES = {...getStyles(R)}
-    const { matchDetails } = match
+    const { details } = match
 
     const controls = useAnimation()
 
@@ -101,7 +101,7 @@ export default function FinishedMatchDetails({
                 >
                     {/*Head*/}
                     <Div w={'100%'} mb={40} mt={25} pt={24} className={'bg-mystic-alabaster'}>
-                        <FinishedMatchDetailsHead matchDetails={matchDetails}/>
+                        <FinishedMatchDetailsHead matchDetails={details}/>
                     </Div>
                     {/*Tabs*/}
                     <FinishedMatchDetailsTabs
@@ -124,11 +124,11 @@ export default function FinishedMatchDetails({
                             animate={selectedTab === ZERO ? 'moveRight' : 'moveLeft'}
                             style={STYLES.content}
                         >
-                            <MatchHighlights
-                                selectedTab={selectedTab}
-                                match={match}
-                                containerRef={highlightsContentRef}
-                            />
+                            {/*<MatchHighlights*/}
+                            {/*    selectedTab={selectedTab}*/}
+                            {/*    match={match}*/}
+                            {/*    containerRef={highlightsContentRef}*/}
+                            {/*/>*/}
                         </motion.div>
 
                         <motion.div
@@ -136,10 +136,10 @@ export default function FinishedMatchDetails({
                             animate={selectedTab === ZERO ? 'moveRight' : 'moveLeft'}
                             style={{ ...STYLES.content, ...STYLES.statistics}}
                         >
-                            <MatchStatistics
-                                selectedTab={selectedTab} match={match}
-                                containerRef={statisticsContentRef}
-                            />
+                            {/*<MatchStatistics*/}
+                            {/*    selectedTab={selectedTab} match={match}*/}
+                            {/*    containerRef={statisticsContentRef}*/}
+                            {/*/>*/}
                         </motion.div>
                     </motion.div>
                     {/*Footer*/}
