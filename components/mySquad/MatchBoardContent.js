@@ -28,7 +28,7 @@ export default function MatchBoardContent({
                                             match={match}
                                             index={index}
                                             parentIndex={parentIndex}
-                                            tabChanged={toggleAnimation}
+                                            toggleAnimation={toggleAnimation}
                                             initialOpacity={0}
                                         />
                                     </Div>

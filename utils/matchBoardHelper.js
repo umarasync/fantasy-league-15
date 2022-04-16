@@ -117,11 +117,6 @@ export const tabClickHandler = ({
         return item
     })
 
-    console.log('8--------', {
-        'h': $matchesGameWeeks.find(gw => gw.active === true),
-        'l': activeGameWeek
-    })
-
     setActiveTabContent({
         toggleAnimation: !activeTabContent.toggleAnimation,
         data: matchFixturesObj

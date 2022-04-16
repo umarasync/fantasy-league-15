@@ -134,7 +134,7 @@ export default function MatchBoard () {
 
     useEffect(() => {
         setInitialRenderDone(true)
-        if(!isEmpty(activeTabContent)){
+        if(!isEmpty(matchesGameWeeks)){
          setTimeout(() => {
                 scrollRenderer({
                     activeRef,
@@ -146,7 +146,8 @@ export default function MatchBoard () {
                 })
          }, 100)
         }
-    }, [activeTabContent, initialRenderDone])
+        setTabsContent()
+    }, [matchesGameWeeks, initialRenderDone])
 
     const setGameWeeks = async () => {
         const { success, data } = await dispatch(getGameWeeks({seasonId: '2021-2022'}))
@@ -158,7 +159,9 @@ export default function MatchBoard () {
     }
 
     const setTabsContent = async () => {
+
         if(!matchesGameWeeks.length) return
+
         const activeWeekId = matchesGameWeeks.find(gw => gw.active === true).gameweek
         const res = await dispatch(getMatchFixturesForGameWeek({gameWeek: activeWeekId}))
         if(!res.success) return
@@ -167,8 +170,6 @@ export default function MatchBoard () {
             data: res.data
         })
     }
-
-    useEffect(() => {setTabsContent()}, [matchesGameWeeks])
 
     // Did Mount
     useEffect(() => {setGameWeeks()}, [])
