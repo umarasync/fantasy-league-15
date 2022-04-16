@@ -90,6 +90,7 @@ export default function MatchBoard () {
 
     const [moved, setMoved] = useState(0)
     const [animationInProgress, setAnimationInProgress] = useState(false)
+    const [disableClick, setDisableClick] = useState(false)
     const [borderWidth, setBorderWidth] = useState(0)
     const [activeTabContent, setActiveTabContent] = useState({})
     const scrollBoxOriginPointForBorder = R(517.421)
@@ -110,9 +111,6 @@ export default function MatchBoard () {
             isNext,
             gameWeeks,
             setGameWeeks,
-            activeTabContent,
-            setActiveTabContent,
-            dispatch
         })
     }
 
