@@ -102,12 +102,9 @@ export const tabClickHandler1 = ({
 }
 
 export const tabClickHandler = ({
-    matchFixturesObj,
     activeGameWeek,
     matchesGameWeeks,
     setMatchesGameWeeks,
-    activeTabContent,
-    setActiveTabContent,
 }) => {
 
     let currentActive = matchesGameWeeks.findIndex((match) => match.active)
@@ -116,12 +113,6 @@ export const tabClickHandler = ({
         item.lastActive = index === currentActive
         return item
     })
-
-    setActiveTabContent({
-        toggleAnimation: !activeTabContent.toggleAnimation,
-        data: matchFixturesObj
-    })
-
     setMatchesGameWeeks($matchesGameWeeks)
 }
 

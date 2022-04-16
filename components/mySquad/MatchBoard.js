@@ -89,7 +89,6 @@ export default function MatchBoard () {
     const borderAnimationControls = useAnimation()
 
     const [moved, setMoved] = useState(0)
-    const [initialRenderDone, setInitialRenderDone] = useState(false)
     const [animationInProgress, setAnimationInProgress] = useState(false)
     const [borderWidth, setBorderWidth] = useState(0)
     const [activeTabContent, setActiveTabContent] = useState({})
@@ -98,25 +97,17 @@ export default function MatchBoard () {
 
 
     useEffect(() => {
-        if(initialRenderDone){
-            controls.start('scroll')
-            borderAnimationControls.start('borderWidth')
-            controls.start('changeTextColor')
-        }
+        controls.start('scroll')
+        borderAnimationControls.start('borderWidth')
+        controls.start('changeTextColor')
     }, [moved])
 
     const handleTabClick = async (gw) => {
         if(animationInProgress) return
-        const {success, data} = await dispatch(getMatchFixturesForGameWeek({gameWeek: gw.gameweek}))
-        if(!success)return
-
         tabClickHandler({
-            matchFixturesObj: data,
             activeGameWeek: gw.gameweek,
             matchesGameWeeks,
             setMatchesGameWeeks,
-            activeTabContent,
-            setActiveTabContent,
         })
     }
 
@@ -133,7 +124,7 @@ export default function MatchBoard () {
     }
 
     useEffect(() => {
-        setInitialRenderDone(true)
+        updateContentOnGameWeekChange()
         if(!isEmpty(matchesGameWeeks)){
          setTimeout(() => {
                 scrollRenderer({
@@ -146,10 +137,9 @@ export default function MatchBoard () {
                 })
          }, 100)
         }
-        setTabsContent()
-    }, [matchesGameWeeks, initialRenderDone])
+    }, [matchesGameWeeks])
 
-    const setGameWeeks = async () => {
+    const fetchGameWeeks = async () => {
         const { success, data } = await dispatch(getGameWeeks({seasonId: '2021-2022'}))
         if(!success) return
         setInitialSettings({
@@ -158,21 +148,22 @@ export default function MatchBoard () {
         })
     }
 
-    const setTabsContent = async () => {
-
+    const updateContentOnGameWeekChange = async () => {
         if(!matchesGameWeeks.length) return
-
         const activeWeekId = matchesGameWeeks.find(gw => gw.active === true).gameweek
         const res = await dispatch(getMatchFixturesForGameWeek({gameWeek: activeWeekId}))
         if(!res.success) return
+
         setActiveTabContent({
-            toggleAnimation: false,
+            toggleAnimation: !activeTabContent.toggleAnimation,
             data: res.data
         })
     }
 
     // Did Mount
-    useEffect(() => {setGameWeeks()}, [])
+    useEffect(() => {
+        fetchGameWeeks()
+    }, [])
 
     const onAnimationComplete = (definition) => {
         if(definition === 'borderWidth') {
@@ -225,7 +216,6 @@ export default function MatchBoard () {
                                             className={'flex flex-col items-center'}
                                             ref={gw.active ? activeRef : null}
                                             onClick={() => handleTabClick(gw)}
-
                                         >
                                             <Text text={`Gameweek ${gw.gameweek}`} color={colors.regent_grey} fs={18} lh={26}/>
                                             <motion.p
