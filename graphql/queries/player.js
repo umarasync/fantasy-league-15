@@ -5,6 +5,8 @@ export default gql`
       playerById(id: $id) {
         id
         name
+        firstName
+        lastName
         photo
         value
         totalPoints

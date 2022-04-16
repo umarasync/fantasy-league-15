@@ -19,7 +19,6 @@ const getStyles = (R) => {
         container: {
             width: '100%'
         }
-
     }
 }
 export default function MatchHighlights({

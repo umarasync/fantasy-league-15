@@ -8,7 +8,7 @@ import {
 
 // GraphQL
 import GET_MATCH_FIXTURES from "graphql/queries/matchFixtures";
-// import GET_MATCH_FIXTURES_GAME_WEEKS from "graphql/queries/getMatchFixturesGameWeeks";
+import GET_GAME_WEEKS from "graphql/queries/matchFixturesGameWeeks";
 import {isEmpty, responseFailed, responseSuccess} from "utils/helpers";
 
 // Constants
@@ -40,29 +40,24 @@ export const getMatchFixturesForGameWeek = (data) => {
   };
 };
 
-export const getAllMatchFixturesGameWeeks = () => {
+export const getGameWeeks = ({seasonId}) => {
 
   return async (dispatch) => {
     try {
-
-      return MatchesGameWeeks
-
       const apolloClient = createApolloClient();
       const result = await apolloClient.query({
-        // query: GET_MATCH_FIXTURES_GAME_WEEKS,
-        query: '',
-        variables: {},
+        query: GET_GAME_WEEKS,
+        variables: {
+          seasonId
+        },
       });
 
-      if (result && !isEmpty(result.data.matchFixtures)) {
-        let { data } = result.data.matchFixtures
-        dispatch(getMatchFixturesSuccess(data))
-        return responseSuccess('', data)
+      if (result && !isEmpty(result.data.gameweeks)) {
+        return responseSuccess('', result.data.gameweeks)
       }
-      dispatch(getMatchFixturesFailed(result.data.errors[0].message))
+
       return responseFailed(ERROR_MSG)
     } catch (e) {
-      dispatch(getMatchFixturesFailed(e.message))
       return responseFailed(ERROR_MSG)
     }
   };

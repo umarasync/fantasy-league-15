@@ -6,19 +6,21 @@ import {getMatchFixturesForGameWeek} from "../redux/MatchFixtures/api";
 export const MAKE_TRANSFERS = 'make transfers'
 
 export const setInitialSettings = ({
-  initialMatchFixturesGameWeeks,
+  initialGameWeeks,
   setMatchesGameWeeks
 }) => {
-    const $matchesGameWeeks = initialMatchFixturesGameWeeks.map((gw, index) => {
-        if (gw.currentGameWeek) {
-            gw.gameWeekDate = MAKE_TRANSFERS
+    const $initialGameWeeks = clone(initialGameWeeks)
+    const $gameWeeks = $initialGameWeeks.map((gw) => {
+        if (gw.current) {
+            gw.deadline = MAKE_TRANSFERS
             gw.active = true
         }else {
             gw.active = false
         }
         return gw
     })
-    setMatchesGameWeeks($matchesGameWeeks)
+
+    setMatchesGameWeeks([...$gameWeeks])
 }
 
 export const getActiveRect = ({
@@ -113,6 +115,11 @@ export const tabClickHandler = ({
         item.active = item.id === activeGameWeek;
         item.lastActive = index === currentActive
         return item
+    })
+
+    console.log('8--------', {
+        'h': $matchesGameWeeks.find(gw => gw.active === true),
+        'l': activeGameWeek
     })
 
     setActiveTabContent({

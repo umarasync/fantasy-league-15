@@ -15,7 +15,7 @@ export default function PlayerInfoHeader ({
     onMakeCaptain,
     onMakeViceCaptain
 }) {
-    const { captain, viceCaptain, clubName, position } = player
+    const { captain, viceCaptain, clubName, position, firstName, lastName } = player
     const isSubstitutePlayer = player.isSubstitute
 
     return (
@@ -41,8 +41,8 @@ export default function PlayerInfoHeader ({
                     player={player}
                 />
                 <Div ml={20}>
-                    <Text text={'Naoufal'} fw={600} fs={18} lh={22} mb={2} color={colors.white}/>
-                    <Text text={'Bannis'} fw={600} fs={24} lh={28} mb={6} color={colors.white}/>
+                    <Text text={firstName} fw={600} fs={18} lh={22} mb={2} color={colors.white}/>
+                    <Text text={lastName} fw={600} fs={24} lh={28} mb={6} color={colors.white}/>
                     <Text text={`${clubName} • ${upperCase(position)}`} fw={'normal'} fs={18} lh={22} color={colors.link_water}/>
                 </Div>
             </Div>
