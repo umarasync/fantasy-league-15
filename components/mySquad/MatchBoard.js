@@ -79,7 +79,7 @@ export default function MatchBoard () {
 
     const STYLES =  { ...getStyles(R) }
 
-    const [matchesGameWeeks, setMatchesGameWeeks] = useState([])
+    const [gameWeeks, setGameWeeks] = useState([])
 
     const scrollContainerRef = useRef()
     let activeRef = useRef()
@@ -95,19 +95,12 @@ export default function MatchBoard () {
     const scrollBoxOriginPointForBorder = R(517.421)
     const scrollBoxOriginPoint = R(417)
 
-
-    useEffect(() => {
-        controls.start('scroll')
-        borderAnimationControls.start('borderWidth')
-        controls.start('changeTextColor')
-    }, [moved])
-
     const handleTabClick = async (gw) => {
         if(animationInProgress) return
         tabClickHandler({
             activeGameWeek: gw.gameweek,
-            matchesGameWeeks,
-            setMatchesGameWeeks,
+            gameWeeks,
+            setGameWeeks,
         })
     }
 
@@ -115,8 +108,8 @@ export default function MatchBoard () {
         if(animationInProgress) return
         controlsHandler({
             isNext,
-            matchesGameWeeks,
-            setMatchesGameWeeks,
+            gameWeeks,
+            setGameWeeks,
             activeTabContent,
             setActiveTabContent,
             dispatch
@@ -125,7 +118,7 @@ export default function MatchBoard () {
 
     useEffect(() => {
         updateContentOnGameWeekChange()
-        if(!isEmpty(matchesGameWeeks)){
+        if(!isEmpty(gameWeeks)){
          setTimeout(() => {
                 scrollRenderer({
                     activeRef,
@@ -137,20 +130,21 @@ export default function MatchBoard () {
                 })
          }, 100)
         }
-    }, [matchesGameWeeks])
+    }, [gameWeeks])
 
     const fetchGameWeeks = async () => {
         const { success, data } = await dispatch(getGameWeeks({seasonId: '2021-2022'}))
         if(!success) return
         setInitialSettings({
             initialGameWeeks: data,
-            setMatchesGameWeeks,
+            setGameWeeks,
         })
     }
 
     const updateContentOnGameWeekChange = async () => {
-        if(!matchesGameWeeks.length) return
-        const activeWeekId = matchesGameWeeks.find(gw => gw.active === true).gameweek
+
+        if(!gameWeeks.length) return
+        const activeWeekId = gameWeeks.find(gw => gw.active === true).gameweek
         const res = await dispatch(getMatchFixturesForGameWeek({gameWeek: activeWeekId}))
         if(!res.success) return
 
@@ -159,6 +153,13 @@ export default function MatchBoard () {
             data: res.data
         })
     }
+
+    // Run Animations
+    useEffect(() => {
+        controls.start('scroll')
+        borderAnimationControls.start('borderWidth')
+        controls.start('changeTextColor')
+    }, [moved])
 
     // Did Mount
     useEffect(() => {
@@ -199,7 +200,7 @@ export default function MatchBoard () {
                          ref={scrollContainerRef}
                     >
                         {
-                            !isEmpty(matchesGameWeeks) && matchesGameWeeks.map((gw) => {
+                            !isEmpty(gameWeeks) && gameWeeks.map((gw) => {
                                 return(
                                     <motion.div
                                         variants={scrollAnimation}

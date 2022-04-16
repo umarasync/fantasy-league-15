@@ -7,7 +7,7 @@ export const MAKE_TRANSFERS = 'make transfers'
 
 export const setInitialSettings = ({
   initialGameWeeks,
-  setMatchesGameWeeks
+  setGameWeeks
 }) => {
     const $initialGameWeeks = clone(initialGameWeeks)
     const $gameWeeks = $initialGameWeeks.map((gw) => {
@@ -20,7 +20,7 @@ export const setInitialSettings = ({
         return gw
     })
 
-    setMatchesGameWeeks([...$gameWeeks])
+    setGameWeeks([...$gameWeeks])
 }
 
 export const getActiveRect = ({
@@ -78,69 +78,37 @@ export const scrollRenderer = (props) => {
     }
 }
 
-export const tabClickHandler1 = ({
-    matchFixturesObj,
-    matchesGameWeeks,
-    setMatchesGameWeeks,
-    activeTabContent,
-    setActiveTabContent,
-}) => {
-
-    let currentActive = matchesGameWeeks.findIndex((match) => match.active)
-    const $matchesGameWeeks = matchesGameWeeks.map((item, index) => {
-        item.active = item.id === matchFixturesObj.id;
-        item.lastActive = index === currentActive
-        return item
-    })
-
-    setActiveTabContent({
-        toggleAnimation: !activeTabContent.toggleAnimation,
-        data: {...$matchesGameWeeks.find((gw) => gw.active)}
-    })
-
-    setMatchesGameWeeks($matchesGameWeeks)
-}
-
 export const tabClickHandler = ({
     activeGameWeek,
-    matchesGameWeeks,
-    setMatchesGameWeeks,
+    gameWeeks,
+    setGameWeeks,
 }) => {
 
-    let currentActive = matchesGameWeeks.findIndex((match) => match.active)
-    const $matchesGameWeeks = matchesGameWeeks.map((item, index) => {
+    let currentActive = gameWeeks.findIndex((match) => match.active)
+    const $gameWeeks = gameWeeks.map((item, index) => {
         item.active = item.id === activeGameWeek;
         item.lastActive = index === currentActive
         return item
     })
-    setMatchesGameWeeks($matchesGameWeeks)
+    setGameWeeks($gameWeeks)
 }
 
 
 export const controlsHandler = async ({
     isNext,
-    matchesGameWeeks,
-    dispatch,
-    // These props are necessary for tabClickHandler function
-    setMatchesGameWeeks,
-    activeTabContent,
-    setActiveTabContent,
+    gameWeeks,
+    setGameWeeks,
 }) => {
-    const $matchesGameWeeks = clone(matchesGameWeeks)
-    let objIndex = $matchesGameWeeks.findIndex((match) => match.active)
-    let nextIndex = isNext ? objIndex + 1 : objIndex - 1
-    if (nextIndex === $matchesGameWeeks.length || nextIndex === -1) return
-    let nextGw = $matchesGameWeeks[nextIndex]
 
-    const res = await dispatch(getMatchFixturesForGameWeek({gameWeek: nextGw.gameWeek}))
+    let objIndex = gameWeeks.findIndex((match) => match.active)
+    let nextIndex = isNext ? objIndex + 1 : objIndex - 1
+    if (nextIndex === gameWeeks.length || nextIndex === -1) return
+    let nextGw = gameWeeks[nextIndex]
 
     tabClickHandler({
-        matchesGameWeeks,
-        // matchFixturesObj: res.data,
-        matchFixturesObj: nextGw,
-        setMatchesGameWeeks,
-        activeTabContent,
-        setActiveTabContent,
+        activeGameWeek: nextGw.id,
+        gameWeeks,
+        setGameWeeks,
     })
 }
 
