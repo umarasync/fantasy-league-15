@@ -136,10 +136,10 @@ export default function FinishedMatchDetails({
                             animate={selectedTab === ZERO ? 'moveRight' : 'moveLeft'}
                             style={{ ...STYLES.content, ...STYLES.statistics}}
                         >
-                            {/*<MatchStatistics*/}
-                            {/*    selectedTab={selectedTab} match={match}*/}
-                            {/*    containerRef={statisticsContentRef}*/}
-                            {/*/>*/}
+                            <MatchStatistics
+                                selectedTab={selectedTab} match={match}
+                                containerRef={statisticsContentRef}
+                            />
                         </motion.div>
                     </motion.div>
                     {/*Footer*/}

@@ -28,9 +28,12 @@ export default function MatchHighlights({
 
     const STYLES = {...getStyles(R)}
 
-    const {matchDetails} = match
+    const {details} = match
 
-    const {statistics} = matchDetails
+    const team1 = match.homeTeam
+    const team2 = match.awayTeam
+
+    const {statistics} = details
 
     return (
         <div ref={containerRef} className={'flex items-center justify-center'} style={STYLES.container}>
@@ -38,8 +41,8 @@ export default function MatchHighlights({
                 <thead>
                     <th>
                         <Div className={'flex items-center'} mb={24}>
-                            <Text text={match.team1.name} fs={18} lh={22} fw={600} color={colors.black_rock} mr={12}/>
-                            <Image src={`/images/${match.team1.logo}`} w={40} h={40}/>
+                            <Text text={team1.name} fs={18} lh={22} fw={600} color={colors.black_rock} mr={12}/>
+                            <Image src={team1.logo} w={40} h={40}/>
                         </Div>
                     </th>
                     <th>
@@ -47,8 +50,8 @@ export default function MatchHighlights({
                     </th>
                     <th>
                         <Div className={'flex items-center'} mb={24}>
-                            <Image src={`/images/${match.team2.logo}`} w={40} h={40}/>
-                            <Text text={match.team2.name} fs={18} lh={22} fw={600} color={colors.black_rock} ml={12}/>
+                            <Image src={team2.logo} w={40} h={40}/>
+                            <Text text={team2.name} fs={18} lh={22} fw={600} color={colors.black_rock} ml={12}/>
                         </Div>
                     </th>
                 </thead>
@@ -58,9 +61,9 @@ export default function MatchHighlights({
                         statistics.map((stat,index) => {
                            return (
                                <tr key={index} className={`text-center`}>
-                                   <td><Text text={stat.team1} fs={18} lh={26} color={colors.black_rock} mb={24}/></td>
-                                   <td><Text text={stat.heading} fs={18} lh={26} color={colors.regent_grey} mb={24}/></td>
-                                   <td><Text text={stat.team2} fs={18} lh={26} color={colors.black_rock} mb={24}/></td>
+                                   <td><Text text={stat.away} fs={18} lh={26} color={colors.black_rock} mb={24}/></td>
+                                   <td><Text text={stat.title} fs={18} lh={26} color={colors.regent_grey} mb={24}/></td>
+                                   <td><Text text={stat.home} fs={18} lh={26} color={colors.black_rock} mb={24}/></td>
                                </tr>
                            )
                         })
