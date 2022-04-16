@@ -127,7 +127,7 @@ export default function MatchRow({
             {/*Match Details*/}
             <div>
                 {
-                    match.finished ? (
+                    !match.finished ? (
                         <FinishedMatchDetails
                             match={match}
                             tabChanged={tabChanged}

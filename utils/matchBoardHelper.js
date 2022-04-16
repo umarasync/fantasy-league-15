@@ -1,6 +1,3 @@
-// Packages
-import dayjs from "dayjs";
-
 // Utils
 import {clone} from "utils/helpers";
 import {getMatchFixturesForGameWeek} from "../redux/MatchFixtures/api";

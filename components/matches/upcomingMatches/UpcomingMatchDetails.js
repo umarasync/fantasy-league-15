@@ -132,11 +132,11 @@ export default function UpcomingMatchDetails({
                             animate={selectedTab === ZERO ? 'moveRight' : 'moveLeft'}
                             style={{ ...STYLES.content, ...STYLES.statistics}}
                         >
-                            <HeadToHead
-                                selectedTab={selectedTab}
-                                match={match}
-                                containerRef={headToHeadContentRef}
-                            />
+                            {/*<HeadToHead*/}
+                            {/*    selectedTab={selectedTab}*/}
+                            {/*    match={match}*/}
+                            {/*    containerRef={headToHeadContentRef}*/}
+                            {/*/>*/}
                         </motion.div>
                     </motion.div>
                     {/*Footer*/}
