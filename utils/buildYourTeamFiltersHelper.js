@@ -22,7 +22,7 @@ const filtersHandler = ({
 
         // TEAM-FILTER
         if (selectedClubs.length > 0 &&
-            (selectedClubs[0].value === ALL_TEAMS || selectedClubs.some(club => club.value === player.clubName))) {
+            (selectedClubs[0].value === ALL_TEAMS || selectedClubs.some(club => club.value === player.team.name))) {
 
             // Price-FILTER
             if (

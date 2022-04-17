@@ -434,7 +434,7 @@ const updatePlayersDataAfterTransferDeselectionClicked = ({
   player,
   remainingBudget,
 }) => {
-  
+
   const $players = playersDataInitial.map((p) => {
     if (
       p.position === player.position &&
