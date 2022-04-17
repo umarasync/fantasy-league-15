@@ -88,11 +88,21 @@ export default gql`
           }
         }
         home {
-          goals
           fantasyPlayers {
             id
             name
+            photo
+            value
+            captain
+            viceCaptain
+            matchName
+            team {
+              id
+              logo
+              name
+            }
           }
+          goals
           team {
             id
             name

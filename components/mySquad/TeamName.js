@@ -13,7 +13,6 @@ import PlayerImage from "components/player/PlayerImage";
 
 // Utils
 import {isEmpty} from "utils/helpers";
-import {buildPlayers} from "../../utils/playersHelper";
 
 // Styles
 const getStyles = (R, props) => {
@@ -62,9 +61,10 @@ export default function TeamName({
  }) {
 
     const STYLES =  { ...getStyles(R, {fromSecondClub}) }
-    // const fantasyPlayers = buildPlayers(team.fantasyPlayers)
-    const fantasyPlayers = []
+    const { fantasyPlayers } = team
     const teamName = team.team.name
+
+    console.log('1============', fantasyPlayers)
 
     if(match.finished) {
         if(tabChanged) {

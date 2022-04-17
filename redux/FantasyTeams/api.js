@@ -10,7 +10,6 @@ import {ERROR_MSG} from "constants/universalConstants";
 
 // Utils
 import {isEmpty, responseFailed, responseSuccess} from "utils/helpers";
-import {buildPlayers} from "utils/playersHelper";
 
 // Actions
 import {
@@ -59,7 +58,7 @@ export const getFantasyTeamById = (data) => {
       });
 
       if (result && result.data.fantasyTeamById !== null) {
-        return responseSuccess('Success !!!', buildPlayers(result.data.fantasyTeamById.squad))
+        return responseSuccess('Success !!!', result.data.fantasyTeamById.squad)
       }
       return responseFailed(ERROR_MSG)
     } catch (e) {

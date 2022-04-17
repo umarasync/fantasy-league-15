@@ -1,6 +1,3 @@
-// Utils
-import {nFormatter} from "utils/helpers";
-
 // POSITIONS
 export const POSITION_ALL = 'All'
 export const POSITION_GK = 'GOALKEEPER'
