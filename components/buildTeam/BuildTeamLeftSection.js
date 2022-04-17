@@ -92,16 +92,12 @@ export default function BuildTeamLeftSection({
             </div>
             <div style={STYLES.fieldImage}>
                 <div className="bg-[url('/images/field2.png')] bg-[length:100%_100%] bg-no-repeat h-full w-full" >
-                    {
-                        !isEmpty(pickedPlayers) && (
-                            <AllPlayersOnField
-                               pickedPlayers={pickedPlayers}
-                               autoPickDisabled={autoPickDisabled}
-                               onDeselectPlayer={onDeselectPlayer}
-                               isOneFreeTransferWindow={isOneFreeTransferWindow}
-                           />
-                        )
-                    }
+                    <AllPlayersOnField
+                         pickedPlayers={pickedPlayers}
+                         autoPickDisabled={autoPickDisabled}
+                         onDeselectPlayer={onDeselectPlayer}
+                         isOneFreeTransferWindow={isOneFreeTransferWindow}
+                     />
                 </div>
             </div>
         </div>

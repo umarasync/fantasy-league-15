@@ -10,12 +10,8 @@ export default gql`
       fantasyTeamId
       totalScore
       currentSeason
-      fantasyTeamValue
       fullName
       freeTransfers
-      dob
-      mobileNumber
-      gender
       favouriteTeam {
         id
         name

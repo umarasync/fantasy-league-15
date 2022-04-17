@@ -61,6 +61,11 @@ export default function AllPlayersOnField({
     const STYLES = {...getStyles(R)}
 
     const buildPlayer = (position, index) => {
+
+        if(!pickedPlayers){
+            return {}
+        }
+
         return {
             ...pickedPlayers[position][index],
             isOneFreeTransferWindow

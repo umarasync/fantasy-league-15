@@ -12,7 +12,7 @@ import {
 import {ALL_PLAYERS_INDEXES, PLAYERS, SELECTED_PLAYERS} from "constants/data/players";
 
 // Utils
-import { clone, shuffle } from "utils/helpers";
+import {clone, isEmpty, shuffle} from "utils/helpers";
 
 export const resetMultiSelectsDataState = (option, data) => {
   const { setSelectedOptions, setOptions } = data;
@@ -290,7 +290,6 @@ export const sortingHandler = ({ playersData, selectedSortingOption }) => {
 
 
 const getAllSelectedPlayersIDs = (squad) => squad.map(p => p.id)
-const calculateRemainingBudget = (squad) => squad.reduce((totalBudget, p) => totalBudget + p.value, 0)
 
 const putSquadUnderPositions = (squad) => {
   return {
@@ -373,15 +372,20 @@ export const initialSettingsForBuildYourTeam = ({
   setRemainingBudget,
   totalBudget
 }) => {
-  let playersData = [];
+  let playersData = []
 
-  const allPlayerIds = allPlayersIDs(pickedPlayers)
+  let allPlayerIds = []
+
+  if(!isEmpty(pickedPlayers)) {
+    allPlayerIds = allPlayersIDs(pickedPlayers)
+  }
 
   playersData = players.map((p) => {
     p.chosen = !!allPlayerIds.includes(p.id);
     p.disablePlayerCard = false;
     return p;
   });
+
   setPlayersData([...playersData]);
   setPlayersDataInitial([...playersData]);
   setShowFooterBar(true);
