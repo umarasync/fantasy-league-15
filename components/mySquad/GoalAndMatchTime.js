@@ -36,7 +36,6 @@ const getStyles = (R) => {
     }
 }
 
-
 const GoalAndMatchTime = (props) => {
     const {
         match,
@@ -49,8 +48,6 @@ const GoalAndMatchTime = (props) => {
 
     const team1 = match.home
     const team2 = match.away
-
-    console.log('1========', match)
 
     if(match.finished) {
         if(tabChanged) {

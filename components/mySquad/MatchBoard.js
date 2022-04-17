@@ -2,7 +2,7 @@
 import {motion, useAnimation} from "framer-motion";
 import {createRef, useEffect, useRef, useState} from "react";
 import dayjs from 'dayjs'
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 // Components
 import Div from "components/html/Div";
@@ -96,6 +96,9 @@ export default function MatchBoard () {
     const scrollBoxOriginPointForBorder = R(517.421)
     const scrollBoxOriginPoint = R(417)
 
+    // Global States
+    const user = useSelector(({ auth }) => auth.user);
+    
     const handleTabClick = async (gw) => {
         if(animationInProgress) return
         tabClickHandler({
@@ -131,7 +134,7 @@ export default function MatchBoard () {
     }, [gameWeeks])
 
     const fetchGameWeeks = async () => {
-        const { success, data } = await dispatch(getGameWeeks({seasonId: '2021-2022'}))
+        const { success, data } = await dispatch(getGameWeeks({seasonId: user.currentSeason}))
         if(!success) return
         setInitialSettings({
             initialGameWeeks: data,

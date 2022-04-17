@@ -107,9 +107,7 @@ const makePlayersInOrder = (squad) => {
 
 const handlesP11Click = ({
     player,
-    arrayIndex,
     squadInfo,
-    setChangeFormation,
 }) => {
     const squad = clone(squadInfo.squad)
 

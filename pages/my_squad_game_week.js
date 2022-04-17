@@ -276,6 +276,7 @@ export default function MySquadGameWeek () {
         runDidMount()
     }, [])
 
+
     if (squadInfo.length === 0) {return <Loader/>}
 
     return (

@@ -306,19 +306,20 @@ export const initialSettingsForTransferWindows = ({
   // Picked Players
   setPickedPlayers,
   // Budget
-  totalBudget,
+  remainingBudget,
   setRemainingBudget,
   // Players-Data
   setPlayersData,
   playersDataInitial,
   setPlayersDataInitial,
   // Transfer Window
+  freeTransfers,
   setIsOneFreeTransferWindow,
   setTransferInProgress,
   setCurrentTransferredToBePlayer,
-  setNoOfFreeTransfersLeft,
   setAdditionalTransferredPlayers,
   setTransferResetDisabled,
+  setNoOfFreeTransfersLeft,
   setTransferConfirmDisabled,
   setTransferredPlayers,
   // Footer
@@ -328,7 +329,6 @@ export const initialSettingsForTransferWindows = ({
   const $squad = clone(squad)
   setIsOneFreeTransferWindow(true);
 
-  const remainingBudget = totalBudget - calculateRemainingBudget(squad)
   const allPlayerIds = getAllSelectedPlayersIDs($squad);
 
   playersData = playersDataInitial.map((p) => {
@@ -348,8 +348,8 @@ export const initialSettingsForTransferWindows = ({
     position: null,
     index: null,
   });
-  setNoOfFreeTransfersLeft(1);
   setAdditionalTransferredPlayers(0);
+  setNoOfFreeTransfersLeft(freeTransfers)
   setTransferResetDisabled(true);
   setTransferConfirmDisabled(true);
   setTransferredPlayers([]);
@@ -370,6 +370,8 @@ export const initialSettingsForBuildYourTeam = ({
   players,
   setPlayersDataInitial,
   setShowFooterBar,
+  setRemainingBudget,
+  totalBudget
 }) => {
   let playersData = [];
 
@@ -383,6 +385,7 @@ export const initialSettingsForBuildYourTeam = ({
   setPlayersData([...playersData]);
   setPlayersDataInitial([...playersData]);
   setShowFooterBar(true);
+  setRemainingBudget(totalBudget)
 };
 
 // Player-Transfer Deselection

@@ -107,11 +107,12 @@ export default function BuildTeamPlayers ({
     const [selectedSortingOption, setSelectedSortingOption] = useState(SORTING_OPTIONS_INITIAL[0])
 
     // States-for-Player-Transfer
+    const [remainingBudget, setRemainingBudget] = useState('')
+    const [noOfFreeTransfersLeft, setNoOfFreeTransfersLeft] = useState('')
     const [isOneFreeTransferWindow, setIsOneFreeTransferWindow] = useState(false)
     const [showFooterBar, setShowFooterBar] = useState(false)
     const [transferInProgress, setTransferInProgress] = useState(false)
     const [currentTransferredToBePlayer, setCurrentTransferredToBePlayer] = useState({})
-    const [noOfFreeTransfersLeft, setNoOfFreeTransfersLeft] = useState(1)
     const [additionalTransferredPlayers, setAdditionalTransferredPlayers] = useState(0)
     const [transferResetDisabled, setTransferResetDisabled] = useState(true)
     const [transferConfirmDisabled, setTransferConfirmDisabled] = useState(true)
@@ -121,7 +122,6 @@ export default function BuildTeamPlayers ({
     // Global States
     const user = useSelector(({ auth }) => auth.user);
     const totalBudget = useSelector(({ fantasyTeam }) => fantasyTeam.totalBudget);
-    const [remainingBudget, setRemainingBudget] = useState(totalBudget)
 
     // OnSearch
     const onSearch = () => false
@@ -365,26 +365,27 @@ export default function BuildTeamPlayers ({
     const initiateInitialSettings = async () => {
 
         // For Transfer Window
-        const squad = await dispatch(getFantasyTeamById({
+        const { success, data } = await dispatch(getFantasyTeamById({
                    gameWeek: user.currentGameweek ,
                    fantasyTeamId: user.fantasyTeamId,
            }))
 
         // Fetch team data from backend database
-        if (!isEmpty(squad)) {
+        if (success) {
             return initialSettingsForTransferWindows({
                 // Team Data
-                squad,
+                squad: data,
                 // Picked Players
                 setPickedPlayers,
                 // Budget
-                totalBudget,
+                remainingBudget: totalBudget - user.fantasyTeamValue,
                 setRemainingBudget,
                 // Players-Data
                 setPlayersData,
                 playersDataInitial: $players,
                 setPlayersDataInitial,
                 // Transfer Window
+                freeTransfers: user.freeTransfers,
                 setIsOneFreeTransferWindow,
                 setTransferInProgress,
                 setCurrentTransferredToBePlayer,
@@ -403,7 +404,9 @@ export default function BuildTeamPlayers ({
             pickedPlayers,
             setPlayersDataInitial,
             setPlayersData,
-            setShowFooterBar
+            setShowFooterBar,
+            setRemainingBudget,
+            totalBudget
         })
     }
 
