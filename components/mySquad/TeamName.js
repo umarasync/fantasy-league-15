@@ -64,8 +64,6 @@ export default function TeamName({
     const { fantasyPlayers } = team
     const teamName = team.team.name
 
-    console.log('1============', fantasyPlayers)
-
     if(match.finished) {
         if(tabChanged) {
             return (

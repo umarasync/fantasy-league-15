@@ -258,8 +258,6 @@ export default function MySquadGameWeek () {
 
         const $squadInfo = setPlayersAdditionalData(data)
 
-        console.log('5----------', $squadInfo)
-
         setSquadInfo($squadInfo)
         setSavedSquadInfo($squadInfo)
 
