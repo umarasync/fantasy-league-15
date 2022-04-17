@@ -278,7 +278,7 @@ export const sortingHandler = ({ playersData, selectedSortingOption }) => {
   } else if (selectedSortingOption.value === PRICE_FROM_LOW_TO_HIGH) {
     playersDataI = playersDataI.sort((a, b) => (a.price > b.price ? 1 : -1));
   } else if (selectedSortingOption.value === TOTAL_POINTS) {
-    playersDataI = playersDataI.sort((a, b) => (a.points < b.points ? 1 : -1));
+    playersDataI = playersDataI.sort((a, b) => (a.totalPoints < b.totalPoints ? 1 : -1));
   } else if (selectedSortingOption.value === MOST_TRANSFERRED) {
     playersDataI = playersDataI.sort((a, b) =>
       a.most_transferred < b.most_transferred ? 1 : -1
@@ -290,7 +290,7 @@ export const sortingHandler = ({ playersData, selectedSortingOption }) => {
 
 
 const getAllSelectedPlayersIDs = (squad) => squad.map(p => p.id)
-const calculateRemainingBudget = (squad) => squad.reduce((totalBudget, p) => totalBudget + p.price, 0)
+const calculateRemainingBudget = (squad) => squad.reduce((totalBudget, p) => totalBudget + p.value, 0)
 
 const putSquadUnderPositions = (squad) => {
   return {
@@ -406,6 +406,8 @@ export const playerTransferDeselectHandler = ({
   setContinueDisabled,
 }) => {
   const $pickedPlayers = { ...pickedPlayers };
+
+
   const player = $pickedPlayers[position][i];
 
   const $remainingBudget = remainingBudget + player.value;
@@ -432,10 +434,11 @@ const updatePlayersDataAfterTransferDeselectionClicked = ({
   player,
   remainingBudget,
 }) => {
+  
   const $players = playersDataInitial.map((p) => {
     if (
       p.position === player.position &&
-      p.price <= remainingBudget &&
+      p.value <= remainingBudget &&
       !p.chosen
     ) {
       p.disablePlayerCard = false;

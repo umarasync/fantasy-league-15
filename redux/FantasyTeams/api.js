@@ -18,6 +18,7 @@ import {
   fantasyTeamSwapSuccess,
   fantasyTeamTransferStart
 } from "./actionCreators";
+import {buildPlayers} from "../../utils/playersHelper";
 
 export const createFantasyTeam = (data) => {
   return async (dispatch) => {
@@ -58,7 +59,7 @@ export const getFantasyTeamById = (data) => {
       });
 
       if (result && result.data.fantasyTeamById !== null) {
-        return responseSuccess('Success !!!', result.data.fantasyTeamById.squad)
+        return responseSuccess('Success !!!', buildPlayers(result.data.fantasyTeamById.squad))
       }
       return responseFailed(ERROR_MSG)
     } catch (e) {

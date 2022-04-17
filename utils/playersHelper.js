@@ -2,24 +2,27 @@
 import {v4 as uuidv4} from 'uuid';
 
 // Constants
-import {POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID, STATUS_FIT} from "constants/data/filters";
+import {POSITION_ALL, POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID} from "constants/data/filters";
 
 // Players
 export const positionAbbr = (position) => {
   let p = "";
   switch (position) {
-    case "FORWARD":
+    case POSITION_FWD:
       p = "FWD";
       break;
-    case "DEFENDER":
+    case POSITION_DEF:
       p = "DEF";
       break;
-    case "MIDFIELDER":
+    case POSITION_MID:
       p = "MID";
       break;
-    case "GOALKEEPER":
+    case POSITION_GK:
       p = "GK";
       break;
+    case POSITION_ALL:
+        p = "ALL";
+        break;
   }
   return p;
 };

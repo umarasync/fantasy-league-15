@@ -1,7 +1,12 @@
+// Components
+import Button from "components/html/Button";
+
 // Constants
 import colors from "constants/colors";
 import { PLAYERS_POSITIONS } from "constants/data/filters"
-import Button from "components/html/Button";
+
+// Utils
+import {positionAbbr} from "utils/playersHelper";
 
 export default function FilterButtons({
    activePosition,
@@ -14,7 +19,7 @@ export default function FilterButtons({
                 PLAYERS_POSITIONS.map((position) => {
                     return (
                           <Button
-                              title={position.label}
+                              title={positionAbbr(position.label)}
                               bg={ activePosition === position.label ? false : colors.lavender_grey}
                               bs={ activePosition === position.label}
                               fw={'600'}

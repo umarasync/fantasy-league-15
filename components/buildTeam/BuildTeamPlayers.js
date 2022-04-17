@@ -226,6 +226,7 @@ export default function BuildTeamPlayers ({
     }, [currentTransferredToBePlayer])
 
     const handleTransferPlayerDeselect = (position, i) => {
+
         setCurrentTransferredToBePlayer({position: position, index: i})
     }
 
