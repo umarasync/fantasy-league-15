@@ -9,6 +9,9 @@ import Text from "components/html/Text";
 import colors from "constants/colors";
 import {SHADOW_WHITE_SMOKE} from "constants/boxShadow";
 
+// Utils
+import {nFormatter} from "utils/helpers";
+
 export default function PlayerInfoPlayerCard({
        player,
        mt
@@ -54,7 +57,7 @@ export default function PlayerInfoPlayerCard({
             {/*right side*/}
             <div className={'flex items-center'}>
                 <Div mr={16}>
-                    <Text text={player.formattedPrice} fs={18} lh={22} color={colors.black_rock} textAlign={'right'} fw={600}/>
+                    <Text text={nFormatter(player.value)} fs={18} lh={22} color={colors.black_rock} textAlign={'right'} fw={600}/>
                     <Text text={player.position} fs={18} lh={22} color={colors.regent_grey} textAlign={'right'}  mt={3}/>
                 </Div>
                 <Border/>

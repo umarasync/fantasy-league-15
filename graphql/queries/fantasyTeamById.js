@@ -14,6 +14,7 @@ export default gql`
         value
         totalPoints
         captain
+        state
         viceCaptain
         isSubstitute
         team {

@@ -147,7 +147,7 @@ const PlayerInsideField = ({player}) => {
                 onClick={() => onPlayerClick ? onPlayerClick(player): false}
             >
                 {
-                    player.status === STATUS_INJURED || player.status === STATUS_SUSPENDED && (
+                    player.state === STATUS_INJURED || player.state === STATUS_SUSPENDED && (
                         <div className={'flex items-center justify-center'} style={STYLES.statusImage}>
                             <Image src={`${player.statusImage}`} alt="statusImage" w={10} h={10}/>
                         </div>

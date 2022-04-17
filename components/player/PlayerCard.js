@@ -9,6 +9,9 @@ import R from "utils/getResponsiveValue";
 import colors from "constants/colors";
 import {useEffect, useState} from "react";
 
+// Utils
+import {nFormatter} from "utils/helpers";
+
 // Styles
 const getStyles = (R, props) => {
 
@@ -115,7 +118,7 @@ export default function PlayerCard (props){
             <div className={'flex items-center'}>
                 <div style={{marginRight: R(16)}}>
                     <p style={STYLES.price}>
-                        {player.formattedPrice}
+                        {nFormatter(player.value)}
                         <p style={STYLES.type}><span>{player.position}</span></p>
                     </p>
                 </div>

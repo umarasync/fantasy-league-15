@@ -1,11 +1,8 @@
 // Packages
 import {v4 as uuidv4} from 'uuid';
 
-// Helpers
-import {nFormatter} from "utils/helpers";
-
 // Constants
-import {POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID} from "constants/data/filters";
+import {POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID, STATUS_FIT} from "constants/data/filters";
 
 // Players
 const getPlayerPosition = (position) => {
@@ -31,10 +28,7 @@ export const buildPlayers = (playersData) => {
   return playersData.map(p => {
             return {
                   ...p,
-                  status: p.state ? p.state : "fit", // Currently checking due to data sync gaps
-                  formattedPrice: nFormatter(p.value),
                   position: getPlayerPosition(p.position),
-
                   // Dummy
                   nextMatch: {
                     club: 'GRO',

@@ -24,7 +24,7 @@ export default function PlayerOnPitchText({player, mt}) {
             className={'items-center relative items-center text-center justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
         >
             {
-                player.status === STATUS_INJURED || player.status === STATUS_SUSPENDED && (
+                player.state === STATUS_INJURED || player.state === STATUS_SUSPENDED && (
                     <Div
                         w={15}
                         h={15}

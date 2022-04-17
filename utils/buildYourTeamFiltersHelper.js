@@ -32,7 +32,7 @@ const filtersHandler = ({
 
                 // STATUS-FILTER
                 if (selectedStatuses.length > 0 &&
-                    (selectedStatuses[0].value === ALL_STATUSES || selectedStatuses.some(status => status.value === player.status))) {
+                    (selectedStatuses[0].value === ALL_STATUSES || selectedStatuses.some(status => status.value === player.state))) {
 
                     // Recommendation-FILTER
                     if (
