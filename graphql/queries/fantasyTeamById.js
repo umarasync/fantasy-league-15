@@ -21,8 +21,6 @@ export default gql`
           id
           name
           logo
-          homeKit
-          goalkeeperKit
         }
       }
     }

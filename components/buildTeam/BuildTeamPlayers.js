@@ -259,7 +259,7 @@ export default function BuildTeamPlayers ({
 
     // Player-Transfer-Reset
     const onTransferResetClick = () => {
-        initiateInitialSettings()
+        runInitialSettingsForTransferWindows()
     }
 
     // Player-Transfer-Confirm
@@ -362,16 +362,11 @@ export default function BuildTeamPlayers ({
         persistDataToReduxStore()
     }
 
-    // Initial Settings for Build Your Team & Transfer windows
-    const initiateInitialSettings = async () => {
-
-        // For Transfer Window
+    const runInitialSettingsForTransferWindows = async () => {
         const { success, data } = await dispatch(getFantasyTeamById({
                    gameWeek: user.currentGameweek ,
                    fantasyTeamId: user.fantasyTeamId,
            }))
-
-        // Fetch team data from backend database
         if (success) {
             return initialSettingsForTransferWindows({
                 // Team Data
@@ -400,21 +395,32 @@ export default function BuildTeamPlayers ({
             })
         }
 
-        return initialSettingsForBuildYourTeam({
+    }
+
+    const runInitialSettingsForBuildYourTeam = () => {
+        initialSettingsForBuildYourTeam({
             players: $players,
             pickedPlayers,
             setPlayersDataInitial,
             setPlayersData,
-            setShowFooterBar,
-            setRemainingBudget,
-            totalBudget
         })
     }
 
+    useEffect(() => {
+        /*** If team already exists run transfer window ****/
+        if(user.fantasyTeamId){ return runInitialSettingsForTransferWindows() }
+        runInitialSettingsForBuildYourTeam()
+    }, [$players])
+
     // Did-Mount
     useEffect(() => {
-        initiateInitialSettings()
-    }, [$players])
+        /*** If team already exists run transfer window ****/
+         if(user.fantasyTeamId){ return runInitialSettingsForTransferWindows() }
+
+        runInitialSettingsForBuildYourTeam()
+        setShowFooterBar(true);
+        setRemainingBudget(totalBudget)
+    }, [])
 
     return (
         <Layout title="Build Team All Player" showToast={true}>

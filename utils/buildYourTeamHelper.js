@@ -368,18 +368,10 @@ export const initialSettingsForBuildYourTeam = ({
   pickedPlayers,
   players,
   setPlayersDataInitial,
-  setShowFooterBar,
-  setRemainingBudget,
-  totalBudget
 }) => {
   let playersData = []
 
-  let allPlayerIds = []
-
-  if(!isEmpty(pickedPlayers)) {
-    allPlayerIds = allPlayersIDs(pickedPlayers)
-  }
-
+  const allPlayerIds = allPlayersIDs(pickedPlayers)
   playersData = players.map((p) => {
     p.chosen = !!allPlayerIds.includes(p.id);
     p.disablePlayerCard = false;
@@ -388,8 +380,6 @@ export const initialSettingsForBuildYourTeam = ({
 
   setPlayersData([...playersData]);
   setPlayersDataInitial([...playersData]);
-  setShowFooterBar(true);
-  setRemainingBudget(totalBudget)
 };
 
 // Player-Transfer Deselection
