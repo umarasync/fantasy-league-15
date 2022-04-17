@@ -30,7 +30,7 @@ export default function TransferOut({
                     fs={18}
                     lh={22}
                     fw={600}
-                    text={player.name}
+                    text={player.matchName}
                     color={colors.black_rock}
                     mb={6}
                 />
@@ -51,7 +51,7 @@ export default function TransferOut({
                     fs={18}
                     lh={22}
                     fw={600}
-                    text={nFormatter(player.price)}
+                    text={nFormatter(player.value)}
                     color={colors.black_rock}
                     mb={6}
                 />

@@ -70,7 +70,7 @@ const SubTitle = ({player}) => {
                     style={STYLES.subTitle}
                 >
                     <Text
-                        text={`${player.points} pts ${player.position}`}
+                        text={`${player.totalPoints} pts ${player.position}`}
                         fs={10}
                         lh={14}
                         color={colors.white}
@@ -111,7 +111,7 @@ const SubTitle = ({player}) => {
                 style={STYLES.subTitle}
             >
                 <Text
-                    text={`${nFormatter(player.price)} ${player.position}`}
+                    text={`${nFormatter(player.value)} ${player.position}`}
                     fs={10}
                     lh={14}
                     color={colors.white}

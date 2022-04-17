@@ -45,6 +45,8 @@ const ClubImage = ({
     cursor,
 }) => {
 
+    const { team } = player
+    const { logo } = team
     if(animatedText) {
         return  (
             <motion.div
@@ -56,14 +58,14 @@ const ClubImage = ({
                 custom={{initialOpacity}}
             >
                 <Div position='absolute' bottom={0} right={0}>
-                    <Image w={ciw} h={cih} onClick={onPlayerClick} src={player.clubImage} cursor={cursor}/>
+                    <Image w={ciw} h={cih} onClick={onPlayerClick} src={logo} cursor={cursor}/>
                 </Div>
             </motion.div>
         )
     }
    return (
        <Div position='absolute' bottom={0} right={0}>
-           <Image w={ciw} h={cih} onClick={onPlayerClick} src={player.clubImage} cursor={cursor}/>
+           <Image w={ciw} h={cih} onClick={onPlayerClick} src={logo} cursor={cursor}/>
        </Div>
    )
 }
@@ -91,6 +93,8 @@ export default function PlayerImage(props) {
 
     if(!player) return null
 
+    const { photo } = player
+
     return (
         <Div w={w} h={h} style={STYLES.image}>
 
@@ -106,7 +110,7 @@ export default function PlayerImage(props) {
                     >
                          <Image
                              onClick={onPlayerClick}
-                             src={player.image}
+                             src={photo}
                              alt={'playerImage'}
                              cursor={cursor}
                          />
@@ -114,7 +118,7 @@ export default function PlayerImage(props) {
                 ): (
                     <Image
                         onClick={onPlayerClick}
-                        src={player.image}
+                        src={photo}
                         alt={'playerImage'}
                         cursor={cursor}
                     />
@@ -126,7 +130,7 @@ export default function PlayerImage(props) {
                     <Div h={16} w={16} position={'absolute'} left={0} top={0} cursor={!player.disableIconClick ? 'pointer' : 'auto'}
                          onClick={() => !player.disableIconClick && onIconClick ? onIconClick() : false}
                     >
-                        <Image src={`${clickedIcon}`}/>
+                        <Image src={`${clickedIcon}`} alt={'clickedicon'}/>
                     </Div>
 
                 )

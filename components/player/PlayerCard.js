@@ -103,7 +103,7 @@ export default function PlayerCard (props){
                 <PlayerImage player={player} ml={16} mr={16} w={70} h={70} />
                 <div>
                     <p className={'font-[600]'} style={STYLES.playerName}>
-                        {player.name}
+                        {player.matchName}
                         <p style={{paddingTop: R(3)}}>
                             <span>{player.nextMatch.club}</span>
                             <span className={'font-[200]'}>{` vs ${player.nextMatch.vs}`}</span>
@@ -122,7 +122,7 @@ export default function PlayerCard (props){
                 <Border/>
                 <p style={
                     STYLES.totalPoints
-                }>{player.points}</p>
+                }>{player.totalPoints}</p>
             </div>
         </div>
     )

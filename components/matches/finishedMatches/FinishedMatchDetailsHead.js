@@ -10,13 +10,6 @@ export default function FinishedMatchDetailsHead({
      matchDetails
  }) {
 
-    const getPlayer = (p) => {
-        return {
-            ...p,
-            image: p.photo,
-            clubImage: p.team.logo
-        }
-    }
     return (
         <Div className={'flex'}>
             {/*<Div w={'43.5%'}/>*/}
@@ -24,7 +17,7 @@ export default function FinishedMatchDetailsHead({
                 {
                     matchDetails.awardedPlayers.map((item, index) => (
                         <Div key={index} className={'flex flex-col items-center'} mr={40}>
-                            <PlayerImage player={getPlayer(item.player)} w={70} h={70}/>
+                            <PlayerImage player={item.player} w={70} h={70}/>
                             <Text
                                 text={
                                     <>

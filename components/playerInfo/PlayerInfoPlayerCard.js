@@ -29,7 +29,7 @@ export default function PlayerInfoPlayerCard({
                 <Border/>
                 <PlayerImage player={player} ml={16} mr={16} w={70} h={70}/>
                 <div>
-                    <Text text={player.name}
+                    <Text text={player.matchName}
                           fs={18}
                           lh={22}
                           color={colors.black_rock}
@@ -60,7 +60,7 @@ export default function PlayerInfoPlayerCard({
                 <Border/>
                 <Text
                     className={'text-heliotrope-purple'}
-                    text={player.points}
+                    text={player.totalPoints}
                     fs={22}
                     fw={600}
                     ml={16}

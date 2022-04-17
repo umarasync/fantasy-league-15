@@ -31,15 +31,11 @@ export const buildPlayers = (playersData) => {
   return playersData.map(p => {
             return {
                   ...p,
-                  image: p.photo,
-                  clubImage: p.team.logo,
-                  clubName: p.team.name,
                   status: p.state ? p.state : "fit", // Currently checking due to data sync gaps
-                  name: p.matchName,
-                  price: parseFloat(p.value),
                   formattedPrice: nFormatter(p.value),
-                  points: p.totalPoints,
                   position: getPlayerPosition(p.position),
+
+                  // Dummy
                   nextMatch: {
                     club: 'GRO',
                     vs: "BEN",

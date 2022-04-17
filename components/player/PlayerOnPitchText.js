@@ -41,7 +41,7 @@ export default function PlayerOnPitchText({player, mt}) {
             }
 
             <Text
-                text={truncate(`${player.name}`, player.captain || player.viceCaptain ? 10 : 12)}
+                text={truncate(`${player.matchName}`, player.captain || player.viceCaptain ? 10 : 12)}
                 fs={10}
                 lh={14}
                 color={colors.white}
@@ -49,7 +49,7 @@ export default function PlayerOnPitchText({player, mt}) {
                 fw={600}
             />
             <Text
-                text={`${nFormatter(player.price)} ${player.position}`}
+                text={`${nFormatter(player.value)} ${player.position}`}
                 fs={10}
                 lh={14}
                 color={colors.white}

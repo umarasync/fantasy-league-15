@@ -54,7 +54,7 @@ export default function MatchHighlights({
                                                 !isEmpty(team1) && team1.map((player) => (
                                                     <>
                                                         <Div className={'flex items-center'}>
-                                                            <Text text={player.name} fs={18} lh={22} fw={600}
+                                                            <Text text={player.matchName} fs={18} lh={22} fw={600}
                                                                   color={colors.black_rock}/>
                                                             <Text text={`${player.value}`} fs={12} lh={16} ml={8}
                                                                   color={colors.regent_grey}/>
@@ -76,7 +76,7 @@ export default function MatchHighlights({
                                                         <Div className={'flex items-center'}>
                                                             <Text text={`${player.value}`} fs={12} lh={16} mr={8}
                                                                   color={colors.regent_grey}/>
-                                                            <Text text={player.name} fs={18} lh={22} fw={600}
+                                                            <Text text={player.matchName} fs={18} lh={22} fw={600}
                                                                   color={colors.black_rock}/>
 
                                                         </Div>

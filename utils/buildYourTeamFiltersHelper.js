@@ -27,8 +27,8 @@ const filtersHandler = ({
             // Price-FILTER
             if (
                 selectedPrice.value === ALL_PRICES ||
-                ((selectedPrice.value.to === null) && player.price > selectedPrice.value.from) ||
-                (player.price > selectedPrice.value.from && player.price < selectedPrice.value.to)) {
+                ((selectedPrice.value.to === null) && player.value > selectedPrice.value.from) ||
+                (player.value > selectedPrice.value.from && player.value < selectedPrice.value.to)) {
 
                 // STATUS-FILTER
                 if (selectedStatuses.length > 0 &&

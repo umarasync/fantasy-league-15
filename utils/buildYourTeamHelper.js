@@ -123,11 +123,11 @@ export const handleAutoPick = ({
   for (let i = 0; i < shuffledFifteenChosenPlayersIndex.length; i++) {
     let player = playersI[shuffledFifteenChosenPlayersIndex[i]];
 
-    if (player.price < remainingBudget) {
+    if (player.value < remainingBudget) {
 
       player.chosen = true;
       chosenPlayersWithinBudget[player.position].push(player);
-      remainingBudget = remainingBudget - player.price;
+      remainingBudget = remainingBudget - player.value;
       totalChosenPlayers += 1;
 
     } else {
@@ -195,7 +195,7 @@ export const playerSelectionHandler = ({
       (pickedPlayersArray.length > 0 &&
         !pickedPlayersArray.some((p) => p.id === player.id))
     ) {
-      setRemainingBudget(remainingBudget - player.price);
+      setRemainingBudget(remainingBudget - player.value);
       setTotalChosenPlayers(totalChosenPlayers + 1);
       pickedPlayersArray.push(player);
 
@@ -216,7 +216,7 @@ export const playerSelectionHandler = ({
 
     pickedPlayersArray[indexOfEmptyPosition] = player;
 
-    setRemainingBudget(remainingBudget - player.price);
+    setRemainingBudget(remainingBudget - player.value);
     setTotalChosenPlayers(totalChosenPlayers + 1);
 
     setPlayersDataInitial(
@@ -254,7 +254,7 @@ export const playerDeselectionHandler = ({
 
   const player = $pickedPlayers[position][i];
 
-  setRemainingBudget(remainingBudget + player.price);
+  setRemainingBudget(remainingBudget + player.value);
   setTotalChosenPlayers(totalChosenPlayers - 1);
   setContinueDisabled(true);
   $pickedPlayers[position][i] = false;
@@ -408,7 +408,7 @@ export const playerTransferDeselectHandler = ({
   const $pickedPlayers = { ...pickedPlayers };
   const player = $pickedPlayers[position][i];
 
-  const $remainingBudget = remainingBudget + player.price;
+  const $remainingBudget = remainingBudget + player.value;
   setRemainingBudget($remainingBudget);
   setContinueDisabled(true);
 
@@ -486,7 +486,7 @@ export const playerTransferSelectionHandler = ({
   // readyToBeTransferOut Player
   const toIndex = pp[position].findIndex((p) => p.readyToBeTransferOut);
 
-  setRemainingBudget(remainingBudget - player.price);
+  setRemainingBudget(remainingBudget - player.value);
 
   if (noOfFreeTransfersLeft) {
     setNoOfFreeTransfersLeft(noOfFreeTransfersLeft - 1);

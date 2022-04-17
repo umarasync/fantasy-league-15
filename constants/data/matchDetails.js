@@ -139,7 +139,7 @@ const getStatistics = () => {
 }
 
 export const finishedMatchDetails = {
-    awardedPlayers: getAwardedPlayers(),
+    // awardedPlayers: getAwardedPlayers(),
     highlights: [
         {
             title: 'Goals',
@@ -217,7 +217,7 @@ const getHeadToHeadData = () => {
 
 export const upcomingMatchDetails = () => {
     return {
-        lastMatchUps: getLastMatchUpsData(),
-        headToHead: getHeadToHeadData()
+        // lastMatchUps: getLastMatchUpsData(),
+        // headToHead: getHeadToHeadData()
     }
 }

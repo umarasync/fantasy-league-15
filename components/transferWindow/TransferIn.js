@@ -30,7 +30,7 @@ export default function TransferIn({
                     fs={18}
                     lh={22}
                     fw={600}
-                    text={player.name}
+                    text={player.matchName}
                     textAlign={'right'}
                     color={colors.black_rock}
                     mb={6}
@@ -53,7 +53,7 @@ export default function TransferIn({
                     fs={18}
                     lh={22}
                     fw={600}
-                    text={nFormatter(player.price)}
+                    text={nFormatter(player.value)}
                     textAlign={'right'}
                     color={colors.black_rock}
                     mb={6}
