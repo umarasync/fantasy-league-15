@@ -13,6 +13,7 @@ import PlayerImage from "components/player/PlayerImage";
 
 // Utils
 import {isEmpty} from "utils/helpers";
+import {buildPlayers} from "../../utils/playersHelper";
 
 // Styles
 const getStyles = (R, props) => {
@@ -55,14 +56,15 @@ export default function TeamName({
     initialOpacity,
     fromSecondClub,
     match,
-    club,
+    team,
     teamStyle,
     tabChanged
  }) {
 
-    const STYLES =  { ...getStyles(R, {
-        fromSecondClub
-        }) }
+    const STYLES =  { ...getStyles(R, {fromSecondClub}) }
+    // const fantasyPlayers = buildPlayers(team.fantasyPlayers)
+    const fantasyPlayers = []
+    const teamName = team.team.name
 
     if(match.finished) {
         if(tabChanged) {
@@ -78,10 +80,10 @@ export default function TeamName({
                         style={{...STYLES.teamName, ...teamStyle}}
                         className={'flex'}
                     >
-                        {fromSecondClub && club.name}
+                        {fromSecondClub && teamName}
                         <div style={STYLES.playerImagesContainer} className={'flex'}>
                             {
-                               !isEmpty(club.players) && club.players.map((player, index) => {
+                               !isEmpty(fantasyPlayers) && fantasyPlayers.map((player, index) => {
                                     return (
                                         <div
                                             key={index}
@@ -94,7 +96,7 @@ export default function TeamName({
                             }
 
                         </div>
-                        {!fromSecondClub && club.name}
+                        {!fromSecondClub && teamName}
                     </motion.div>
                 </AnimatePresence>
             )
@@ -111,10 +113,10 @@ export default function TeamName({
                         style={{...STYLES.teamName, ...teamStyle}}
                         className={'flex'}
                     >
-                        {fromSecondClub && club.name}
+                        {fromSecondClub && teamName}
                         <div style={STYLES.playerImagesContainer} className={'flex'}>
                             {
-                                !isEmpty(club.players) && club.players.map((player, index) => {
+                                !isEmpty(fantasyPlayers) && fantasyPlayers.map((player, index) => {
                                     return (
                                         <div
                                             key={index}
@@ -127,7 +129,7 @@ export default function TeamName({
                             }
 
                         </div>
-                        {!fromSecondClub && club.name}
+                        {!fromSecondClub && teamName}
 
                     </motion.div>
                 </AnimatePresence>
@@ -146,10 +148,10 @@ export default function TeamName({
                        custom={{ index, parentIndex, initialOpacity, isMatchFinished: match.finished, fromSecondClub}}                                                               style={{...STYLES.teamName, ...teamStyle}}
                        className={'flex'}
                    >
-                       {fromSecondClub && club.name}
+                       {fromSecondClub && teamName}
                        <div style={STYLES.playerImagesContainer} className={'flex'}>
                            {
-                               !isEmpty(club.players) && club.players.map((player, index) => {
+                               !isEmpty(fantasyPlayers) && fantasyPlayers.map((player, index) => {
                                    return (
                                        <div
                                            key={index}
@@ -162,7 +164,7 @@ export default function TeamName({
                            }
 
                        </div>
-                       {!fromSecondClub && club.name}
+                       {!fromSecondClub && teamName}
                    </motion.div>
                </AnimatePresence>
            )
@@ -178,10 +180,10 @@ export default function TeamName({
                        custom={{ index, parentIndex, initialOpacity, isMatchFinished: match.finished, fromSecondClub}}                                                               style={{...STYLES.teamName, ...teamStyle}}
                        className={'flex'}
                    >
-                       {fromSecondClub && club.name}
+                       {fromSecondClub && teamName}
                        <div style={STYLES.playerImagesContainer} className={'flex'}>
                            {
-                               !isEmpty(club.players) &&  club.players.map((player, index) => {
+                               !isEmpty(fantasyPlayers) &&  fantasyPlayers.map((player, index) => {
                                    return (
                                        <div
                                            key={index}
@@ -194,7 +196,7 @@ export default function TeamName({
                            }
 
                        </div>
-                       {!fromSecondClub && club.name}
+                       {!fromSecondClub && teamName}
                    </motion.div>
                </AnimatePresence>
            )

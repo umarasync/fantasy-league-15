@@ -46,6 +46,9 @@ export default function MatchRow({
     const STYLES = {...getStyles(R)}
     const [showMatchDetails, setShowMatchDetails] = useState(false)
 
+    const homeTeam = match.home
+    const awayTeam = match.away
+
     const team1 = match.home.team
     const team2 = match.away.team
 
@@ -65,7 +68,7 @@ export default function MatchRow({
                         <TeamName
                             tabChanged={toggleAnimation}
                             match={match}
-                            club={team1}
+                            team={homeTeam}
                             index={index}
                             parentIndex={parentIndex}
                             initialOpacity={initialOpacity}
@@ -112,7 +115,7 @@ export default function MatchRow({
                         <TeamName
                             tabChanged={toggleAnimation}
                             match={match}
-                            club={team2}
+                            team={awayTeam}
                             index={index}
                             parentIndex={parentIndex}
                             initialOpacity={initialOpacity}

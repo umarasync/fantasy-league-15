@@ -28,7 +28,7 @@ const getPlayerPosition = (position) => {
 };
 
 export const buildPlayers = (playersData) => {
-  return playersData.map((p, i) => {
+  return playersData.map(p => {
             return {
                   ...p,
                   image: p.photo,

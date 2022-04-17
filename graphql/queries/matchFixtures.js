@@ -8,7 +8,9 @@ export default gql`
         id
         finished
         gameWeek
+  
         matchTime
+  
         details {
           statistics {
             title
@@ -101,6 +103,16 @@ export default gql`
           fantasyPlayers {
             id
             name
+            photo
+            value
+            captain
+            viceCaptain
+            matchName
+            team {
+              id
+              logo
+              name
+            }
           }
           goals
           team {
