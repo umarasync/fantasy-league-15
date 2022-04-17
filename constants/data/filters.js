@@ -3,10 +3,11 @@ import {nFormatter} from "utils/helpers";
 
 // POSITIONS
 export const POSITION_ALL = 'All'
-export const POSITION_GK = 'GK'
-export const POSITION_DEF = 'DEF'
-export const POSITION_MID = 'MID'
-export const POSITION_FWD = 'FWD'
+export const POSITION_GK = 'GOALKEEPER'
+export const POSITION_DEF = 'DEFENDER'
+export const POSITION_MID = 'MIDFIELDER'
+export const POSITION_FWD = 'FORWARD'
+
 export const PLAYERS_POSITIONS = [
     {
         id: 1,

@@ -9,6 +9,7 @@ import colors from "constants/colors";
 
 // Utils
 import {nFormatter} from "utils/helpers";
+import {positionAbbr} from "utils/playersHelper";
 
 export default function TransferOut({
     player
@@ -59,7 +60,7 @@ export default function TransferOut({
                     fs={18}
                     lh={22}
                     fw={400}
-                    text={player.position}
+                    text={positionAbbr(player.position)}
                     color={colors.regent_grey}
                     mb={6}
                 />

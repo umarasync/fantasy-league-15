@@ -9,6 +9,7 @@ import colors from "constants/colors"
 
 // Utils
 import {nFormatter, truncate} from "utils/helpers";
+import {positionAbbr} from "utils/playersHelper";
 
 export default function PlayerOnPitchText({player, mt}) {
 
@@ -49,7 +50,7 @@ export default function PlayerOnPitchText({player, mt}) {
                 fw={600}
             />
             <Text
-                text={`${nFormatter(player.value)} ${player.position}`}
+                text={`${nFormatter(player.value)} ${positionAbbr(player.position)}`}
                 fs={10}
                 lh={14}
                 color={colors.white}

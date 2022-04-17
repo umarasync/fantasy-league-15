@@ -11,6 +11,7 @@ import {useEffect, useState} from "react";
 
 // Utils
 import {nFormatter} from "utils/helpers";
+import {positionAbbr} from "utils/playersHelper";
 
 // Styles
 const getStyles = (R, props) => {
@@ -119,7 +120,7 @@ export default function PlayerCard (props){
                 <div style={{marginRight: R(16)}}>
                     <p style={STYLES.price}>
                         {nFormatter(player.value)}
-                        <p style={STYLES.type}><span>{player.position}</span></p>
+                        <p style={STYLES.type}><span>{positionAbbr(player.position)}</span></p>
                     </p>
                 </div>
                 <Border/>

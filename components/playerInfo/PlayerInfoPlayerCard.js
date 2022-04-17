@@ -11,6 +11,7 @@ import {SHADOW_WHITE_SMOKE} from "constants/boxShadow";
 
 // Utils
 import {nFormatter} from "utils/helpers";
+import {positionAbbr} from "utils/playersHelper";
 
 export default function PlayerInfoPlayerCard({
        player,
@@ -58,7 +59,7 @@ export default function PlayerInfoPlayerCard({
             <div className={'flex items-center'}>
                 <Div mr={16}>
                     <Text text={nFormatter(player.value)} fs={18} lh={22} color={colors.black_rock} textAlign={'right'} fw={600}/>
-                    <Text text={player.position} fs={18} lh={22} color={colors.regent_grey} textAlign={'right'}  mt={3}/>
+                    <Text text={positionAbbr(player.position)} fs={18} lh={22} color={colors.regent_grey} textAlign={'right'}  mt={3}/>
                 </Div>
                 <Border/>
                 <Text

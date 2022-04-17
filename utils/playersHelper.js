@@ -5,7 +5,7 @@ import {v4 as uuidv4} from 'uuid';
 import {POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID, STATUS_FIT} from "constants/data/filters";
 
 // Players
-const getPlayerPosition = (position) => {
+export const positionAbbr = (position) => {
   let p = "";
   switch (position) {
     case "FORWARD":
@@ -28,8 +28,6 @@ export const buildPlayers = (playersData) => {
   return playersData.map(p => {
             return {
                   ...p,
-                  position: getPlayerPosition(p.position),
-                  // Dummy
                   nextMatch: {
                     club: 'GRO',
                     vs: "BEN",
