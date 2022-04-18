@@ -188,15 +188,11 @@ export default function MySquadGameWeek () {
         setShowTripleCaptainModal(true)
     }
 
-    const handleTripleCaptainConfirmed = () => {
+    const handleTripleCaptainConfirmed = async () => {
+        if(!await handleBenchBoost('TRIPLE_CAPTAIN')) return
         setTripleCaptainApplied(true)
         setShowTripleCaptainModal(false)
     }
-
-    useEffect(() => {
-            if(!tripleCaptainApplied) return
-            handleMakeCaptain(squadInfo.squad.find(p => p.captain === true))
-    }, [tripleCaptainApplied])
 
     const handleTripleCaptainDisable = () => {
         if(tripleCaptainApplied){
@@ -213,6 +209,7 @@ export default function MySquadGameWeek () {
         setShowBenchBoostModal(true)
     }
 
+    // Handles Bench Boost Api Call
     const handleBenchBoost = async (type) => {
         dispatch(fantasyTeamBoosterStart())
         const dataInput = {

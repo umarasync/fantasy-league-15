@@ -33,7 +33,6 @@ function authReducer(
     case LOGIN_SUCCESS:
       return {
         ...state,
-        // user: { ...action.payload },
       };
     case LOGIN_FAILED:
       return {

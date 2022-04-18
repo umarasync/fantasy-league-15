@@ -140,7 +140,7 @@ export const setFantasyTeamBooster = (data) => {
 
       if (result && !isEmpty(result.data.setFantasyTeamBooster)) {
         dispatch(fantasyTeamBoosterSuccess())
-        return responseSuccess('Bench Boost Applied Successfully!!!')
+        return responseSuccess('Boost Applied Successfully!!!')
       }
 
       dispatch(fantasyTeamBoosterFailed())
