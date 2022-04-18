@@ -22,7 +22,7 @@ export default function FinishedMatchDetailsHead({
                                 text={
                                     <>
                                         <Text text={item.player.matchName} inline fw={600} nowrap/>
-                                        <Text text={`${item.totalPoints}pts`} inline ml={5}
+                                        <Text text={`${item.points}pts`} inline ml={5}
                                               className={'text-froly-cerise_red'} fw={600} nowrap/>
                                     </>
                                 }
