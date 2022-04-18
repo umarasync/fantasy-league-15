@@ -88,9 +88,11 @@ export const headToHeadTabContentAnimation = () => {
     return {
         moveLeft: {
             marginLeft: 0,
-            transition
+            transition,
+            maxHeight: 2000,
         },
         moveRight: {
+            maxHeight: 0,
             marginLeft: '110%',
             transition
         }

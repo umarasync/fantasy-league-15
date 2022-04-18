@@ -39,14 +39,14 @@ export default function LastMatchUps({
                                     <Div w={'54.5%'}>
                                         <Div className={'flex items-center justify-end'}>
                                             <Div className={'flex items-center'}>
-                                                <Text text={homeTeam.name} fs={18} lh={22} mr={12}
+                                                <Text text={awayTeam.name} fs={18} lh={22} mr={12}
                                                       color={colors.black_rock}/>
-                                                <Image src={homeTeam.logo} w={40} h={40} alt={'team1logo'}/>
+                                                <Image src={awayTeam.logo} w={40} h={40} alt={'team1logo'}/>
                                             </Div>
                                             <Div center w={106}>
                                                 <Goals
-                                                    team1Goals={team1.goals}
-                                                    team2Goals={team2.goals}
+                                                    team1Goals={team2.goals}
+                                                    team2Goals={team1.goals}
                                                     fs={18}
                                                     lh={26}
                                                 />
@@ -55,8 +55,8 @@ export default function LastMatchUps({
                                     </Div>
                                     <Div w={'45.5%'} className={''}>
                                         <Div className={'flex items-center'}>
-                                            <Image src={awayTeam.logo} w={40} h={40} alt={'team2logo'}/>
-                                            <Text text={awayTeam.name} fs={18} lh={22} ml={12}
+                                            <Image src={homeTeam.logo} w={40} h={40} alt={'team2logo'}/>
+                                            <Text text={homeTeam.name} fs={18} lh={22} ml={12}
                                                   color={colors.black_rock}/>
                                         </Div>
                                     </Div>
