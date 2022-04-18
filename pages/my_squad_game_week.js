@@ -55,6 +55,9 @@ export default function MySquadGameWeek () {
 
     const dispatch = useDispatch()
 
+    // Global States
+    const user = useSelector(({ auth }) => auth.user);
+
     const [squadInfo, setSquadInfo] = useState({})
     const [savedSquad, setSavedSquadInfo] = useState({})
     const [transferInProgress, setTransferInProgress] = useState(false)
@@ -79,9 +82,6 @@ export default function MySquadGameWeek () {
 
     // Info-Board
     const [currentGameWeekInfo, setCurrentGameWeekInfo] = useState({})
-
-    // Global States
-    const user = useSelector(({ auth }) => auth.user);
 
     //Player-Transfer
     const handlePlayerSwap = (player, arrayIndex) => {
@@ -195,11 +195,8 @@ export default function MySquadGameWeek () {
     }
 
     const handleTripleCaptainDisable = () => {
-        if(tripleCaptainApplied){
-            setTripleCaptainDisabled(true)
-        }else {
-            setTripleCaptainDisabled(false)
-        }
+        if(tripleCaptainApplied){ return setTripleCaptainDisabled(true)}
+        setTripleCaptainDisabled(false)
     }
 
     // Bench-Boost
@@ -235,10 +232,9 @@ export default function MySquadGameWeek () {
 
     const handleBenchBoostDisable = () => {
         if (benchBoostApplied) {
-            setBenchBoostDisabled(true)
-        } else {
-            setBenchBoostDisabled(false)
+            return setBenchBoostDisabled(true)
         }
+        setBenchBoostDisabled(false)
     }
 
     const handleMakeTransfer = () => {
@@ -250,11 +246,13 @@ export default function MySquadGameWeek () {
         })
     }
 
-    // Picked-Players-Change
+    // On Booster Chip Applying
+    useEffect(() => {
+        handleBenchBoostDisable()
+    }, [benchBoostApplied])
     useEffect(() => {
         handleTripleCaptainDisable()
-        handleBenchBoostDisable()
-    }, [squadInfo])
+    }, [tripleCaptainApplied])
 
     const runDidMount = async () => {
 
@@ -274,9 +272,11 @@ export default function MySquadGameWeek () {
 
         setSquadInfo($squadInfo)
         setSavedSquadInfo($squadInfo)
-
         setShowPlayerInfoModal(false)
         setShowTripleCaptainModal(false)
+
+        setTripleCaptainApplied(user.tripleCaptainApplied)
+        setBenchBoostApplied(user.benchBoostApplied)
 
         // Setting-Info-Board-State
         setCurrentGameWeekInfo({

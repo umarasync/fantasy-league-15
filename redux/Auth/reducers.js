@@ -25,7 +25,10 @@ function authReducer(
     resetRequestError:"",
     resetPasswordSuccess:"",
     resetPasswordError:"",
-    user: null,
+    user: {
+      benchBoostApplied: false,
+      tripleCaptainApplied: false,
+    },
   },
   action
 ) {
@@ -38,17 +41,17 @@ function authReducer(
       return {
         ...state,
         loginError: action.payload,
-        user: null,
+        user: { ...state.user, ...action.payload },
       };
     case ME_SUCCESS:
       return {
         ...state,
-        user: { ...action.payload },
+        user: { ...state.user, ...action.payload },
       };
     case ME_FAILED:
       return {
         ...state,
-        user: null,
+        user: { ...state.user, ...action.payload },
       };
     case SIGNUP_SUCCESS:
       return {
@@ -89,19 +92,6 @@ function authReducer(
       return {
         ...state,
         resetPasswordError: action.payload,
-      };
-    case RESET_PAGE:
-      return {
-        loginError: "",
-        signUpSuccess: "",
-        signUpError: "",
-        confirmationError:"",
-        confirmationSuccess:"",
-        resetRequestSuccess:"",
-        resetRequestError:"",
-        resetPasswordSuccess:"",
-        resetPasswordError:"",
-        user: null,
       };
     default:
       return state;
