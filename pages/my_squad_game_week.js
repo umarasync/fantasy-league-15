@@ -32,6 +32,7 @@ import R from "utils/getResponsiveValue";
 // Constants
 import {INITIAL} from "constants/animations";
 import {getCurrentWeekInfo} from "constants/data/leaguesAndRanking";
+import {BOOST_TYPE_BENCH, BOOST_TYPE_TRIPLE_CAPTAIN} from "constants/universalConstants";
 
 // Actions
 import {getFantasyTeamById, setFantasyTeamBooster, swapFantasyTeamPlayers} from "redux/FantasyTeams/api";
@@ -70,14 +71,10 @@ export default function MySquadGameWeek () {
 
     // Triple-Captain
     const [showTripleCaptainModal, setShowTripleCaptainModal] = useState(false);
-    const [tripleCaptainDisabled, setTripleCaptainDisabled] = useState(true);
-    const [tripleCaptainApplied, setTripleCaptainApplied] = useState(false);
     const [tripleCaptainPlayer, setTripleCaptainPlayer] = useState([])
 
     // Bench-Boost
     const [showBenchBoostModal, setShowBenchBoostModal] = useState(false);
-    const [benchBoostDisabled, setBenchBoostDisabled] = useState(true);
-    const [benchBoostApplied, setBenchBoostApplied] = useState(false);
     const [benchBoostPlayers, setBenchBoostPlayers] = useState([]);
 
     // Info-Board
@@ -92,7 +89,6 @@ export default function MySquadGameWeek () {
             squadInfo,
             setChangeFormation,
             setTransferInProgress,
-            tripleCaptainApplied
         })
         setSquadInfo($squadInfo)
     }
@@ -110,25 +106,24 @@ export default function MySquadGameWeek () {
 
     /*** Filter Buttons (Total pts, Price, Match) ***/
     useEffect(() => {
-            if(isEmpty(squadInfo)) return
-            const squad = squadInfo.squad.map((player) => {
-                player.activeFilter = activeFilter
-                return player
-            })
-            setSquadInfo({...squadInfo, squad})
+        if(isEmpty(squadInfo)) return
+        const squad = squadInfo.squad.map((player) => {
+            player.activeFilter = activeFilter
+            return player
+        })
+        setSquadInfo({...squadInfo, squad})
     }, [activeFilter])
 
     // Transfer_Edit-Cancel
-    const handleCancel = () => {
+    const handleCancelFantasyTeamSwap = () => {
         setSquadInfo(savedSquad)
         setTransferInProgress(false)
     }
 
     // Transfer_Edit-Save
-    const handleSave = async () => {
+    const handleSaveFantasyTeamSwap = async () => {
         // Api Calling
         dispatch(fantasyTeamSwapStart())
-
         const substitutes = squadInfo.squad
                                 .map(p => {if(p.isSubstitutePlayer){ return { id: p.id}}return false})
                                 .filter(p => p !== false)
@@ -180,30 +175,9 @@ export default function MySquadGameWeek () {
         setShowPlayerInfoModal(false)
     }
 
-    // Triple Captain
-    const handleShowTripleCaptainModal = () => {
-        const captain = squadInfo.squad.find(p => p.captain === true)
-        if(captain === undefined) return
-        setTripleCaptainPlayer([{...captain}])
-        setShowTripleCaptainModal(true)
-    }
-
     const handleTripleCaptainConfirmed = async () => {
-        if(!await handleBenchBoost('TRIPLE_CAPTAIN')) return
-        setTripleCaptainApplied(true)
+        if(!await handleBenchBoost(BOOST_TYPE_TRIPLE_CAPTAIN)) return
         setShowTripleCaptainModal(false)
-    }
-
-    const handleTripleCaptainDisable = () => {
-        if(tripleCaptainApplied){ return setTripleCaptainDisabled(true)}
-        setTripleCaptainDisabled(false)
-    }
-
-    // Bench-Boost
-    const handleBenchBoostModal = () => {
-        const substitutePlayer = squadInfo.squad.filter(p => p.isSubstitutePlayer)
-        setBenchBoostPlayers([...substitutePlayer])
-        setShowBenchBoostModal(true)
     }
 
     // Handles Bench Boost Api Call
@@ -224,18 +198,10 @@ export default function MySquadGameWeek () {
         return success
     }
     const handleBenchBoostConfirmed = async () => {
-        if(!await handleBenchBoost('BENCH')) return
-        setBenchBoostDisabled(true)
-        setBenchBoostApplied(true)
+        if(!await handleBenchBoost(BOOST_TYPE_BENCH)) return
         setShowBenchBoostModal(false)
     }
 
-    const handleBenchBoostDisable = () => {
-        if (benchBoostApplied) {
-            return setBenchBoostDisabled(true)
-        }
-        setBenchBoostDisabled(false)
-    }
 
     const handleMakeTransfer = () => {
         router.push({
@@ -245,14 +211,6 @@ export default function MySquadGameWeek () {
             }
         })
     }
-
-    // On Booster Chip Applying
-    useEffect(() => {
-        handleBenchBoostDisable()
-    }, [benchBoostApplied])
-    useEffect(() => {
-        handleTripleCaptainDisable()
-    }, [tripleCaptainApplied])
 
     const runDidMount = async () => {
 
@@ -275,9 +233,6 @@ export default function MySquadGameWeek () {
         setShowPlayerInfoModal(false)
         setShowTripleCaptainModal(false)
 
-        setTripleCaptainApplied(user.tripleCaptainApplied)
-        setBenchBoostApplied(user.benchBoostApplied)
-
         // Setting-Info-Board-State
         setCurrentGameWeekInfo({
             toggleAnimation: false,
@@ -299,11 +254,9 @@ export default function MySquadGameWeek () {
                 <div className={'flex'}>
                     <Div className="w-[62%]">
                         <MySquadLeftSection
+                            squadInfo={squadInfo}
                             transferInProgress={transferInProgress}
                             handleFilterButtonClick={(v) => setActiveFilter(v)}
-                            tripleCaptainApplied={tripleCaptainApplied}
-                            benchBoostApplied={benchBoostApplied}
-                            squadInfo={squadInfo}
                             onPlayerChange={handlePlayerSwap}
                             changeFormation={changeFormation}
                             onPlayerClick={handleShowPlayerInfoModal}
@@ -324,14 +277,19 @@ export default function MySquadGameWeek () {
 
                 {/*Footer-Bar*/}
                 <MySquadFooterBar
-                    transferInProgress={transferInProgress}
-                    onBenchBoost={handleBenchBoostModal}
-                    onTripleCaptain={handleShowTripleCaptainModal}
+                    // Squad Info
+                    squadInfo={squadInfo}
+                    // Transfer
                     onMakeTransfers={handleMakeTransfer}
-                    tripleCaptainDisabled={tripleCaptainDisabled}
-                    benchBoostDisabled={benchBoostDisabled}
-                    onCancel={handleCancel}
-                    onSave={handleSave}
+                    transferInProgress={transferInProgress}
+                    onCancel={handleCancelFantasyTeamSwap}
+                    onSave={handleSaveFantasyTeamSwap}
+                    // Triple Captain
+                    setTripleCaptainPlayer={setTripleCaptainPlayer}
+                    setShowTripleCaptainModal={setShowTripleCaptainModal}
+                    // Bench Boost
+                    setBenchBoostPlayers={setBenchBoostPlayers}
+                    setShowBenchBoostModal={setShowBenchBoostModal}
                 />
                 {/*Modals*/}
                 <PlayerInfoModal

@@ -1,3 +1,6 @@
+// Packages
+import {useSelector} from "react-redux";
+
 // Components
 import Div from 'components/html/Div'
 import MySquadFilterButtons from "components/mySquad/MySquadFilterButtons";
@@ -47,15 +50,15 @@ export default function MySquadLeftSection({
      squadInfo,
      onPlayerChange,
      transferInProgress,
-     changeFormation,
      handleFilterButtonClick,
-     onPlayerClick,
-     tripleCaptainApplied,
-     benchBoostApplied
-
+     onPlayerClick
 }) {
 
     const STYLES =  { ... getStyles(R) }
+
+    // Global States
+    const benchBoostApplied = useSelector(({ auth }) => auth.user.benchBoostApplied);
+    const tripleCaptainApplied = useSelector(({ auth }) => auth.user.tripleCaptainApplied);
 
     return (
         <div className="bg-[url('/images/bg_my_squad.png')] bg-[length:100%_100%] bg-no-repeat w-full h-full"
@@ -70,9 +73,8 @@ export default function MySquadLeftSection({
                         {
                             !isEmpty(squadInfo) && squadInfo.squad.length ? (
                                 <SelectedSquadOnPitch
-                                    changeFormation={changeFormation}
-                                    transferInProgress={transferInProgress}
                                     squadInfo={squadInfo}
+                                    transferInProgress={transferInProgress}
                                     onPlayerChange={onPlayerChange}
                                     onPlayerClick={onPlayerClick}
                                     tripleCaptainApplied={tripleCaptainApplied}

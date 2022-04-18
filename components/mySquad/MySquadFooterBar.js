@@ -12,6 +12,7 @@ import R from "utils/getResponsiveValue";
 // Colors
 import colors from "constants/colors";
 import {SHADOW_OBSERVATORY, SHADOW_PIGMENT_INDIGO} from "constants/boxShadow";
+import {useState} from "react";
 
 // Styles
 const getStyles = (R) => {
@@ -25,19 +26,43 @@ const getStyles = (R) => {
 }
 
 export default function MySquadFooterBar({
-    onBenchBoost,
-    onTripleCaptain,
+    // Squad Info
+    squadInfo,
+    // Transfer
     onMakeTransfers,
+    transferInProgress,
     onCancel,
     onSave,
-    transferInProgress,
-    tripleCaptainDisabled,
-    benchBoostDisabled
+    // Triple Captain
+    setTripleCaptainPlayer,
+    setShowTripleCaptainModal,
+    // Bench Boost
+    setBenchBoostPlayers,
+    setShowBenchBoostModal,
 }) {
 
     const STYLES = {...getStyles(R)}
 
+    // Global States
+    const benchBoostApplied = useSelector(({ auth }) => auth.user.benchBoostApplied);
+    const tripleCaptainApplied = useSelector(({ auth }) => auth.user.tripleCaptainApplied);
     const loadingFantasyTeamSwapping = useSelector(({ fantasyTeam }) => fantasyTeam.loadingFantasyTeamSwapping);
+
+
+    // Triple Captain
+    const handleShowTripleCaptainModal = () => {
+        const captain = squadInfo.squad.find(p => p.captain === true)
+        if(captain === undefined) return
+        setTripleCaptainPlayer([{...captain}])
+        setShowTripleCaptainModal(true)
+    }
+
+    // Bench-Boost
+    const handleBenchBoostModal = () => {
+        const substitutePlayer = squadInfo.squad.filter(p => p.isSubstitutePlayer)
+        setBenchBoostPlayers([...substitutePlayer])
+        setShowBenchBoostModal(true)
+    }
 
     return (
         <div
@@ -53,24 +78,24 @@ export default function MySquadFooterBar({
                                 <Button
                                     title={'Bench boost'}
                                     color={colors.white}
-                                    disabled={benchBoostDisabled}
+                                    disabled={benchBoostApplied}
                                     mr={32}
                                     h={50}
                                     w={190}
                                     bs={SHADOW_OBSERVATORY}
                                     className={'bg-turquoise-niagara'}
-                                    onClick={onBenchBoost}
+                                    onClick={handleBenchBoostModal}
                                 />
 
                                 <Button
                                     title={'Triple captain'}
                                     color={colors.white}
-                                    disabled={tripleCaptainDisabled}
+                                    disabled={tripleCaptainApplied}
                                     h={50}
                                     w={190}
                                     bs={SHADOW_PIGMENT_INDIGO}
                                     className={'bg-hibiscus-purple'}
-                                    onClick={onTripleCaptain}
+                                    onClick={handleShowTripleCaptainModal}
                                 />
                             </>
                         )
