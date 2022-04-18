@@ -12,6 +12,7 @@ export default gql`
       currentSeason
       fullName
       freeTransfers
+      fantasyTeamValue
       favouriteTeam {
         id
         name

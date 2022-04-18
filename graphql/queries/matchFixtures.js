@@ -8,9 +8,7 @@ export default gql`
         id
         finished
         gameWeek
-  
         matchTime
-  
         details {
           statistics {
             title
@@ -20,19 +18,21 @@ export default gql`
           }
           lastMatchUps {
             date
-            awayTeam {
-              checked
+            home {
               goals
-              id
-              logo
-              name
+              team {
+                id
+                name
+                logo
+              }
             }
-            homeTeam {
-              checked
+            away {
               goals
-              id
-              logo
-              name
+              team {
+                id
+                name
+                logo
+              }
             }
           }
           awardedPlayers {
@@ -53,25 +53,28 @@ export default gql`
           }
           headToHead {
             draws
-            homeTeam {
-              id
-              name
-              logo
-              totalWins
-              checked
+            away {
               away
               home
-            }
-            awayTeam {
-              away
-              checked
-              home
-              id
-              logo
-              name
               totalWins
+              team {
+                id
+                logo
+                name
+              }
             }
+  
             totalMatchPlayed
+            home {
+              away
+              home
+              totalWins
+              team {
+                logo
+              id
+                name
+              }
+            }
           }
           highlights {
             away {
@@ -88,21 +91,11 @@ export default gql`
           }
         }
         home {
+          goals
           fantasyPlayers {
             id
             name
-            photo
-            value
-            captain
-            viceCaptain
-            matchName
-            team {
-              id
-              logo
-              name
-            }
           }
-          goals
           team {
             id
             name

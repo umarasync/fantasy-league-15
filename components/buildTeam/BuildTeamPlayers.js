@@ -368,7 +368,7 @@ export default function BuildTeamPlayers ({
                    fantasyTeamId: user.fantasyTeamId,
            }))
         if (success) {
-            return initialSettingsForTransferWindows({
+            initialSettingsForTransferWindows({
                 // Team Data
                 squad: data,
                 // Picked Players
@@ -420,6 +420,7 @@ export default function BuildTeamPlayers ({
         runInitialSettingsForBuildYourTeam()
         setShowFooterBar(true);
         setRemainingBudget(totalBudget)
+
     }, [])
 
     return (

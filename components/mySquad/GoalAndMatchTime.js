@@ -94,7 +94,9 @@ const GoalAndMatchTime = (props) => {
                         exit="exit"
                         custom={{index, parentIndex, initialOpacity}}
                         key={3}
-                        style={STYLES.time}>
+                        style={STYLES.time}
+                    >
+
                         {dayjs(match.matchTime).format('HH:mm')}
                     </motion.p>
                 </AnimatePresence>
