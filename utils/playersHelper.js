@@ -45,15 +45,6 @@ export const buildPlayers = (playersData) => {
           })
 }
 
-export const mapSquadToPositions = (squad) => {
-    return {
-        [POSITION_GK]: squad.filter(p => p.position === POSITION_GK),
-        [POSITION_FWD]: squad.filter(p => p.position === POSITION_FWD),
-        [POSITION_DEF]: squad.filter(p => p.position === POSITION_DEF),
-        [POSITION_MID]: squad.filter(p => p.position === POSITION_MID),
-    }
-}
-
 // Teams
 export const ALL_TEAMS = 'All Teams'
 export const buildClubs = (teams) => {

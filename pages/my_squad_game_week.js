@@ -2,7 +2,6 @@
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
-import {toast} from "react-toastify";
 
 // Components
 import Layout from "components/layout/index";
@@ -17,26 +16,18 @@ import ProfileSettingsSideDrawer from "components/profileSettings/ProfileSetting
 import Loader from "components/loaders/Loader";
 
 // Utils
-import {clone, isEmpty} from "utils/helpers";
+import {isEmpty} from "utils/helpers";
 import {
-    resetPlayers,
-    setPlayersAdditionalData,
     TOTAL_POINTS,
-    CAPTAIN,
-    VICE_CAPTAIN,
-    makeCaptain
 } from "utils/mySquadHelper";
-import {playerSwapHandler, DIAMOND_UP_GREEN} from "utils/mySquadHelper";
+import {playerSwapHandler, DIAMOND_UP_GREEN, didMount} from "utils/mySquadHelper";
 import R from "utils/getResponsiveValue";
 
 // Constants
 import {INITIAL} from "constants/animations";
-import {getCurrentWeekInfo} from "constants/data/leaguesAndRanking";
 
 // Actions
-import {getFantasyTeamById, swapFantasyTeamPlayers} from "redux/FantasyTeams/api";
 import {getPlayer} from "redux/Players/api";
-import {fantasyTeamSwapStart} from "redux/FantasyTeams/actionCreators";
 
 // Styles
 const getStyles = (R) => {
@@ -90,7 +81,8 @@ export default function MySquadGameWeek () {
         })
         setSquadInfo($squadInfo)
     }
-    // Player-Info-Modal
+
+    /**** Player info modal ***/
     const handleShowPlayerInfoModal = async (player, arrayIndex) => {
         const {success, data} = await dispatch(getPlayer({playerId: player.id}))
         if(!success) return
@@ -102,7 +94,7 @@ export default function MySquadGameWeek () {
         setShowPlayerInfoModal(true)
     }, [playerInfoPlayer])
 
-    /*** Filter Buttons (Total pts, Price, Match) ***/
+    /*** Filter Buttons - Total pts, Price, Match ***/
     useEffect(() => {
         if(isEmpty(squadInfo)) return
         const squad = squadInfo.squad.map((player) => {
@@ -113,37 +105,23 @@ export default function MySquadGameWeek () {
     }, [activeFilter])
 
 
-    const runDidMount = async () => {
-
-        if (!user.fantasyTeamId) {return router.push('/build_team_all_players')}
-
-        const {
-            success,
-            data
-        } = await dispatch(getFantasyTeamById({
-                gameWeek: user.currentGameweek ,
-                fantasyTeamId: user.fantasyTeamId,
-        }))
-
-        if(!success) return
-
-        const $squadInfo = setPlayersAdditionalData(data)
-
-        setSquadInfo($squadInfo)
-        setSavedSquadInfo($squadInfo)
-        setShowPlayerInfoModal(false)
-        setShowTripleCaptainModal(false)
-
-        // Setting-Info-Board-State
-        setCurrentGameWeekInfo({
-            toggleAnimation: false,
-            data: clone(getCurrentWeekInfo())
-        })
-    }
-
     // Did-Mount
     useEffect(() => {
-        runDidMount()
+        if (!user.fantasyTeamId) { return router.push('/build_team_all_players')}
+        didMount({
+            // User
+            user,
+            // Squad Info
+            setSquadInfo,
+            setSavedSquadInfo,
+            // Modals
+            setShowPlayerInfoModal,
+            setShowTripleCaptainModal,
+            // Current game info
+            setCurrentGameWeekInfo,
+            // dispatch
+            dispatch
+        })
     }, [])
 
 
