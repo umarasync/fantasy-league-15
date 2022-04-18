@@ -28,6 +28,7 @@ import {
 } from "utils/mySquadHelper";
 import {playerSwapHandler, DIAMOND_UP_GREEN} from "utils/mySquadHelper";
 import R from "utils/getResponsiveValue";
+import {handleBenchBoost} from "utils/chipBoosterHelper";
 
 // Constants
 import {INITIAL} from "constants/animations";
@@ -175,33 +176,16 @@ export default function MySquadGameWeek () {
         setShowPlayerInfoModal(false)
     }
 
-    const handleTripleCaptainConfirmed = async () => {
-        if(!await handleBenchBoost(BOOST_TYPE_TRIPLE_CAPTAIN)) return
-        setShowTripleCaptainModal(false)
-    }
 
-    // Handles Bench Boost Api Call
-    const handleBenchBoost = async (type) => {
-        dispatch(fantasyTeamBoosterStart())
-        const dataInput = {
-            fantasyTeamId: user.fantasyTeamId,
-            gameweek: user.currentGameweek,
-            type
-        }
-        const { success, msg } = await dispatch(setFantasyTeamBooster(dataInput))
 
-        if (!success) {
-            toast.error(msg);
-            return success
-        }
-        toast.success(msg);
-        return success
-    }
     const handleBenchBoostConfirmed = async () => {
-        if(!await handleBenchBoost(BOOST_TYPE_BENCH)) return
-        setShowBenchBoostModal(false)
+        await handleBenchBoost({
+            boostType: BOOST_TYPE_BENCH,
+            dispatch,
+            user,
+            setShowModal: setShowBenchBoostModal
+        })
     }
-
 
     const handleMakeTransfer = () => {
         router.push({
@@ -300,16 +284,14 @@ export default function MySquadGameWeek () {
                     onMakeViceCaptain={handleMakeViceCaptain}
                 />
                 <TripleCaptainModal
-                    show={showTripleCaptainModal}
-                    onCancel={() => setShowTripleCaptainModal(false)}
+                    showTripleCaptainModal={showTripleCaptainModal}
+                    setShowTripleCaptainModal={setShowTripleCaptainModal}
                     player={tripleCaptainPlayer}
-                    onConfirmed={handleTripleCaptainConfirmed}
                 />
                 <BenchBoostModal
-                    show={showBenchBoostModal}
-                    onCancel={() => setShowBenchBoostModal(false)}
+                    showBenchBoostModal={showBenchBoostModal}
+                    setShowBenchBoostModal={setShowBenchBoostModal}
                     players={benchBoostPlayers}
-                    onConfirmed={handleBenchBoostConfirmed}
                 />
             </Div>
         </Layout>

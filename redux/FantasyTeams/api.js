@@ -145,6 +145,7 @@ export const setFantasyTeamBooster = (data) => {
           type
         },
       });
+
       // Success
       if (result && !isEmpty(result.data.setFantasyTeamBooster)) {
         dispatch(fantasyTeamBoosterSuccess())
