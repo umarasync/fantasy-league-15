@@ -145,9 +145,8 @@ export const setFantasyTeamBooster = (data) => {
           type
         },
       });
-
+      // Success
       if (result && !isEmpty(result.data.setFantasyTeamBooster)) {
-
         dispatch(fantasyTeamBoosterSuccess())
         if(isTypeBenchBoost) {
           dispatch(benchBoostAppliedSuccess())
@@ -157,26 +156,24 @@ export const setFantasyTeamBooster = (data) => {
         return responseSuccess(`${isTypeBenchBoost ? 'Bench' : 'Triple Captain'} Boost Applied Successfully!!!`)
       }
 
+      // Failed
       dispatch(fantasyTeamBoosterFailed())
-
       if(isTypeBenchBoost) {
         dispatch(benchBoostAppliedFailed())
       }else {
         dispatch(tripleCaptainBoostAppliedFailed())
       }
-
       return responseFailed(ERROR_MSG)
 
     } catch (e) {
 
+      // Failed
       dispatch(fantasyTeamBoosterFailed())
-
       if(isTypeBenchBoost) {
         dispatch(benchBoostAppliedFailed())
       }else {
         dispatch(tripleCaptainBoostAppliedFailed())
       }
-
       return responseFailed(ERROR_MSG)
     }
   };

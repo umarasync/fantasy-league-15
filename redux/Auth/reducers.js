@@ -18,6 +18,35 @@ import {
   TRIPLE_CAPTAIN_BOOST_APPLIED_FAILED,
 } from "./actionCreators";
 
+
+// Chip Booster States
+const benchBoosterState = (state, action) => {
+
+  switch (action.type) {
+      // Chip Booster
+    case BENCH_BOOST_APPLIED_SUCCESS:
+      return {
+        ...state,
+        user: { ...state.user, benchBoostApplied: true, ...action.payload },
+      };
+    case BENCH_BOOST_APPLIED_FAILED:
+      return {
+        ...state,
+        user: { ...state.user, benchBoostApplied: false, ...action.payload },
+      };
+    case TRIPLE_CAPTAIN_BOOST_APPLIED_SUCCESS:
+      return {
+        ...state,
+        user: { ...state.user, tripleCaptainApplied: true, ...action.payload },
+      };
+    case TRIPLE_CAPTAIN_BOOST_APPLIED_FAILED:
+      return {
+        ...state,
+        user: { ...state.user, tripleCaptainApplied: false, ...action.payload, },
+      };
+  }
+}
+
 function authReducer(
   state = {
     loginError: "",
@@ -36,6 +65,7 @@ function authReducer(
   },
   action
 ) {
+
   switch (action.type) {
     // login
     case LOGIN_SUCCESS:
@@ -107,27 +137,13 @@ function authReducer(
         resetPasswordError: action.payload,
       };
 
-      // Chip Booster
+    // Chip Booster States
     case BENCH_BOOST_APPLIED_SUCCESS:
-      return {
-        ...state,
-        user: { ...state.user, benchBoostApplied: true, ...action.payload },
-      };
     case BENCH_BOOST_APPLIED_FAILED:
-      return {
-        ...state,
-        user: { ...state.user, benchBoostApplied: false, ...action.payload },
-      };
     case TRIPLE_CAPTAIN_BOOST_APPLIED_SUCCESS:
-      return {
-        ...state,
-        user: { ...state.user, tripleCaptainApplied: true, ...action.payload },
-      };
     case TRIPLE_CAPTAIN_BOOST_APPLIED_FAILED:
-      return {
-        ...state,
-        user: { ...state.user, tripleCaptainApplied: false, ...action.payload, },
-      };
+      return benchBoosterState(state, action)
+
     default:
       return state;
   }
