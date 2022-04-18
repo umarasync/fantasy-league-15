@@ -285,12 +285,12 @@ const readyCaptainBeforeChange = (p1, p2) => {
 }
 
 export const makeCaptain = ({
-    $squadInfo,
+    squadInfo,
     player,
     captainType
 }) => {
 
-    const { squad } = $squadInfo
+    const { squad } = squadInfo
 
     // Previous Captain or Vice Captain Index
     const pIndex = squad.findIndex(p => p[captainType] === true)

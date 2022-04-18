@@ -28,17 +28,15 @@ import {
 } from "utils/mySquadHelper";
 import {playerSwapHandler, DIAMOND_UP_GREEN} from "utils/mySquadHelper";
 import R from "utils/getResponsiveValue";
-import {handleBenchBoost} from "utils/chipBoosterHelper";
 
 // Constants
 import {INITIAL} from "constants/animations";
 import {getCurrentWeekInfo} from "constants/data/leaguesAndRanking";
-import {BOOST_TYPE_BENCH, BOOST_TYPE_TRIPLE_CAPTAIN} from "constants/universalConstants";
 
 // Actions
-import {getFantasyTeamById, setFantasyTeamBooster, swapFantasyTeamPlayers} from "redux/FantasyTeams/api";
-import {getPlayer, setFantasyTeamRole} from "redux/Players/api";
-import {fantasyTeamBoosterStart, fantasyTeamSwapStart} from "redux/FantasyTeams/actionCreators";
+import {getFantasyTeamById, swapFantasyTeamPlayers} from "redux/FantasyTeams/api";
+import {getPlayer} from "redux/Players/api";
+import {fantasyTeamSwapStart} from "redux/FantasyTeams/actionCreators";
 
 // Styles
 const getStyles = (R) => {
@@ -147,46 +145,6 @@ export default function MySquadGameWeek () {
         setTransferInProgress(false)
     }
 
-    // Player info
-    const handleMakeCaptain = (player) => handleCaptainChange(player, CAPTAIN)
-    const handleMakeViceCaptain = (player) => handleCaptainChange(player, VICE_CAPTAIN)
-    const handleCaptainChange = async (player, captainType) => {
-
-        const squad = makeCaptain(
-            {
-                $squadInfo: squadInfo,
-                player,
-                captainType,
-        })
-
-        // Api Calling
-        const inputData = {
-            fantasyTeamId: user.fantasyTeamId,
-            captain: { id: squad.find(p => p.captain).id }  ,
-            viceCaptain: { id: squad.find(p => p.viceCaptain).id }
-        }
-        const {success, msg, data} = await dispatch(setFantasyTeamRole(inputData))
-
-        if (!success) { return toast.error(msg); }
-
-        toast.success(msg);
-        setSquadInfo({...squadInfo, squad})
-        setSavedSquadInfo({...squadInfo, squad})
-        setShowPlayerInfoModal(false)
-    }
-
-
-
-    const handleBenchBoostConfirmed = async () => {
-        await handleBenchBoost({
-            boostType: BOOST_TYPE_BENCH,
-            dispatch,
-            user,
-            setShowModal: setShowBenchBoostModal
-        })
-    }
-
-
     const runDidMount = async () => {
 
         if (!user.fantasyTeamId) {return router.push('/build_team_all_players')}
@@ -267,11 +225,15 @@ export default function MySquadGameWeek () {
                 />
                 {/*Modals*/}
                 <PlayerInfoModal
-                    show={showPlayerInfoModal}
-                    onClose={() => setShowPlayerInfoModal(false)}
+                    // Squad Info
+                    squadInfo={squadInfo}
+                    setSquadInfo={setSquadInfo}
+                    setSavedSquadInfo={setSavedSquadInfo}
+                    // Modal
+                    showPlayerInfoModal={showPlayerInfoModal}
+                    setShowPlayerInfoModal={setShowPlayerInfoModal}
+                    // Player
                     player={playerInfoPlayer}
-                    onMakeCaptain={handleMakeCaptain}
-                    onMakeViceCaptain={handleMakeViceCaptain}
                 />
                 <TripleCaptainModal
                     showTripleCaptainModal={showTripleCaptainModal}
