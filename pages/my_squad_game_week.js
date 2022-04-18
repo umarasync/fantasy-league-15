@@ -54,7 +54,6 @@ export default function MySquadGameWeek () {
     const STYLES = {...getStyles(R)}
 
     const router = useRouter()
-
     const dispatch = useDispatch()
 
     // Global States
@@ -187,14 +186,6 @@ export default function MySquadGameWeek () {
         })
     }
 
-    const handleMakeTransfer = () => {
-        router.push({
-            pathname: '/make_players_transfers',
-            query: {
-                makeTransfer: true
-            }
-        })
-    }
 
     const runDidMount = async () => {
 
@@ -264,7 +255,6 @@ export default function MySquadGameWeek () {
                     // Squad Info
                     squadInfo={squadInfo}
                     // Transfer
-                    onMakeTransfers={handleMakeTransfer}
                     transferInProgress={transferInProgress}
                     onCancel={handleCancelFantasyTeamSwap}
                     onSave={handleSaveFantasyTeamSwap}

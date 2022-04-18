@@ -13,6 +13,7 @@ import R from "utils/getResponsiveValue";
 import colors from "constants/colors";
 import {SHADOW_OBSERVATORY, SHADOW_PIGMENT_INDIGO} from "constants/boxShadow";
 import {useState} from "react";
+import {useRouter} from "next/router";
 
 // Styles
 const getStyles = (R) => {
@@ -29,7 +30,6 @@ export default function MySquadFooterBar({
     // Squad Info
     squadInfo,
     // Transfer
-    onMakeTransfers,
     transferInProgress,
     onCancel,
     onSave,
@@ -42,6 +42,8 @@ export default function MySquadFooterBar({
 }) {
 
     const STYLES = {...getStyles(R)}
+
+    const router = useRouter()
 
     // Global States
     const benchBoostApplied = useSelector(({ auth }) => auth.user.benchBoostApplied);
@@ -62,6 +64,16 @@ export default function MySquadFooterBar({
         const substitutePlayer = squadInfo.squad.filter(p => p.isSubstitutePlayer)
         setBenchBoostPlayers([...substitutePlayer])
         setShowBenchBoostModal(true)
+    }
+
+    // Make Transfers
+    const handleMakeTransfer = () => {
+        router.push({
+            pathname: '/make_players_transfers',
+            query: {
+                makeTransfer: true
+            }
+        })
     }
 
     return (
@@ -144,7 +156,7 @@ export default function MySquadFooterBar({
                                     w={190}
                                     bs={'unset'}
                                     bg={colors.white}
-                                    onClick={onMakeTransfers}
+                                    onClick={handleMakeTransfer}
                                 />
                             </>
                         )
