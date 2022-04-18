@@ -4,6 +4,7 @@ import CREATE_FANTASY_TEAM from "graphql/mutations/createFantasyTeam";
 import DO_FANTASY_TEAM_TRANSFER from "graphql/mutations/doFantasyTeamTransfers";
 import GET_FANTASY_TEAM from "graphql/queries/fantasyTeamById";
 import SWAP_FANTASY_TEAM_PLAYERS from "graphql/mutations/swapFantasyTeamPlayers";
+import SET_FANTASY_TEAM_BOOSTER from "graphql/mutations/setFantasyTeamBooster";
 
 // Constants
 import {ERROR_MSG} from "constants/universalConstants";
@@ -13,8 +14,10 @@ import {isEmpty, responseFailed, responseSuccess} from "utils/helpers";
 
 // Actions
 import {
+  fantasyTeamBoosterFailed,
+  fantasyTeamBoosterSuccess,
   fantasyTeamCreationStart,
-  fantasyTeamSwapFailed, fantasyTeamSwapStart,
+  fantasyTeamSwapFailed,
   fantasyTeamSwapSuccess,
   fantasyTeamTransferStart
 } from "./actionCreators";
@@ -120,3 +123,31 @@ export const swapFantasyTeamPlayers = ({fantasyTeamId, captain, viceCaptain, sub
   };
 };
 
+export const setFantasyTeamBooster = (data) => {
+  const { fantasyTeamId, gameweek, type } = data
+
+  return async (dispatch) => {
+    try {
+      const apolloClient = createApolloClient();
+      const result = await apolloClient.mutate({
+        mutation: SET_FANTASY_TEAM_BOOSTER,
+        variables: {
+          fantasyTeamId,
+          gameweek,
+          type
+        },
+      });
+
+      if (result && !isEmpty(result.data.setFantasyTeamBooster)) {
+        dispatch(fantasyTeamBoosterSuccess())
+        return responseSuccess('Bench Boost Applied Successfully!!!')
+      }
+
+      dispatch(fantasyTeamBoosterFailed())
+      return responseFailed(ERROR_MSG)
+    } catch (e) {
+      dispatch(fantasyTeamBoosterFailed())
+      return responseFailed(ERROR_MSG)
+    }
+  };
+};

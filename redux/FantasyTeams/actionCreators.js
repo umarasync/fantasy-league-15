@@ -49,3 +49,13 @@ export const FANTASY_TEAM_SWAP_FAILED = "FANTASY_TEAM_SWAP_FAILED"
 export const fantasyTeamSwapStart = (payload) => {return {type: FANTASY_TEAM_SWAP_START, payload}}
 export const fantasyTeamSwapSuccess = (payload) => {return {type: FANTASY_TEAM_SWAP_SUCCESS, payload}}
 export const fantasyTeamSwapFailed = (payload) => {return {type: FANTASY_TEAM_SWAP_FAILED, payload}}
+
+
+// Fantasy Team Booster
+export const FANTASY_TEAM_BOOSTER_START = "FANTASY_TEAM_BOOSTER_START"
+export const FANTASY_TEAM_BOOSTER_SUCCESS = "FANTASY_TEAM_BOOSTER_SUCCESS"
+export const FANTASY_TEAM_BOOSTER_FAILED = "FANTASY_TEAM_BOOSTER_FAILED"
+
+export const fantasyTeamBoosterStart = (payload) => {return {type: FANTASY_TEAM_BOOSTER_START, payload}}
+export const fantasyTeamBoosterSuccess = (payload) => {return {type: FANTASY_TEAM_BOOSTER_SUCCESS, payload}}
+export const fantasyTeamBoosterFailed = (payload) => {return {type: FANTASY_TEAM_BOOSTER_FAILED, payload}}

@@ -34,9 +34,9 @@ import {INITIAL} from "constants/animations";
 import {getCurrentWeekInfo} from "constants/data/leaguesAndRanking";
 
 // Actions
-import {getFantasyTeamById, swapFantasyTeamPlayers} from "redux/FantasyTeams/api";
+import {getFantasyTeamById, setFantasyTeamBooster, swapFantasyTeamPlayers} from "redux/FantasyTeams/api";
 import {getPlayer, setFantasyTeamRole} from "redux/Players/api";
-import {fantasyTeamSwapStart} from "redux/FantasyTeams/actionCreators";
+import {fantasyTeamBoosterStart, fantasyTeamSwapStart} from "redux/FantasyTeams/actionCreators";
 
 // Styles
 const getStyles = (R) => {
@@ -213,7 +213,24 @@ export default function MySquadGameWeek () {
         setShowBenchBoostModal(true)
     }
 
-    const handleBenchBoostConfirmed = () => {
+    const handleBenchBoost = async (type) => {
+        dispatch(fantasyTeamBoosterStart())
+        const dataInput = {
+            fantasyTeamId: user.fantasyTeamId,
+            gameweek: user.currentGameweek,
+            type
+        }
+        const { success, msg } = await dispatch(setFantasyTeamBooster(dataInput))
+
+        if (!success) {
+            toast.error(msg);
+            return success
+        }
+        toast.success(msg);
+        return success
+    }
+    const handleBenchBoostConfirmed = async () => {
+        if(!await handleBenchBoost('BENCH')) return
         setBenchBoostDisabled(true)
         setBenchBoostApplied(true)
         setShowBenchBoostModal(false)

@@ -8,6 +8,7 @@ import Button from "components/html/Button";
 // Constants
 import colors from "constants/colors";
 import {SHADOW_DARK_INDIGO} from "constants/boxShadow";
+import {useSelector} from "react-redux";
 
 export default function PointsBoostModalContent({
     title,
@@ -18,6 +19,8 @@ export default function PointsBoostModalContent({
     onCancel,
     onConfirmed,
 }) {
+    const loadingFantasyTeamBooster = useSelector(
+      ({ fantasyTeam }) => fantasyTeam.loadingFantasyTeamBooster);
 
     return (
         <Modal>
@@ -46,6 +49,7 @@ export default function PointsBoostModalContent({
                                     bs={SHADOW_DARK_INDIGO}
                                     bg={colors.dark_indigo}
                                     onClick={onCancel}
+                                    disabled={loadingFantasyTeamBooster}
                                 />
                                 <Button
                                     title={'Confirm'}
@@ -53,6 +57,7 @@ export default function PointsBoostModalContent({
                                     ml={8}
                                     h={70}
                                     onClick={onConfirmed}
+                                    disabled={loadingFantasyTeamBooster}
                                 />
                             </Div>
                         </Div>
