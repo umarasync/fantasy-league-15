@@ -30,11 +30,6 @@ export default function FinishedMatchDetailsHead({
                                 lh={28}
                                 color={colors.black_rock}
                             />
-                            {
-                                item.award && (
-                                    <Text text={item.award} fs={12} lh={16} color={colors.regent_grey} mt={6}/>
-                                )
-                            }
                         </Div>
                     ))
                 }
