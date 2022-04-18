@@ -216,7 +216,6 @@ export const me = () => {
       if(res && res.data.me) {
         return res.data.me
       }
-
       return false
     } catch (e) {
       return false

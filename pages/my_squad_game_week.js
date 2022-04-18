@@ -246,12 +246,17 @@ export default function MySquadGameWeek () {
 
         if (!user.fantasyTeamId) {return router.push('/build_team_all_players')}
 
-        const squad = await dispatch(getFantasyTeamById({
+        const {
+            success,
+            data
+        } = await dispatch(getFantasyTeamById({
                 gameWeek: user.currentGameweek ,
                 fantasyTeamId: user.fantasyTeamId,
         }))
 
-        const $squadInfo = setPlayersAdditionalData(squad)
+        if(!success) return
+
+        const $squadInfo = setPlayersAdditionalData(data)
 
         setSquadInfo($squadInfo)
         setSavedSquadInfo($squadInfo)
@@ -270,6 +275,7 @@ export default function MySquadGameWeek () {
     useEffect(() => {
         runDidMount()
     }, [])
+
 
     if (squadInfo.length === 0) {return <Loader/>}
 

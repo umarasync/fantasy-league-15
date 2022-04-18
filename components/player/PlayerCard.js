@@ -9,6 +9,10 @@ import R from "utils/getResponsiveValue";
 import colors from "constants/colors";
 import {useEffect, useState} from "react";
 
+// Utils
+import {nFormatter} from "utils/helpers";
+import {positionAbbr} from "utils/playersHelper";
+
 // Styles
 const getStyles = (R, props) => {
 
@@ -103,7 +107,7 @@ export default function PlayerCard (props){
                 <PlayerImage player={player} ml={16} mr={16} w={70} h={70} />
                 <div>
                     <p className={'font-[600]'} style={STYLES.playerName}>
-                        {player.name}
+                        {player.matchName}
                         <p style={{paddingTop: R(3)}}>
                             <span>{player.nextMatch.club}</span>
                             <span className={'font-[200]'}>{` vs ${player.nextMatch.vs}`}</span>
@@ -115,14 +119,14 @@ export default function PlayerCard (props){
             <div className={'flex items-center'}>
                 <div style={{marginRight: R(16)}}>
                     <p style={STYLES.price}>
-                        {player.formattedPrice}
-                        <p style={STYLES.type}><span>{player.position}</span></p>
+                        {nFormatter(player.value)}
+                        <p style={STYLES.type}><span>{positionAbbr(player.position)}</span></p>
                     </p>
                 </div>
                 <Border/>
                 <p style={
                     STYLES.totalPoints
-                }>{player.points}</p>
+                }>{player.totalPoints}</p>
             </div>
         </div>
     )

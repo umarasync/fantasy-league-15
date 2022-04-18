@@ -20,6 +20,7 @@ export default gql`
         captain
         viceCaptain
         isSubstitute
+        state
         currGWPoints {
           totalPoints
           assistPoints

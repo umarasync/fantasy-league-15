@@ -15,7 +15,7 @@ export default function PlayerName({
     return (
         <Div className={'flex items-center justify-center'}>
             <Text
-                text={truncate(`${player.name}`, player.captain || player.viceCaptain ? 10 : 12)}
+                text={truncate(`${player.matchName}`, player.captain || player.viceCaptain ? 10 : 12)}
                 fs={10}
                 lh={14}
                 color={colors.white}

@@ -16,9 +16,6 @@ import ClubImageAnimation from "Animations/mySquad/ClubImageAnimation";
 import R from "utils/getResponsiveValue";
 import UpcomingMatchDetails from "./upcomingMatches/UpcomingMatchDetails";
 
-// Constants
-import {ZERO} from "constants/arrayIndexes";
-
 // Styles
 const getStyles = (R) => {
     return {
@@ -43,11 +40,17 @@ export default function MatchRow({
     parentIndex,
     index,
     match,
-    tabChanged,
+    toggleAnimation,
     initialOpacity,
 }) {
     const STYLES = {...getStyles(R)}
     const [showMatchDetails, setShowMatchDetails] = useState(false)
+
+    const homeTeam = match.home
+    const awayTeam = match.away
+
+    const team1 = match.home.team
+    const team2 = match.away.team
 
     const handleShowMatchDetails = () => {
         setShowMatchDetails(!showMatchDetails)
@@ -55,7 +58,7 @@ export default function MatchRow({
 
     useEffect(() => {
         setShowMatchDetails(false)
-    }, [tabChanged])
+    }, [toggleAnimation])
 
     return (
         <div>
@@ -63,9 +66,9 @@ export default function MatchRow({
                 <div className={'w-[54%]'}>
                     <Div className={'flex justify-end items-center relative'} pr={100}>
                         <TeamName
-                            tabChanged={tabChanged}
+                            tabChanged={toggleAnimation}
                             match={match}
-                            club={match.team1}
+                            team={homeTeam}
                             index={index}
                             parentIndex={parentIndex}
                             initialOpacity={initialOpacity}
@@ -76,8 +79,8 @@ export default function MatchRow({
                             <CardImage
                                 fadeInOutAnimation={ClubImageAnimation}
                                 custom={{initialOpacity}}
-                                changeCard={tabChanged}
-                                image={{...STYLES.teamImage, name: `/images/${match.team1.logo}`}}
+                                changeCard={toggleAnimation}
+                                image={{...STYLES.teamImage, name: team1.logo}}
                             />
                         </div>
                         <div className={'relative'}>
@@ -86,14 +89,14 @@ export default function MatchRow({
                                 index={index}
                                 parentIndex={parentIndex}
                                 initialOpacity={initialOpacity}
-                                tabChanged={tabChanged}
+                                tabChanged={toggleAnimation}
                             />
                             <FT
                                 match={match}
                                 index={index}
                                 parentIndex={parentIndex}
                                 initialOpacity={initialOpacity}
-                                tabChanged={tabChanged}
+                                tabChanged={toggleAnimation}
                             />
                         </div>
 
@@ -105,14 +108,14 @@ export default function MatchRow({
                             <CardImage
                                 fadeInOutAnimation={ClubImageAnimation}
                                 custom={{initialOpacity}}
-                                changeCard={tabChanged}
-                                image={{...STYLES.teamImage, name: `/images/${match.team2.logo}`}}
+                                changeCard={toggleAnimation}
+                                image={{...STYLES.teamImage, name: team2.logo}}
                             />
                         </div>
                         <TeamName
-                            tabChanged={tabChanged}
+                            tabChanged={toggleAnimation}
                             match={match}
-                            club={match.team2}
+                            team={awayTeam}
                             index={index}
                             parentIndex={parentIndex}
                             initialOpacity={initialOpacity}
@@ -128,13 +131,13 @@ export default function MatchRow({
                     match.finished ? (
                         <FinishedMatchDetails
                             match={match}
-                            tabChanged={tabChanged}
+                            tabChanged={toggleAnimation}
                             showMatchDetails={showMatchDetails}
                         />
                     ): (
                         <UpcomingMatchDetails
                             match={match}
-                            tabChanged={tabChanged}
+                            tabChanged={toggleAnimation}
                             showMatchDetails={showMatchDetails}
                         />
                     )

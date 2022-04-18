@@ -1,6 +1,3 @@
-// Packages
-import dayjs from "dayjs";
-
 // Utils
 import {clone} from "utils/helpers";
 import {getMatchFixturesForGameWeek} from "../redux/MatchFixtures/api";
@@ -9,26 +6,21 @@ import {getMatchFixturesForGameWeek} from "../redux/MatchFixtures/api";
 export const MAKE_TRANSFERS = 'make transfers'
 
 export const setInitialSettings = ({
-  initialMatchFixturesGameWeeks,
-  setActiveTabContent,
-  setMatchesGameWeeks
+  initialGameWeeks,
+  setGameWeeks
 }) => {
-    const $matchesGameWeeks = initialMatchFixturesGameWeeks.map((gw, index) => {
-        if (gw.currentGameWeek) {
-            gw.gameWeekDate = MAKE_TRANSFERS
+    const $initialGameWeeks = clone(initialGameWeeks)
+    const $gameWeeks = $initialGameWeeks.map((gw) => {
+        if (gw.current) {
+            gw.deadline = MAKE_TRANSFERS
             gw.active = true
-            // setActiveTabContent({...gw})
-            setActiveTabContent({
-                toggleAnimation: false,
-                data: {...gw}
-            })
-
         }else {
             gw.active = false
         }
         return gw
     })
-    setMatchesGameWeeks($matchesGameWeeks)
+
+    setGameWeeks([...$gameWeeks])
 }
 
 export const getActiveRect = ({
@@ -87,54 +79,36 @@ export const scrollRenderer = (props) => {
 }
 
 export const tabClickHandler = ({
-    matchFixturesObj,
-    matchesGameWeeks,
-    setMatchesGameWeeks,
-    activeTabContent,
-    setActiveTabContent,
+    activeGameWeek,
+    gameWeeks,
+    setGameWeeks,
 }) => {
 
-    let currentActive = matchesGameWeeks.findIndex((match) => match.active)
-    const $matchesGameWeeks = matchesGameWeeks.map((item, index) => {
-        item.active = item.id === matchFixturesObj.id;
+    let currentActive = gameWeeks.findIndex((match) => match.active)
+    const $gameWeeks = gameWeeks.map((item, index) => {
+        item.active = item.id === activeGameWeek;
         item.lastActive = index === currentActive
         return item
     })
-
-    // setActiveTabContent({...$matchesGameWeeks.find((gw) => gw.active)})
-    setActiveTabContent({
-        toggleAnimation: !activeTabContent.toggleAnimation,
-        data: {...$matchesGameWeeks.find((gw) => gw.active)}
-    })
-
-    setMatchesGameWeeks($matchesGameWeeks)
+    setGameWeeks($gameWeeks)
 }
 
 
 export const controlsHandler = async ({
     isNext,
-    matchesGameWeeks,
-    dispatch,
-    // These props are necessary for tabClickHandler function
-    setMatchesGameWeeks,
-    activeTabContent,
-    setActiveTabContent,
+    gameWeeks,
+    setGameWeeks,
 }) => {
-    const $matchesGameWeeks = clone(matchesGameWeeks)
-    let objIndex = $matchesGameWeeks.findIndex((match) => match.active)
-    let nextIndex = isNext ? objIndex + 1 : objIndex - 1
-    if (nextIndex === $matchesGameWeeks.length || nextIndex === -1) return
-    let nextGw = $matchesGameWeeks[nextIndex]
 
-    const res = await dispatch(getMatchFixturesForGameWeek({gameWeek: nextGw.gameWeek}))
+    let objIndex = gameWeeks.findIndex((match) => match.active)
+    let nextIndex = isNext ? objIndex + 1 : objIndex - 1
+    if (nextIndex === gameWeeks.length || nextIndex === -1) return
+    let nextGw = gameWeeks[nextIndex]
 
     tabClickHandler({
-        matchesGameWeeks,
-        // matchFixturesObj: res.data,
-        matchFixturesObj: nextGw,
-        setMatchesGameWeeks,
-        activeTabContent,
-        setActiveTabContent,
+        activeGameWeek: nextGw.id,
+        gameWeeks,
+        setGameWeeks,
     })
 }
 

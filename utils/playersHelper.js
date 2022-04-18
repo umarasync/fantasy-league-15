@@ -1,45 +1,36 @@
 // Packages
 import {v4 as uuidv4} from 'uuid';
 
-// Helpers
-import {nFormatter} from "utils/helpers";
-
 // Constants
-import {POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID} from "constants/data/filters";
+import {POSITION_ALL, POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID} from "constants/data/filters";
 
 // Players
-const getPlayerPosition = (position) => {
+export const positionAbbr = (position) => {
   let p = "";
   switch (position) {
-    case "FORWARD":
+    case POSITION_FWD:
       p = "FWD";
       break;
-    case "DEFENDER":
+    case POSITION_DEF:
       p = "DEF";
       break;
-    case "MIDFIELDER":
+    case POSITION_MID:
       p = "MID";
       break;
-    case "GOALKEEPER":
+    case POSITION_GK:
       p = "GK";
       break;
+    case POSITION_ALL:
+        p = "ALL";
+        break;
   }
   return p;
 };
 
 export const buildPlayers = (playersData) => {
-  return playersData.map((p, i) => {
+  return playersData.map(p => {
             return {
                   ...p,
-                  image: p.photo,
-                  clubImage: p.team.logo,
-                  clubName: p.team.name,
-                  status: p.state ? p.state : "fit", // Currently checking due to data sync gaps
-                  name: p.matchName,
-                  price: parseFloat(p.value),
-                  formattedPrice: nFormatter(p.value),
-                  points: p.totalPoints,
-                  position: getPlayerPosition(p.position),
                   nextMatch: {
                     club: 'GRO',
                     vs: "BEN",

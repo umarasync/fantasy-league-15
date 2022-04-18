@@ -36,7 +36,8 @@ const getStyles = (R) => {
             width: '100%'
         },
         statistics: {
-            marginLeft: '110%'
+            marginLeft: '110%',
+            maxHeight: 0
         }
     }
 }

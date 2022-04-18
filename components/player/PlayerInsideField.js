@@ -10,6 +10,7 @@ import Image from "components/html/Image";
 import R from "utils/getResponsiveValue";
 import {getButtonBGColor, MATCHES, TOTAL_POINTS} from "utils/mySquadHelper";
 import {nFormatter} from "utils/helpers";
+import {positionAbbr} from "utils/playersHelper";
 
 // Constants
 import {STATUS_INJURED, STATUS_SUSPENDED} from "constants/data/filters";
@@ -70,7 +71,7 @@ const SubTitle = ({player}) => {
                     style={STYLES.subTitle}
                 >
                     <Text
-                        text={`${player.points} pts ${player.position}`}
+                        text={`${player.totalPoints} pts ${positionAbbr(player.position)}`}
                         fs={10}
                         lh={14}
                         color={colors.white}
@@ -90,7 +91,7 @@ const SubTitle = ({player}) => {
                     style={STYLES.subTitle}
                 >
                     <Text
-                        text={`${player.nextMatch.vs} (${player.nextMatch.matchType}) ${player.position}`}
+                        text={`${player.nextMatch.vs} (${player.nextMatch.matchType}) ${positionAbbr(player.position)}`}
                         fs={10}
                         lh={14}
                         color={colors.white}
@@ -111,7 +112,7 @@ const SubTitle = ({player}) => {
                 style={STYLES.subTitle}
             >
                 <Text
-                    text={`${nFormatter(player.price)} ${player.position}`}
+                    text={`${nFormatter(player.value)} ${positionAbbr(player.position)}`}
                     fs={10}
                     lh={14}
                     color={colors.white}
@@ -147,7 +148,7 @@ const PlayerInsideField = ({player}) => {
                 onClick={() => onPlayerClick ? onPlayerClick(player): false}
             >
                 {
-                    player.status === STATUS_INJURED || player.status === STATUS_SUSPENDED && (
+                    player.state === STATUS_INJURED || player.state === STATUS_SUSPENDED && (
                         <div className={'flex items-center justify-center'} style={STYLES.statusImage}>
                             <Image src={`${player.statusImage}`} alt="statusImage" w={10} h={10}/>
                         </div>

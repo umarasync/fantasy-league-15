@@ -14,12 +14,12 @@ export default function PointsDetails({
     return (
         <>
             <Div className={'flex items-center'} mb={26}>
-                <Text text={player1.points} fs={30} lh={38} fw={600}
+                <Text text={player1.totalPoints} fs={30} lh={38} fw={600}
                       className={'text-froly-cerise_red'}
                       mr={24}
                 />
                 <Border h={70}/>
-                <Text text={player2.points} fs={30} lh={38} fw={600}
+                <Text text={player2.totalPoints} fs={30} lh={38} fw={600}
                       className={'text-froly-cerise_red'}
                       ml={24}
                 />

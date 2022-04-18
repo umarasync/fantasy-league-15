@@ -1,6 +1,3 @@
-// Packages
-import {useAnimation} from "framer-motion";
-
 // Components
 import PlayerOnPitch from "components/player/PlayerOnPitch";
 import Div from "components/html/Div";
@@ -14,19 +11,12 @@ import {
     ONE,
     TWO,
     THREE,
-    FOUR,
-    FIVE,
-    SIX,
-    SEVEN,
-    EIGHT,
-    NINE,
-    TEN,
-    ELEVEN,
-    TWELVE,
-    THIRTEEN,
-    FOURTEEN
+    FOUR
 } from "constants/arrayIndexes";
 import {POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID} from "constants/data/filters";
+
+// Utils
+import {isEmpty} from "utils/helpers";
 
 // Styles
 const getStyles = (R) => {
@@ -71,6 +61,11 @@ export default function AllPlayersOnField({
     const STYLES = {...getStyles(R)}
 
     const buildPlayer = (position, index) => {
+
+        if(!pickedPlayers){
+            return {}
+        }
+
         return {
             ...pickedPlayers[position][index],
             isOneFreeTransferWindow

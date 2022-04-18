@@ -8,12 +8,12 @@ import {
 
 // GraphQL
 import GET_MATCH_FIXTURES from "graphql/queries/matchFixtures";
-// import GET_MATCH_FIXTURES_GAME_WEEKS from "graphql/queries/getMatchFixturesGameWeeks";
-import {isEmpty, responseSuccess} from "utils/helpers";
+import GET_GAME_WEEKS from "graphql/queries/matchFixturesGameWeeks";
+import {isEmpty, responseFailed, responseSuccess} from "utils/helpers";
 
 // Constants
 import {MatchesGameWeeks} from "constants/data/matchesGameWeeks";
-
+import {ERROR_MSG} from "constants/universalConstants";
 
 export const getMatchFixturesForGameWeek = (data) => {
   return async (dispatch) => {
@@ -27,47 +27,38 @@ export const getMatchFixturesForGameWeek = (data) => {
       });
 
       if (result && !isEmpty(result.data.matchFixtures)) {
-        let { data } = result.data.matchFixtures
-        dispatch(getMatchFixturesSuccess(data))
-
-        // console.log('getMatchFixturesForGameWeek success =========', data)
-
-        return responseSuccess('', data)
+        let { matchFixtures } = result.data
+        dispatch(getMatchFixturesSuccess(matchFixtures))
+        return responseSuccess('', {matchesOnDates: matchFixtures})
       }
-
       dispatch(getMatchFixturesFailed(result.data.errors[0].message))
-
+      return responseFailed(ERROR_MSG)
     } catch (e) {
       dispatch(getMatchFixturesFailed(e.message))
+      return responseFailed(ERROR_MSG)
     }
   };
 };
 
-export const getAllMatchFixturesGameWeeks = () => {
+export const getGameWeeks = ({seasonId}) => {
 
   return async (dispatch) => {
     try {
-
-      return MatchesGameWeeks
-
-
       const apolloClient = createApolloClient();
       const result = await apolloClient.query({
-        // query: GET_MATCH_FIXTURES_GAME_WEEKS,
-        query: '',
-        variables: {},
+        query: GET_GAME_WEEKS,
+        variables: {
+          seasonId
+        },
       });
 
-      if (result && !isEmpty(result.data.matchFixtures)) {
-        let { data } = result.data.matchFixtures
-        dispatch(getMatchFixturesSuccess(data))
-        return responseSuccess('', data)
+      if (result && !isEmpty(result.data.gameweeks)) {
+        return responseSuccess('', result.data.gameweeks)
       }
 
-      dispatch(getMatchFixturesFailed(result.data.errors[0].message))
-
+      return responseFailed(ERROR_MSG)
     } catch (e) {
-      dispatch(getMatchFixturesFailed(e.message))
+      return responseFailed(ERROR_MSG)
     }
   };
 }

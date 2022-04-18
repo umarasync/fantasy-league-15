@@ -12,7 +12,7 @@ import {
 import {ALL_PLAYERS_INDEXES, PLAYERS, SELECTED_PLAYERS} from "constants/data/players";
 
 // Utils
-import { clone, shuffle } from "utils/helpers";
+import {clone, isEmpty, shuffle} from "utils/helpers";
 
 export const resetMultiSelectsDataState = (option, data) => {
   const { setSelectedOptions, setOptions } = data;
@@ -123,11 +123,11 @@ export const handleAutoPick = ({
   for (let i = 0; i < shuffledFifteenChosenPlayersIndex.length; i++) {
     let player = playersI[shuffledFifteenChosenPlayersIndex[i]];
 
-    if (player.price < remainingBudget) {
+    if (player.value < remainingBudget) {
 
       player.chosen = true;
       chosenPlayersWithinBudget[player.position].push(player);
-      remainingBudget = remainingBudget - player.price;
+      remainingBudget = remainingBudget - player.value;
       totalChosenPlayers += 1;
 
     } else {
@@ -195,7 +195,7 @@ export const playerSelectionHandler = ({
       (pickedPlayersArray.length > 0 &&
         !pickedPlayersArray.some((p) => p.id === player.id))
     ) {
-      setRemainingBudget(remainingBudget - player.price);
+      setRemainingBudget(remainingBudget - player.value);
       setTotalChosenPlayers(totalChosenPlayers + 1);
       pickedPlayersArray.push(player);
 
@@ -216,7 +216,7 @@ export const playerSelectionHandler = ({
 
     pickedPlayersArray[indexOfEmptyPosition] = player;
 
-    setRemainingBudget(remainingBudget - player.price);
+    setRemainingBudget(remainingBudget - player.value);
     setTotalChosenPlayers(totalChosenPlayers + 1);
 
     setPlayersDataInitial(
@@ -254,7 +254,7 @@ export const playerDeselectionHandler = ({
 
   const player = $pickedPlayers[position][i];
 
-  setRemainingBudget(remainingBudget + player.price);
+  setRemainingBudget(remainingBudget + player.value);
   setTotalChosenPlayers(totalChosenPlayers - 1);
   setContinueDisabled(true);
   $pickedPlayers[position][i] = false;
@@ -278,7 +278,7 @@ export const sortingHandler = ({ playersData, selectedSortingOption }) => {
   } else if (selectedSortingOption.value === PRICE_FROM_LOW_TO_HIGH) {
     playersDataI = playersDataI.sort((a, b) => (a.price > b.price ? 1 : -1));
   } else if (selectedSortingOption.value === TOTAL_POINTS) {
-    playersDataI = playersDataI.sort((a, b) => (a.points < b.points ? 1 : -1));
+    playersDataI = playersDataI.sort((a, b) => (a.totalPoints < b.totalPoints ? 1 : -1));
   } else if (selectedSortingOption.value === MOST_TRANSFERRED) {
     playersDataI = playersDataI.sort((a, b) =>
       a.most_transferred < b.most_transferred ? 1 : -1
@@ -290,7 +290,6 @@ export const sortingHandler = ({ playersData, selectedSortingOption }) => {
 
 
 const getAllSelectedPlayersIDs = (squad) => squad.map(p => p.id)
-const calculateRemainingBudget = (squad) => squad.reduce((totalBudget, p) => totalBudget + p.price, 0)
 
 const putSquadUnderPositions = (squad) => {
   return {
@@ -306,19 +305,20 @@ export const initialSettingsForTransferWindows = ({
   // Picked Players
   setPickedPlayers,
   // Budget
-  totalBudget,
+  remainingBudget,
   setRemainingBudget,
   // Players-Data
   setPlayersData,
   playersDataInitial,
   setPlayersDataInitial,
   // Transfer Window
+  freeTransfers,
   setIsOneFreeTransferWindow,
   setTransferInProgress,
   setCurrentTransferredToBePlayer,
-  setNoOfFreeTransfersLeft,
   setAdditionalTransferredPlayers,
   setTransferResetDisabled,
+  setNoOfFreeTransfersLeft,
   setTransferConfirmDisabled,
   setTransferredPlayers,
   // Footer
@@ -328,7 +328,6 @@ export const initialSettingsForTransferWindows = ({
   const $squad = clone(squad)
   setIsOneFreeTransferWindow(true);
 
-  const remainingBudget = totalBudget - calculateRemainingBudget(squad)
   const allPlayerIds = getAllSelectedPlayersIDs($squad);
 
   playersData = playersDataInitial.map((p) => {
@@ -348,8 +347,8 @@ export const initialSettingsForTransferWindows = ({
     position: null,
     index: null,
   });
-  setNoOfFreeTransfersLeft(1);
   setAdditionalTransferredPlayers(0);
+  setNoOfFreeTransfersLeft(freeTransfers)
   setTransferResetDisabled(true);
   setTransferConfirmDisabled(true);
   setTransferredPlayers([]);
@@ -369,20 +368,18 @@ export const initialSettingsForBuildYourTeam = ({
   pickedPlayers,
   players,
   setPlayersDataInitial,
-  setShowFooterBar,
 }) => {
-  let playersData = [];
+  let playersData = []
 
   const allPlayerIds = allPlayersIDs(pickedPlayers)
-
   playersData = players.map((p) => {
     p.chosen = !!allPlayerIds.includes(p.id);
     p.disablePlayerCard = false;
     return p;
   });
+
   setPlayersData([...playersData]);
   setPlayersDataInitial([...playersData]);
-  setShowFooterBar(true);
 };
 
 // Player-Transfer Deselection
@@ -403,9 +400,11 @@ export const playerTransferDeselectHandler = ({
   setContinueDisabled,
 }) => {
   const $pickedPlayers = { ...pickedPlayers };
+
+
   const player = $pickedPlayers[position][i];
 
-  const $remainingBudget = remainingBudget + player.price;
+  const $remainingBudget = remainingBudget + player.value;
   setRemainingBudget($remainingBudget);
   setContinueDisabled(true);
 
@@ -429,10 +428,11 @@ const updatePlayersDataAfterTransferDeselectionClicked = ({
   player,
   remainingBudget,
 }) => {
+
   const $players = playersDataInitial.map((p) => {
     if (
       p.position === player.position &&
-      p.price <= remainingBudget &&
+      p.value <= remainingBudget &&
       !p.chosen
     ) {
       p.disablePlayerCard = false;
@@ -483,7 +483,7 @@ export const playerTransferSelectionHandler = ({
   // readyToBeTransferOut Player
   const toIndex = pp[position].findIndex((p) => p.readyToBeTransferOut);
 
-  setRemainingBudget(remainingBudget - player.price);
+  setRemainingBudget(remainingBudget - player.value);
 
   if (noOfFreeTransfersLeft) {
     setNoOfFreeTransfersLeft(noOfFreeTransfersLeft - 1);

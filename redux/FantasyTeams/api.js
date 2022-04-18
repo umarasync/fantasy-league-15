@@ -10,7 +10,6 @@ import {ERROR_MSG} from "constants/universalConstants";
 
 // Utils
 import {isEmpty, responseFailed, responseSuccess} from "utils/helpers";
-import {buildPlayers} from "utils/playersHelper";
 
 // Actions
 import {
@@ -19,6 +18,7 @@ import {
   fantasyTeamSwapSuccess,
   fantasyTeamTransferStart
 } from "./actionCreators";
+import {buildPlayers} from "../../utils/playersHelper";
 
 export const createFantasyTeam = (data) => {
   return async (dispatch) => {
@@ -54,16 +54,16 @@ export const getFantasyTeamById = (data) => {
         mutation: GET_FANTASY_TEAM,
         variables: {
           "gameweek": data.gameWeek,
-          "fantasyTeamId": data.fantasyTeamId
+          "fantasyTeamId": data.fantasyTeamId,
         },
       });
 
       if (result && result.data.fantasyTeamById !== null) {
-        return buildPlayers(result.data.fantasyTeamById.squad)
+        return responseSuccess('Success !!!', buildPlayers(result.data.fantasyTeamById.squad))
       }
-      return false
+      return responseFailed(ERROR_MSG)
     } catch (e) {
-      return false
+      return responseFailed(ERROR_MSG)
     }
   };
 };

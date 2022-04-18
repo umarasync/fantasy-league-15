@@ -8,6 +8,7 @@ import Text from "components/html/Text";
 
 // Utils
 import R from "utils/getResponsiveValue";
+import {isEmpty} from "utils/helpers";
 
 // Constants
 import colors from "constants/colors";
@@ -89,17 +90,14 @@ export default function BuildTeamLeftSection({
                     Select a maximum of 3 players from a single team <br/>{`or 'Auto Pick' if you're short of time.`}
                 </p>
             </div>
-
-            <div>
-                <div style={STYLES.fieldImage}>
-                    <div className="bg-[url('/images/field2.png')] bg-[length:100%_100%] bg-no-repeat h-full w-full" >
-                        <AllPlayersOnField
-                            pickedPlayers={pickedPlayers}
-                            autoPickDisabled={autoPickDisabled}
-                            onDeselectPlayer={onDeselectPlayer}
-                            isOneFreeTransferWindow={isOneFreeTransferWindow}
-                        />
-                    </div>
+            <div style={STYLES.fieldImage}>
+                <div className="bg-[url('/images/field2.png')] bg-[length:100%_100%] bg-no-repeat h-full w-full" >
+                    <AllPlayersOnField
+                         pickedPlayers={pickedPlayers}
+                         autoPickDisabled={autoPickDisabled}
+                         onDeselectPlayer={onDeselectPlayer}
+                         isOneFreeTransferWindow={isOneFreeTransferWindow}
+                     />
                 </div>
             </div>
         </div>

@@ -23,6 +23,9 @@ import {
   fantasyTeamCreationSuccess,
 } from "redux/FantasyTeams/actionCreators";
 
+// Constants
+import {POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID} from "constants/data/filters";
+
 // Styles
 const getStyles = (R) => {
   return {
@@ -95,25 +98,25 @@ export default function ConfirmAccount() {
     const { pickedPlayers } = JSON.parse(teamData)
 
     const dataInput = {
-      goalkeepers: pickedPlayers.GK.map((p, pitchIndex) => {
+      goalkeepers: pickedPlayers[POSITION_GK].map((p, pitchIndex) => {
         return {
           id: p.id,
           pitchIndex,
         };
       }),
-      defenders: pickedPlayers.DEF.map((p, pitchIndex) => {
+      defenders: pickedPlayers[POSITION_DEF].map((p, pitchIndex) => {
         return {
           id: p.id,
           pitchIndex,
         };
       }),
-      midfielders: pickedPlayers.MID.map((p, pitchIndex) => {
+      midfielders: pickedPlayers[POSITION_MID].map((p, pitchIndex) => {
         return {
           id: p.id,
           pitchIndex,
         };
       }),
-      forwards: pickedPlayers.FWD.map((p, pitchIndex) => {
+      forwards: pickedPlayers[POSITION_FWD].map((p, pitchIndex) => {
         return {
           id: p.id,
           pitchIndex,

@@ -2,7 +2,7 @@
 import {motion, useAnimation} from "framer-motion";
 import {createRef, useEffect, useRef, useState} from "react";
 import dayjs from 'dayjs'
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 // Components
 import Div from "components/html/Div";
@@ -30,7 +30,7 @@ import {scrollAnimation, borderAnimation, subHeadingAnimation} from "Animations/
 
 // Actions
 import {
-    getAllMatchFixturesGameWeeks,
+    getGameWeeks,
     getMatchFixturesForGameWeek
 } from "redux/MatchFixtures/api";
 import {isEmpty} from "../../utils/helpers";
@@ -47,9 +47,9 @@ const getStyles = (R) => {
             width: R(1080)
         },
         item: {
-            height: 'max-content',
+            // height: 'max-content',
             cursor: 'pointer',
-            display: 'inline-block',
+            display: 'inline-flex',
             textAlign: 'center',
             background: 'white',
             marginLeft: R(35),
@@ -79,7 +79,7 @@ export default function MatchBoard () {
 
     const STYLES =  { ...getStyles(R) }
 
-    const [matchesGameWeeks, setMatchesGameWeeks] = useState([])
+    const [gameWeeks, setGameWeeks] = useState([])
 
     const scrollContainerRef = useRef()
     let activeRef = useRef()
@@ -89,32 +89,21 @@ export default function MatchBoard () {
     const borderAnimationControls = useAnimation()
 
     const [moved, setMoved] = useState(0)
-    const [initialRenderDone, setInitialRenderDone] = useState(false)
     const [animationInProgress, setAnimationInProgress] = useState(false)
     const [borderWidth, setBorderWidth] = useState(0)
     const [activeTabContent, setActiveTabContent] = useState({})
     const scrollBoxOriginPointForBorder = R(517.421)
     const scrollBoxOriginPoint = R(417)
 
-
-    useEffect(() => {
-        if(initialRenderDone){
-            controls.start('scroll')
-            borderAnimationControls.start('borderWidth')
-            controls.start('changeTextColor')
-        }
-    }, [moved])
+    // Global States
+    const user = useSelector(({ auth }) => auth.user);
 
     const handleTabClick = async (gw) => {
         if(animationInProgress) return
-        const res = await dispatch(getMatchFixturesForGameWeek({gameWeek: gw.gameWeek}))
         tabClickHandler({
-            // matchFixturesObj: res.data,
-            matchFixturesObj: gw,
-            matchesGameWeeks,
-            setMatchesGameWeeks,
-            activeTabContent,
-            setActiveTabContent,
+            activeGameWeek: gw.gameweek,
+            gameWeeks,
+            setGameWeeks,
         })
     }
 
@@ -122,17 +111,14 @@ export default function MatchBoard () {
         if(animationInProgress) return
         controlsHandler({
             isNext,
-            matchesGameWeeks,
-            setMatchesGameWeeks,
-            activeTabContent,
-            setActiveTabContent,
-            dispatch
+            gameWeeks,
+            setGameWeeks,
         })
     }
 
     useEffect(() => {
-        setInitialRenderDone(true)
-        if(!isEmpty(activeTabContent)){
+        updateContentOnGameWeekChange()
+        if(!isEmpty(gameWeeks)){
          setTimeout(() => {
                 scrollRenderer({
                     activeRef,
@@ -144,19 +130,40 @@ export default function MatchBoard () {
                 })
          }, 100)
         }
-    }, [activeTabContent, initialRenderDone])
+    }, [gameWeeks])
 
-    const runInitialSettings = async () => {
-        const $matchFixturesGameWeeks = await dispatch(getAllMatchFixturesGameWeeks())
+    const fetchGameWeeks = async () => {
+        const { success, data } = await dispatch(getGameWeeks({seasonId: user.currentSeason}))
+        if(!success) return
         setInitialSettings({
-            initialMatchFixturesGameWeeks: $matchFixturesGameWeeks,
-            setActiveTabContent,
-            setMatchesGameWeeks
+            initialGameWeeks: data,
+            setGameWeeks,
         })
     }
 
+    const updateContentOnGameWeekChange = async () => {
+
+        if(!gameWeeks.length) return
+        const activeWeekId = gameWeeks.find(gw => gw.active === true).gameweek
+        const res = await dispatch(getMatchFixturesForGameWeek({gameWeek: activeWeekId}))
+        if(!res.success) return
+
+        setActiveTabContent({
+            toggleAnimation: !activeTabContent.toggleAnimation,
+            data: res.data
+        })
+    }
+
+    // Run Animations
     useEffect(() => {
-      runInitialSettings()
+        controls.start('scroll')
+        borderAnimationControls.start('borderWidth')
+        controls.start('changeTextColor')
+    }, [moved])
+
+    // Did Mount
+    useEffect(() => {
+        fetchGameWeeks()
     }, [])
 
     const onAnimationComplete = (definition) => {
@@ -193,7 +200,7 @@ export default function MatchBoard () {
                          ref={scrollContainerRef}
                     >
                         {
-                            matchesGameWeeks.length > 0 && matchesGameWeeks.map((gw, index) => {
+                            !isEmpty(gameWeeks) && gameWeeks.map((gw) => {
                                 return(
                                     <motion.div
                                         variants={scrollAnimation}
@@ -210,9 +217,8 @@ export default function MatchBoard () {
                                             className={'flex flex-col items-center'}
                                             ref={gw.active ? activeRef : null}
                                             onClick={() => handleTabClick(gw)}
-
                                         >
-                                            <Text text={`Gameweek ${gw.gameWeek}`} color={colors.regent_grey} fs={18} lh={26}/>
+                                            <Text text={`Gameweek ${gw.gameweek}`} color={colors.regent_grey} fs={18} lh={26}/>
                                             <motion.p
                                                 variants={subHeadingAnimation}
                                                 animate={controls}
@@ -221,9 +227,9 @@ export default function MatchBoard () {
                                                 style={STYLES.subHeading}
                                             >
                                                 {
-                                                    gw.gameWeekDate !== MAKE_TRANSFERS
-                                                        ? dayjs(gw.gameWeekDate).format('DD MMM')
-                                                        : gw.gameWeekDate
+                                                    gw.deadline !== MAKE_TRANSFERS
+                                                        ? dayjs(gw.deadline).format('DD MMM')
+                                                        : gw.deadline
                                                 }
                                             </motion.p>
                                         </div>
@@ -257,14 +263,12 @@ export default function MatchBoard () {
                     }}
                 />
             </Div>
-
             {/*Content*/}
             {
                 !isEmpty(activeTabContent) && (
                     <Div mt={30} center><MatchBoardContent activeTabContent={activeTabContent}/></Div>
                 )
             }
-
         </Div>
     )
 

@@ -9,6 +9,10 @@ import Text from "components/html/Text";
 import colors from "constants/colors";
 import {SHADOW_WHITE_SMOKE} from "constants/boxShadow";
 
+// Utils
+import {nFormatter} from "utils/helpers";
+import {positionAbbr} from "utils/playersHelper";
+
 export default function PlayerInfoPlayerCard({
        player,
        mt
@@ -29,7 +33,7 @@ export default function PlayerInfoPlayerCard({
                 <Border/>
                 <PlayerImage player={player} ml={16} mr={16} w={70} h={70}/>
                 <div>
-                    <Text text={player.name}
+                    <Text text={player.matchName}
                           fs={18}
                           lh={22}
                           color={colors.black_rock}
@@ -54,13 +58,13 @@ export default function PlayerInfoPlayerCard({
             {/*right side*/}
             <div className={'flex items-center'}>
                 <Div mr={16}>
-                    <Text text={player.formattedPrice} fs={18} lh={22} color={colors.black_rock} textAlign={'right'} fw={600}/>
-                    <Text text={player.position} fs={18} lh={22} color={colors.regent_grey} textAlign={'right'}  mt={3}/>
+                    <Text text={nFormatter(player.value)} fs={18} lh={22} color={colors.black_rock} textAlign={'right'} fw={600}/>
+                    <Text text={positionAbbr(player.position)} fs={18} lh={22} color={colors.regent_grey} textAlign={'right'}  mt={3}/>
                 </Div>
                 <Border/>
                 <Text
                     className={'text-heliotrope-purple'}
-                    text={player.points}
+                    text={player.totalPoints}
                     fs={22}
                     fw={600}
                     ml={16}

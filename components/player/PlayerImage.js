@@ -8,6 +8,7 @@ import Image from "components/html/Image";
 // Utils
 import R from "utils/getResponsiveValue";
 import RS from "utils/responsiveStyle"
+import {isEmpty} from "../../utils/helpers";
 
 // Styles
 const getStyles = (R, RS, style) => {
@@ -45,6 +46,8 @@ const ClubImage = ({
     cursor,
 }) => {
 
+    const { team } = player
+
     if(animatedText) {
         return  (
             <motion.div
@@ -56,14 +59,22 @@ const ClubImage = ({
                 custom={{initialOpacity}}
             >
                 <Div position='absolute' bottom={0} right={0}>
-                    <Image w={ciw} h={cih} onClick={onPlayerClick} src={player.clubImage} cursor={cursor}/>
+                    {
+                        !isEmpty(team) && (
+                            <Image w={ciw} h={cih} onClick={onPlayerClick} src={team.logo} cursor={cursor} alt={'club_logo'}/>
+                        )
+                    }
                 </Div>
             </motion.div>
         )
     }
    return (
        <Div position='absolute' bottom={0} right={0}>
-           <Image w={ciw} h={cih} onClick={onPlayerClick} src={player.clubImage} cursor={cursor}/>
+           {
+                 !isEmpty(team) && (
+                     <Image w={ciw} h={cih} onClick={onPlayerClick} src={team.logo} cursor={cursor} alt={'club_logo'}/>
+                 )
+             }
        </Div>
    )
 }
@@ -91,9 +102,10 @@ export default function PlayerImage(props) {
 
     if(!player) return null
 
+    const { photo } = player
+
     return (
         <Div w={w} h={h} style={STYLES.image}>
-
             {
                 animatedImage ? (
                     <motion.div
@@ -106,16 +118,16 @@ export default function PlayerImage(props) {
                     >
                          <Image
                              onClick={onPlayerClick}
-                             src={player.image}
-                             alt={'playerImage'}
+                             src={photo}
+                             alt={'_'}
                              cursor={cursor}
                          />
                     </motion.div>
                 ): (
                     <Image
                         onClick={onPlayerClick}
-                        src={player.image}
-                        alt={'playerImage'}
+                        src={photo}
+                        alt={'_'}
                         cursor={cursor}
                     />
                 )
@@ -126,7 +138,7 @@ export default function PlayerImage(props) {
                     <Div h={16} w={16} position={'absolute'} left={0} top={0} cursor={!player.disableIconClick ? 'pointer' : 'auto'}
                          onClick={() => !player.disableIconClick && onIconClick ? onIconClick() : false}
                     >
-                        <Image src={`${clickedIcon}`}/>
+                        <Image src={`${clickedIcon}`} alt={'clicked_icon'}/>
                     </Div>
 
                 )

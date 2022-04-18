@@ -36,7 +36,6 @@ const getStyles = (R) => {
     }
 }
 
-
 const GoalAndMatchTime = (props) => {
     const {
         match,
@@ -46,6 +45,9 @@ const GoalAndMatchTime = (props) => {
         tabChanged
     } = props
     const STYLES =  { ...getStyles(R) }
+
+    const team1 = match.home
+    const team2 = match.away
 
     if(match.finished) {
         if(tabChanged) {
@@ -60,7 +62,7 @@ const GoalAndMatchTime = (props) => {
                         style={STYLES.goalsBox}
                         key={1}
                     >
-                        <Goals team1Goals={match.team1.goals} team2Goals={match.team2.goals}/>
+                        <Goals team1Goals={team1.goals} team2Goals={team2.goals}/>
                     </motion.div>
                 </AnimatePresence>
             )
@@ -76,7 +78,7 @@ const GoalAndMatchTime = (props) => {
                         style={STYLES.goalsBox}
                         key={2}
                     >
-                        <Goals team1Goals={match.team1.goals} team2Goals={match.team2.goals}/>
+                        <Goals team1Goals={team1.goals} team2Goals={team2.goals}/>
                     </motion.div>
                 </AnimatePresence>
             )
@@ -92,8 +94,10 @@ const GoalAndMatchTime = (props) => {
                         exit="exit"
                         custom={{index, parentIndex, initialOpacity}}
                         key={3}
-                        style={STYLES.time}>
-                        {dayjs(match.time).format('HH:mm')}
+                        style={STYLES.time}
+                    >
+
+                        {dayjs(match.matchTime).format('HH:mm')}
                     </motion.p>
                 </AnimatePresence>
             )
@@ -108,7 +112,7 @@ const GoalAndMatchTime = (props) => {
                         custom={{index, parentIndex, initialOpacity}}
                         key={4}
                         style={STYLES.time}>
-                        {dayjs(match.time).format('HH:mm')}
+                        {dayjs(match.matchTime).format('HH:mm')}
                     </motion.p>
                 </AnimatePresence>
             )

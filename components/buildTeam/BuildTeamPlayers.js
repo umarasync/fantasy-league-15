@@ -107,11 +107,12 @@ export default function BuildTeamPlayers ({
     const [selectedSortingOption, setSelectedSortingOption] = useState(SORTING_OPTIONS_INITIAL[0])
 
     // States-for-Player-Transfer
+    const [remainingBudget, setRemainingBudget] = useState('')
+    const [noOfFreeTransfersLeft, setNoOfFreeTransfersLeft] = useState('')
     const [isOneFreeTransferWindow, setIsOneFreeTransferWindow] = useState(false)
     const [showFooterBar, setShowFooterBar] = useState(false)
     const [transferInProgress, setTransferInProgress] = useState(false)
     const [currentTransferredToBePlayer, setCurrentTransferredToBePlayer] = useState({})
-    const [noOfFreeTransfersLeft, setNoOfFreeTransfersLeft] = useState(1)
     const [additionalTransferredPlayers, setAdditionalTransferredPlayers] = useState(0)
     const [transferResetDisabled, setTransferResetDisabled] = useState(true)
     const [transferConfirmDisabled, setTransferConfirmDisabled] = useState(true)
@@ -121,7 +122,6 @@ export default function BuildTeamPlayers ({
     // Global States
     const user = useSelector(({ auth }) => auth.user);
     const totalBudget = useSelector(({ fantasyTeam }) => fantasyTeam.totalBudget);
-    const [remainingBudget, setRemainingBudget] = useState(totalBudget)
 
     // OnSearch
     const onSearch = () => false
@@ -226,6 +226,7 @@ export default function BuildTeamPlayers ({
     }, [currentTransferredToBePlayer])
 
     const handleTransferPlayerDeselect = (position, i) => {
+
         setCurrentTransferredToBePlayer({position: position, index: i})
     }
 
@@ -258,7 +259,7 @@ export default function BuildTeamPlayers ({
 
     // Player-Transfer-Reset
     const onTransferResetClick = () => {
-        initiateInitialSettings()
+        runInitialSettingsForTransferWindows()
     }
 
     // Player-Transfer-Confirm
@@ -361,30 +362,26 @@ export default function BuildTeamPlayers ({
         persistDataToReduxStore()
     }
 
-    // Initial Settings for Build Your Team & Transfer windows
-    const initiateInitialSettings = async () => {
-
-        // For Transfer Window
-        const squad = await dispatch(getFantasyTeamById({
+    const runInitialSettingsForTransferWindows = async () => {
+        const { success, data } = await dispatch(getFantasyTeamById({
                    gameWeek: user.currentGameweek ,
                    fantasyTeamId: user.fantasyTeamId,
            }))
-
-        // Fetch team data from backend database
-        if (!isEmpty(squad)) {
-            return initialSettingsForTransferWindows({
+        if (success) {
+            initialSettingsForTransferWindows({
                 // Team Data
-                squad,
+                squad: data,
                 // Picked Players
                 setPickedPlayers,
                 // Budget
-                totalBudget,
+                remainingBudget: totalBudget - user.fantasyTeamValue,
                 setRemainingBudget,
                 // Players-Data
                 setPlayersData,
                 playersDataInitial: $players,
                 setPlayersDataInitial,
                 // Transfer Window
+                freeTransfers: user.freeTransfers,
                 setIsOneFreeTransferWindow,
                 setTransferInProgress,
                 setCurrentTransferredToBePlayer,
@@ -398,19 +395,33 @@ export default function BuildTeamPlayers ({
             })
         }
 
-        return initialSettingsForBuildYourTeam({
+    }
+
+    const runInitialSettingsForBuildYourTeam = () => {
+        initialSettingsForBuildYourTeam({
             players: $players,
             pickedPlayers,
             setPlayersDataInitial,
             setPlayersData,
-            setShowFooterBar
         })
     }
 
+    useEffect(() => {
+        /*** If team already exists run transfer window ****/
+        if(user.fantasyTeamId){ return runInitialSettingsForTransferWindows() }
+        runInitialSettingsForBuildYourTeam()
+    }, [$players])
+
     // Did-Mount
     useEffect(() => {
-        initiateInitialSettings()
-    }, [$players])
+        /*** If team already exists run transfer window ****/
+         if(user.fantasyTeamId){ return runInitialSettingsForTransferWindows() }
+
+        runInitialSettingsForBuildYourTeam()
+        setShowFooterBar(true);
+        setRemainingBudget(totalBudget)
+
+    }, [])
 
     return (
         <Layout title="Build Team All Player" showToast={true}>

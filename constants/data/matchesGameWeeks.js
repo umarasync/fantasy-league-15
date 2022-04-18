@@ -22,8 +22,8 @@ const CLUBS_GROUP_1= [
         name: 'Zwolle',
         logo: 'club_zwo.png',
         players: [
-            playersData[0],
-            playersData[1]
+            // playersData[0],
+            // playersData[1]
         ],
         goals: 1
     },
@@ -37,8 +37,8 @@ const CLUBS_GROUP_1= [
         name: 'Heerenven',
         logo: 'club_hee.png',
         players: [
-            playersData[2],
-            playersData[3],
+            // playersData[2],
+            // playersData[3],
         ],
         goals: 2
     },
@@ -73,9 +73,9 @@ const CLUBS_GROUP_2= [
         name: 'Sparta Roterdam',
         logo: 'club_sparta.png',
         players: [
-            playersData[7],
-            playersData[8],
-            playersData[10],
+            // playersData[7],
+            // playersData[8],
+            // playersData[10],
         ],
         goals: 5
     },
@@ -89,7 +89,7 @@ const CLUBS_GROUP_2= [
         name: 'AZ',
         logo: 'club_az.png',
         players: [
-            playersData[11],
+            // playersData[11],
         ],
         goals: 3
     },
@@ -97,8 +97,8 @@ const CLUBS_GROUP_2= [
         name: 'Ajax',
         logo: 'club_ajax.png',
         players: [
-            playersData[12],
-            playersData[13]
+            // playersData[12],
+            // playersData[13]
         ],
         goals: 2
     },

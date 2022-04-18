@@ -48,7 +48,7 @@ export default function FinishedMatchDetails({
 }) {
 
     const STYLES = {...getStyles(R)}
-    const { matchDetails } = match
+    const { details } = match
 
     const controls = useAnimation()
 
@@ -101,7 +101,7 @@ export default function FinishedMatchDetails({
                 >
                     {/*Head*/}
                     <Div w={'100%'} mb={40} mt={25} pt={24} className={'bg-mystic-alabaster'}>
-                        <FinishedMatchDetailsHead matchDetails={matchDetails}/>
+                        <FinishedMatchDetailsHead matchDetails={details}/>
                     </Div>
                     {/*Tabs*/}
                     <FinishedMatchDetailsTabs

@@ -9,6 +9,7 @@ import colors from "constants/colors"
 
 // Utils
 import {nFormatter, truncate} from "utils/helpers";
+import {positionAbbr} from "utils/playersHelper";
 
 export default function PlayerOnPitchText({player, mt}) {
 
@@ -24,7 +25,7 @@ export default function PlayerOnPitchText({player, mt}) {
             className={'items-center relative items-center text-center justify-center cursor-pointer primary-button-color text-white whitespace-nowrap'}
         >
             {
-                player.status === STATUS_INJURED || player.status === STATUS_SUSPENDED && (
+                player.state === STATUS_INJURED || player.state === STATUS_SUSPENDED && (
                     <Div
                         w={15}
                         h={15}
@@ -41,7 +42,7 @@ export default function PlayerOnPitchText({player, mt}) {
             }
 
             <Text
-                text={truncate(`${player.name}`, player.captain || player.viceCaptain ? 10 : 12)}
+                text={truncate(`${player.matchName}`, player.captain || player.viceCaptain ? 10 : 12)}
                 fs={10}
                 lh={14}
                 color={colors.white}
@@ -49,7 +50,7 @@ export default function PlayerOnPitchText({player, mt}) {
                 fw={600}
             />
             <Text
-                text={`${nFormatter(player.price)} ${player.position}`}
+                text={`${nFormatter(player.value)} ${positionAbbr(player.position)}`}
                 fs={10}
                 lh={14}
                 color={colors.white}

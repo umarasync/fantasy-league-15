@@ -21,8 +21,8 @@ export default function UpcomingMatchDetailsHead({
                             <Text
                                 text={
                                     <>
-                                        <Text text={player.player.name} inline fw={600} nowrap/>
-                                        <Text text={`${player.points}pts`} inline ml={5}
+                                        <Text text={player.player.matchName} inline fw={600} nowrap/>
+                                        <Text text={`${player.totalPoints}pts`} inline ml={5}
                                               className={'text-froly-cerise_red'} fw={600} nowrap/>
                                     </>
                                 }

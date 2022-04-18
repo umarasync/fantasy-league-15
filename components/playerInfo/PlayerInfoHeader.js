@@ -7,6 +7,7 @@ import PlayerImage from "components/player/PlayerImage";
 // Constants
 import colors from "constants/colors";
 import PlayerInfoControls from "./PlayerInfoControls";
+import {positionAbbr} from "../../utils/playersHelper";
 
 export default function PlayerInfoHeader ({
     player,
@@ -14,7 +15,7 @@ export default function PlayerInfoHeader ({
     onMakeCaptain,
     onMakeViceCaptain
 }) {
-    const { captain, viceCaptain } = player
+    const { captain, viceCaptain, team, position, firstName, lastName } = player
     const isSubstitutePlayer = player.isSubstitute
 
     return (
@@ -40,9 +41,9 @@ export default function PlayerInfoHeader ({
                     player={player}
                 />
                 <Div ml={20}>
-                    <Text text={'Naoufal'} fw={600} fs={18} lh={22} mb={2} color={colors.white}/>
-                    <Text text={'Bannis'} fw={600} fs={24} lh={28} mb={6} color={colors.white}/>
-                    <Text text={'PEC Zwolle • MID'} fw={'normal'} fs={18} lh={22} color={colors.link_water}/>
+                    <Text text={firstName} fw={600} fs={18} lh={22} mb={2} color={colors.white}/>
+                    <Text text={lastName} fw={600} fs={24} lh={28} mb={6} color={colors.white}/>
+                    <Text text={`${team.name} • ${positionAbbr(position)}`} fw={'normal'} fs={18} lh={22} color={colors.link_water}/>
                 </Div>
             </Div>
 
