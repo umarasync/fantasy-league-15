@@ -112,38 +112,6 @@ export default function MySquadGameWeek () {
         setSquadInfo({...squadInfo, squad})
     }, [activeFilter])
 
-    // Transfer_Edit-Cancel
-    const handleCancelFantasyTeamSwap = () => {
-        setSquadInfo(savedSquad)
-        setTransferInProgress(false)
-    }
-
-    // Transfer_Edit-Save
-    const handleSaveFantasyTeamSwap = async () => {
-        // Api Calling
-        dispatch(fantasyTeamSwapStart())
-        const substitutes = squadInfo.squad
-                                .map(p => {if(p.isSubstitutePlayer){ return { id: p.id}}return false})
-                                .filter(p => p !== false)
-        const inputData = {
-                fantasyTeamId: user.fantasyTeamId,
-                captain: { id: squadInfo.squad.find(p => p.captain).id }  ,
-                viceCaptain: { id: squadInfo.squad.find(p => p.viceCaptain).id },
-                substitutes: substitutes
-        }
-
-        const {success, msg} = await dispatch(swapFantasyTeamPlayers(inputData))
-
-        if (!success) { return toast.error(msg); }
-
-        toast.success(msg);
-
-        const squad = resetPlayers({squad: squadInfo.squad, activeFilter})
-
-        setSquadInfo({...squadInfo, squad: [...squad]})
-        setSavedSquadInfo({...squadInfo, squad: [...squad]})
-        setTransferInProgress(false)
-    }
 
     const runDidMount = async () => {
 
@@ -212,16 +180,19 @@ export default function MySquadGameWeek () {
                 <MySquadFooterBar
                     // Squad Info
                     squadInfo={squadInfo}
+                    setSquadInfo={setSquadInfo}
+                    savedSquad={savedSquad}
+                    setSavedSquadInfo={setSavedSquadInfo}
                     // Transfer
                     transferInProgress={transferInProgress}
-                    onCancel={handleCancelFantasyTeamSwap}
-                    onSave={handleSaveFantasyTeamSwap}
-                    // Triple Captain
+                    setTransferInProgress={setTransferInProgress}
+                    // Chip Boosters
                     setTripleCaptainPlayer={setTripleCaptainPlayer}
                     setShowTripleCaptainModal={setShowTripleCaptainModal}
-                    // Bench Boost
                     setBenchBoostPlayers={setBenchBoostPlayers}
                     setShowBenchBoostModal={setShowBenchBoostModal}
+                    // Top Buttons
+                    activeFilter
                 />
                 {/*Modals*/}
                 <PlayerInfoModal

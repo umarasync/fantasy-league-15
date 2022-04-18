@@ -1,5 +1,7 @@
 // Packages
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {useRouter} from "next/router";
+import {toast} from "react-toastify";
 
 // Components
 import Button from "components/html/Button";
@@ -8,12 +10,15 @@ import Text from "components/html/Text";
 
 // Utils
 import R from "utils/getResponsiveValue";
+import {resetPlayers} from "utils/mySquadHelper";
 
-// Colors
+// Constants
 import colors from "constants/colors";
 import {SHADOW_OBSERVATORY, SHADOW_PIGMENT_INDIGO} from "constants/boxShadow";
-import {useState} from "react";
-import {useRouter} from "next/router";
+
+// Actions
+import {fantasyTeamSwapStart} from "redux/FantasyTeams/actionCreators";
+import {swapFantasyTeamPlayers} from "redux/FantasyTeams/api";
 
 // Styles
 const getStyles = (R) => {
@@ -29,29 +34,33 @@ const getStyles = (R) => {
 export default function MySquadFooterBar({
     // Squad Info
     squadInfo,
+    setSquadInfo,
+    savedSquad,
+    setSavedSquadInfo,
     // Transfer
     transferInProgress,
-    onCancel,
-    onSave,
-    // Triple Captain
+    setTransferInProgress,
+    // Chip Boosters
     setTripleCaptainPlayer,
     setShowTripleCaptainModal,
-    // Bench Boost
     setBenchBoostPlayers,
     setShowBenchBoostModal,
+    // Top Buttons
+    activeFilter
 }) {
 
     const STYLES = {...getStyles(R)}
 
     const router = useRouter()
+    const dispatch = useDispatch()
 
     // Global States
     const benchBoostApplied = useSelector(({ auth }) => auth.user.benchBoostApplied);
     const tripleCaptainApplied = useSelector(({ auth }) => auth.user.tripleCaptainApplied);
     const loadingFantasyTeamSwapping = useSelector(({ fantasyTeam }) => fantasyTeam.loadingFantasyTeamSwapping);
+    const user = useSelector(({ auth }) => auth.user);
 
-
-    // Triple Captain
+    // Triple Captain Booster
     const handleShowTripleCaptainModal = () => {
         const captain = squadInfo.squad.find(p => p.captain === true)
         if(captain === undefined) return
@@ -59,7 +68,7 @@ export default function MySquadFooterBar({
         setShowTripleCaptainModal(true)
     }
 
-    // Bench-Boost
+    // Bench Boost Booster
     const handleBenchBoostModal = () => {
         const substitutePlayer = squadInfo.squad.filter(p => p.isSubstitutePlayer)
         setBenchBoostPlayers([...substitutePlayer])
@@ -75,6 +84,39 @@ export default function MySquadFooterBar({
             }
         })
     }
+
+    // Swap Cancel
+      const handleCancelFantasyTeamSwap = () => {
+          setSquadInfo(savedSquad)
+          setTransferInProgress(false)
+      }
+
+      // Swap Save
+      const handleSaveFantasyTeamSwap = async () => {
+          dispatch(fantasyTeamSwapStart())
+          const substitutes = squadInfo.squad
+                                  .map(p => {if(p.isSubstitutePlayer){
+                                      return { id: p.id}}return false})
+                                  .filter(p => p !== false)
+          const inputData = {
+              fantasyTeamId: user.fantasyTeamId,
+              captain: { id: squadInfo.squad.find(p => p.captain).id }  ,
+              viceCaptain: { id: squadInfo.squad.find(p => p.viceCaptain).id },
+              substitutes: substitutes
+          }
+
+          const {success, msg} = await dispatch(swapFantasyTeamPlayers(inputData))
+
+          if (!success) { return toast.error(msg); }
+
+          toast.success(msg);
+
+          const squad = resetPlayers({squad: squadInfo.squad, activeFilter})
+
+          setSquadInfo({...squadInfo, squad: [...squad]})
+          setSavedSquadInfo({...squadInfo, squad: [...squad]})
+          setTransferInProgress(false)
+      }
 
     return (
         <div
@@ -128,7 +170,7 @@ export default function MySquadFooterBar({
                                     disabled={loadingFantasyTeamSwapping}
                                     bs={'unset'}
                                     bg={colors.white}
-                                    onClick={onCancel}
+                                    onClick={handleCancelFantasyTeamSwap}
                                 />
                                 <Button
                                     title={'save changes'}
@@ -136,7 +178,7 @@ export default function MySquadFooterBar({
                                     h={50}
                                     w={190}
                                     color={colors.white}
-                                    onClick={onSave}
+                                    onClick={handleSaveFantasyTeamSwap}
                                 />
                             </>
                         ) : (
