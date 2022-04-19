@@ -10,14 +10,10 @@ import {
   PRICE_FROM_LOW_TO_HIGH,
   TOTAL_POINTS,
 } from "constants/data/filters";
-import {
-  ALL_PLAYERS_INDEXES,
-  PLAYERS,
-  SELECTED_PLAYERS,
-} from "constants/data/players";
+import { SELECTED_PLAYERS } from "constants/data/players";
 
 // Utils
-import { clone, isEmpty, shuffle } from "utils/helpers";
+import { clone } from "utils/helpers";
 
 export const resetMultiSelectsDataState = (option, data) => {
   const { setSelectedOptions, setOptions } = data;
@@ -76,54 +72,23 @@ const getAllPlayersIndex = (players) => {
 
 export const handleAutoPick = ({ players, totalBudget }) => {
   let remainingBudget = totalBudget;
+  let $players = clone(players);
 
-  let playersI = clone(players);
+  const pIndexes = getAllPlayersIndex($players);
 
-  const allPlayersObjectIndexes = getAllPlayersIndex(playersI);
-
-  const GKsIndexes = shuffle(allPlayersObjectIndexes[POSITION_GK]);
-  const FWDsIndexes = shuffle(allPlayersObjectIndexes[POSITION_FWD]);
-  const MIDsIndexes = shuffle(allPlayersObjectIndexes[POSITION_MID]);
-  const DEFsIndexes = shuffle(allPlayersObjectIndexes[POSITION_DEF]);
-
-  let chosenGKsIndexes = [];
-  for (let i = 0; i < 2; i++) {
-    chosenGKsIndexes.push(GKsIndexes[i]);
-  }
-
-  let chosenFWDsIndexes = [];
-  for (let i = 0; i < 3; i++) {
-    chosenFWDsIndexes.push(FWDsIndexes[i]);
-  }
-
-  let chosenMIDsIndexes = [];
-  for (let i = 0; i < 5; i++) {
-    chosenMIDsIndexes.push(MIDsIndexes[i]);
-  }
-
-  let chosenDEFsIndexes = [];
-  for (let i = 0; i < 5; i++) {
-    chosenDEFsIndexes.push(DEFsIndexes[i]);
-  }
-
-  let fifteenChosenPlayersIndex = [
-    ...chosenGKsIndexes,
-    ...chosenFWDsIndexes,
-    ...chosenMIDsIndexes,
-    ...chosenDEFsIndexes,
+  let chosenPlayersIndexes = [
+    ...pIndexes[POSITION_GK].slice(0, 2),
+    ...pIndexes[POSITION_DEF].slice(0, 5),
+    ...pIndexes[POSITION_MID].slice(0, 5),
+    ...pIndexes[POSITION_FWD].slice(0, 3),
   ];
-
-  let shuffledFifteenChosenPlayersIndex = shuffle(
-    fifteenChosenPlayersIndex
-  ).filter((x) => x !== undefined);
 
   let chosenPlayersWithinBudget = clone(SELECTED_PLAYERS);
 
   let totalChosenPlayers = 0;
 
-  for (let i = 0; i < shuffledFifteenChosenPlayersIndex.length; i++) {
-    let player = playersI[shuffledFifteenChosenPlayersIndex[i]];
-
+  for (let i = 0; i < chosenPlayersIndexes.length; i++) {
+    let player = $players[chosenPlayersIndexes[i]];
     if (player.value < remainingBudget) {
       player.chosen = true;
       chosenPlayersWithinBudget[player.position].push(player);
@@ -138,7 +103,7 @@ export const handleAutoPick = ({ players, totalBudget }) => {
     chosenPlayersWithinBudget,
     remainingBudget,
     totalChosenPlayers,
-    players: playersI,
+    players: $players,
   };
 };
 

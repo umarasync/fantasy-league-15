@@ -9,6 +9,7 @@ import Button from "components/html/Button";
 import Border from "components/borders/Border";
 import Div from "components/html/Div";
 import Text from "components/html/Text";
+import Image from "components/html/Image";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -18,6 +19,7 @@ import { handleAutoPick } from "utils/buildYourTeamHelper";
 // Constants
 import colors from "constants/colors";
 import { POINTS_PER_ADDITIONAL_TRANSFER } from "constants/universalConstants";
+import { FIFTEEN } from "constants/arrayIndexes";
 
 // Actions
 import { saveFantasyTeamToRedux } from "redux/FantasyTeams/actionCreators";
@@ -102,7 +104,7 @@ export default function FooterBar({
   const [resetDisabled, setResetDisabled] = useState(true);
   const [autoPickDisabled, setAutoPickDisabled] = useState(false);
   const [continueDisabled, setContinueDisabled] = useState(true);
-  const continueDisabled1 = totalChosenPlayers < 15;
+  const continueDisabled1 = totalChosenPlayers < FIFTEEN;
 
   const maxThreePlayersPerClub = (players) => {
     const $players = [];
@@ -117,21 +119,22 @@ export default function FooterBar({
   };
 
   const onAutoPick = () => {
-    const {
-      chosenPlayersWithinBudget,
-      remainingBudget,
-      totalChosenPlayers: totalChosenPlayersI,
-      players: playersI,
-    } = handleAutoPick({
+    const res = handleAutoPick({
       players: maxThreePlayersPerClub(players),
       totalBudget,
     });
 
+    const {
+      chosenPlayersWithinBudget,
+      remainingBudget,
+      totalChosenPlayers: $totalChosenPlayers,
+      players: playersI,
+    } = res;
+
     setPickedPlayers(chosenPlayersWithinBudget);
     setRemainingBudget(remainingBudget);
-    setTotalChosenPlayers(totalChosenPlayersI);
+    setTotalChosenPlayers($totalChosenPlayers);
     setPlayersDataInitial(playersI);
-
     setAutoPickDisabled(true);
     setResetDisabled(false);
   };
@@ -141,7 +144,7 @@ export default function FooterBar({
       setAutoPickDisabled(false);
       setResetDisabled(true);
       setContinueDisabled(true);
-    } else if (totalChosenPlayers === 15 && remainingBudget > 0) {
+    } else if (totalChosenPlayers === FIFTEEN && remainingBudget > 0) {
       setAutoPickDisabled(true);
       setResetDisabled(false);
       setContinueDisabled(false);
@@ -179,7 +182,7 @@ export default function FooterBar({
     } else if (isOneFreeTransferWindow) {
       return `${noOfFreeTransfersLeft} FREE`;
     } else {
-      return `${totalChosenPlayers} / 15`;
+      return `${totalChosenPlayers} / ${FIFTEEN}`;
     }
   };
 
@@ -219,12 +222,7 @@ export default function FooterBar({
             )}
 
             <div style={STYLES.infoImage}>
-              <img
-                src="/images/info_light.png"
-                alt=""
-                width={"100%"}
-                height={"100%"}
-              />
+              <Image src={"/images/info_light.png"} alt={"-"} />
             </div>
           </div>
           <p
