@@ -101,25 +101,37 @@ const cutPlayersAccordingToPositionsCount = (players) => {
   ];
 };
 
+export const getClubCountAfterAutoPickApplied = (clubCount) => {
+  const clubs = groupBy(clubCount);
+  let $clubsCount = {};
+  for (let key in clubs) {
+    if (clubs.hasOwnProperty(key)) {
+      $clubsCount[key] = clubs[key].length;
+    }
+  }
+  return $clubsCount;
+};
+
 export const handleAutoPick = ({ players, totalBudget }) => {
   let remainingBudget = totalBudget;
   let $players = clone(players);
 
   const max3PlayersPerClub = maxThreePlayersPerClub($players);
 
-  const allMax3PlayersIds = cutPlayersAccordingToPositionsCount(
+  const max3PlayersPerClubIds = cutPlayersAccordingToPositionsCount(
     max3PlayersPerClub
   ).map((p) => p.id);
 
   let totalChosenPlayers = 0;
   let chosenPlayersWithinBudget = clone(SELECTED_PLAYERS);
-
+  let clubCount = [];
   const $$players = $players.map((p) => {
-    if (allMax3PlayersIds.includes(p.id) && p.value < remainingBudget) {
+    if (max3PlayersPerClubIds.includes(p.id) && p.value < remainingBudget) {
       p.chosen = true;
       chosenPlayersWithinBudget[p.position].push(p);
       remainingBudget = remainingBudget - p.value;
       totalChosenPlayers += 1;
+      clubCount.push(p.team.name);
       return p;
     }
     return p;
@@ -130,6 +142,7 @@ export const handleAutoPick = ({ players, totalBudget }) => {
     remainingBudget,
     totalChosenPlayers,
     players: $$players,
+    clubCount,
   };
 };
 

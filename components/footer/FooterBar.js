@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import { groupBy } from "lodash/collection";
 
 // Components
 import Button from "components/html/Button";
@@ -14,7 +13,10 @@ import Image from "components/html/Image";
 // Utils
 import R from "utils/getResponsiveValue";
 import { nFormatter, shuffle } from "utils/helpers";
-import { handleAutoPick } from "utils/buildYourTeamHelper";
+import {
+  getClubCountAfterAutoPickApplied,
+  handleAutoPick,
+} from "utils/buildYourTeamHelper";
 
 // Constants
 import colors from "constants/colors";
@@ -82,11 +84,12 @@ export default function FooterBar({
   setTotalChosenPlayers,
   setPlayersDataInitial,
   selectedPlayersInitial,
+  // Clubs Info
+  setClubsForWhichPlayersPicked,
   // Budget
   totalBudget,
   remainingBudget,
   setRemainingBudget,
-
   // Transfer-Window
   isOneFreeTransferWindow,
   noOfFreeTransfersLeft,
@@ -107,15 +110,20 @@ export default function FooterBar({
   const continueDisabled1 = totalChosenPlayers < FIFTEEN;
 
   const onAutoPick = () => {
-    const res = handleAutoPick({ players, totalBudget });
+    const res = handleAutoPick({
+      players,
+      totalBudget,
+    });
 
     const {
       chosenPlayersWithinBudget,
       remainingBudget,
       totalChosenPlayers: $totalChosenPlayers,
       players: playersI,
+      clubCount,
     } = res;
 
+    setClubsForWhichPlayersPicked(getClubCountAfterAutoPickApplied(clubCount));
     setPickedPlayers(chosenPlayersWithinBudget);
     setRemainingBudget(remainingBudget);
     setTotalChosenPlayers($totalChosenPlayers);

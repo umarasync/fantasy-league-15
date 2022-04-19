@@ -453,6 +453,8 @@ export default function BuildTeamPlayers({ players: $players, clubs: $clubs }) {
             setTotalChosenPlayers={setTotalChosenPlayers}
             setPlayersDataInitial={setPlayersDataInitial}
             selectedPlayersInitial={SELECTED_PLAYERS_INITIAL}
+            // Clubs Info
+            setClubsForWhichPlayersPicked={setClubsForWhichPlayersPicked}
             // Budget
             totalBudget={totalBudget}
             remainingBudget={remainingBudget}
