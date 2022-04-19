@@ -59,20 +59,7 @@ export const handleMultiSelectionDropDowns = (option, data) => {
   setOptions([...newStateI]);
 };
 
-const getAllPlayersIndex = (players) => {
-  const squad = {
-    [POSITION_ALL]: [],
-    [POSITION_MID]: [],
-    [POSITION_GK]: [],
-    [POSITION_DEF]: [],
-    [POSITION_FWD]: [],
-  };
-  return players.reduce(function (a, e, i) {
-    squad[e.position].push(i);
-    return squad;
-  }, []);
-};
-
+// Maximum 3 players can be chosen from 1 club
 const maxThreePlayersPerClub = (players) => {
   const $players = [];
   const groupByClub = groupBy(players, "team.name");
@@ -82,8 +69,17 @@ const maxThreePlayersPerClub = (players) => {
       $players.push(...shuffle(groupByClub[key]).slice(0, 3));
     }
   }
-
   return $players;
+};
+
+// 2 GKs, 5 DEFs, 5 MIDs, 3 FWDs
+const cutPlayersAccordingToPositionsCount = (players) => {
+  return [
+    ...players.filter((p) => p.position === POSITION_GK).slice(0, 2),
+    ...players.filter((p) => p.position === POSITION_DEF).slice(0, 5),
+    ...players.filter((p) => p.position === POSITION_MID).slice(0, 5),
+    ...players.filter((p) => p.position === POSITION_FWD).slice(0, 3),
+  ];
 };
 
 export const handleAutoPick = ({ players, totalBudget }) => {
@@ -92,26 +88,12 @@ export const handleAutoPick = ({ players, totalBudget }) => {
 
   const max3PlayersPerClub = maxThreePlayersPerClub($players);
 
-  let chosenPlayers = [
-    ...max3PlayersPerClub.filter((p) => p.position === POSITION_GK).slice(0, 2),
-    ...max3PlayersPerClub
-      .filter((p) => p.position === POSITION_DEF)
-      .slice(0, 5),
-    ...max3PlayersPerClub
-      .filter((p) => p.position === POSITION_MID)
-      .slice(0, 5),
-    ...max3PlayersPerClub
-      .filter((p) => p.position === POSITION_FWD)
-      .slice(0, 3),
-  ];
-
-  let chosenPlayersWithinBudget = clone(SELECTED_PLAYERS);
-
-  const allMax3PlayersIds = chosenPlayers.map((p) => p.id);
+  const allMax3PlayersIds = cutPlayersAccordingToPositionsCount(
+    max3PlayersPerClub
+  ).map((p) => p.id);
 
   let totalChosenPlayers = 0;
-
-  // let clubsForSelectedPlayers = [];
+  let chosenPlayersWithinBudget = clone(SELECTED_PLAYERS);
 
   const $$players = $players.map((p) => {
     if (allMax3PlayersIds.includes(p.id) && p.value < remainingBudget) {
