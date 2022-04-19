@@ -2,7 +2,6 @@
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
-import {toast} from "react-toastify";
 
 // Components
 import Layout from "components/layout/index";
@@ -17,26 +16,18 @@ import ProfileSettingsSideDrawer from "components/profileSettings/ProfileSetting
 import Loader from "components/loaders/Loader";
 
 // Utils
-import {clone, isEmpty} from "utils/helpers";
+import {isEmpty} from "utils/helpers";
 import {
-    resetPlayers,
-    setPlayersAdditionalData,
     TOTAL_POINTS,
-    CAPTAIN,
-    VICE_CAPTAIN,
-    makeCaptain
 } from "utils/mySquadHelper";
-import {playerSwapHandler, DIAMOND_UP_GREEN} from "utils/mySquadHelper";
+import {playerSwapHandler, DIAMOND_UP_GREEN, didMount} from "utils/mySquadHelper";
 import R from "utils/getResponsiveValue";
 
 // Constants
 import {INITIAL} from "constants/animations";
-import {getCurrentWeekInfo} from "constants/data/leaguesAndRanking";
 
 // Actions
-import {getFantasyTeamById, swapFantasyTeamPlayers} from "redux/FantasyTeams/api";
-import {getPlayer, setFantasyTeamRole} from "redux/Players/api";
-import {fantasyTeamSwapStart} from "redux/FantasyTeams/actionCreators";
+import {getPlayer} from "redux/Players/api";
 
 // Styles
 const getStyles = (R) => {
@@ -52,8 +43,10 @@ export default function MySquadGameWeek () {
     const STYLES = {...getStyles(R)}
 
     const router = useRouter()
-
     const dispatch = useDispatch()
+
+    // Global States
+    const user = useSelector(({ auth }) => auth.user);
 
     const [squadInfo, setSquadInfo] = useState({})
     const [savedSquad, setSavedSquadInfo] = useState({})
@@ -67,21 +60,14 @@ export default function MySquadGameWeek () {
 
     // Triple-Captain
     const [showTripleCaptainModal, setShowTripleCaptainModal] = useState(false);
-    const [tripleCaptainDisabled, setTripleCaptainDisabled] = useState(true);
-    const [tripleCaptainApplied, setTripleCaptainApplied] = useState(false);
     const [tripleCaptainPlayer, setTripleCaptainPlayer] = useState([])
 
     // Bench-Boost
     const [showBenchBoostModal, setShowBenchBoostModal] = useState(false);
-    const [benchBoostDisabled, setBenchBoostDisabled] = useState(true);
-    const [benchBoostApplied, setBenchBoostApplied] = useState(false);
     const [benchBoostPlayers, setBenchBoostPlayers] = useState([]);
 
     // Info-Board
     const [currentGameWeekInfo, setCurrentGameWeekInfo] = useState({})
-
-    // Global States
-    const user = useSelector(({ auth }) => auth.user);
 
     //Player-Transfer
     const handlePlayerSwap = (player, arrayIndex) => {
@@ -92,11 +78,11 @@ export default function MySquadGameWeek () {
             squadInfo,
             setChangeFormation,
             setTransferInProgress,
-            tripleCaptainApplied
         })
         setSquadInfo($squadInfo)
     }
-    // Player-Info-Modal
+
+    /**** Player info modal ***/
     const handleShowPlayerInfoModal = async (player, arrayIndex) => {
         const {success, data} = await dispatch(getPlayer({playerId: player.id}))
         if(!success) return
@@ -108,172 +94,34 @@ export default function MySquadGameWeek () {
         setShowPlayerInfoModal(true)
     }, [playerInfoPlayer])
 
-    /*** Filter Buttons (Total pts, Price, Match) ***/
+    /*** Filter Buttons - Total pts, Price, Match ***/
     useEffect(() => {
-            if(isEmpty(squadInfo)) return
-            const squad = squadInfo.squad.map((player) => {
-                player.activeFilter = activeFilter
-                return player
-            })
-            setSquadInfo({...squadInfo, squad})
+        if(isEmpty(squadInfo)) return
+        const squad = squadInfo.squad.map((player) => {
+            player.activeFilter = activeFilter
+            return player
+        })
+        setSquadInfo({...squadInfo, squad})
     }, [activeFilter])
 
-    // Transfer_Edit-Cancel
-    const handleCancel = () => {
-        setSquadInfo(savedSquad)
-        setTransferInProgress(false)
-    }
-
-    // Transfer_Edit-Save
-    const handleSave = async () => {
-        // Api Calling
-        dispatch(fantasyTeamSwapStart())
-
-        const substitutes = squadInfo.squad
-                                .map(p => {if(p.isSubstitutePlayer){ return { id: p.id}}return false})
-                                .filter(p => p !== false)
-        const inputData = {
-                fantasyTeamId: user.fantasyTeamId,
-                captain: { id: squadInfo.squad.find(p => p.captain).id }  ,
-                viceCaptain: { id: squadInfo.squad.find(p => p.viceCaptain).id },
-                substitutes: substitutes
-        }
-
-        const {success, msg} = await dispatch(swapFantasyTeamPlayers(inputData))
-
-        if (!success) { return toast.error(msg); }
-
-        toast.success(msg);
-
-        const squad = resetPlayers({squad: squadInfo.squad, activeFilter})
-
-        setSquadInfo({...squadInfo, squad: [...squad]})
-        setSavedSquadInfo({...squadInfo, squad: [...squad]})
-        setTransferInProgress(false)
-    }
-
-    // Player info
-    const handleMakeCaptain = (player) => handleCaptainChange(player, CAPTAIN)
-    const handleMakeViceCaptain = (player) => handleCaptainChange(player, VICE_CAPTAIN)
-    const handleCaptainChange = async (player, captainType) => {
-
-        const squad = makeCaptain(
-            {
-                $squadInfo: squadInfo,
-                player,
-                captainType,
-        })
-
-        // Api Calling
-        const inputData = {
-            fantasyTeamId: user.fantasyTeamId,
-            captain: { id: squad.find(p => p.captain).id }  ,
-            viceCaptain: { id: squad.find(p => p.viceCaptain).id }
-        }
-        const {success, msg, data} = await dispatch(setFantasyTeamRole(inputData))
-
-        if (!success) { return toast.error(msg); }
-
-        toast.success(msg);
-        setSquadInfo({...squadInfo, squad})
-        setSavedSquadInfo({...squadInfo, squad})
-        setShowPlayerInfoModal(false)
-    }
-
-    // Triple Captain
-    const handleShowTripleCaptainModal = () => {
-        const captain = squadInfo.squad.find(p => p.captain === true)
-        if(captain === undefined) return
-        setTripleCaptainPlayer([{...captain}])
-        setShowTripleCaptainModal(true)
-    }
-
-    const handleTripleCaptainConfirmed = () => {
-        setTripleCaptainApplied(true)
-        setShowTripleCaptainModal(false)
-    }
-
-    useEffect(() => {
-            if(!tripleCaptainApplied) return
-            handleMakeCaptain(squadInfo.squad.find(p => p.captain === true))
-    }, [tripleCaptainApplied])
-
-    const handleTripleCaptainDisable = () => {
-        if(tripleCaptainApplied){
-            setTripleCaptainDisabled(true)
-        }else {
-            setTripleCaptainDisabled(false)
-        }
-    }
-
-    // Bench-Boost
-    const handleBenchBoostModal = () => {
-        const substitutePlayer = squadInfo.squad.filter(p => p.isSubstitutePlayer)
-        setBenchBoostPlayers([...substitutePlayer])
-        setShowBenchBoostModal(true)
-    }
-
-    const handleBenchBoostConfirmed = () => {
-        setBenchBoostDisabled(true)
-        setBenchBoostApplied(true)
-        setShowBenchBoostModal(false)
-    }
-
-    const handleBenchBoostDisable = () => {
-        if (benchBoostApplied) {
-            setBenchBoostDisabled(true)
-        } else {
-            setBenchBoostDisabled(false)
-        }
-    }
-
-    const handleMakeTransfer = () => {
-        router.push({
-            pathname: '/make_players_transfers',
-            query: {
-                makeTransfer: true
-            }
-        })
-    }
-
-    // Picked-Players-Change
-    useEffect(() => {
-        handleTripleCaptainDisable()
-        handleBenchBoostDisable()
-    }, [squadInfo])
-
-    const runDidMount = async () => {
-
-        if (!user.fantasyTeamId) {return router.push('/build_team_all_players')}
-
-        const {
-            success,
-            data
-        } = await dispatch(getFantasyTeamById({
-                gameWeek: user.currentGameweek ,
-                fantasyTeamId: user.fantasyTeamId,
-        }))
-
-        if(!success) return
-
-        const $squadInfo = setPlayersAdditionalData(data)
-
-        setSquadInfo($squadInfo)
-        setSavedSquadInfo($squadInfo)
-
-        setShowPlayerInfoModal(false)
-        setShowTripleCaptainModal(false)
-
-        // Setting-Info-Board-State
-        setCurrentGameWeekInfo({
-            toggleAnimation: false,
-            data: clone(getCurrentWeekInfo())
-        })
-    }
 
     // Did-Mount
     useEffect(() => {
-        runDidMount()
+        if (!user.fantasyTeamId) { return router.push('/build_team_all_players')}
+        didMount({
+            // User
+            user,
+            // Squad Info
+            setSquadInfo,
+            setSavedSquadInfo,
+            // Modals
+            setShowPlayerInfoModal,
+            setShowTripleCaptainModal,
+            // Current game info
+            setCurrentGameWeekInfo,
+            // dispatch
+            dispatch
+        })
     }, [])
 
 
@@ -285,11 +133,9 @@ export default function MySquadGameWeek () {
                 <div className={'flex'}>
                     <Div className="w-[62%]">
                         <MySquadLeftSection
+                            squadInfo={squadInfo}
                             transferInProgress={transferInProgress}
                             handleFilterButtonClick={(v) => setActiveFilter(v)}
-                            tripleCaptainApplied={tripleCaptainApplied}
-                            benchBoostApplied={benchBoostApplied}
-                            squadInfo={squadInfo}
                             onPlayerChange={handlePlayerSwap}
                             changeFormation={changeFormation}
                             onPlayerClick={handleShowPlayerInfoModal}
@@ -310,34 +156,43 @@ export default function MySquadGameWeek () {
 
                 {/*Footer-Bar*/}
                 <MySquadFooterBar
+                    // Squad Info
+                    squadInfo={squadInfo}
+                    setSquadInfo={setSquadInfo}
+                    savedSquad={savedSquad}
+                    setSavedSquadInfo={setSavedSquadInfo}
+                    // Transfer
                     transferInProgress={transferInProgress}
-                    onBenchBoost={handleBenchBoostModal}
-                    onTripleCaptain={handleShowTripleCaptainModal}
-                    onMakeTransfers={handleMakeTransfer}
-                    tripleCaptainDisabled={tripleCaptainDisabled}
-                    benchBoostDisabled={benchBoostDisabled}
-                    onCancel={handleCancel}
-                    onSave={handleSave}
+                    setTransferInProgress={setTransferInProgress}
+                    // Chip Boosters
+                    setTripleCaptainPlayer={setTripleCaptainPlayer}
+                    setShowTripleCaptainModal={setShowTripleCaptainModal}
+                    setBenchBoostPlayers={setBenchBoostPlayers}
+                    setShowBenchBoostModal={setShowBenchBoostModal}
+                    // Top Buttons
+                    activeFilter
                 />
                 {/*Modals*/}
                 <PlayerInfoModal
-                    show={showPlayerInfoModal}
-                    onClose={() => setShowPlayerInfoModal(false)}
+                    // Squad Info
+                    squadInfo={squadInfo}
+                    setSquadInfo={setSquadInfo}
+                    setSavedSquadInfo={setSavedSquadInfo}
+                    // Modal
+                    showPlayerInfoModal={showPlayerInfoModal}
+                    setShowPlayerInfoModal={setShowPlayerInfoModal}
+                    // Player
                     player={playerInfoPlayer}
-                    onMakeCaptain={handleMakeCaptain}
-                    onMakeViceCaptain={handleMakeViceCaptain}
                 />
                 <TripleCaptainModal
-                    show={showTripleCaptainModal}
-                    onCancel={() => setShowTripleCaptainModal(false)}
+                    showTripleCaptainModal={showTripleCaptainModal}
+                    setShowTripleCaptainModal={setShowTripleCaptainModal}
                     player={tripleCaptainPlayer}
-                    onConfirmed={handleTripleCaptainConfirmed}
                 />
                 <BenchBoostModal
-                    show={showBenchBoostModal}
-                    onCancel={() => setShowBenchBoostModal(false)}
+                    showBenchBoostModal={showBenchBoostModal}
+                    setShowBenchBoostModal={setShowBenchBoostModal}
                     players={benchBoostPlayers}
-                    onConfirmed={handleBenchBoostConfirmed}
                 />
             </Div>
         </Layout>

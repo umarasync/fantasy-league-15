@@ -15,3 +15,6 @@ export const formations = {
     F532: '532',
     F541: '541',
 }
+
+export const BOOST_TYPE_BENCH = 'BENCH'
+export const BOOST_TYPE_TRIPLE_CAPTAIN = 'TRIPLE_CAPTAIN'

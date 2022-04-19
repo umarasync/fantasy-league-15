@@ -12,7 +12,40 @@ import {
   RESET_PASSWORD_FAILED,
   RESET_PASSWORD_SUCCESS,
   RESET_PAGE,
+  BENCH_BOOST_APPLIED_SUCCESS,
+  BENCH_BOOST_APPLIED_FAILED,
+  TRIPLE_CAPTAIN_BOOST_APPLIED_SUCCESS,
+  TRIPLE_CAPTAIN_BOOST_APPLIED_FAILED,
 } from "./actionCreators";
+
+
+// Chip Booster States
+const benchBoosterState = (state, action) => {
+
+  switch (action.type) {
+      // Chip Booster
+    case BENCH_BOOST_APPLIED_SUCCESS:
+      return {
+        ...state,
+        user: { ...state.user, benchBoostApplied: true, ...action.payload },
+      };
+    case BENCH_BOOST_APPLIED_FAILED:
+      return {
+        ...state,
+        user: { ...state.user, benchBoostApplied: false, ...action.payload },
+      };
+    case TRIPLE_CAPTAIN_BOOST_APPLIED_SUCCESS:
+      return {
+        ...state,
+        user: { ...state.user, tripleCaptainApplied: true, ...action.payload },
+      };
+    case TRIPLE_CAPTAIN_BOOST_APPLIED_FAILED:
+      return {
+        ...state,
+        user: { ...state.user, tripleCaptainApplied: false, ...action.payload, },
+      };
+  }
+}
 
 function authReducer(
   state = {
@@ -25,32 +58,40 @@ function authReducer(
     resetRequestError:"",
     resetPasswordSuccess:"",
     resetPasswordError:"",
-    user: null,
+    user: {
+      benchBoostApplied: false,
+      tripleCaptainApplied: false,
+    },
   },
   action
 ) {
+
   switch (action.type) {
+    // login
     case LOGIN_SUCCESS:
       return {
         ...state,
-        // user: { ...action.payload },
       };
     case LOGIN_FAILED:
       return {
         ...state,
         loginError: action.payload,
-        user: null,
+        user: { ...state.user, ...action.payload },
       };
+
+      // ME
     case ME_SUCCESS:
       return {
         ...state,
-        user: { ...action.payload },
+        user: { ...state.user, ...action.payload },
       };
     case ME_FAILED:
       return {
         ...state,
-        user: null,
+        user: { ...state.user, ...action.payload },
       };
+
+      // signup
     case SIGNUP_SUCCESS:
       return {
         ...state,
@@ -61,6 +102,8 @@ function authReducer(
         ...state,
         signUpError: action.payload,
       };
+
+      //email confirmation
     case CONFIRMATION_SUCCESS:
       return {
         ...state,
@@ -71,6 +114,8 @@ function authReducer(
         ...state,
         confirmationError: action.payload,
       };
+
+      // reset password
     case RESET_PASSWORD_REQUEST_SUCCESS:
       return {
         ...state,
@@ -91,19 +136,14 @@ function authReducer(
         ...state,
         resetPasswordError: action.payload,
       };
-    case RESET_PAGE:
-      return {
-        loginError: "",
-        signUpSuccess: "",
-        signUpError: "",
-        confirmationError:"",
-        confirmationSuccess:"",
-        resetRequestSuccess:"",
-        resetRequestError:"",
-        resetPasswordSuccess:"",
-        resetPasswordError:"",
-        user: null,
-      };
+
+    // Chip Booster States
+    case BENCH_BOOST_APPLIED_SUCCESS:
+    case BENCH_BOOST_APPLIED_FAILED:
+    case TRIPLE_CAPTAIN_BOOST_APPLIED_SUCCESS:
+    case TRIPLE_CAPTAIN_BOOST_APPLIED_FAILED:
+      return benchBoosterState(state, action)
+
     default:
       return state;
   }

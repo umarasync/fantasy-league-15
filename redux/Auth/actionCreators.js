@@ -64,3 +64,36 @@ export const meFailed = (payload) => {
         payload
     }
 }
+
+// TODO:Remove when we get from api
+
+export const BENCH_BOOST_APPLIED_SUCCESS = "BENCH_BOOST_APPLIED_SUCCESS";
+export const BENCH_BOOST_APPLIED_FAILED = "BENCH_BOOST_APPLIED_FAILED";
+export const TRIPLE_CAPTAIN_BOOST_APPLIED_SUCCESS = "TRIPLE_CAPTAIN_BOOST_APPLIED_SUCCESS";
+export const TRIPLE_CAPTAIN_BOOST_APPLIED_FAILED = "TRIPLE_CAPTAIN_BOOST_APPLIED_FAILED";
+
+export const benchBoostAppliedSuccess = (payload) => {
+    return {
+        type: BENCH_BOOST_APPLIED_SUCCESS,
+        payload
+    }
+}
+export const benchBoostAppliedFailed = (payload) => {
+    return {
+        type: BENCH_BOOST_APPLIED_FAILED,
+        payload
+    }
+}
+
+export const tripleCaptainBoostAppliedSuccess = (payload) => {
+    return {
+        type: TRIPLE_CAPTAIN_BOOST_APPLIED_SUCCESS,
+        payload
+    }
+}
+export const tripleCaptainBoostAppliedFailed = (payload) => {
+    return {
+        type: TRIPLE_CAPTAIN_BOOST_APPLIED_FAILED,
+        payload
+    }
+}

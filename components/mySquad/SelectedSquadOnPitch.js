@@ -47,7 +47,6 @@ export default function SelectedSquadOnPitch ({
     squadInfo,
     onPlayerChange,
     onPlayerClick,
-    changeFormation,
     tripleCaptainApplied,
     benchBoostApplied,
 }){

@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {isEmpty} from "lodash";
 
 // Components
 import Layout from "components/layout";
@@ -22,6 +21,7 @@ import { getAllTeams, addFavouriteTeam } from "redux/Teams/api";
 // Utils
 import R from "utils/getResponsiveValue";
 import {buildClubs1} from "utils/playersHelper";
+import {isEmpty} from "utils/helpers";
 
 // Constants
 import colors from "constants/colors";
@@ -73,7 +73,7 @@ export default function SelectClub() {
   };
 
   const onNextClick = async () => {
-    if (!isEmpty(user)) {
+    if (user.id) {
       let inputData = {
         profileId: user.id,
         accountId: user.id,

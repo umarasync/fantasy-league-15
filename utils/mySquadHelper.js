@@ -6,7 +6,10 @@ import {clone} from "utils/helpers";
 
 // Constants
 import {ELEVEN, ZERO} from "constants/arrayIndexes";
-import {ANIMATE} from "constants/animations";
+import {getCurrentWeekInfo} from "constants/data/leaguesAndRanking";
+
+// Actions
+import {getFantasyTeamById} from "redux/FantasyTeams/api";
 
 export const TRANSFER_ICON = '/images/transfer.png'
 export const DIAMOND_UP_GREEN = '/images/diamond_up_green.png'
@@ -16,6 +19,48 @@ export const PRICES = 'Price'
 export const MATCHES = 'Matches'
 export const CAPTAIN = 'captain'
 export const VICE_CAPTAIN = 'viceCaptain'
+
+
+export const didMount = async ({
+    // User
+    user,
+    // Squad Info
+    setSquadInfo,
+    setSavedSquadInfo,
+    // Modals
+    setShowPlayerInfoModal,
+    setShowTripleCaptainModal,
+    // Current game info
+    setCurrentGameWeekInfo,
+    // dispatch
+    dispatch
+}) => {
+
+       const {
+           success,
+           data
+       } = await dispatch(getFantasyTeamById({
+               gameWeek: user.currentGameweek ,
+               fantasyTeamId: user.fantasyTeamId,
+       }))
+
+       if(!success) return
+
+    console.log('3==============', data)
+
+       const $squadInfo = setPlayersAdditionalData(data)
+
+       setSquadInfo($squadInfo)
+       setSavedSquadInfo($squadInfo)
+       setShowPlayerInfoModal(false)
+       setShowTripleCaptainModal(false)
+
+       // Setting-Info-Board-State
+       setCurrentGameWeekInfo({
+           toggleAnimation: false,
+           data: clone(getCurrentWeekInfo())
+       })
+   }
 
 
 // Initializing Initial State
@@ -36,8 +81,7 @@ const getPlayersFormation = (squad) => {
     }
 }
 
-export const setPlayersAdditionalData = ($squad) => {
-
+const setPlayersAdditionalData = ($squad) => {
 
     const squad = clone($squad).map((player) => {
 
@@ -90,7 +134,6 @@ const readyPlayerBeforeSwapping = (p1, p2) => {
 }
 
 // Player Swapping Handling
-
 const makePlayersInOrder = (squad) => {
     return [
 
@@ -285,12 +328,12 @@ const readyCaptainBeforeChange = (p1, p2) => {
 }
 
 export const makeCaptain = ({
-    $squadInfo,
+    squadInfo,
     player,
     captainType
 }) => {
 
-    const { squad } = $squadInfo
+    const { squad } = squadInfo
 
     // Previous Captain or Vice Captain Index
     const pIndex = squad.findIndex(p => p[captainType] === true)

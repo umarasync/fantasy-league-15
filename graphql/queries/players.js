@@ -21,22 +21,6 @@ export default gql`
         viceCaptain
         isSubstitute
         state
-        currGWPoints {
-          totalPoints
-          assistPoints
-          yellowCardPoints
-          redCardPoints
-          savesPoints
-          penaltySavePoints
-          missedPenaltyPoints
-          ownGoalPoints
-          playingTimePoints
-          scoringPoints
-          cleanSheetPoints
-          goalsConcededPoints
-          normal
-          bonus
-        }
         team {
           id
           name
