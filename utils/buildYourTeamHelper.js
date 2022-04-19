@@ -1,6 +1,7 @@
 // Constants
 import {
-  MOST_TRANSFERRED, POSITION_ALL,
+  MOST_TRANSFERRED,
+  POSITION_ALL,
   POSITION_DEF,
   POSITION_FWD,
   POSITION_GK,
@@ -9,10 +10,14 @@ import {
   PRICE_FROM_LOW_TO_HIGH,
   TOTAL_POINTS,
 } from "constants/data/filters";
-import {ALL_PLAYERS_INDEXES, PLAYERS, SELECTED_PLAYERS} from "constants/data/players";
+import {
+  ALL_PLAYERS_INDEXES,
+  PLAYERS,
+  SELECTED_PLAYERS,
+} from "constants/data/players";
 
 // Utils
-import {clone, isEmpty, shuffle} from "utils/helpers";
+import { clone, isEmpty, shuffle } from "utils/helpers";
 
 export const resetMultiSelectsDataState = (option, data) => {
   const { setSelectedOptions, setOptions } = data;
@@ -57,28 +62,24 @@ export const handleMultiSelectionDropDowns = (option, data) => {
 
 const getAllPlayersIndex = (players) => {
   const ALL_PLAYERS_INDEXES = {
-      [POSITION_ALL] : [],
-      [POSITION_MID] : [],
-      [POSITION_GK] : [],
-      [POSITION_DEF] : [],
-      [POSITION_FWD] : [],
-  }
-  return players.reduce(function(a, e, i) {
-      ALL_PLAYERS_INDEXES[e.position].push(i);
-      return ALL_PLAYERS_INDEXES;
+    [POSITION_ALL]: [],
+    [POSITION_MID]: [],
+    [POSITION_GK]: [],
+    [POSITION_DEF]: [],
+    [POSITION_FWD]: [],
+  };
+  return players.reduce(function (a, e, i) {
+    ALL_PLAYERS_INDEXES[e.position].push(i);
+    return ALL_PLAYERS_INDEXES;
   }, []);
-}
+};
 
-export const handleAutoPick = ({
-  players,
-  // allPlayersObjectIndexes,
-  totalBudget,
-}) => {
+export const handleAutoPick = ({ players, totalBudget }) => {
   let remainingBudget = totalBudget;
 
   let playersI = clone(players);
 
-  const allPlayersObjectIndexes = getAllPlayersIndex(playersI)
+  const allPlayersObjectIndexes = getAllPlayersIndex(playersI);
 
   const GKsIndexes = shuffle(allPlayersObjectIndexes[POSITION_GK]);
   const FWDsIndexes = shuffle(allPlayersObjectIndexes[POSITION_FWD]);
@@ -116,7 +117,7 @@ export const handleAutoPick = ({
     fifteenChosenPlayersIndex
   ).filter((x) => x !== undefined);
 
-  let chosenPlayersWithinBudget = clone(SELECTED_PLAYERS) ;
+  let chosenPlayersWithinBudget = clone(SELECTED_PLAYERS);
 
   let totalChosenPlayers = 0;
 
@@ -124,12 +125,10 @@ export const handleAutoPick = ({
     let player = playersI[shuffledFifteenChosenPlayersIndex[i]];
 
     if (player.value < remainingBudget) {
-
       player.chosen = true;
       chosenPlayersWithinBudget[player.position].push(player);
       remainingBudget = remainingBudget - player.value;
       totalChosenPlayers += 1;
-
     } else {
       chosenPlayersWithinBudget[player.position].push(false);
     }
@@ -278,7 +277,9 @@ export const sortingHandler = ({ playersData, selectedSortingOption }) => {
   } else if (selectedSortingOption.value === PRICE_FROM_LOW_TO_HIGH) {
     playersDataI = playersDataI.sort((a, b) => (a.price > b.price ? 1 : -1));
   } else if (selectedSortingOption.value === TOTAL_POINTS) {
-    playersDataI = playersDataI.sort((a, b) => (a.totalPoints < b.totalPoints ? 1 : -1));
+    playersDataI = playersDataI.sort((a, b) =>
+      a.totalPoints < b.totalPoints ? 1 : -1
+    );
   } else if (selectedSortingOption.value === MOST_TRANSFERRED) {
     playersDataI = playersDataI.sort((a, b) =>
       a.most_transferred < b.most_transferred ? 1 : -1
@@ -288,17 +289,16 @@ export const sortingHandler = ({ playersData, selectedSortingOption }) => {
   return playersDataI;
 };
 
-
-const getAllSelectedPlayersIDs = (squad) => squad.map(p => p.id)
+const getAllSelectedPlayersIDs = (squad) => squad.map((p) => p.id);
 
 const putSquadUnderPositions = (squad) => {
   return {
-    [POSITION_GK]: squad.filter(p => p.position === POSITION_GK),
-    [POSITION_DEF]: squad.filter(p => p.position === POSITION_DEF),
-    [POSITION_MID]: squad.filter(p => p.position === POSITION_MID),
-    [POSITION_FWD]: squad.filter(p => p.position === POSITION_FWD),
-  }
-}
+    [POSITION_GK]: squad.filter((p) => p.position === POSITION_GK),
+    [POSITION_DEF]: squad.filter((p) => p.position === POSITION_DEF),
+    [POSITION_MID]: squad.filter((p) => p.position === POSITION_MID),
+    [POSITION_FWD]: squad.filter((p) => p.position === POSITION_FWD),
+  };
+};
 
 export const initialSettingsForTransferWindows = ({
   squad,
@@ -325,7 +325,7 @@ export const initialSettingsForTransferWindows = ({
   setShowFooterBar,
 }) => {
   let playersData = [];
-  const $squad = clone(squad)
+  const $squad = clone(squad);
   setIsOneFreeTransferWindow(true);
 
   const allPlayerIds = getAllSelectedPlayersIDs($squad);
@@ -348,20 +348,20 @@ export const initialSettingsForTransferWindows = ({
     index: null,
   });
   setAdditionalTransferredPlayers(0);
-  setNoOfFreeTransfersLeft(freeTransfers)
+  setNoOfFreeTransfersLeft(freeTransfers);
   setTransferResetDisabled(true);
   setTransferConfirmDisabled(true);
   setTransferredPlayers([]);
   setShowFooterBar(true);
 };
 
-const allPlayersIDs = (pickedPlayers) => getAllSelectedPlayersIDs([
+const allPlayersIDs = (pickedPlayers) =>
+  getAllSelectedPlayersIDs([
     ...pickedPlayers[POSITION_GK],
     ...pickedPlayers[POSITION_DEF],
     ...pickedPlayers[POSITION_MID],
     ...pickedPlayers[POSITION_FWD],
   ]);
-
 
 export const initialSettingsForBuildYourTeam = ({
   setPlayersData,
@@ -369,9 +369,9 @@ export const initialSettingsForBuildYourTeam = ({
   players,
   setPlayersDataInitial,
 }) => {
-  let playersData = []
+  let playersData = [];
 
-  const allPlayerIds = allPlayersIDs(pickedPlayers)
+  const allPlayerIds = allPlayersIDs(pickedPlayers);
   playersData = players.map((p) => {
     p.chosen = !!allPlayerIds.includes(p.id);
     p.disablePlayerCard = false;
@@ -401,7 +401,6 @@ export const playerTransferDeselectHandler = ({
 }) => {
   const $pickedPlayers = { ...pickedPlayers };
 
-
   const player = $pickedPlayers[position][i];
 
   const $remainingBudget = remainingBudget + player.value;
@@ -428,7 +427,6 @@ const updatePlayersDataAfterTransferDeselectionClicked = ({
   player,
   remainingBudget,
 }) => {
-
   const $players = playersDataInitial.map((p) => {
     if (
       p.position === player.position &&
@@ -443,7 +441,7 @@ const updatePlayersDataAfterTransferDeselectionClicked = ({
   // Make currently deselected player also disable in list
   const playerIndex = $players.findIndex((p) => p.id === player.id);
 
-  if(playerIndex !== -1){
+  if (playerIndex !== -1) {
     const $player = $players[playerIndex];
     $player.chosen = false;
     $player.disablePlayerCard = true;

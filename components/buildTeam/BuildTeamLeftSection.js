@@ -50,7 +50,6 @@ const getStyles = (R) => {
 }
 export default function BuildTeamLeftSection({
     pickedPlayers,
-    autoPickDisabled,
     onDeselectPlayer,
     isOneFreeTransferWindow
 }) {
@@ -94,7 +93,6 @@ export default function BuildTeamLeftSection({
                 <div className="bg-[url('/images/field2.png')] bg-[length:100%_100%] bg-no-repeat h-full w-full" >
                     <AllPlayersOnField
                          pickedPlayers={pickedPlayers}
-                         autoPickDisabled={autoPickDisabled}
                          onDeselectPlayer={onDeselectPlayer}
                          isOneFreeTransferWindow={isOneFreeTransferWindow}
                      />

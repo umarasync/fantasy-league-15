@@ -77,12 +77,7 @@ export default function MySquadFooterBar({
 
     // Make Transfers
     const handleMakeTransfer = () => {
-        router.push({
-            pathname: '/make_players_transfers',
-            query: {
-                makeTransfer: true
-            }
-        })
+        router.push('/make_players_transfers')
     }
 
     // Swap Cancel

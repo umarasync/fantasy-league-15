@@ -45,11 +45,7 @@ export const didMount = async ({
        }))
 
        if(!success) return
-
-    console.log('3==============', data)
-
        const $squadInfo = setPlayersAdditionalData(data)
-
        setSquadInfo($squadInfo)
        setSavedSquadInfo($squadInfo)
        setShowPlayerInfoModal(false)
