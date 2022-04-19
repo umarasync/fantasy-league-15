@@ -246,8 +246,6 @@ export const playerDeselectionHandler = ({
   // Players-Data-Initial
   playersDataInitial,
   setPlayersDataInitial,
-  // Continue=Button
-  setContinueDisabled,
 }) => {
   const $pickedPlayers = { ...pickedPlayers };
 
@@ -255,7 +253,6 @@ export const playerDeselectionHandler = ({
 
   setRemainingBudget(remainingBudget + player.value);
   setTotalChosenPlayers(totalChosenPlayers - 1);
-  setContinueDisabled(true);
   $pickedPlayers[position][i] = false;
 
   setPickedPlayers($pickedPlayers);

@@ -102,6 +102,7 @@ export default function FooterBar({
   const [resetDisabled, setResetDisabled] = useState(true);
   const [autoPickDisabled, setAutoPickDisabled] = useState(false);
   const [continueDisabled, setContinueDisabled] = useState(true);
+  const continueDisabled1 = totalChosenPlayers < 15;
 
   const maxThreePlayersPerClub = (players) => {
     const $players = [];
@@ -293,7 +294,7 @@ export default function FooterBar({
               h={50}
               w={163}
               color={colors.white}
-              disabled={continueDisabled}
+              disabled={continueDisabled || continueDisabled1}
               style={STYLES.continueBtn}
             />
           )}

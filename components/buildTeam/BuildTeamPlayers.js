@@ -208,7 +208,6 @@ export default function BuildTeamPlayers({ players: $players, clubs: $clubs }) {
       setTotalChosenPlayers,
       playersDataInitial,
       setPlayersDataInitial,
-      setContinueDisabled,
     });
   };
 
@@ -224,7 +223,6 @@ export default function BuildTeamPlayers({ players: $players, clubs: $clubs }) {
       setRemainingBudget,
       playersDataInitial,
       setPlayersDataInitial,
-      setContinueDisabled,
     });
   };
 
