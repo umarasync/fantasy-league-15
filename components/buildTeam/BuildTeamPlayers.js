@@ -379,10 +379,6 @@ export default function BuildTeamPlayers({ players: $players, clubs: $clubs }) {
     setRemainingBudget(totalBudget);
   }, []);
 
-  // useEffect(() => {
-  //   console.log("5-------------", clubsForWhichPlayersPicked);
-  // }, [clubsForWhichPlayersPicked]);
-
   return (
     <Layout title="Build Team All Player" showToast={true}>
       <div className="mx-auto flex bg-white">

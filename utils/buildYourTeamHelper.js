@@ -178,8 +178,6 @@ export const playerSelectionHandler = ({
   )
     return;
 
-  console.log("-----------", clubsForWhichPlayersPicked);
-
   const $position = player.position;
   const pp = { ...pickedPlayers };
   const pickedPlayersArray = pp[$position];
