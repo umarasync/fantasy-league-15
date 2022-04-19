@@ -19,12 +19,14 @@ import {
   playerSelectionHandler,
   playerDeselectionHandler,
   sortingHandler,
-  initialSettingsForTransferWindows,
-  playerTransferDeselectHandler,
-  playerTransferSelectionHandler,
   initialSettingsForBuildYourTeam,
 } from "utils/buildYourTeamHelper";
 import filtersHandler from "utils/buildYourTeamFiltersHelper";
+import {
+  initialSettingsForTransferWindows,
+  playerTransferDeselectHandler,
+  playerTransferSelectionHandler,
+} from "utils/makeTransferHelper";
 
 // Constants
 import {
