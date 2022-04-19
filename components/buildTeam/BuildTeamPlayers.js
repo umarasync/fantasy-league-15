@@ -67,7 +67,7 @@ export default function BuildTeamPlayers({ players: $players, clubs: $clubs }) {
   // Picked-Players
   const [pickedPlayers, setPickedPlayers] = useState(SELECTED_PLAYERS_INITIAL);
   const [clubsForWhichPlayersPicked, setClubsForWhichPlayersPicked] = useState(
-    []
+    {}
   );
 
   // Footer Bar States
@@ -215,6 +215,8 @@ export default function BuildTeamPlayers({ players: $players, clubs: $clubs }) {
       setTotalChosenPlayers,
       playersDataInitial,
       setPlayersDataInitial,
+      clubsForWhichPlayersPicked,
+      setClubsForWhichPlayersPicked,
     });
   };
 
@@ -376,6 +378,10 @@ export default function BuildTeamPlayers({ players: $players, clubs: $clubs }) {
     setShowFooterBar(true);
     setRemainingBudget(totalBudget);
   }, []);
+
+  // useEffect(() => {
+  //   console.log("5-------------", clubsForWhichPlayersPicked);
+  // }, [clubsForWhichPlayersPicked]);
 
   return (
     <Layout title="Build Team All Player" showToast={true}>

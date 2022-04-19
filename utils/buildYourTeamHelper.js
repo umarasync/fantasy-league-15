@@ -16,7 +16,7 @@ import {
 import { SELECTED_PLAYERS } from "constants/data/players";
 
 // Utils
-import { clone, getClubCount, shuffle } from "utils/helpers";
+import { clone, getClubCount, isEmpty, shuffle } from "utils/helpers";
 
 export const resetMultiSelectsDataState = (option, data) => {
   const { setSelectedOptions, setOptions } = data;
@@ -127,6 +127,29 @@ const updatePlayersDataAfterSelectionOrDeselection = (
   return $players;
 };
 
+const updateClubCount = ({
+  clubsForWhichPlayersPicked,
+  setClubsForWhichPlayersPicked,
+  player,
+  increase = true,
+}) => {
+  const teamName = player.team.name;
+
+  if (!clubsForWhichPlayersPicked[teamName]) {
+    setClubsForWhichPlayersPicked({
+      ...clubsForWhichPlayersPicked,
+      [teamName]: 1,
+    });
+  } else {
+    setClubsForWhichPlayersPicked({
+      ...clubsForWhichPlayersPicked,
+      [teamName]: increase
+        ? clubsForWhichPlayersPicked[teamName] + 1
+        : clubsForWhichPlayersPicked[teamName] - 1,
+    });
+  }
+};
+
 export const playerSelectionHandler = ({
   // Player
   player,
@@ -149,15 +172,13 @@ export const playerSelectionHandler = ({
   /*** If total chosen players are 15 or
    * 3 players are chosen per club then don't go further
    ****/
-
-  console.log("clubsForWhichPlayersPicked -------", clubsForWhichPlayersPicked);
-
   if (
     totalChosenPlayers === 15 ||
-    getClubCount(clubsForWhichPlayersPicked, player.team.name) > 3
+    clubsForWhichPlayersPicked[player.team.name] === 3
   )
     return;
-  let cfwpp = [...clubsForWhichPlayersPicked];
+
+  console.log("-----------", clubsForWhichPlayersPicked);
 
   const $position = player.position;
   const pp = { ...pickedPlayers };
@@ -176,11 +197,17 @@ export const playerSelectionHandler = ({
     ) {
       setRemainingBudget(remainingBudget - player.value);
       setTotalChosenPlayers(totalChosenPlayers + 1);
+
+      // Adding new player
       pickedPlayersArray.push(player);
 
-      let x = cfwpp.push(player.team.name);
-      setClubsForWhichPlayersPicked(x);
+      updateClubCount({
+        clubsForWhichPlayersPicked,
+        setClubsForWhichPlayersPicked,
+        player,
+      });
 
+      // Update Players Data
       setPlayersDataInitial(
         updatePlayersDataAfterSelectionOrDeselection(
           playersDataInitial,
@@ -198,8 +225,11 @@ export const playerSelectionHandler = ({
 
     pickedPlayersArray[indexOfEmptyPosition] = player;
 
-    let x = cfwpp.push(player.team.name);
-    setClubsForWhichPlayersPicked(x);
+    updateClubCount({
+      clubsForWhichPlayersPicked,
+      setClubsForWhichPlayersPicked,
+      player,
+    });
 
     setRemainingBudget(remainingBudget - player.value);
     setTotalChosenPlayers(totalChosenPlayers + 1);
@@ -232,6 +262,9 @@ export const playerDeselectionHandler = ({
   // Players-Data-Initial
   playersDataInitial,
   setPlayersDataInitial,
+  // ----
+  clubsForWhichPlayersPicked,
+  setClubsForWhichPlayersPicked,
 }) => {
   const $pickedPlayers = { ...pickedPlayers };
 
@@ -242,6 +275,13 @@ export const playerDeselectionHandler = ({
   $pickedPlayers[position][i] = false;
 
   setPickedPlayers($pickedPlayers);
+
+  updateClubCount({
+    clubsForWhichPlayersPicked,
+    setClubsForWhichPlayersPicked,
+    player,
+    increase: false,
+  });
 
   setPlayersDataInitial(
     updatePlayersDataAfterSelectionOrDeselection(
