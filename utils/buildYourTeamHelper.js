@@ -1,3 +1,6 @@
+// Packages
+import { countBy } from "lodash/collection";
+
 // Constants
 import {
   MOST_TRANSFERRED,
@@ -86,6 +89,7 @@ export const handleAutoPick = ({ players, totalBudget }) => {
   let chosenPlayersWithinBudget = clone(SELECTED_PLAYERS);
 
   let totalChosenPlayers = 0;
+  let clubsForSelectedPlayers = [];
 
   for (let i = 0; i < chosenPlayersIndexes.length; i++) {
     let player = $players[chosenPlayersIndexes[i]];
@@ -94,10 +98,13 @@ export const handleAutoPick = ({ players, totalBudget }) => {
       chosenPlayersWithinBudget[player.position].push(player);
       remainingBudget = remainingBudget - player.value;
       totalChosenPlayers += 1;
+      clubsForSelectedPlayers.push(player.team.name);
     } else {
       chosenPlayersWithinBudget[player.position].push(false);
     }
   }
+
+  console.log(countBy(clubsForSelectedPlayers));
 
   return {
     chosenPlayersWithinBudget,
@@ -132,30 +139,29 @@ export const playerSelectionHandler = ({
   // Picked-Players
   pickedPlayers,
   setPickedPlayers,
+  // Clubs For Which Players Picked
+  clubsForWhichPlayersPicked,
+  setClubsForWhichPlayersPicked,
   // Remaining-Budget
   remainingBudget,
   setRemainingBudget,
 }) => {
   if (totalChosenPlayers === 15) return;
 
-  const playerPositionI = player.position;
+  const $position = player.position;
 
-  const pickedPlayersI = { ...pickedPlayers };
+  const pp = { ...pickedPlayers };
 
-  const pickedPlayersArray = pickedPlayersI[playerPositionI];
+  const pickedPlayersArray = pp[$position];
 
   if (
-    (playerPositionI === POSITION_GK &&
-      pickedPlayersI[POSITION_GK].length < 2) ||
-    (playerPositionI === POSITION_FWD &&
-      pickedPlayersI[POSITION_FWD].length < 3) ||
-    (playerPositionI === POSITION_MID &&
-      pickedPlayersI[POSITION_MID].length < 5) ||
-    (playerPositionI === POSITION_DEF &&
-      pickedPlayersI[POSITION_DEF].length < 5)
+    ($position === POSITION_GK && pp[POSITION_GK].length < 2) ||
+    ($position === POSITION_FWD && pp[POSITION_FWD].length < 3) ||
+    ($position === POSITION_MID && pp[POSITION_MID].length < 5) ||
+    ($position === POSITION_DEF && pp[POSITION_DEF].length < 5)
   ) {
     if (
-      pickedPlayersArray.length === 0 ||
+      !pickedPlayersArray.length ||
       (pickedPlayersArray.length > 0 &&
         !pickedPlayersArray.some((p) => p.id === player.id))
     ) {
@@ -192,7 +198,7 @@ export const playerSelectionHandler = ({
     );
   }
 
-  setPickedPlayers({ ...pickedPlayersI });
+  setPickedPlayers({ ...pp });
 };
 
 export const playerDeselectionHandler = ({

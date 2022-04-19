@@ -66,6 +66,9 @@ export default function BuildTeamPlayers({ players: $players, clubs: $clubs }) {
 
   // Picked-Players
   const [pickedPlayers, setPickedPlayers] = useState(SELECTED_PLAYERS_INITIAL);
+  const [clubsForWhichPlayersPicked, setClubsForWhichPlayersPicked] = useState(
+    []
+  );
 
   // Footer Bar States
   const [totalChosenPlayers, setTotalChosenPlayers] = useState(0);
@@ -183,6 +186,7 @@ export default function BuildTeamPlayers({ players: $players, clubs: $clubs }) {
   // Player-Selection
   const handlePlayerSelection = (player) => {
     return playerSelectionHandler({
+      // Player
       player,
       playersDataInitial,
       setPlayersDataInitial,
@@ -190,6 +194,9 @@ export default function BuildTeamPlayers({ players: $players, clubs: $clubs }) {
       setTotalChosenPlayers,
       pickedPlayers,
       setPickedPlayers,
+      clubsForWhichPlayersPicked,
+      setClubsForWhichPlayersPicked,
+      // Budget
       remainingBudget,
       setRemainingBudget,
     });
