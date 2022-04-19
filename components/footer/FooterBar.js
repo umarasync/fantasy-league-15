@@ -106,23 +106,8 @@ export default function FooterBar({
   const [continueDisabled, setContinueDisabled] = useState(true);
   const continueDisabled1 = totalChosenPlayers < FIFTEEN;
 
-  const maxThreePlayersPerClub = (players) => {
-    const $players = [];
-    const groupByClub = groupBy(players, "team.name");
-
-    for (let key in groupByClub) {
-      if (groupByClub.hasOwnProperty(key)) {
-        $players.push(...shuffle(groupByClub[key]).slice(0, 3));
-      }
-    }
-    return $players;
-  };
-
   const onAutoPick = () => {
-    const res = handleAutoPick({
-      players: maxThreePlayersPerClub(players),
-      totalBudget,
-    });
+    const res = handleAutoPick({ players, totalBudget });
 
     const {
       chosenPlayersWithinBudget,

@@ -1,5 +1,5 @@
 // Packages
-import { countBy } from "lodash/collection";
+import { countBy, groupBy } from "lodash/collection";
 
 // Constants
 import {
@@ -16,7 +16,7 @@ import {
 import { SELECTED_PLAYERS } from "constants/data/players";
 
 // Utils
-import { clone } from "utils/helpers";
+import { clone, getClubCount, shuffle } from "utils/helpers";
 
 export const resetMultiSelectsDataState = (option, data) => {
   const { setSelectedOptions, setOptions } = data;
@@ -60,7 +60,7 @@ export const handleMultiSelectionDropDowns = (option, data) => {
 };
 
 const getAllPlayersIndex = (players) => {
-  const ALL_PLAYERS_INDEXES = {
+  const squad = {
     [POSITION_ALL]: [],
     [POSITION_MID]: [],
     [POSITION_GK]: [],
@@ -68,49 +68,67 @@ const getAllPlayersIndex = (players) => {
     [POSITION_FWD]: [],
   };
   return players.reduce(function (a, e, i) {
-    ALL_PLAYERS_INDEXES[e.position].push(i);
-    return ALL_PLAYERS_INDEXES;
+    squad[e.position].push(i);
+    return squad;
   }, []);
+};
+
+const maxThreePlayersPerClub = (players) => {
+  const $players = [];
+  const groupByClub = groupBy(players, "team.name");
+
+  for (let key in groupByClub) {
+    if (groupByClub.hasOwnProperty(key)) {
+      $players.push(...shuffle(groupByClub[key]).slice(0, 3));
+    }
+  }
+
+  return $players;
 };
 
 export const handleAutoPick = ({ players, totalBudget }) => {
   let remainingBudget = totalBudget;
   let $players = clone(players);
 
-  const pIndexes = getAllPlayersIndex($players);
+  const max3PlayersPerClub = maxThreePlayersPerClub($players);
 
-  let chosenPlayersIndexes = [
-    ...pIndexes[POSITION_GK].slice(0, 2),
-    ...pIndexes[POSITION_DEF].slice(0, 5),
-    ...pIndexes[POSITION_MID].slice(0, 5),
-    ...pIndexes[POSITION_FWD].slice(0, 3),
+  let chosenPlayers = [
+    ...max3PlayersPerClub.filter((p) => p.position === POSITION_GK).slice(0, 2),
+    ...max3PlayersPerClub
+      .filter((p) => p.position === POSITION_DEF)
+      .slice(0, 5),
+    ...max3PlayersPerClub
+      .filter((p) => p.position === POSITION_MID)
+      .slice(0, 5),
+    ...max3PlayersPerClub
+      .filter((p) => p.position === POSITION_FWD)
+      .slice(0, 3),
   ];
 
   let chosenPlayersWithinBudget = clone(SELECTED_PLAYERS);
 
+  const allMax3PlayersIds = chosenPlayers.map((p) => p.id);
+
   let totalChosenPlayers = 0;
-  let clubsForSelectedPlayers = [];
 
-  for (let i = 0; i < chosenPlayersIndexes.length; i++) {
-    let player = $players[chosenPlayersIndexes[i]];
-    if (player.value < remainingBudget) {
-      player.chosen = true;
-      chosenPlayersWithinBudget[player.position].push(player);
-      remainingBudget = remainingBudget - player.value;
+  // let clubsForSelectedPlayers = [];
+
+  const $$players = $players.map((p) => {
+    if (allMax3PlayersIds.includes(p.id) && p.value < remainingBudget) {
+      p.chosen = true;
+      chosenPlayersWithinBudget[p.position].push(p);
+      remainingBudget = remainingBudget - p.value;
       totalChosenPlayers += 1;
-      clubsForSelectedPlayers.push(player.team.name);
-    } else {
-      chosenPlayersWithinBudget[player.position].push(false);
+      return p;
     }
-  }
-
-  console.log(countBy(clubsForSelectedPlayers));
+    return p;
+  });
 
   return {
     chosenPlayersWithinBudget,
     remainingBudget,
     totalChosenPlayers,
-    players: $players,
+    players: $$players,
   };
 };
 
@@ -146,12 +164,21 @@ export const playerSelectionHandler = ({
   remainingBudget,
   setRemainingBudget,
 }) => {
-  if (totalChosenPlayers === 15) return;
+  /*** If total chosen players are 15 or
+   * 3 players are chosen per club then don't go further
+   ****/
+
+  console.log("clubsForWhichPlayersPicked -------", clubsForWhichPlayersPicked);
+
+  if (
+    totalChosenPlayers === 15 ||
+    getClubCount(clubsForWhichPlayersPicked, player.team.name) > 3
+  )
+    return;
+  let cfwpp = [...clubsForWhichPlayersPicked];
 
   const $position = player.position;
-
   const pp = { ...pickedPlayers };
-
   const pickedPlayersArray = pp[$position];
 
   if (
@@ -169,6 +196,9 @@ export const playerSelectionHandler = ({
       setTotalChosenPlayers(totalChosenPlayers + 1);
       pickedPlayersArray.push(player);
 
+      let x = cfwpp.push(player.team.name);
+      setClubsForWhichPlayersPicked(x);
+
       setPlayersDataInitial(
         updatePlayersDataAfterSelectionOrDeselection(
           playersDataInitial,
@@ -185,6 +215,9 @@ export const playerSelectionHandler = ({
     if (indexOfEmptyPosition === -1) return;
 
     pickedPlayersArray[indexOfEmptyPosition] = player;
+
+    let x = cfwpp.push(player.team.name);
+    setClubsForWhichPlayersPicked(x);
 
     setRemainingBudget(remainingBudget - player.value);
     setTotalChosenPlayers(totalChosenPlayers + 1);

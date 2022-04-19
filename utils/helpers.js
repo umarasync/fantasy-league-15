@@ -1,7 +1,7 @@
 // Packages
 import cloneDeep from "lodash/cloneDeep";
 import { isEmpty as isEmptyLodash } from "lodash";
-import { shuffle as shuffleLodash } from "lodash/collection";
+import { countBy, shuffle as shuffleLodash } from "lodash/collection";
 
 // Constants
 import { currencySymbol } from "constants/universalConstants";
@@ -80,4 +80,8 @@ export const responseFailed = (msg) => {
     success: false,
     msg: msg,
   };
+};
+
+export const getClubCount = (clubs, clubName) => {
+  return countBy(clubs)[clubName];
 };
