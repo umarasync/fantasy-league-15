@@ -17,6 +17,7 @@ import {
   getClubCountAfterAutoPickApplied,
   handleAutoPick,
 } from "utils/buildYourTeamHelper";
+import { clone } from "utils/helpers";
 
 // Constants
 import colors from "constants/colors";
@@ -151,7 +152,8 @@ export default function FooterBar({
     setAutoPickDisabled(false);
     setResetDisabled(true);
     setContinueDisabled(true);
-    setPlayersDataInitial([...players]);
+    setPlayersDataInitial([...clone(players)]);
+    setClubsForWhichPlayersPicked({});
   };
 
   const persistDataToReduxStore = () => {
