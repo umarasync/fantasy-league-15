@@ -123,7 +123,7 @@ export default function BuildTeamPlayers({ players, clubs }) {
   const handleTransferPlayerDeselect = (position, i) => {
     setTransferInfo({
       ...transferInfo,
-      setCurrentTransferredToBePlayer: { position: position, index: i },
+      currentTransferredToBePlayer: { position: position, index: i },
     });
   };
 
@@ -196,6 +196,13 @@ export default function BuildTeamPlayers({ players, clubs }) {
     }
     runInitialSettingsForBuildYourTeam();
   }, [players]);
+
+  useEffect(() => {
+    console.log({
+      squadInfo,
+      transferInfo,
+    });
+  }, [squadInfo, transferInfo]);
 
   const {
     isOneFreeTransferWindow,

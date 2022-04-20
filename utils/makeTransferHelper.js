@@ -116,7 +116,7 @@ export const playerTransferDeselectHandler = ({
   setPlayersDataInitial,
 }) => {
   const squad = { ...squadInfo.squad };
-  let { remainingBudget } = setSquadInfo;
+  let { remainingBudget } = squadInfo;
 
   const position = transferInfo.currentTransferredToBePlayer.position;
   const i = transferInfo.currentTransferredToBePlayer.index;
@@ -132,7 +132,7 @@ export const playerTransferDeselectHandler = ({
   // Updates squad info
   const updatedSquadInfo = {
     ...squadInfo,
-    squad: { ...putSquadUnderPositions(squad) },
+    squad: { ...squad },
     clubsCount: getClubCount(flattenSquad(squad)),
     remainingBudget: remainingBudget,
   };
@@ -198,7 +198,7 @@ export const playerTransferSelectionHandler = ({
   // Update squad info
   const updatedSquadInfo = {
     ...squadInfo,
-    squad: { ...putSquadUnderPositions(squad) },
+    squad: { ...squad },
     clubsCount: getClubCount(flattenSquad(squad)),
     remainingBudget: remainingBudget,
   };
