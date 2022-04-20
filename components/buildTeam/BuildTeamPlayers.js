@@ -93,7 +93,11 @@ export default function BuildTeamPlayers({ players, clubs }) {
       ...teamInfo.transferInfo,
       transferInProgress: true,
     };
-    setTeamInfo({ ...teamInfo, transferInfo: updatedTransferInfo });
+
+    setTeamInfo({
+      ...teamInfo,
+      transferInfo: updatedTransferInfo,
+    });
 
     return playerTransferDeselectHandler({
       teamInfo,
@@ -102,18 +106,24 @@ export default function BuildTeamPlayers({ players, clubs }) {
   };
 
   useEffect(() => {
-    const { currentTransferredToBePlayer, transferInProgress } =
-      teamInfo.transferInfo;
+    console.log("1=========", teamInfo.transferInfo.transferInProgress);
+  }, [teamInfo.transferInfo.transferInProgress]);
+
+  useEffect(() => {
+    const { currentTransferredToBePlayer } = teamInfo.transferInfo;
     if (
       isEmpty(currentTransferredToBePlayer) ||
-      currentTransferredToBePlayer.position === null ||
-      transferInProgress
+      currentTransferredToBePlayer.position === null
     )
       return;
     executeTransferPlayerDeselect();
   }, [teamInfo.transferInfo.currentTransferredToBePlayer]);
 
   const handleTransferPlayerDeselect = (position, i) => {
+    const { transferInProgress } = teamInfo.transferInfo;
+
+    if (transferInProgress) return;
+
     const updatedTransferInfo = {
       ...teamInfo.transferInfo,
       currentTransferredToBePlayer: { position: position, index: i },
