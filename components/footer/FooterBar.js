@@ -12,11 +12,8 @@ import Image from "components/html/Image";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import { nFormatter, shuffle } from "utils/helpers";
-import {
-  getClubCountAfterAutoPickApplied,
-  handleAutoPick,
-} from "utils/buildYourTeamHelper";
+import { nFormatter } from "utils/helpers";
+import { getClubCount, handleAutoPick } from "utils/buildYourTeamHelper";
 import { clone } from "utils/helpers";
 
 // Constants
@@ -124,7 +121,7 @@ export default function FooterBar({
       clubCount,
     } = res;
 
-    setClubsForWhichPlayersPicked(getClubCountAfterAutoPickApplied(clubCount));
+    setClubsForWhichPlayersPicked(getClubCount(clubCount));
     setPickedPlayers(chosenPlayersWithinBudget);
     setRemainingBudget(remainingBudget);
     setTotalChosenPlayers($totalChosenPlayers);

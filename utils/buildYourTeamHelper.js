@@ -101,7 +101,7 @@ const cutPlayersAccordingToPositionsCount = (players) => {
   ];
 };
 
-export const getClubCountAfterAutoPickApplied = (clubCount) => {
+export const getClubCount = (clubCount) => {
   const clubs = groupBy(clubCount);
   let $clubsCount = {};
   for (let key in clubs) {

@@ -336,6 +336,7 @@ export default function BuildTeamPlayers({ players: $players, clubs: $clubs }) {
         setPlayersData,
         playersDataInitial: $players,
         setPlayersDataInitial,
+        setClubsForWhichPlayersPicked,
         // Transfer Window
         freeTransfers: user.freeTransfers,
         setIsOneFreeTransferWindow,
@@ -361,22 +362,19 @@ export default function BuildTeamPlayers({ players: $players, clubs: $clubs }) {
     });
   };
 
-  useEffect(() => {
+  const runDidMount = () => {
     /*** If team already exists run transfer window ****/
     if (user.fantasyTeamId) {
       return runInitialSettingsForTransferWindows();
     }
     runInitialSettingsForBuildYourTeam();
+  };
+  useEffect(() => {
+    runDidMount();
   }, [$players]);
 
-  // Did-Mount
   useEffect(() => {
-    /*** If team already exists run transfer window ****/
-    if (user.fantasyTeamId) {
-      return runInitialSettingsForTransferWindows();
-    }
-
-    runInitialSettingsForBuildYourTeam();
+    runDidMount();
     setShowFooterBar(true);
     setRemainingBudget(totalBudget);
   }, []);

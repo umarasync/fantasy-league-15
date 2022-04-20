@@ -1,6 +1,9 @@
 // Utils
 import { clone } from "utils/helpers";
-import { getAllSelectedPlayersIDs } from "utils/buildYourTeamHelper";
+import {
+  getAllSelectedPlayersIDs,
+  getClubCount,
+} from "utils/buildYourTeamHelper";
 
 // Constants
 import {
@@ -19,6 +22,10 @@ const putSquadUnderPositions = (squad) => {
   };
 };
 
+const groupByClubs = (squad) => {
+  return;
+};
+
 export const initialSettingsForTransferWindows = ({
   squad,
   // Picked Players
@@ -30,6 +37,7 @@ export const initialSettingsForTransferWindows = ({
   setPlayersData,
   playersDataInitial,
   setPlayersDataInitial,
+  setClubsForWhichPlayersPicked,
   // Transfer Window
   freeTransfers,
   setIsOneFreeTransferWindow,
@@ -45,6 +53,9 @@ export const initialSettingsForTransferWindows = ({
 }) => {
   let playersData = [];
   const $squad = clone(squad);
+
+  // Setting total clubs count
+  setClubsForWhichPlayersPicked(getClubCount(squad.map((p) => p.team.name)));
   setIsOneFreeTransferWindow(true);
 
   const allPlayerIds = getAllSelectedPlayersIDs($squad);
@@ -116,8 +127,6 @@ export const playerTransferDeselectHandler = ({
   // Players-Data-Initial
   playersDataInitial,
   setPlayersDataInitial,
-  // Continue=Button
-  setContinueDisabled,
 }) => {
   const $pickedPlayers = { ...pickedPlayers };
 
@@ -125,7 +134,6 @@ export const playerTransferDeselectHandler = ({
 
   const $remainingBudget = remainingBudget + player.value;
   setRemainingBudget($remainingBudget);
-  setContinueDisabled(true);
 
   $pickedPlayers[position][i].animateState =
     !$pickedPlayers[position][i].animateState;
