@@ -47,12 +47,7 @@ import {
 import { SELECTED_PLAYERS } from "constants/data/players";
 
 // Actions
-import {
-  fantasyTeamTransferFailed,
-  fantasyTeamTransferSuccess,
-} from "redux/FantasyTeams/actionCreators";
 import { getFantasyTeamById } from "redux/FantasyTeams/api";
-import { doFantasyTeamTransfers } from "redux/FantasyTeams/api";
 
 export default function BuildTeamPlayers({ players: $players, clubs: $clubs }) {
   const dispatch = useDispatch();
@@ -288,34 +283,6 @@ export default function BuildTeamPlayers({ players: $players, clubs: $clubs }) {
     setShowTransferWindowModal(true);
   };
 
-  const onTransferModalConfirmed = async () => {
-    let transfers = [];
-    transferredPlayers.forEach((p) => {
-      transfers.push({
-        in: { id: p.transferIn.id },
-        out: { id: p.transferOut.id },
-      });
-    });
-
-    const { success, msg } = await dispatch(
-      doFantasyTeamTransfers({ fantasyTeamId: user.fantasyTeamId, transfers })
-    );
-
-    /****** Toast ******/
-    if (success) {
-      toast.success(msg, {
-        onClose: () => {
-          dispatch(fantasyTeamTransferSuccess());
-          return router.push("/my_squad_game_week");
-        },
-      });
-    } else {
-      toast.error(msg, {
-        onClose: () => dispatch(fantasyTeamTransferFailed()),
-      });
-    }
-  };
-
   const runInitialSettingsForTransferWindows = async () => {
     const { success, data } = await dispatch(
       getFantasyTeamById({
@@ -469,10 +436,9 @@ export default function BuildTeamPlayers({ players: $players, clubs: $clubs }) {
         )}
 
         <TransferWindowModal
-          show={showTransferWindowModal}
+          showTransferWindowModal={showTransferWindowModal}
+          setShowTransferWindowModal={setShowTransferWindowModal}
           transferredPlayers={transferredPlayers}
-          onCancel={() => setShowTransferWindowModal(false)}
-          onConfirmed={onTransferModalConfirmed}
           // Additional Data
           remainingBudget={remainingBudget}
           additionalTransferredPlayers={additionalTransferredPlayers}

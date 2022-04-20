@@ -22,10 +22,6 @@ const putSquadUnderPositions = (squad) => {
   };
 };
 
-const groupByClubs = (squad) => {
-  return;
-};
-
 export const initialSettingsForTransferWindows = ({
   squad,
   // Picked Players
@@ -85,7 +81,7 @@ export const initialSettingsForTransferWindows = ({
   setShowFooterBar(true);
 };
 
-const updatePlayersDataAfterTransferDeselectionClicked = ({
+const updatePlayersDataAfterDeselectionClicked = ({
   playersDataInitial,
   player,
   remainingBudget,
@@ -128,26 +124,24 @@ export const playerTransferDeselectHandler = ({
   playersDataInitial,
   setPlayersDataInitial,
 }) => {
-  const $pickedPlayers = { ...pickedPlayers };
+  const pp = { ...pickedPlayers };
 
-  const player = $pickedPlayers[position][i];
+  const player = pp[position][i];
+  const $player = pp[position][i];
 
   const $remainingBudget = remainingBudget + player.value;
   setRemainingBudget($remainingBudget);
 
-  $pickedPlayers[position][i].animateState =
-    !$pickedPlayers[position][i].animateState;
-  $pickedPlayers[position][i].readyToBeTransferOut = true;
+  $player.animateState = !$player.animateState;
+  $player.readyToBeTransferOut = true;
 
-  setPickedPlayers($pickedPlayers);
-
-  setPlayersDataInitial(
-    updatePlayersDataAfterTransferDeselectionClicked({
-      playersDataInitial,
-      player,
-      remainingBudget: $remainingBudget,
-    })
-  );
+  setPickedPlayers(pp);
+  const input = {
+    playersDataInitial,
+    player,
+    remainingBudget: $remainingBudget,
+  };
+  setPlayersDataInitial(updatePlayersDataAfterDeselectionClicked(input));
 };
 
 // Player-Transfer Selection
@@ -208,15 +202,14 @@ export const playerTransferSelectionHandler = ({
   setTransferResetDisabled(false);
   setTransferConfirmDisabled(false);
 
-  setPlayersDataInitial(
-    updatePlayersDataAfterTransferSelectionDone({
-      playersDataInitial,
-      player,
-    })
-  );
+  const input = {
+    playersDataInitial,
+    player,
+  };
+  setPlayersDataInitial(updatePlayersDataAfterSelectionDone(input));
 };
 
-const updatePlayersDataAfterTransferSelectionDone = ({
+const updatePlayersDataAfterSelectionDone = ({
   playersDataInitial,
   player,
 }) => {
