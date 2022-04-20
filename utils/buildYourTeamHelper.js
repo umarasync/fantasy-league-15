@@ -18,6 +18,23 @@ import { SELECTED_PLAYERS } from "constants/data/players";
 // Utils
 import { clone, isEmpty, shuffle } from "utils/helpers";
 
+export const initialSettingsForBuildYourTeam = ({
+  squadInfo,
+  players,
+  setPlayersData,
+  setPlayersDataInitial,
+}) => {
+  const allPlayerIds = getAllSelectedPlayersIDs(flattenSquad(squadInfo.squad));
+  const playersData = players.map((p) => {
+    p.chosen = !!allPlayerIds.includes(p.id);
+    p.disablePlayerCard = false;
+    return p;
+  });
+
+  setPlayersData([...playersData]);
+  setPlayersDataInitial([...playersData]);
+};
+
 export const resetMultiSelectsDataState = (option, data) => {
   const { setSelectedOptions, setOptions } = data;
 

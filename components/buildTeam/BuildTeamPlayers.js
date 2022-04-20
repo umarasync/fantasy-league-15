@@ -15,6 +15,7 @@ import { clone, isEmpty } from "utils/helpers";
 import {
   playerSelectionHandler,
   playerDeselectionHandler,
+  initialSettingsForBuildYourTeam,
 } from "utils/buildYourTeamHelper";
 import {
   initialSettingsForTransferWindows,
@@ -35,10 +36,8 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
   const user = useSelector(({ auth }) => auth.user);
   const totalBudget = useSelector(({ fantasyTeam }) => fantasyTeam.totalBudget);
 
-  const selectedPlayersInitial = clone(SELECTED_PLAYERS);
-
   const squadInfoInitialState = {
-    squad: { ...selectedPlayersInitial },
+    squad: clone(SELECTED_PLAYERS),
     clubsCount: {},
     remainingBudget: totalBudget,
     totalChosenPlayers: 0,
@@ -52,7 +51,6 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
   // States-for-Player-Transfer
   const [noOfFreeTransfersLeft, setNoOfFreeTransfersLeft] = useState("");
   const [isOneFreeTransferWindow, setIsOneFreeTransferWindow] = useState(false);
-  const [showFooterBar, setShowFooterBar] = useState(false);
   const [transferInProgress, setTransferInProgress] = useState(false);
   const [currentTransferredToBePlayer, setCurrentTransferredToBePlayer] =
     useState({});
@@ -177,15 +175,17 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
         setTransferResetDisabled,
         setTransferConfirmDisabled,
         setTransferredPlayers,
-        // Footer
-        setShowFooterBar,
       });
     }
   };
 
   const runInitialSettingsForBuildYourTeam = () => {
-    setPlayersData($players);
-    setPlayersDataInitial($players);
+    initialSettingsForBuildYourTeam({
+      squadInfo,
+      players: $players,
+      setPlayersData,
+      setPlayersDataInitial,
+    });
   };
 
   const runDidMount = () => {
@@ -198,15 +198,6 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
   useEffect(() => {
     runDidMount();
   }, [$players]);
-
-  useEffect(() => {
-    runDidMount();
-    setShowFooterBar(true);
-  }, []);
-
-  useEffect(() => {
-    console.log("1===========", squadInfo);
-  }, [squadInfo]);
 
   return (
     <Layout title="Build Team All Player" showToast={true}>
@@ -240,24 +231,23 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
             }
           />
         </div>
-        {showFooterBar && (
-          <FooterBar
-            // Players
-            players={$players}
-            squadInfo={squadInfo}
-            setSquadInfo={setSquadInfo}
-            squadInfoInitialState={squadInfoInitialState}
-            setPlayersDataInitial={setPlayersDataInitial}
-            // Transfer-Window
-            isOneFreeTransferWindow={isOneFreeTransferWindow}
-            noOfFreeTransfersLeft={noOfFreeTransfersLeft}
-            transferResetDisabled={transferResetDisabled}
-            transferConfirmDisabled={transferConfirmDisabled}
-            onTransferResetClick={onTransferResetClick}
-            onTransferConfirmClick={onTransferConfirmClick}
-            additionalTransferredPlayers={additionalTransferredPlayers}
-          />
-        )}
+
+        <FooterBar
+          // Players
+          players={$players}
+          squadInfo={squadInfo}
+          setSquadInfo={setSquadInfo}
+          squadInfoInitialState={squadInfoInitialState}
+          setPlayersDataInitial={setPlayersDataInitial}
+          // Transfer-Window
+          isOneFreeTransferWindow={isOneFreeTransferWindow}
+          noOfFreeTransfersLeft={noOfFreeTransfersLeft}
+          transferResetDisabled={transferResetDisabled}
+          transferConfirmDisabled={transferConfirmDisabled}
+          onTransferResetClick={onTransferResetClick}
+          onTransferConfirmClick={onTransferConfirmClick}
+          additionalTransferredPlayers={additionalTransferredPlayers}
+        />
 
         <TransferWindowModal
           showTransferWindowModal={showTransferWindowModal}
