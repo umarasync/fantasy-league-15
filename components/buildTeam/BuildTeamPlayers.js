@@ -10,18 +10,15 @@ import FooterBar from "components/footer/FooterBar";
 import BuildTeamLeftSection from "components/buildTeam/BuildTeamLeftSection";
 import BuildTeamRightSection from "components/buildTeam/BuildTeamRightSection";
 import TransferWindowModal from "components/transferWindow/TransferWindowModal";
-import { isEmpty } from "lodash";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import { clone } from "utils/helpers";
+import { clone, isEmpty } from "utils/helpers";
 import {
   playerSelectionHandler,
   playerDeselectionHandler,
-  sortingHandler,
   initialSettingsForBuildYourTeam,
 } from "utils/buildYourTeamHelper";
-import filtersHandler from "utils/buildYourTeamFiltersHelper";
 import {
   initialSettingsForTransferWindows,
   playerTransferDeselectHandler,
@@ -29,36 +26,18 @@ import {
 } from "utils/makeTransferHelper";
 
 // Constants
-import {
-  // POSITIONS
-  POSITION_ALL,
-  // CLUBS
-  CLUBS,
-  // PRICES
-  PRICES,
-  // STATUES
-  STATUSES,
-  // RECOMMENDATIONS
-  RECOMMENDATIONS,
-  // SORTING
-  SORTING_OPTIONS,
-} from "constants/data/filters";
-
 import { SELECTED_PLAYERS } from "constants/data/players";
 
 // Actions
 import { getFantasyTeamById } from "redux/FantasyTeams/api";
 
-export default function BuildTeamPlayers({ players: $players, clubs: $clubs }) {
+export default function BuildTeamPlayers({ players: $players, clubs }) {
   const dispatch = useDispatch();
-  const router = useRouter();
 
-  // Initial States
-  const CLUBS_INITIAL = clone($clubs);
-  const PRICES_INITIAL = clone(PRICES);
-  const STATUSES_INITIAL = clone(STATUSES);
-  const RECOMMENDATIONS_INITIAL = clone(RECOMMENDATIONS);
-  const SORTING_OPTIONS_INITIAL = clone(SORTING_OPTIONS);
+  // Global States
+  const user = useSelector(({ auth }) => auth.user);
+  const totalBudget = useSelector(({ fantasyTeam }) => fantasyTeam.totalBudget);
+
   const SELECTED_PLAYERS_INITIAL = clone(SELECTED_PLAYERS);
 
   // Picked-Players
@@ -67,46 +46,9 @@ export default function BuildTeamPlayers({ players: $players, clubs: $clubs }) {
     {}
   );
 
-  // Footer Bar States
-  const [totalChosenPlayers, setTotalChosenPlayers] = useState(0);
-  const [showAllFilters, setShowAllFilters] = useState(false);
-
   // Players States
   const [playersData, setPlayersData] = useState([]);
   const [playersDataInitial, setPlayersDataInitial] = useState([]); // contains all players
-
-  // Positions States
-  const [activePosition, setActivePosition] = useState(POSITION_ALL);
-
-  // Clubs States
-  const [clubs, setClubs] = useState([...CLUBS_INITIAL]);
-  const [selectedClubs, setSelectedClubs] = useState([CLUBS_INITIAL[0]]);
-
-  // Statuses Statuses
-  const [statuses, setStatuses] = useState([...STATUSES_INITIAL]);
-  const [selectedStatuses, setSelectedStatuses] = useState([
-    STATUSES_INITIAL[0],
-  ]);
-
-  // Prices States
-  const [prices, setPrices] = useState([...PRICES_INITIAL]);
-  const [selectedPrice, setSelectedPrice] = useState(PRICES_INITIAL[0]);
-
-  // Recommendations States
-  const [recommendations, setRecommendations] = useState([
-    ...RECOMMENDATIONS_INITIAL,
-  ]);
-  const [selectedRecommendation, setSelectedRecommendation] = useState(
-    RECOMMENDATIONS_INITIAL[0]
-  );
-
-  // Sorting
-  const [sortingOptions, setSortingOptions] = useState([
-    ...SORTING_OPTIONS_INITIAL,
-  ]);
-  const [selectedSortingOption, setSelectedSortingOption] = useState(
-    SORTING_OPTIONS_INITIAL[0]
-  );
 
   // States-for-Player-Transfer
   const [remainingBudget, setRemainingBudget] = useState("");
@@ -123,62 +65,8 @@ export default function BuildTeamPlayers({ players: $players, clubs: $clubs }) {
   const [transferredPlayers, setTransferredPlayers] = useState([]);
   const [showTransferWindowModal, setShowTransferWindowModal] = useState(false);
 
-  // Global States
-  const user = useSelector(({ auth }) => auth.user);
-  const totalBudget = useSelector(({ fantasyTeam }) => fantasyTeam.totalBudget);
-
-  // OnSearch
-  const onSearch = () => false;
-
-  // Reset-Filters
-  const handleResetFilter = () => {
-    setClubs([...CLUBS_INITIAL]);
-    setSelectedClubs([CLUBS_INITIAL[0]]);
-
-    setStatuses([...STATUSES_INITIAL]);
-    setSelectedStatuses([STATUSES_INITIAL[0]]);
-
-    setPrices([...PRICES_INITIAL]);
-    setSelectedPrice(PRICES_INITIAL[0]);
-
-    setRecommendations([...RECOMMENDATIONS_INITIAL]);
-    setSelectedRecommendation(RECOMMENDATIONS_INITIAL[0]);
-  };
-
-  // Filters-And-Sorting
-  const runFiltersOnPlayersData = () => {
-    let $playersData = [...playersDataInitial];
-
-    $playersData = $playersData.filter((player) => {
-      return filtersHandler({
-        player,
-        activePosition,
-        selectedClubs,
-        selectedPrice,
-        selectedStatuses,
-        selectedRecommendation,
-      });
-    });
-
-    $playersData = sortingHandler({
-      playersData: $playersData,
-      selectedSortingOption,
-    });
-
-    setPlayersData([...$playersData]);
-  };
-
-  useEffect(() => {
-    runFiltersOnPlayersData();
-  }, [
-    clubs,
-    statuses,
-    selectedRecommendation,
-    selectedPrice,
-    activePosition,
-    selectedSortingOption,
-    playersDataInitial,
-  ]);
+  // Footer Bar States
+  const [totalChosenPlayers, setTotalChosenPlayers] = useState(0);
 
   // Player-Selection
   const handlePlayerSelection = (player) => {
@@ -346,6 +234,8 @@ export default function BuildTeamPlayers({ players: $players, clubs: $clubs }) {
     setRemainingBudget(totalBudget);
   }, []);
 
+  console.log("1=-============", $players);
+
   return (
     <Layout title="Build Team All Player" showToast={true}>
       <div className="mx-auto flex bg-white">
@@ -364,48 +254,18 @@ export default function BuildTeamPlayers({ players: $players, clubs: $clubs }) {
         {/*Right-Section*/}
         <div className="w-[43%] flex justify-center" style={{ minHeight: R() }}>
           <BuildTeamRightSection
-            // Filters
-            showAllFilters={showAllFilters}
-            setShowAllFilters={setShowAllFilters}
-            // Positions
-            activePosition={activePosition}
-            setActivePosition={setActivePosition}
-            // Clubs
-            selectedClubs={selectedClubs}
-            clubs={clubs}
-            setClubs={setClubs}
-            setSelectedClubs={setSelectedClubs}
-            clubsInitial={CLUBS_INITIAL}
-            // Statuses
-            selectedStatuses={selectedStatuses}
-            statuses={statuses}
-            setStatuses={setStatuses}
-            setSelectedStatuses={setSelectedStatuses}
-            statusesInitial={STATUSES_INITIAL}
-            // Prices
-            prices={prices}
-            selectedPrice={selectedPrice}
-            setSelectedPrice={setSelectedPrice}
-            // Recommendations
-            recommendations={recommendations}
-            selectedRecommendation={selectedRecommendation}
-            setSelectedRecommendation={setSelectedRecommendation}
-            // Players-Data
+            // Players Data
             playersData={playersData}
-            // Reset-Filter-Button
-            handleResetFilter={handleResetFilter}
-            // Sorting
-            sortingOptions={sortingOptions}
-            selectedSortingOption={selectedSortingOption}
-            setSelectedSortingOption={setSelectedSortingOption}
-            // Player-Selection
+            setPlayersData={setPlayersData}
+            playersDataInitial={playersDataInitial}
+            // Clubs
+            clubs={clubs}
+            // Player Selection
             handlePlayerSelection={
               isOneFreeTransferWindow
                 ? handleTransferPlayerSelection
                 : handlePlayerSelection
             }
-            // Search
-            onSearch={onSearch}
           />
         </div>
         {showFooterBar && (

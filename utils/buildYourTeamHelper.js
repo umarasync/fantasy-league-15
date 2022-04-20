@@ -326,9 +326,9 @@ export const sortingHandler = ({ playersData, selectedSortingOption }) => {
   let playersDataI = [...playersData];
 
   if (selectedSortingOption.value === PRICE_FROM_HIGH_TO_LOW) {
-    playersDataI = playersDataI.sort((a, b) => (a.price < b.price ? 1 : -1));
+    playersDataI = playersDataI.sort((a, b) => (a.value < b.value ? 1 : -1));
   } else if (selectedSortingOption.value === PRICE_FROM_LOW_TO_HIGH) {
-    playersDataI = playersDataI.sort((a, b) => (a.price > b.price ? 1 : -1));
+    playersDataI = playersDataI.sort((a, b) => (a.value > b.value ? 1 : -1));
   } else if (selectedSortingOption.value === TOTAL_POINTS) {
     playersDataI = playersDataI.sort((a, b) =>
       a.totalPoints < b.totalPoints ? 1 : -1
