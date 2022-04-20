@@ -16,18 +16,16 @@ import {
 import { SELECTED_PLAYERS } from "constants/data/players";
 
 // Utils
-import { clone, shuffle } from "utils/helpers";
+import { clone, isEmpty, shuffle } from "utils/helpers";
 
 export const initialSettingsForBuildYourTeam = ({
-  setPlayersData,
-  pickedPlayers,
+  squadInfo,
   players,
+  setPlayersData,
   setPlayersDataInitial,
 }) => {
-  let playersData = [];
-
-  const allPlayerIds = allPlayersIDs(pickedPlayers);
-  playersData = players.map((p) => {
+  const allPlayerIds = getAllSelectedPlayersIDs(flattenSquad(squadInfo.squad));
+  const playersData = players.map((p) => {
     p.chosen = !!allPlayerIds.includes(p.id);
     p.disablePlayerCard = false;
     return p;
@@ -101,14 +99,27 @@ const cutPlayersAccordingToPositionsCount = (players) => {
   ];
 };
 
-export const getClubCount = (clubCount) => {
-  const clubs = groupBy(clubCount);
+// Flatten squad into single array
+export const flattenSquad = ($squad) => {
+  let squad = [];
+  for (let key in $squad) {
+    if ($squad.hasOwnProperty(key)) {
+      squad.push(...$squad[key]);
+    }
+  }
+  return squad.filter((p) => !isEmpty(p));
+};
+
+// Group By club names and then count clubs
+export const getClubCount = (squad) => {
+  const clubs = groupBy(squad, "team.name");
   let $clubsCount = {};
   for (let key in clubs) {
     if (clubs.hasOwnProperty(key)) {
       $clubsCount[key] = clubs[key].length;
     }
   }
+
   return $clubsCount;
 };
 
@@ -124,25 +135,22 @@ export const handleAutoPick = ({ players, totalBudget }) => {
 
   let totalChosenPlayers = 0;
   let chosenPlayersWithinBudget = clone(SELECTED_PLAYERS);
-  let clubCount = [];
   const $$players = $players.map((p) => {
     if (max3PlayersPerClubIds.includes(p.id) && p.value < remainingBudget) {
       p.chosen = true;
       chosenPlayersWithinBudget[p.position].push(p);
       remainingBudget = remainingBudget - p.value;
       totalChosenPlayers += 1;
-      clubCount.push(p.team.name);
       return p;
     }
     return p;
   });
 
   return {
-    chosenPlayersWithinBudget,
+    squad: chosenPlayersWithinBudget,
     remainingBudget,
     totalChosenPlayers,
     players: $$players,
-    clubCount,
   };
 };
 
@@ -159,85 +167,34 @@ const updatePlayersDataAfterSelectionOrDeselection = (
   return $players;
 };
 
-const updateClubCount = ({
-  clubsForWhichPlayersPicked,
-  setClubsForWhichPlayersPicked,
-  player,
-  increase = true,
-}) => {
-  const teamName = player.team.name;
-
-  if (!clubsForWhichPlayersPicked[teamName]) {
-    setClubsForWhichPlayersPicked({
-      ...clubsForWhichPlayersPicked,
-      [teamName]: 1,
-    });
-  } else {
-    setClubsForWhichPlayersPicked({
-      ...clubsForWhichPlayersPicked,
-      [teamName]: increase
-        ? clubsForWhichPlayersPicked[teamName] + 1
-        : clubsForWhichPlayersPicked[teamName] - 1,
-    });
-  }
-};
-
 export const playerSelectionHandler = ({
   // Player
   player,
-  // Players-Data-Initial
+  // Squad info
+  squadInfo,
+  setSquadInfo,
+  // Players data initial
   playersDataInitial,
   setPlayersDataInitial,
-  // Total-Chosen-Players
-  totalChosenPlayers,
-  setTotalChosenPlayers,
-  // Picked-Players
-  pickedPlayers,
-  setPickedPlayers,
-  // Clubs For Which Players Picked
-  clubsForWhichPlayersPicked,
-  setClubsForWhichPlayersPicked,
-  // Remaining-Budget
-  remainingBudget,
-  setRemainingBudget,
 }) => {
-  /*** If total chosen players are 15 or
-   * 3 players are chosen per club then don't go further
-   ****/
-  if (
-    totalChosenPlayers === 15 ||
-    clubsForWhichPlayersPicked[player.team.name] === 3
-  )
-    return;
+  let { remainingBudget, totalChosenPlayers, clubsCount } = squadInfo;
+  if (totalChosenPlayers === 15 || clubsCount[player.team.name] === 3) return;
 
-  const $position = player.position;
-  const pp = { ...pickedPlayers };
-  const pickedPlayersArray = pp[$position];
+  const pos = player.position;
+  const squad = { ...squadInfo.squad };
+  const sp = squad[pos];
 
   if (
-    ($position === POSITION_GK && pp[POSITION_GK].length < 2) ||
-    ($position === POSITION_FWD && pp[POSITION_FWD].length < 3) ||
-    ($position === POSITION_MID && pp[POSITION_MID].length < 5) ||
-    ($position === POSITION_DEF && pp[POSITION_DEF].length < 5)
+    (pos === POSITION_GK && squad[POSITION_GK].length < 2) ||
+    (pos === POSITION_FWD && squad[POSITION_FWD].length < 3) ||
+    (pos === POSITION_MID && squad[POSITION_MID].length < 5) ||
+    (pos === POSITION_DEF && squad[POSITION_DEF].length < 5)
   ) {
-    if (
-      !pickedPlayersArray.length ||
-      (pickedPlayersArray.length > 0 &&
-        !pickedPlayersArray.some((p) => p.id === player.id))
-    ) {
-      setRemainingBudget(remainingBudget - player.value);
-      setTotalChosenPlayers(totalChosenPlayers + 1);
+    if (!sp.length || (sp.length > 0 && !sp.some((p) => p.id === player.id))) {
+      remainingBudget = remainingBudget - player.value;
+      totalChosenPlayers = totalChosenPlayers + 1;
 
-      // Adding new player
-      pickedPlayersArray.push(player);
-
-      updateClubCount({
-        clubsForWhichPlayersPicked,
-        setClubsForWhichPlayersPicked,
-        player,
-      });
-
-      // Update Players Data
+      sp.push(player);
       setPlayersDataInitial(
         updatePlayersDataAfterSelectionOrDeselection(
           playersDataInitial,
@@ -246,23 +203,13 @@ export const playerSelectionHandler = ({
         )
       );
     }
-  } else if (!pickedPlayersArray.some((p) => p.id === player.id)) {
-    const indexOfEmptyPosition = pickedPlayersArray.findIndex(
-      (x) => x === false
-    );
-
+  } else if (!sp.some((p) => p.id === player.id)) {
+    const indexOfEmptyPosition = sp.findIndex((x) => x === false);
     if (indexOfEmptyPosition === -1) return;
+    sp[indexOfEmptyPosition] = player;
 
-    pickedPlayersArray[indexOfEmptyPosition] = player;
-
-    updateClubCount({
-      clubsForWhichPlayersPicked,
-      setClubsForWhichPlayersPicked,
-      player,
-    });
-
-    setRemainingBudget(remainingBudget - player.value);
-    setTotalChosenPlayers(totalChosenPlayers + 1);
+    remainingBudget = remainingBudget - player.value;
+    totalChosenPlayers = totalChosenPlayers + 1;
 
     setPlayersDataInitial(
       updatePlayersDataAfterSelectionOrDeselection(
@@ -273,46 +220,51 @@ export const playerSelectionHandler = ({
     );
   }
 
-  setPickedPlayers({ ...pp });
+  // Updates squad info
+  const updatedSquadInfo = {
+    ...squadInfo,
+    squad: { ...squad },
+    clubsCount: getClubCount(flattenSquad(squad)),
+    remainingBudget,
+    totalChosenPlayers,
+  };
+  setSquadInfo(updatedSquadInfo);
 };
 
 export const playerDeselectionHandler = ({
   // Position
   position,
   i,
-  // Picked-Players
-  pickedPlayers,
-  setPickedPlayers,
-  // Remaining-Budget
-  remainingBudget,
-  setRemainingBudget,
-  // Total-Chosen-Players
-  totalChosenPlayers,
-  setTotalChosenPlayers,
+  // Squad Info
+  squadInfo,
+  setSquadInfo,
   // Players-Data-Initial
   playersDataInitial,
   setPlayersDataInitial,
-  // ----
-  clubsForWhichPlayersPicked,
-  setClubsForWhichPlayersPicked,
 }) => {
-  const $pickedPlayers = { ...pickedPlayers };
+  const squad = { ...squadInfo.squad };
 
-  const player = $pickedPlayers[position][i];
+  let { remainingBudget, totalChosenPlayers } = squadInfo;
 
-  setRemainingBudget(remainingBudget + player.value);
-  setTotalChosenPlayers(totalChosenPlayers - 1);
-  $pickedPlayers[position][i] = false;
+  const player = squad[position][i];
 
-  setPickedPlayers($pickedPlayers);
+  remainingBudget = remainingBudget + player.value;
+  totalChosenPlayers = totalChosenPlayers - 1;
 
-  updateClubCount({
-    clubsForWhichPlayersPicked,
-    setClubsForWhichPlayersPicked,
-    player,
-    increase: false,
-  });
+  squad[position][i] = false;
 
+  // Updates squad info
+  const updatedSquadInfo = {
+    ...squadInfo,
+    squad: { ...squad },
+    clubsCount: getClubCount(flattenSquad(squad)),
+    remainingBudget,
+    totalChosenPlayers,
+  };
+
+  setSquadInfo(updatedSquadInfo);
+
+  // Update players initial data
   setPlayersDataInitial(
     updatePlayersDataAfterSelectionOrDeselection(
       playersDataInitial,
@@ -343,11 +295,3 @@ export const sortingHandler = ({ playersData, selectedSortingOption }) => {
 };
 
 export const getAllSelectedPlayersIDs = (squad) => squad.map((p) => p.id);
-
-const allPlayersIDs = (pickedPlayers) =>
-  getAllSelectedPlayersIDs([
-    ...pickedPlayers[POSITION_GK],
-    ...pickedPlayers[POSITION_DEF],
-    ...pickedPlayers[POSITION_MID],
-    ...pickedPlayers[POSITION_FWD],
-  ]);

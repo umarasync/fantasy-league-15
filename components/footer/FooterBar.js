@@ -1,6 +1,6 @@
 // Packages
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 
 // Components
@@ -13,7 +13,11 @@ import Image from "components/html/Image";
 // Utils
 import R from "utils/getResponsiveValue";
 import { nFormatter } from "utils/helpers";
-import { getClubCount, handleAutoPick } from "utils/buildYourTeamHelper";
+import {
+  flattenSquad,
+  getClubCount,
+  handleAutoPick,
+} from "utils/buildYourTeamHelper";
 import { clone } from "utils/helpers";
 
 // Constants
@@ -76,18 +80,10 @@ const getStyles = (R) => {
 export default function FooterBar({
   // Players
   players,
-  pickedPlayers,
-  setPickedPlayers,
-  totalChosenPlayers,
-  setTotalChosenPlayers,
+  squadInfo,
+  setSquadInfo,
   setPlayersDataInitial,
-  selectedPlayersInitial,
-  // Clubs Info
-  setClubsForWhichPlayersPicked,
-  // Budget
-  totalBudget,
-  remainingBudget,
-  setRemainingBudget,
+  squadInfoInitialState,
   // Transfer-Window
   isOneFreeTransferWindow,
   noOfFreeTransfersLeft,
@@ -102,6 +98,10 @@ export default function FooterBar({
   const dispatch = useDispatch();
   const router = useRouter();
 
+  // Global states
+  const totalBudget = useSelector(({ fantasyTeam }) => fantasyTeam.totalBudget);
+
+  const { remainingBudget, totalChosenPlayers } = squadInfo;
   const [resetDisabled, setResetDisabled] = useState(true);
   const [autoPickDisabled, setAutoPickDisabled] = useState(false);
   const [continueDisabled, setContinueDisabled] = useState(true);
@@ -113,19 +113,15 @@ export default function FooterBar({
       totalBudget,
     });
 
-    const {
-      chosenPlayersWithinBudget,
-      remainingBudget,
-      totalChosenPlayers: $totalChosenPlayers,
-      players: playersI,
-      clubCount,
-    } = res;
+    setSquadInfo({
+      ...squadInfo,
+      squad: res.squad,
+      clubsCount: getClubCount(flattenSquad(res.squad)),
+      remainingBudget: res.remainingBudget,
+      totalChosenPlayers: res.totalChosenPlayers,
+    });
 
-    setClubsForWhichPlayersPicked(getClubCount(clubCount));
-    setPickedPlayers(chosenPlayersWithinBudget);
-    setRemainingBudget(remainingBudget);
-    setTotalChosenPlayers($totalChosenPlayers);
-    setPlayersDataInitial(playersI);
+    setPlayersDataInitial(res.players);
     setAutoPickDisabled(true);
     setResetDisabled(false);
   };
@@ -143,24 +139,15 @@ export default function FooterBar({
   }, [totalChosenPlayers]);
 
   const handleResetClick = () => {
-    setPickedPlayers({ ...selectedPlayersInitial });
-    setTotalChosenPlayers(0);
-    setRemainingBudget(totalBudget);
+    setSquadInfo(clone(squadInfoInitialState));
     setAutoPickDisabled(false);
     setResetDisabled(true);
     setContinueDisabled(true);
-    setPlayersDataInitial([...clone(players)]);
-    setClubsForWhichPlayersPicked({});
+    setPlayersDataInitial(clone(players));
   };
 
   const persistDataToReduxStore = () => {
-    const teamData = JSON.stringify({
-      pickedPlayers,
-      remainingBudget,
-      // Only for transfer windows
-      noOfFreeTransfersLeft,
-      additionalTransferredPlayers,
-    });
+    const teamData = JSON.stringify({ squadInfo });
 
     dispatch(saveFantasyTeamToRedux(teamData));
     router.push("/create_team_name");

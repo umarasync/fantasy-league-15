@@ -1,6 +1,7 @@
 // Utils
 import { clone } from "utils/helpers";
 import {
+  flattenSquad,
   getAllSelectedPlayersIDs,
   getClubCount,
 } from "utils/buildYourTeamHelper";
@@ -25,38 +26,23 @@ const putSquadUnderPositions = (squad) => {
 export const initialSettingsForTransferWindows = ({
   squad,
   // Picked Players
-  setPickedPlayers,
+  setSquadInfo,
   // Budget
   remainingBudget,
-  setRemainingBudget,
   // Players-Data
   setPlayersData,
   playersDataInitial,
   setPlayersDataInitial,
-  setClubsForWhichPlayersPicked,
-  // Transfer Window
+  // Transfer Info
   freeTransfers,
-  setIsOneFreeTransferWindow,
-  setTransferInProgress,
-  setCurrentTransferredToBePlayer,
-  setAdditionalTransferredPlayers,
-  setTransferResetDisabled,
-  setNoOfFreeTransfersLeft,
-  setTransferConfirmDisabled,
-  setTransferredPlayers,
-  // Footer
-  setShowFooterBar,
+  transferInfo,
+  setTransferInfo,
 }) => {
-  let playersData = [];
   const $squad = clone(squad);
-
-  // Setting total clubs count
-  setClubsForWhichPlayersPicked(getClubCount(squad.map((p) => p.team.name)));
-  setIsOneFreeTransferWindow(true);
 
   const allPlayerIds = getAllSelectedPlayersIDs($squad);
 
-  playersData = playersDataInitial.map((p) => {
+  const playersData = playersDataInitial.map((p) => {
     p.chosen = !!allPlayerIds.includes(p.id);
     p.disablePlayerCard = true;
     p.animateState = false;
@@ -64,21 +50,33 @@ export const initialSettingsForTransferWindows = ({
     return p;
   });
 
+  // Updates squad info
+  const updatedSquadInfo = {
+    squad: { ...putSquadUnderPositions($squad) },
+    clubsCount: getClubCount($squad),
+    remainingBudget,
+    totalChosenPlayers: 15,
+  };
+
+  setSquadInfo(updatedSquadInfo);
   setPlayersData(playersData);
   setPlayersDataInitial(playersData);
-  setPickedPlayers(putSquadUnderPositions($squad));
-  setRemainingBudget(remainingBudget);
-  setTransferInProgress(false);
-  setCurrentTransferredToBePlayer({
-    position: null,
-    index: null,
+
+  // Update transfer info
+  setTransferInfo({
+    ...transferInfo,
+    transferredPlayers: [],
+    isOneFreeTransferWindow: true,
+    currentTransferredToBePlayer: {
+      position: null,
+      index: null,
+    },
+    additionalTransferredPlayers: 0,
+    noOfFreeTransfersLeft: freeTransfers,
+    transferInProgress: false,
+    transferResetDisabled: true,
+    transferConfirmDisabled: true,
   });
-  setAdditionalTransferredPlayers(0);
-  setNoOfFreeTransfersLeft(freeTransfers);
-  setTransferResetDisabled(true);
-  setTransferConfirmDisabled(true);
-  setTransferredPlayers([]);
-  setShowFooterBar(true);
 };
 
 const updatePlayersDataAfterDeselectionClicked = ({
@@ -109,98 +107,111 @@ const updatePlayersDataAfterDeselectionClicked = ({
   return $players;
 };
 
-// Player-Transfer Deselection
+// Player transfer deselection
 export const playerTransferDeselectHandler = ({
-  // Position
-  position,
-  i,
-  // Picked-Players
-  pickedPlayers,
-  setPickedPlayers,
-  // Remaining-Budget
-  remainingBudget,
-  setRemainingBudget,
-  // Players-Data-Initial
+  transferInfo,
+  squadInfo,
+  setSquadInfo,
   playersDataInitial,
   setPlayersDataInitial,
 }) => {
-  const pp = { ...pickedPlayers };
+  const squad = { ...squadInfo.squad };
+  let { remainingBudget } = squadInfo;
 
-  const player = pp[position][i];
-  const $player = pp[position][i];
+  const position = transferInfo.currentTransferredToBePlayer.position;
+  const i = transferInfo.currentTransferredToBePlayer.index;
 
-  const $remainingBudget = remainingBudget + player.value;
-  setRemainingBudget($remainingBudget);
+  const player = squad[position][i];
+  const $player = squad[position][i];
 
   $player.animateState = !$player.animateState;
   $player.readyToBeTransferOut = true;
 
-  setPickedPlayers(pp);
+  remainingBudget = remainingBudget + player.value;
+
+  // Updates squad info
+
+  setSquadInfo({
+    ...squadInfo,
+    squad: { ...squad },
+    clubsCount: getClubCount(flattenSquad(squad)),
+    remainingBudget: remainingBudget,
+  });
+
   const input = {
     playersDataInitial,
     player,
-    remainingBudget: $remainingBudget,
+    remainingBudget: remainingBudget,
   };
   setPlayersDataInitial(updatePlayersDataAfterDeselectionClicked(input));
 };
 
 // Player-Transfer Selection
 export const playerTransferSelectionHandler = ({
-  // Player
   player,
-  // Players-Data-Initial
+  // Transfer Info
+  transferInfo,
+  setTransferInfo,
+  // Players-Data
   playersDataInitial,
   setPlayersDataInitial,
-  // Picked-Players
-  pickedPlayers,
-  setPickedPlayers,
-  // Remaining-Budget
-  remainingBudget,
-  setRemainingBudget,
-  // Transfer
-  setTransferInProgress,
-  noOfFreeTransfersLeft,
-  setNoOfFreeTransfersLeft,
-  additionalTransferredPlayers,
-  setAdditionalTransferredPlayers,
-  transferredPlayers,
-  setTransferredPlayers,
-  // Buttons
-  setTransferResetDisabled,
-  setTransferConfirmDisabled,
+  // Squad info
+  squadInfo,
+  setSquadInfo,
 }) => {
-  const pp = { ...pickedPlayers };
+  const squad = { ...squadInfo.squad };
   const position = player.position;
+  let { remainingBudget } = squadInfo;
+  let {
+    noOfFreeTransfersLeft,
+    additionalTransferredPlayers,
+    transferredPlayers,
+  } = transferInfo;
 
   // readyToBeTransferOut Player
-  const toIndex = pp[position].findIndex((p) => p.readyToBeTransferOut);
+  const toIndex = squad[position].findIndex((p) => p.readyToBeTransferOut);
 
-  setRemainingBudget(remainingBudget - player.value);
+  remainingBudget = remainingBudget - player.value;
 
+  // Logic regarding noOfFreeTransfersLeft / additionalTransferredPlayers
+  let obj = {};
   if (noOfFreeTransfersLeft) {
-    setNoOfFreeTransfersLeft(noOfFreeTransfersLeft - 1);
+    obj = { noOfFreeTransfersLeft: noOfFreeTransfersLeft - 1 };
   } else {
-    setAdditionalTransferredPlayers(additionalTransferredPlayers + 1);
+    obj = { additionalTransferredPlayers: additionalTransferredPlayers + 1 };
   }
 
-  setTransferredPlayers([
+  const updatedTransferredPlayers = [
     ...transferredPlayers,
     {
-      transferOut: { ...pp[position][toIndex] },
+      transferOut: { ...squad[position][toIndex] },
       transferIn: { ...player },
     },
-  ]);
+  ];
 
-  pp[position][toIndex] = {
+  squad[position][toIndex] = {
     ...player,
     animateState: false,
     chosen: true,
   };
 
-  setPickedPlayers(pp);
-  setTransferInProgress(false);
-  setTransferResetDisabled(false);
-  setTransferConfirmDisabled(false);
+  // Update squad info
+  setSquadInfo({
+    ...squadInfo,
+    squad: { ...squad },
+    clubsCount: getClubCount(flattenSquad(squad)),
+    remainingBudget: remainingBudget,
+  });
+
+  // Update transfer info
+  setTransferInfo({
+    ...transferInfo,
+    ...obj,
+    transferredPlayers: updatedTransferredPlayers,
+    transferInProgress: false,
+    transferResetDisabled: false,
+    transferConfirmDisabled: false,
+  });
 
   const input = {
     playersDataInitial,

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import {isEmpty} from "lodash";
+import { isEmpty } from "lodash";
 
 // Components
 import Layout from "components/layout";
@@ -24,7 +24,12 @@ import {
 } from "redux/FantasyTeams/actionCreators";
 
 // Constants
-import {POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID} from "constants/data/filters";
+import {
+  POSITION_DEF,
+  POSITION_FWD,
+  POSITION_GK,
+  POSITION_MID,
+} from "constants/data/filters";
 
 // Styles
 const getStyles = (R) => {
@@ -72,7 +77,6 @@ const getStyles = (R) => {
 };
 
 export default function ConfirmAccount() {
-
   const STYLES = { ...getStyles(R) };
 
   const router = useRouter();
@@ -83,40 +87,42 @@ export default function ConfirmAccount() {
   const teamAlreadyExists = useSelector(({ auth }) => auth.user.fantasyTeamId);
 
   const teamData = useSelector(
-    ({ fantasyTeam }) => fantasyTeam.savedFantasyTeamOnRedux);
+    ({ fantasyTeam }) => fantasyTeam.savedFantasyTeamOnRedux
+  );
   const loadingFantasyTeamCreation = useSelector(
-    ({ fantasyTeam }) => fantasyTeam.loadingFantasyTeamCreation);
+    ({ fantasyTeam }) => fantasyTeam.loadingFantasyTeamCreation
+  );
 
   /***** Create Team Handler *******/
   const handleOnClick = async () => {
-
-    if(!teamName) {
-      return toast.error("Please enter team name !!!")
+    if (!teamName) {
+      return toast.error("Please enter team name !!!");
     }
 
+    const { squadInfo } = JSON.parse(teamData);
 
-    const { pickedPlayers } = JSON.parse(teamData)
+    const { squad } = squadInfo;
 
     const dataInput = {
-      goalkeepers: pickedPlayers[POSITION_GK].map((p, pitchIndex) => {
+      goalkeepers: squad[POSITION_GK].map((p, pitchIndex) => {
         return {
           id: p.id,
           pitchIndex,
         };
       }),
-      defenders: pickedPlayers[POSITION_DEF].map((p, pitchIndex) => {
+      defenders: squad[POSITION_DEF].map((p, pitchIndex) => {
         return {
           id: p.id,
           pitchIndex,
         };
       }),
-      midfielders: pickedPlayers[POSITION_MID].map((p, pitchIndex) => {
+      midfielders: squad[POSITION_MID].map((p, pitchIndex) => {
         return {
           id: p.id,
           pitchIndex,
         };
       }),
-      forwards: pickedPlayers[POSITION_FWD].map((p, pitchIndex) => {
+      forwards: squad[POSITION_FWD].map((p, pitchIndex) => {
         return {
           id: p.id,
           pitchIndex,
@@ -126,34 +132,39 @@ export default function ConfirmAccount() {
     };
 
     if (!isEmpty(dataInput)) {
-
-      const {success, msg } = await dispatch(createFantasyTeam(dataInput));
+      const { success, msg } = await dispatch(createFantasyTeam(dataInput));
 
       // Toast
       if (success) {
         toast.success(msg, {
           onClose: () => {
-            dispatch(fantasyTeamCreationSuccess())
-            return (
-                router.push({
-                    pathname: "/team_created",
-                        query: {
-                          teamCreated: true
-                        }
-                  })
-            )
+            dispatch(fantasyTeamCreationSuccess());
+            return router.push({
+              pathname: "/team_created",
+              query: {
+                teamCreated: true,
+              },
+            });
           },
         });
-      } else{ toast.error(msg, {onClose: () => dispatch(fantasyTeamCreationFailed())}); }
+      } else {
+        toast.error(msg, {
+          onClose: () => dispatch(fantasyTeamCreationFailed()),
+        });
+      }
     }
   };
 
   useEffect(() => {
-    if (teamAlreadyExists) {return router.push('/my_squad_game_week')}
-    if(!teamData) { router.push("/build_team_all_players") }
-  }, [])
+    if (teamAlreadyExists) {
+      return router.push("/my_squad_game_week");
+    }
+    if (!teamData) {
+      router.push("/build_team_all_players");
+    }
+  }, []);
 
-  if(!teamData || teamAlreadyExists) return <Loader/>
+  if (!teamData || teamAlreadyExists) return <Loader />;
 
   return (
     <Layout title="Create Your Team Name" showToast>
@@ -190,14 +201,18 @@ export default function ConfirmAccount() {
               className={"disable-input-outline font-[900] italic"}
               type="text"
               style={STYLES.input}
-              placeholder={'Champions FC'}
+              placeholder={"Champions FC"}
               value={teamName}
               onChange={(e) => setTeamName(e.target.value)}
             />
             <hr className={"w-full"} style={STYLES.border} />
             <div className="w-full flex items-center justify-center">
               <div style={STYLES.button}>
-                <Button title={"CONFIRM"} onClick={handleOnClick} disabled={loadingFantasyTeamCreation} />
+                <Button
+                  title={"CONFIRM"}
+                  onClick={handleOnClick}
+                  disabled={loadingFantasyTeamCreation}
+                />
               </div>
             </div>
           </div>
