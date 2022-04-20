@@ -24,25 +24,18 @@ const putSquadUnderPositions = (squad) => {
 };
 
 export const initialSettingsForTransferWindows = ({
+  players,
   squad,
-  // Picked Players
-  setSquadInfo,
-  // Budget
+  teamInfo,
+  setTeamInfo,
   remainingBudget,
-  // Players-Data
-  setPlayersData,
-  playersDataInitial,
-  setPlayersDataInitial,
-  // Transfer Info
   freeTransfers,
-  transferInfo,
-  setTransferInfo,
 }) => {
   const $squad = clone(squad);
 
   const allPlayerIds = getAllSelectedPlayersIDs($squad);
 
-  const playersData = playersDataInitial.map((p) => {
+  const updatedPlayers = players.map((p) => {
     p.chosen = !!allPlayerIds.includes(p.id);
     p.disablePlayerCard = true;
     p.animateState = false;
@@ -52,19 +45,15 @@ export const initialSettingsForTransferWindows = ({
 
   // Updates squad info
   const updatedSquadInfo = {
+    ...teamInfo.squadInfo,
     squad: { ...putSquadUnderPositions($squad) },
     clubsCount: getClubCount($squad),
     remainingBudget,
     totalChosenPlayers: 15,
   };
 
-  setSquadInfo(updatedSquadInfo);
-  setPlayersData(playersData);
-  setPlayersDataInitial(playersData);
-
-  // Update transfer info
-  setTransferInfo({
-    ...transferInfo,
+  const updatedTransferInfo = {
+    ...teamInfo.transferInfo,
     transferredPlayers: [],
     isOneFreeTransferWindow: true,
     currentTransferredToBePlayer: {
@@ -76,15 +65,23 @@ export const initialSettingsForTransferWindows = ({
     transferInProgress: false,
     transferResetDisabled: true,
     transferConfirmDisabled: true,
+  };
+
+  setTeamInfo({
+    ...teamInfo,
+    squadInfo: updatedSquadInfo,
+    players: [...updatedPlayers],
+    playersInitial: [...updatedPlayers],
+    transferInfo: updatedTransferInfo,
   });
 };
 
 const updatePlayersDataAfterDeselectionClicked = ({
-  playersDataInitial,
+  playersInitial,
   player,
   remainingBudget,
 }) => {
-  const $players = playersDataInitial.map((p) => {
+  const $players = playersInitial.map((p) => {
     if (
       p.position === player.position &&
       p.value <= remainingBudget &&
@@ -108,13 +105,8 @@ const updatePlayersDataAfterDeselectionClicked = ({
 };
 
 // Player transfer deselection
-export const playerTransferDeselectHandler = ({
-  transferInfo,
-  squadInfo,
-  setSquadInfo,
-  playersDataInitial,
-  setPlayersDataInitial,
-}) => {
+export const playerTransferDeselectHandler = ({ teamInfo, setTeamInfo }) => {
+  const { squadInfo, transferInfo, playersInitial } = teamInfo;
   const squad = { ...squadInfo.squad };
   let { remainingBudget } = squadInfo;
 
@@ -129,36 +121,34 @@ export const playerTransferDeselectHandler = ({
 
   remainingBudget = remainingBudget + player.value;
 
-  // Updates squad info
-
-  setSquadInfo({
+  const updatedSquadInfo = {
     ...squadInfo,
     squad: { ...squad },
     clubsCount: getClubCount(flattenSquad(squad)),
     remainingBudget: remainingBudget,
+  };
+
+  const updatedPlayersInitial = updatePlayersDataAfterDeselectionClicked({
+    playersInitial,
+    player,
+    remainingBudget,
   });
 
-  const input = {
-    playersDataInitial,
-    player,
-    remainingBudget: remainingBudget,
-  };
-  setPlayersDataInitial(updatePlayersDataAfterDeselectionClicked(input));
+  setTeamInfo({
+    ...teamInfo,
+    squadInfo: updatedSquadInfo,
+    playersInitial: updatedPlayersInitial,
+  });
 };
 
 // Player-Transfer Selection
 export const playerTransferSelectionHandler = ({
   player,
-  // Transfer Info
-  transferInfo,
-  setTransferInfo,
-  // Players-Data
+  teamInfo,
+  setTeamInfo,
   playersDataInitial,
-  setPlayersDataInitial,
-  // Squad info
-  squadInfo,
-  setSquadInfo,
 }) => {
+  const { squadInfo, transferInfo, playersInitial } = teamInfo;
   const squad = { ...squadInfo.squad };
 
   const { clubsCount } = squadInfo;
@@ -200,36 +190,37 @@ export const playerTransferSelectionHandler = ({
     chosen: true,
   };
 
-  // Update squad info
-  setSquadInfo({
+  const updatedSquadInfo = {
     ...squadInfo,
     squad: { ...squad },
     clubsCount: getClubCount(flattenSquad(squad)),
     remainingBudget: remainingBudget,
-  });
+  };
 
-  // Update transfer info
-  setTransferInfo({
+  const updatedTransferInfo = {
     ...transferInfo,
     ...obj,
     transferredPlayers: updatedTransferredPlayers,
     transferInProgress: false,
     transferResetDisabled: false,
     transferConfirmDisabled: false,
+  };
+
+  const updatedPlayersInitial = updatePlayersDataAfterSelectionDone({
+    playersInitial,
+    player,
   });
 
-  const input = {
-    playersDataInitial,
-    player,
-  };
-  setPlayersDataInitial(updatePlayersDataAfterSelectionDone(input));
+  setTeamInfo({
+    ...teamInfo,
+    squadInfo: updatedSquadInfo,
+    transferInfo: updatedTransferInfo,
+    playersInitial: updatedPlayersInitial,
+  });
 };
 
-const updatePlayersDataAfterSelectionDone = ({
-  playersDataInitial,
-  player,
-}) => {
-  return playersDataInitial.map((p) => {
+const updatePlayersDataAfterSelectionDone = ({ playersInitial, player }) => {
+  return playersInitial.map((p) => {
     if (p.id === player.id) {
       p.chosen = true;
     }

@@ -78,25 +78,27 @@ const getStyles = (R) => {
 };
 
 export default function FooterBar({
-  // Players
   players,
-  squadInfo,
-  setSquadInfo,
-  setPlayersDataInitial,
+  teamInfo,
+  setTeamInfo,
   squadInfoInitialState,
-  // Transfer-Window
-  isOneFreeTransferWindow,
-  noOfFreeTransfersLeft,
-  transferResetDisabled,
-  transferConfirmDisabled,
   onTransferResetClick,
   onTransferConfirmClick,
-  additionalTransferredPlayers,
 }) {
   const STYLES = { ...getStyles(R) };
 
   const dispatch = useDispatch();
   const router = useRouter();
+
+  const { squadInfo, transferInfo } = teamInfo;
+
+  const {
+    isOneFreeTransferWindow,
+    noOfFreeTransfersLeft,
+    transferResetDisabled,
+    transferConfirmDisabled,
+    additionalTransferredPlayers,
+  } = transferInfo;
 
   // Global states
   const totalBudget = useSelector(({ fantasyTeam }) => fantasyTeam.totalBudget);
@@ -113,15 +115,20 @@ export default function FooterBar({
       totalBudget,
     });
 
-    setSquadInfo({
-      ...squadInfo,
+    const updatedSquadInfo = {
+      ...teamInfo.squadInfo,
       squad: res.squad,
       clubsCount: getClubCount(flattenSquad(res.squad)),
       remainingBudget: res.remainingBudget,
       totalChosenPlayers: res.totalChosenPlayers,
+    };
+
+    setTeamInfo({
+      ...teamInfo,
+      squadInfo: updatedSquadInfo,
+      playersInitial: [...res.players],
     });
 
-    setPlayersDataInitial(res.players);
     setAutoPickDisabled(true);
     setResetDisabled(false);
   };
@@ -139,11 +146,15 @@ export default function FooterBar({
   }, [totalChosenPlayers]);
 
   const handleResetClick = () => {
-    setSquadInfo(clone(squadInfoInitialState));
+    setTeamInfo({
+      ...teamInfo,
+      squadInfo: clone(squadInfoInitialState),
+      playersInitial: clone(players),
+    });
+
     setAutoPickDisabled(false);
     setResetDisabled(true);
     setContinueDisabled(true);
-    setPlayersDataInitial(clone(players));
   };
 
   const persistDataToReduxStore = () => {

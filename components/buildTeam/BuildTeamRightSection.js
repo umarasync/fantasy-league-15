@@ -61,16 +61,14 @@ const getStyles = (R) => {
 };
 
 export default function BuildTeamRightSection({
-  // Players Data
-  playersData,
-  setPlayersData,
-  playersDataInitial,
-  // Clubs
+  teamInfo,
+  setTeamInfo,
   clubs: clubsProp,
-  // Players-Data
   handlePlayerSelection,
 }) {
   const STYLES = { ...getStyles(R) };
+
+  const { players, playersInitial } = teamInfo;
 
   // Global States
   const user = useSelector(({ auth }) => auth.user);
@@ -123,9 +121,9 @@ export default function BuildTeamRightSection({
 
   // Filter & Sorting
   const runFiltersOnPlayersData = () => {
-    let $playersData = [...playersDataInitial];
+    let updatedPlayers = [...playersInitial];
 
-    $playersData = $playersData.filter((player) => {
+    updatedPlayers = updatedPlayers.filter((player) => {
       return filtersHandler({
         player,
         activePosition,
@@ -136,12 +134,15 @@ export default function BuildTeamRightSection({
       });
     });
 
-    $playersData = sortingHandler({
-      playersData: $playersData,
+    updatedPlayers = sortingHandler({
+      players: updatedPlayers,
       selectedSortingOption,
     });
 
-    setPlayersData([...$playersData]);
+    setTeamInfo({
+      ...teamInfo,
+      players: [...updatedPlayers],
+    });
   };
 
   const areAllInitialStatesCompleted = () => {
@@ -152,7 +153,7 @@ export default function BuildTeamRightSection({
       isEmpty(selectedPrice) ||
       isEmpty(activePosition) ||
       isEmpty(selectedSortingOption) ||
-      isEmpty(playersDataInitial)
+      isEmpty(playersInitial)
     ) {
       return false;
     }
@@ -169,7 +170,7 @@ export default function BuildTeamRightSection({
     selectedPrice,
     activePosition,
     selectedSortingOption,
-    playersDataInitial,
+    playersInitial,
   ]);
 
   const areFiltersApplied = () => {
@@ -184,7 +185,7 @@ export default function BuildTeamRightSection({
   };
 
   const getPlayersContainerHeight = () => {
-    if (areFiltersApplied() && !playersData.length) {
+    if (areFiltersApplied() && !players.length) {
       return "hide";
     } else if (showAllFilters) {
       return "half";
@@ -276,7 +277,7 @@ export default function BuildTeamRightSection({
         <AnimatePresence />
       )}
 
-      {areFiltersApplied() && !playersData.length && (
+      {areFiltersApplied() && !players.length && (
         <div className={"absolute w-full"} style={STYLES.noResultFound}>
           <NoResultFound />
         </div>
@@ -292,7 +293,7 @@ export default function BuildTeamRightSection({
           style={STYLES.playerPanel}
         >
           <Div mb={16}>
-            {areFiltersApplied() && !playersData.length ? null : (
+            {areFiltersApplied() && !players.length ? null : (
               <Div>
                 <SelectInput
                   options={sortingOptions}
@@ -309,8 +310,8 @@ export default function BuildTeamRightSection({
           </Div>
 
           <Div h={"100%"} overFlowScroll>
-            {!isEmpty(playersData) &&
-              playersData.map((player) => (
+            {!isEmpty(players) &&
+              players.map((player) => (
                 <PlayerCard
                   key={player.id}
                   player={player}
@@ -318,7 +319,7 @@ export default function BuildTeamRightSection({
                 />
               ))}
           </Div>
-          {!isEmpty(playersData) && (
+          {!isEmpty(players) && (
             <Div mt={40}>
               <BuildYourTeamPlayersPagination />
             </Div>
