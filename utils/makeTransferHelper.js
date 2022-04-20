@@ -160,6 +160,11 @@ export const playerTransferSelectionHandler = ({
   setSquadInfo,
 }) => {
   const squad = { ...squadInfo.squad };
+
+  const { clubsCount } = squadInfo;
+
+  if (clubsCount[player.team.name] === 3) return;
+
   const position = player.position;
   let { remainingBudget } = squadInfo;
   let {
