@@ -1,8 +1,6 @@
 // Packages
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
 
 // Components
 import Layout from "components/layout";
@@ -233,8 +231,6 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
     setShowFooterBar(true);
     setRemainingBudget(totalBudget);
   }, []);
-
-  console.log("1=-============", $players);
 
   return (
     <Layout title="Build Team All Player" showToast={true}>

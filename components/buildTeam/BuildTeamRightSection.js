@@ -42,6 +42,7 @@ import {
 import BuildYourTeamPlayersPagination from "./BuildYourTeamPlayersPagination";
 import filtersHandler from "../../utils/buildYourTeamFiltersHelper";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 // Styles
 const getStyles = (R) => {
@@ -71,57 +72,53 @@ export default function BuildTeamRightSection({
 }) {
   const STYLES = { ...getStyles(R) };
 
+  // Global States
+  const user = useSelector(({ auth }) => auth.user);
+
   // Initial States
-  const CLUBS_INITIAL = clone(clubsProp);
-  const PRICES_INITIAL = clone(PRICES);
-  const RECOMMENDATIONS_INITIAL = clone(RECOMMENDATIONS);
-  const SORTING_OPTIONS_INITIAL = clone(SORTING_OPTIONS);
-  const STATUSES_INITIAL = clone(STATUSES);
+  const clubsInitial = clone(clubsProp);
+  const pricesInitial = clone(PRICES);
+  const recommendationsInitial = clone(RECOMMENDATIONS);
+  const sortingOptionsInitial = clone(SORTING_OPTIONS);
+  const statusesInitial = clone(STATUSES);
 
   // Positions States
-  const [activePosition, setActivePosition] = useState(POSITION_ALL);
+  const [activePosition, setActivePosition] = useState("");
   // Clubs States
-  const [clubs, setClubs] = useState([...CLUBS_INITIAL]);
-  const [selectedClubs, setSelectedClubs] = useState([CLUBS_INITIAL[0]]);
+  const [clubs, setClubs] = useState([]);
+  const [selectedClubs, setSelectedClubs] = useState([]);
   // Statuses Statuses
-  const [statuses, setStatuses] = useState([...STATUSES_INITIAL]);
-  const [selectedStatuses, setSelectedStatuses] = useState([
-    STATUSES_INITIAL[0],
-  ]);
+  const [statuses, setStatuses] = useState([]);
+  const [selectedStatuses, setSelectedStatuses] = useState([]);
   // Prices States
-  const [prices, setPrices] = useState([...PRICES_INITIAL]);
-  const [selectedPrice, setSelectedPrice] = useState(PRICES_INITIAL[0]);
+  const [prices, setPrices] = useState([]);
+  const [selectedPrice, setSelectedPrice] = useState();
   // Recommendations States
-  const [recommendations, setRecommendations] = useState([
-    ...RECOMMENDATIONS_INITIAL,
-  ]);
-  const [selectedRecommendation, setSelectedRecommendation] = useState(
-    RECOMMENDATIONS_INITIAL[0]
-  );
-  // Sorting
-  const [sortingOptions, setSortingOptions] = useState([
-    ...SORTING_OPTIONS_INITIAL,
-  ]);
-  const [selectedSortingOption, setSelectedSortingOption] = useState(
-    SORTING_OPTIONS_INITIAL[0]
-  );
-
-  // Filters
+  const [recommendations, setRecommendations] = useState([]);
+  const [selectedRecommendation, setSelectedRecommendation] = useState();
+  // Sorting States
+  const [sortingOptions, setSortingOptions] = useState([]);
+  const [selectedSortingOption, setSelectedSortingOption] = useState();
+  // Filters State
   const [showAllFilters, setShowAllFilters] = useState(false);
 
-  // Reset-Filters
-  const handleResetFilter = () => {
-    setClubs([...CLUBS_INITIAL]);
-    setSelectedClubs([CLUBS_INITIAL[0]]);
+  const initialSettings = () => {
+    setActivePosition(POSITION_ALL);
 
-    setStatuses([...STATUSES_INITIAL]);
-    setSelectedStatuses([STATUSES_INITIAL[0]]);
+    setClubs([...clubsInitial]);
+    setSelectedClubs([clubsInitial[0]]);
 
-    setPrices([...PRICES_INITIAL]);
-    setSelectedPrice(PRICES_INITIAL[0]);
+    setStatuses([...statusesInitial]);
+    setSelectedStatuses([statusesInitial[0]]);
 
-    setRecommendations([...RECOMMENDATIONS_INITIAL]);
-    setSelectedRecommendation(RECOMMENDATIONS_INITIAL[0]);
+    setPrices([...pricesInitial]);
+    setSelectedPrice(pricesInitial[0]);
+
+    setRecommendations([...recommendationsInitial]);
+    setSelectedRecommendation(recommendationsInitial[0]);
+
+    setSortingOptions([...sortingOptionsInitial]);
+    setSelectedSortingOption(sortingOptionsInitial[0]);
   };
 
   // Filter & Sorting
@@ -147,7 +144,23 @@ export default function BuildTeamRightSection({
     setPlayersData([...$playersData]);
   };
 
+  const areAllInitialStatesCompleted = () => {
+    if (
+      isEmpty(clubs) ||
+      isEmpty(statuses) ||
+      isEmpty(selectedRecommendation) ||
+      isEmpty(selectedPrice) ||
+      isEmpty(activePosition) ||
+      isEmpty(selectedSortingOption) ||
+      isEmpty(playersDataInitial)
+    ) {
+      return false;
+    }
+    return true;
+  };
+
   useEffect(() => {
+    if (!areAllInitialStatesCompleted()) return;
     runFiltersOnPlayersData();
   }, [
     clubs,
@@ -180,12 +193,15 @@ export default function BuildTeamRightSection({
     }
   };
 
+  useEffect(() => {
+    initialSettings();
+  }, []);
+
   return (
     <Div position={"relative"} w={488} pt={35} pb={100}>
       {/*username*/}
       <Div className={"flex flex-row-reverse"} mb={46}>
-        {/*<Username username={user.username}/>*/}
-        <Username username={"john doe"} />
+        <Username username={`${user.firstName} ${user.lastName}`} />
       </Div>
 
       {/*search*/}
@@ -225,7 +241,7 @@ export default function BuildTeamRightSection({
               onClubSelected={(option) =>
                 handleMultiSelectionDropDowns(option, {
                   firstOption: ALL_TEAMS,
-                  initialState: CLUBS_INITIAL,
+                  initialState: clubsInitial,
                   state: clubs,
                   setSelectedOptions: setSelectedClubs,
                   setOptions: setClubs,
@@ -237,7 +253,7 @@ export default function BuildTeamRightSection({
               onStatusSelected={(option) =>
                 handleMultiSelectionDropDowns(option, {
                   firstOption: ALL_STATUSES,
-                  initialState: STATUSES_INITIAL,
+                  initialState: statusesInitial,
                   state: statuses,
                   setSelectedOptions: setSelectedStatuses,
                   setOptions: setStatuses,
@@ -252,7 +268,7 @@ export default function BuildTeamRightSection({
               selectedRecommendation={selectedRecommendation}
               onRecommendationSelected={(r) => setSelectedRecommendation(r)}
               // Reset Filters
-              onResetFilterClicked={handleResetFilter}
+              onResetFilterClicked={initialSettings}
             />
           </motion.div>
         </AnimatePresence>
