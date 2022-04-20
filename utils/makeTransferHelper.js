@@ -130,13 +130,13 @@ export const playerTransferDeselectHandler = ({
   remainingBudget = remainingBudget + player.value;
 
   // Updates squad info
-  const updatedSquadInfo = {
+
+  setSquadInfo({
     ...squadInfo,
     squad: { ...squad },
     clubsCount: getClubCount(flattenSquad(squad)),
     remainingBudget: remainingBudget,
-  };
-  setSquadInfo(updatedSquadInfo);
+  });
 
   const input = {
     playersDataInitial,
@@ -196,13 +196,12 @@ export const playerTransferSelectionHandler = ({
   };
 
   // Update squad info
-  const updatedSquadInfo = {
+  setSquadInfo({
     ...squadInfo,
     squad: { ...squad },
     clubsCount: getClubCount(flattenSquad(squad)),
     remainingBudget: remainingBudget,
-  };
-  setSquadInfo(updatedSquadInfo);
+  });
 
   // Update transfer info
   setTransferInfo({
