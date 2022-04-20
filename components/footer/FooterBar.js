@@ -143,17 +143,11 @@ export default function FooterBar({
     setAutoPickDisabled(false);
     setResetDisabled(true);
     setContinueDisabled(true);
-    setPlayersDataInitial([...clone(players)]);
+    setPlayersDataInitial(clone(players));
   };
 
   const persistDataToReduxStore = () => {
-    const teamData = JSON.stringify({
-      squadInfo,
-      remainingBudget,
-      // Only for transfer windows
-      noOfFreeTransfersLeft,
-      additionalTransferredPlayers,
-    });
+    const teamData = JSON.stringify({ squadInfo });
 
     dispatch(saveFantasyTeamToRedux(teamData));
     router.push("/create_team_name");

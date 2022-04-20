@@ -244,6 +244,7 @@ export const playerDeselectionHandler = ({
     remainingBudget,
     totalChosenPlayers,
   };
+
   setSquadInfo(updatedSquadInfo);
 
   // Update players initial data
