@@ -29,12 +29,13 @@ import { SELECTED_PLAYERS } from "constants/data/players";
 // Actions
 import { getFantasyTeamById } from "redux/FantasyTeams/api";
 
-export default function BuildTeamPlayers({ players: $players, clubs }) {
+export default function BuildTeamPlayers({ players, clubs }) {
   const dispatch = useDispatch();
 
   // Global States
   const user = useSelector(({ auth }) => auth.user);
   const totalBudget = useSelector(({ fantasyTeam }) => fantasyTeam.totalBudget);
+  const teamAlreadyExists = user.fantasyTeamId;
 
   const squadInfoInitialState = {
     squad: clone(SELECTED_PLAYERS),
@@ -66,20 +67,25 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
     return playerSelectionHandler({
       // Player
       player,
-      playersDataInitial,
-      setPlayersDataInitial,
+      // Squad info
       squadInfo,
       setSquadInfo,
+      // Players data initial
+      playersDataInitial,
+      setPlayersDataInitial,
     });
   };
 
   // Player-Deselection
   const handlePlayerDeselection = (position, i) => {
     return playerDeselectionHandler({
+      // Position
       position,
       i,
+      // Squad info
       squadInfo,
       setSquadInfo,
+      // Players data initial
       playersDataInitial,
       setPlayersDataInitial,
     });
@@ -163,7 +169,7 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
         remainingBudget: totalBudget - user.fantasyTeamValue,
         // Players-Data
         setPlayersData,
-        playersDataInitial: $players,
+        playersDataInitial: players,
         setPlayersDataInitial,
         // Transfer Window
         freeTransfers: user.freeTransfers,
@@ -182,22 +188,18 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
   const runInitialSettingsForBuildYourTeam = () => {
     initialSettingsForBuildYourTeam({
       squadInfo,
-      players: $players,
+      players,
       setPlayersData,
       setPlayersDataInitial,
     });
   };
 
-  const runDidMount = () => {
-    /*** If team already exists run transfer window ****/
-    if (user.fantasyTeamId) {
+  useEffect(() => {
+    if (teamAlreadyExists) {
       return runInitialSettingsForTransferWindows();
     }
     runInitialSettingsForBuildYourTeam();
-  };
-  useEffect(() => {
-    runDidMount();
-  }, [$players]);
+  }, [players]);
 
   return (
     <Layout title="Build Team All Player" showToast={true}>
@@ -234,7 +236,7 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
 
         <FooterBar
           // Players
-          players={$players}
+          players={players}
           squadInfo={squadInfo}
           setSquadInfo={setSquadInfo}
           squadInfoInitialState={squadInfoInitialState}

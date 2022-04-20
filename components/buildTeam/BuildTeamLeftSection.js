@@ -8,7 +8,6 @@ import Text from "components/html/Text";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import { isEmpty } from "utils/helpers";
 
 // Constants
 import colors from "constants/colors";

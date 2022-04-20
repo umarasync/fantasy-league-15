@@ -170,10 +170,10 @@ const updatePlayersDataAfterSelectionOrDeselection = (
 export const playerSelectionHandler = ({
   // Player
   player,
-  // Squad Info
+  // Squad info
   squadInfo,
   setSquadInfo,
-  // Players-Data-Initial
+  // Players data initial
   playersDataInitial,
   setPlayersDataInitial,
 }) => {
