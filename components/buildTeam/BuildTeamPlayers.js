@@ -45,9 +45,13 @@ export default function BuildTeamPlayers({ players, clubs }) {
   };
   // Squad Info
   const [squadInfo, setSquadInfo] = useState(squadInfoInitialState);
-  // Players States
+
+  /*****
+   * playersData can be more or less when filter runs
+   * playersDataInitial will always contain all players
+   * *****/
   const [playersData, setPlayersData] = useState([]);
-  const [playersDataInitial, setPlayersDataInitial] = useState([]); // contains all players
+  const [playersDataInitial, setPlayersDataInitial] = useState([]);
 
   // States-for-Player-Transfer
   const [noOfFreeTransfersLeft, setNoOfFreeTransfersLeft] = useState("");
