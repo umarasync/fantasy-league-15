@@ -32,38 +32,40 @@ import { getFantasyTeamById } from "redux/FantasyTeams/api";
 export default function BuildTeamPlayers({ players, clubs }) {
   const dispatch = useDispatch();
 
-  // Global States
+  /**** Global States ****/
   const user = useSelector(({ auth }) => auth.user);
   const totalBudget = useSelector(({ fantasyTeam }) => fantasyTeam.totalBudget);
   const teamAlreadyExists = user.fantasyTeamId;
 
+  /**** Squad Info ****/
   const squadInfoInitialState = {
     squad: clone(SELECTED_PLAYERS),
     clubsCount: {},
     remainingBudget: totalBudget,
     totalChosenPlayers: 0,
   };
-  // Squad Info
   const [squadInfo, setSquadInfo] = useState(squadInfoInitialState);
 
   /*****
-   * playersData can be more or less when filter runs
-   * playersDataInitial will always contain all players
+   * playersData: It can be more or less when filters get applied
+   * playersDataInitial: It will always contain all players
    * *****/
   const [playersData, setPlayersData] = useState([]);
   const [playersDataInitial, setPlayersDataInitial] = useState([]);
 
-  // States-for-Player-Transfer
-  const [noOfFreeTransfersLeft, setNoOfFreeTransfersLeft] = useState("");
-  const [isOneFreeTransferWindow, setIsOneFreeTransferWindow] = useState(false);
-  const [transferInProgress, setTransferInProgress] = useState(false);
-  const [currentTransferredToBePlayer, setCurrentTransferredToBePlayer] =
-    useState({});
-  const [additionalTransferredPlayers, setAdditionalTransferredPlayers] =
-    useState(0);
-  const [transferResetDisabled, setTransferResetDisabled] = useState(true);
-  const [transferConfirmDisabled, setTransferConfirmDisabled] = useState(true);
-  const [transferredPlayers, setTransferredPlayers] = useState([]);
+  /**** Transfer Info ****/
+  const transferInfoInitialState = {
+    noOfFreeTransfersLeft: null,
+    isOneFreeTransferWindow: false,
+    transferInProgress: false,
+    additionalTransferredPlayers: 0,
+    currentTransferredToBePlayer: {},
+    transferResetDisabled: true,
+    transferConfirmDisabled: true,
+    transferredPlayers: [],
+  };
+  const [transferInfo, setTransferInfo] = useState(transferInfoInitialState);
+
   const [showTransferWindowModal, setShowTransferWindowModal] = useState(false);
 
   // Player-Selection
@@ -97,10 +99,9 @@ export default function BuildTeamPlayers({ players, clubs }) {
 
   // Player-Transfer-Player-Deselection
   const executeTransferPlayerDeselect = () => {
-    setTransferInProgress(true);
+    setTransferInfo({ ...transferInfo, transferInProgress: true });
     return playerTransferDeselectHandler({
-      position: currentTransferredToBePlayer.position,
-      i: currentTransferredToBePlayer.index,
+      transferInfo,
       squadInfo,
       setSquadInfo,
       playersDataInitial,
@@ -109,6 +110,7 @@ export default function BuildTeamPlayers({ players, clubs }) {
   };
 
   useEffect(() => {
+    const { currentTransferredToBePlayer, transferInProgress } = transferInfo;
     if (
       isEmpty(currentTransferredToBePlayer) ||
       currentTransferredToBePlayer.position === null ||
@@ -116,33 +118,28 @@ export default function BuildTeamPlayers({ players, clubs }) {
     )
       return;
     executeTransferPlayerDeselect();
-  }, [currentTransferredToBePlayer]);
+  }, [transferInfo.currentTransferredToBePlayer]);
 
   const handleTransferPlayerDeselect = (position, i) => {
-    setCurrentTransferredToBePlayer({ position: position, index: i });
+    setTransferInfo({
+      ...transferInfo,
+      setCurrentTransferredToBePlayer: { position: position, index: i },
+    });
   };
 
   // Player-Transfer-Player-Selection
   const handleTransferPlayerSelection = (player) => {
     playerTransferSelectionHandler({
       player,
+      // Transfer Info
+      transferInfo,
+      setTransferInfo,
       // Players-Data
       playersDataInitial,
       setPlayersDataInitial,
-      // Picked-Players
+      // Squad info
       squadInfo,
       setSquadInfo,
-      // Transfer
-      setTransferInProgress,
-      noOfFreeTransfersLeft,
-      setNoOfFreeTransfersLeft,
-      additionalTransferredPlayers,
-      setAdditionalTransferredPlayers,
-      transferredPlayers,
-      setTransferredPlayers,
-      // Buttons
-      setTransferResetDisabled,
-      setTransferConfirmDisabled,
     });
   };
 
@@ -167,7 +164,7 @@ export default function BuildTeamPlayers({ players, clubs }) {
       initialSettingsForTransferWindows({
         // Team Data
         squad: data,
-        // Picked Players
+        // Squad info
         setSquadInfo,
         // Budget
         remainingBudget: totalBudget - user.fantasyTeamValue,
@@ -177,14 +174,9 @@ export default function BuildTeamPlayers({ players, clubs }) {
         setPlayersDataInitial,
         // Transfer Window
         freeTransfers: user.freeTransfers,
-        setIsOneFreeTransferWindow,
-        setTransferInProgress,
-        setCurrentTransferredToBePlayer,
-        setNoOfFreeTransfersLeft,
-        setAdditionalTransferredPlayers,
-        setTransferResetDisabled,
-        setTransferConfirmDisabled,
-        setTransferredPlayers,
+        // Transfer Info
+        transferInfo,
+        setTransferInfo,
       });
     }
   };
@@ -204,6 +196,15 @@ export default function BuildTeamPlayers({ players, clubs }) {
     }
     runInitialSettingsForBuildYourTeam();
   }, [players]);
+
+  const {
+    isOneFreeTransferWindow,
+    noOfFreeTransfersLeft,
+    transferResetDisabled,
+    transferConfirmDisabled,
+    additionalTransferredPlayers,
+    transferredPlayers,
+  } = transferInfo;
 
   return (
     <Layout title="Build Team All Player" showToast={true}>
