@@ -36,10 +36,10 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
   const user = useSelector(({ auth }) => auth.user);
   const totalBudget = useSelector(({ fantasyTeam }) => fantasyTeam.totalBudget);
 
-  const SELECTED_PLAYERS_INITIAL = clone(SELECTED_PLAYERS);
+  const selectedPlayersInitial = clone(SELECTED_PLAYERS);
 
   // Picked-Players
-  const [pickedPlayers, setPickedPlayers] = useState(SELECTED_PLAYERS_INITIAL);
+  const [pickedPlayers, setPickedPlayers] = useState(selectedPlayersInitial);
   const [clubsForWhichPlayersPicked, setClubsForWhichPlayersPicked] = useState(
     {}
   );
@@ -273,7 +273,7 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
             totalChosenPlayers={totalChosenPlayers}
             setTotalChosenPlayers={setTotalChosenPlayers}
             setPlayersDataInitial={setPlayersDataInitial}
-            selectedPlayersInitial={SELECTED_PLAYERS_INITIAL}
+            selectedPlayersInitial={selectedPlayersInitial}
             // Clubs Info
             setClubsForWhichPlayersPicked={setClubsForWhichPlayersPicked}
             // Budget
