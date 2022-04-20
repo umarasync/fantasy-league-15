@@ -79,13 +79,19 @@ export const initialSettingsForTransferWindows = ({
 const updatePlayersDataAfterDeselectionClicked = ({
   playersInitial,
   player,
-  remainingBudget,
+  updatedSquadInfo,
 }) => {
-  const $players = playersInitial.map((p) => {
+  const { remainingBudget, clubsCount } = updatedSquadInfo;
+
+  const players = playersInitial.map((p) => {
+    // Only enable card if these conditions met
     if (
       p.position === player.position &&
       p.value <= remainingBudget &&
-      !p.chosen
+      !p.chosen &&
+      // If clubs are less than 3 || clubs is equal to 3 but club is deselected one
+      (clubsCount[p.team.name] < 3 ||
+        (clubsCount[p.team.name] === 3 && p.team.name === player.team.name))
     ) {
       p.disablePlayerCard = false;
     }
@@ -93,15 +99,15 @@ const updatePlayersDataAfterDeselectionClicked = ({
   });
 
   // Make currently deselected player also disable in list
-  const playerIndex = $players.findIndex((p) => p.id === player.id);
+  const playerIndex = players.findIndex((p) => p.id === player.id);
 
   if (playerIndex !== -1) {
-    const $player = $players[playerIndex];
+    const $player = players[playerIndex];
     $player.chosen = false;
     $player.disablePlayerCard = true;
   }
 
-  return $players;
+  return players;
 };
 
 // Player transfer deselection
@@ -131,7 +137,7 @@ export const playerTransferDeselectHandler = ({ teamInfo, setTeamInfo }) => {
   const updatedPlayersInitial = updatePlayersDataAfterDeselectionClicked({
     playersInitial,
     player,
-    remainingBudget,
+    updatedSquadInfo,
   });
 
   setTeamInfo({
@@ -146,7 +152,6 @@ export const playerTransferSelectionHandler = ({
   player,
   teamInfo,
   setTeamInfo,
-  playersDataInitial,
 }) => {
   const { squadInfo, transferInfo, playersInitial } = teamInfo;
   const squad = { ...squadInfo.squad };
