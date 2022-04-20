@@ -83,7 +83,7 @@ const cutPlayersAccordingToPositionsCount = (players) => {
 };
 
 // Flatten squad into single array
-const flattenSquad = ($squad) => {
+export const flattenSquad = ($squad) => {
   let squad = [];
   for (let key in $squad) {
     if ($squad.hasOwnProperty(key)) {
@@ -118,25 +118,22 @@ export const handleAutoPick = ({ players, totalBudget }) => {
 
   let totalChosenPlayers = 0;
   let chosenPlayersWithinBudget = clone(SELECTED_PLAYERS);
-  let clubCount = [];
   const $$players = $players.map((p) => {
     if (max3PlayersPerClubIds.includes(p.id) && p.value < remainingBudget) {
       p.chosen = true;
       chosenPlayersWithinBudget[p.position].push(p);
       remainingBudget = remainingBudget - p.value;
       totalChosenPlayers += 1;
-      clubCount.push(p.team.name);
       return p;
     }
     return p;
   });
 
   return {
-    chosenPlayersWithinBudget,
+    squad: chosenPlayersWithinBudget,
     remainingBudget,
     totalChosenPlayers,
     players: $$players,
-    clubCount,
   };
 };
 
@@ -156,28 +153,18 @@ const updatePlayersDataAfterSelectionOrDeselection = (
 export const playerSelectionHandler = ({
   // Player
   player,
-  // Players-Data-Initial
-  playersDataInitial,
-  setPlayersDataInitial,
-  // Total-Chosen-Players
-  totalChosenPlayers,
-  setTotalChosenPlayers,
   // Squad Info
   squadInfo,
   setSquadInfo,
-  // Remaining-Budget
-  remainingBudget,
-  setRemainingBudget,
+  // Players-Data-Initial
+  playersDataInitial,
+  setPlayersDataInitial,
 }) => {
-  /*** If total chosen players are 15 or
-   * 3 players are chosen per club then don't go further
-   ****/
-  if (totalChosenPlayers === 15 || squadInfo.clubsCount[player.team.name] === 3)
-    return;
+  let { remainingBudget, totalChosenPlayers, clubsCount } = squadInfo;
+  if (totalChosenPlayers === 15 || clubsCount[player.team.name] === 3) return;
 
   const pos = player.position;
   const squad = { ...squadInfo.squad };
-  // let { remainingBudget } = squadInfo;
   const sp = squad[pos];
 
   if (
@@ -187,8 +174,9 @@ export const playerSelectionHandler = ({
     (pos === POSITION_DEF && squad[POSITION_DEF].length < 5)
   ) {
     if (!sp.length || (sp.length > 0 && !sp.some((p) => p.id === player.id))) {
-      setRemainingBudget(remainingBudget - player.value);
-      setTotalChosenPlayers(totalChosenPlayers + 1);
+      remainingBudget = remainingBudget - player.value;
+      totalChosenPlayers = totalChosenPlayers + 1;
+
       sp.push(player);
       setPlayersDataInitial(
         updatePlayersDataAfterSelectionOrDeselection(
@@ -202,8 +190,10 @@ export const playerSelectionHandler = ({
     const indexOfEmptyPosition = sp.findIndex((x) => x === false);
     if (indexOfEmptyPosition === -1) return;
     sp[indexOfEmptyPosition] = player;
-    setRemainingBudget(remainingBudget - player.value);
-    setTotalChosenPlayers(totalChosenPlayers + 1);
+
+    remainingBudget = remainingBudget - player.value;
+    totalChosenPlayers = totalChosenPlayers + 1;
+
     setPlayersDataInitial(
       updatePlayersDataAfterSelectionOrDeselection(
         playersDataInitial,
@@ -218,6 +208,8 @@ export const playerSelectionHandler = ({
     ...squadInfo,
     squad: { ...squad },
     clubsCount: getClubCount(flattenSquad(squad)),
+    remainingBudget,
+    totalChosenPlayers,
   };
   setSquadInfo(updatedSquadInfo);
 };
@@ -229,21 +221,19 @@ export const playerDeselectionHandler = ({
   // Squad Info
   squadInfo,
   setSquadInfo,
-  // Remaining-Budget
-  remainingBudget,
-  setRemainingBudget,
-  // Total-Chosen-Players
-  totalChosenPlayers,
-  setTotalChosenPlayers,
   // Players-Data-Initial
   playersDataInitial,
   setPlayersDataInitial,
 }) => {
   const squad = { ...squadInfo.squad };
 
+  let { remainingBudget, totalChosenPlayers } = squadInfo;
+
   const player = squad[position][i];
-  setRemainingBudget(remainingBudget + player.value);
-  setTotalChosenPlayers(totalChosenPlayers - 1);
+
+  remainingBudget = remainingBudget + player.value;
+  totalChosenPlayers = totalChosenPlayers - 1;
+
   squad[position][i] = false;
 
   // Updates squad info
@@ -251,6 +241,8 @@ export const playerDeselectionHandler = ({
     ...squadInfo,
     squad: { ...squad },
     clubsCount: getClubCount(flattenSquad(squad)),
+    remainingBudget,
+    totalChosenPlayers,
   };
   setSquadInfo(updatedSquadInfo);
 

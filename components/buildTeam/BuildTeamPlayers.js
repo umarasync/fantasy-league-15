@@ -36,19 +36,20 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
   const totalBudget = useSelector(({ fantasyTeam }) => fantasyTeam.totalBudget);
 
   const selectedPlayersInitial = clone(SELECTED_PLAYERS);
-  // Squad Info
-  const [squadInfo, setSquadInfo] = useState({
-    squad: {},
+
+  const squadInfoInitialState = {
+    squad: { ...selectedPlayersInitial },
     clubsCount: {},
     remainingBudget: totalBudget,
     totalChosenPlayers: 0,
-  });
+  };
+  // Squad Info
+  const [squadInfo, setSquadInfo] = useState(squadInfoInitialState);
   // Players States
   const [playersData, setPlayersData] = useState([]);
   const [playersDataInitial, setPlayersDataInitial] = useState([]); // contains all players
 
   // States-for-Player-Transfer
-  const [remainingBudget, setRemainingBudget] = useState("");
   const [noOfFreeTransfersLeft, setNoOfFreeTransfersLeft] = useState("");
   const [isOneFreeTransferWindow, setIsOneFreeTransferWindow] = useState(false);
   const [showFooterBar, setShowFooterBar] = useState(false);
@@ -62,9 +63,6 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
   const [transferredPlayers, setTransferredPlayers] = useState([]);
   const [showTransferWindowModal, setShowTransferWindowModal] = useState(false);
 
-  // Footer Bar States
-  const [totalChosenPlayers, setTotalChosenPlayers] = useState(0);
-
   // Player-Selection
   const handlePlayerSelection = (player) => {
     return playerSelectionHandler({
@@ -72,13 +70,8 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
       player,
       playersDataInitial,
       setPlayersDataInitial,
-      totalChosenPlayers,
-      setTotalChosenPlayers,
       squadInfo,
       setSquadInfo,
-      // Budget
-      remainingBudget,
-      setRemainingBudget,
     });
   };
 
@@ -89,10 +82,6 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
       i,
       squadInfo,
       setSquadInfo,
-      remainingBudget,
-      setRemainingBudget,
-      totalChosenPlayers,
-      setTotalChosenPlayers,
       playersDataInitial,
       setPlayersDataInitial,
     });
@@ -106,8 +95,6 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
       i: currentTransferredToBePlayer.index,
       squadInfo,
       setSquadInfo,
-      remainingBudget,
-      setRemainingBudget,
       playersDataInitial,
       setPlayersDataInitial,
     });
@@ -137,9 +124,6 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
       // Picked-Players
       squadInfo,
       setSquadInfo,
-      // Remaining-Budget
-      remainingBudget,
-      setRemainingBudget,
       // Transfer
       setTransferInProgress,
       noOfFreeTransfersLeft,
@@ -179,7 +163,6 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
         setSquadInfo,
         // Budget
         remainingBudget: totalBudget - user.fantasyTeamValue,
-        setRemainingBudget,
         // Players-Data
         setPlayersData,
         playersDataInitial: $players,
@@ -201,7 +184,6 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
   };
 
   const runInitialSettingsForBuildYourTeam = () => {
-    setSquadInfo({ ...squadInfo, squad: selectedPlayersInitial });
     setPlayersData($players);
     setPlayersDataInitial($players);
   };
@@ -264,16 +246,8 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
             players={$players}
             squadInfo={squadInfo}
             setSquadInfo={setSquadInfo}
-            totalChosenPlayers={totalChosenPlayers}
-            setTotalChosenPlayers={setTotalChosenPlayers}
+            squadInfoInitialState={squadInfoInitialState}
             setPlayersDataInitial={setPlayersDataInitial}
-            selectedPlayersInitial={selectedPlayersInitial}
-            // Clubs Info
-            setClubsForWhichPlayersPicked={{}}
-            // Budget
-            totalBudget={totalBudget}
-            remainingBudget={remainingBudget}
-            setRemainingBudget={setRemainingBudget}
             // Transfer-Window
             isOneFreeTransferWindow={isOneFreeTransferWindow}
             noOfFreeTransfersLeft={noOfFreeTransfersLeft}
@@ -290,7 +264,7 @@ export default function BuildTeamPlayers({ players: $players, clubs }) {
           setShowTransferWindowModal={setShowTransferWindowModal}
           transferredPlayers={transferredPlayers}
           // Additional Data
-          remainingBudget={remainingBudget}
+          squadInfo={squadInfo}
           additionalTransferredPlayers={additionalTransferredPlayers}
         />
       </div>

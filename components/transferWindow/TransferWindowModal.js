@@ -45,7 +45,7 @@ export default function TransferWindowModal({
   showTransferWindowModal,
   setShowTransferWindowModal,
   // Additional Data
-  remainingBudget,
+  squadInfo,
   additionalTransferredPlayers,
 }) {
   const STYLES = { ...getStyles(R) };
@@ -55,7 +55,7 @@ export default function TransferWindowModal({
 
   // Global States
   const user = useSelector(({ auth }) => auth.user);
-
+  const { remainingBudget } = squadInfo;
   const noOfFreeTransfers =
     transferredPlayers.length >= 2 ? user.freeTransfers : 1;
   const heading = "You are about to transfer ";
