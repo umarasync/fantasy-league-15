@@ -14,6 +14,7 @@ import Image from "components/html/Image";
 import R from "utils/getResponsiveValue";
 import { nFormatter } from "utils/helpers";
 import {
+  disablePlayersIfClubsLimitReached,
   flattenSquad,
   getClubCount,
   handleAutoPick,
@@ -123,10 +124,15 @@ export default function FooterBar({
       totalChosenPlayers: res.totalChosenPlayers,
     };
 
+    const updatedPlayersInitial = disablePlayersIfClubsLimitReached({
+      players: res.players,
+      clubsCount: updatedSquadInfo.clubsCount,
+    });
+
     setTeamInfo({
       ...teamInfo,
       squadInfo: updatedSquadInfo,
-      playersInitial: [...res.players],
+      playersInitial: updatedPlayersInitial,
     });
 
     setAutoPickDisabled(true);

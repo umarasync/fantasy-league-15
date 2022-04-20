@@ -34,7 +34,7 @@ export const initialSettingsForBuildYourTeam = ({
     return p;
   });
 
-  playersData = disablePlayersIfClubLimitReached({
+  playersData = disablePlayersIfClubsLimitReached({
     players: playersData,
     clubsCount,
   });
@@ -165,13 +165,14 @@ export const handleAutoPick = ({ players, totalBudget }) => {
   };
 };
 
-const disablePlayersIfClubLimitReached = ({ players, clubsCount }) => {
+export const disablePlayersIfClubsLimitReached = ({ players, clubsCount }) => {
   if (isEmpty(clubsCount)) return [...players];
   return players.map((p) => {
     p.disablePlayerCard = clubsCount[p.team.name] === 3;
     return p;
   });
 };
+
 const updatePlayersDataAfterSelectionOrDeselection = ({
   playersInitial,
   player,
@@ -185,7 +186,7 @@ const updatePlayersDataAfterSelectionOrDeselection = ({
     players[playerIndex].chosen = value;
   }
 
-  players = disablePlayersIfClubLimitReached({ players, clubsCount });
+  players = disablePlayersIfClubsLimitReached({ players, clubsCount });
 
   return players;
 };
