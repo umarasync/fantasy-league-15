@@ -10,12 +10,12 @@ import "react-toastify/dist/ReactToastify.css";
 import Layout from "components/layout";
 import Input from "components/inputs/input";
 import Button from "components/html/Button";
-import Image from "components/html/Image"
-import Text from "components/html/Text"
-import Div from "components/html/Div"
+import Image from "components/html/Image";
+import Text from "components/html/Text";
+import Div from "components/html/Div";
 
 // Constants
-import colors from "constants/colors"
+import colors from "constants/colors";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -38,7 +38,6 @@ export default function ResetPassword() {
   useEffect(() => {
     setDisabled(true);
     let confirmation_code = location.search.split("?q=")[1];
-    console.log("confirmation_code", confirmation_code);
     if (confirmation_code) {
       setDisabled(false);
       setConfirmationID(confirmation_code);
@@ -64,12 +63,9 @@ export default function ResetPassword() {
   //Listening to Redux Response
   useEffect(() => {
     if (success) {
-      toast.success(
-        "Password Reset Successful!",
-        {
-          onClose: () => router.push("/reset_password_new_success"),
-        }
-      );
+      toast.success("Password Reset Successful!", {
+        onClose: () => router.push("/reset_password_new_success"),
+      });
     } else if (error) {
       toast.error(error);
     }
@@ -110,19 +106,36 @@ export default function ResetPassword() {
         draggable
         pauseOnHover
       />
-      <Div className="flex flex-col items-center" pt={62} style={{minHeight: R()}}>
+      <Div
+        className="flex flex-col items-center"
+        pt={62}
+        style={{ minHeight: R() }}
+      >
         <Div className="flex flex-col items-center" w={412}>
-          <Image src={'/images/logo_blue.png'} w={231} h={56} mb={140}/>
-          <Text text={'Reset your password'} fs={32} lh={40} fw={800} fst={'italic'} tt={'uppercase'}
-                color={colors.black_rock} mb={20}/>
+          <Image src={"/images/logo_blue.png"} w={231} h={56} mb={140} />
+          <Text
+            text={"Reset your password"}
+            fs={32}
+            lh={40}
+            fw={800}
+            fst={"italic"}
+            tt={"uppercase"}
+            color={colors.black_rock}
+            mb={20}
+          />
 
           <Text
-              text={<span>Securely access your account by creating <br/>a new sign in password</span>}
-              fs={18}
-              lh={26}
-              color={colors.regent_grey}
-              textAlign={'center'}
-              mb={32}
+            text={
+              <span>
+                Securely access your account by creating <br />a new sign in
+                password
+              </span>
+            }
+            fs={18}
+            lh={26}
+            color={colors.regent_grey}
+            textAlign={"center"}
+            mb={32}
           />
 
           <Input
@@ -148,15 +161,15 @@ export default function ResetPassword() {
             style={{ marginBottom: R(60) }}
           />
           {errorHandler && (
-              <Text
-                  text={errorHandler}
-                  fw={600}
-                  fs={14}
-                  textAlign={'center'}
-                  lh={20}
-                  color={colors.bean_red}
-                  mb={32}
-              />
+            <Text
+              text={errorHandler}
+              fw={600}
+              fs={14}
+              textAlign={"center"}
+              lh={20}
+              color={colors.bean_red}
+              mb={32}
+            />
           )}
           <Button
             title={"Next"}

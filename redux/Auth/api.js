@@ -1,5 +1,5 @@
 // Packages
-import {createApolloClient} from "graphql/apollo";
+import { createApolloClient } from "graphql/apollo";
 
 // Actions
 import {
@@ -12,7 +12,7 @@ import {
   RESET_PASSWORD_REQUEST_SUCCESS,
   RESET_PASSWORD_SUCCESS,
   signupFailed,
-  signupSuccess
+  signupSuccess,
 } from "./actionCreators";
 
 // GraphQL
@@ -24,7 +24,7 @@ import UPDATE_PASSWORD from "graphql/mutations/updatePassword";
 import ME from "graphql/queries/me";
 
 // Helpers
-import {responseFailed, responseSuccess} from "utils/helpers";
+import { responseFailed, responseSuccess } from "utils/helpers";
 
 // Login
 export const login = (data) => {
@@ -38,15 +38,15 @@ export const login = (data) => {
 
       if (result && result.data.login !== null) {
         dispatch(loginSuccess(result.data.login));
-        return responseSuccess('Login successfully! Redirecting...')
+        return responseSuccess("Login successfully! Redirecting...");
       }
 
-      let errorMsg = result.data.errors[0].message
-      dispatch(loginFailed(errorMsg))
-      return responseFailed(errorMsg)
+      let errorMsg = result.data.errors[0].message;
+      dispatch(loginFailed(errorMsg));
+      return responseFailed(errorMsg);
     } catch (e) {
-      dispatch(loginFailed(e.message))
-      return responseFailed(e.message)
+      dispatch(loginFailed(e.message));
+      return responseFailed(e.message);
     }
   };
 };
@@ -73,16 +73,16 @@ export const signup = (data) => {
         },
       });
       if (result && result.data.createProfile !== null) {
-       dispatch(signupSuccess(result.data.createProfile))
-       return responseSuccess('Signed Up successfully!')
+        dispatch(signupSuccess(result.data.createProfile));
+        return responseSuccess("Signed Up successfully!");
       }
 
-      let errMsg = result.data.errors[0].message
-      dispatch(signupFailed(errMsg))
-      return responseFailed(errMsg)
+      let errMsg = result.data.errors[0].message;
+      dispatch(signupFailed(errMsg));
+      return responseFailed(errMsg);
     } catch (e) {
-      dispatch(signupFailed(e.message))
-      return responseFailed(e.message)
+      dispatch(signupFailed(e.message));
+      return responseFailed(e.message);
     }
   };
 };
@@ -100,7 +100,6 @@ export const emailConfirmation = (data) => {
           },
         },
       });
-      console.log(result);
       if (result && result.data.confirmAccount != null) {
         dispatch({
           type: CONFIRMATION_SUCCESS,
@@ -115,7 +114,6 @@ export const emailConfirmation = (data) => {
         });
       }
     } catch (e) {
-      console.log(e.message);
       dispatch({
         type: CONFIRMATION_FAILED,
         loading: false,
@@ -138,7 +136,6 @@ export const resetPasswordRequest = (data) => {
           },
         },
       });
-      console.log(result);
       if (result && result.data.resetPassword != null) {
         dispatch({
           type: RESET_PASSWORD_REQUEST_SUCCESS,
@@ -153,7 +150,6 @@ export const resetPasswordRequest = (data) => {
         });
       }
     } catch (e) {
-      console.log(e.message);
       dispatch({
         type: RESET_PASSWORD_REQUEST_FAILED,
         loading: false,
@@ -162,7 +158,6 @@ export const resetPasswordRequest = (data) => {
     }
   };
 };
-
 
 // Updated Password
 export const updatePassword = (data) => {
@@ -178,7 +173,6 @@ export const updatePassword = (data) => {
           },
         },
       });
-      console.log(result);
       if (result && result.data.updatePassword != null) {
         dispatch({
           type: RESET_PASSWORD_SUCCESS,
@@ -193,7 +187,6 @@ export const updatePassword = (data) => {
         });
       }
     } catch (e) {
-      console.log(e.message);
       dispatch({
         type: RESET_PASSWORD_FAILED,
         loading: false,
@@ -211,14 +204,14 @@ export const me = () => {
       const res = await apolloClient.query({
         query: ME,
         variables: {},
-      })
+      });
 
-      if(res && res.data.me) {
-        return res.data.me
+      if (res && res.data.me) {
+        return res.data.me;
       }
-      return false
+      return false;
     } catch (e) {
-      return false
+      return false;
     }
   };
 };

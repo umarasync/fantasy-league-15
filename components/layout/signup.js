@@ -161,7 +161,7 @@ export default function SignUp(props) {
     loginPassword,
   ]);
 
-  if(isAuthenticated) { return <Loader/> }
+  // if(isAuthenticated) { return <Loader/> }
 
   return (
     <Layout title="Sign Up" showToast>
