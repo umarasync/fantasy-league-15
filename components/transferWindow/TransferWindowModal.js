@@ -41,17 +41,17 @@ const getStyles = () => {
 
 export default function TransferWindowModal({
   title = "Summary",
-  transferredPlayers,
   showTransferWindowModal,
   setShowTransferWindowModal,
-  // Additional Data
-  squadInfo,
-  additionalTransferredPlayers,
+  teamInfo,
 }) {
   const STYLES = { ...getStyles(R) };
 
   const dispatch = useDispatch();
   const router = useRouter();
+
+  const { squadInfo, transferInfo } = teamInfo;
+  const { additionalTransferredPlayers, transferredPlayers } = transferInfo;
 
   // Global States
   const user = useSelector(({ auth }) => auth.user);

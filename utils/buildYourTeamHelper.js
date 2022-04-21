@@ -19,20 +19,31 @@ import { SELECTED_PLAYERS } from "constants/data/players";
 import { clone, isEmpty, shuffle } from "utils/helpers";
 
 export const initialSettingsForBuildYourTeam = ({
-  squadInfo,
   players,
-  setPlayersData,
-  setPlayersDataInitial,
+  teamInfo,
+  setTeamInfo,
 }) => {
-  const allPlayerIds = getAllSelectedPlayersIDs(flattenSquad(squadInfo.squad));
-  const playersData = players.map((p) => {
+  const { squadInfo } = teamInfo;
+  const { squad, clubsCount } = squadInfo;
+
+  const allPlayerIds = getAllSelectedPlayersIDs(flattenSquad(squad));
+
+  let playersData = players.map((p) => {
     p.chosen = !!allPlayerIds.includes(p.id);
     p.disablePlayerCard = false;
     return p;
   });
 
-  setPlayersData([...playersData]);
-  setPlayersDataInitial([...playersData]);
+  playersData = disablePlayersIfClubsLimitReached({
+    players: playersData,
+    clubsCount,
+  });
+
+  setTeamInfo({
+    ...teamInfo,
+    players: [...playersData],
+    playersInitial: [...playersData],
+  });
 };
 
 export const resetMultiSelectsDataState = (option, data) => {
@@ -154,31 +165,38 @@ export const handleAutoPick = ({ players, totalBudget }) => {
   };
 };
 
-const updatePlayersDataAfterSelectionOrDeselection = (
-  players,
-  player,
-  value
-) => {
-  const $players = clone(players);
-  const playerIndex = $players.findIndex((p) => p.id === player.id);
-  if (playerIndex !== -1) {
-    $players[playerIndex].chosen = value;
-  }
-  return $players;
+export const disablePlayersIfClubsLimitReached = ({ players, clubsCount }) => {
+  if (isEmpty(clubsCount)) return [...players];
+  return players.map((p) => {
+    p.disablePlayerCard = clubsCount[p.team.name] === 3;
+    return p;
+  });
 };
 
-export const playerSelectionHandler = ({
-  // Player
+const updatePlayersDataAfterSelectionOrDeselection = ({
+  playersInitial,
   player,
-  // Squad info
+  value,
   squadInfo,
-  setSquadInfo,
-  // Players data initial
-  playersDataInitial,
-  setPlayersDataInitial,
 }) => {
+  let players = clone(playersInitial);
+  const { clubsCount } = squadInfo;
+  const playerIndex = players.findIndex((p) => p.id === player.id);
+  if (playerIndex !== -1) {
+    players[playerIndex].chosen = value;
+  }
+
+  players = disablePlayersIfClubsLimitReached({ players, clubsCount });
+
+  return players;
+};
+
+export const playerSelectionHandler = ({ player, teamInfo, setTeamInfo }) => {
+  const { squadInfo, playersInitial } = teamInfo;
   let { remainingBudget, totalChosenPlayers, clubsCount } = squadInfo;
   if (totalChosenPlayers === 15 || clubsCount[player.team.name] === 3) return;
+
+  let updatedPlayersInitial = [];
 
   const pos = player.position;
   const squad = { ...squadInfo.squad };
@@ -193,15 +211,7 @@ export const playerSelectionHandler = ({
     if (!sp.length || (sp.length > 0 && !sp.some((p) => p.id === player.id))) {
       remainingBudget = remainingBudget - player.value;
       totalChosenPlayers = totalChosenPlayers + 1;
-
       sp.push(player);
-      setPlayersDataInitial(
-        updatePlayersDataAfterSelectionOrDeselection(
-          playersDataInitial,
-          player,
-          true
-        )
-      );
     }
   } else if (!sp.some((p) => p.id === player.id)) {
     const indexOfEmptyPosition = sp.findIndex((x) => x === false);
@@ -210,41 +220,42 @@ export const playerSelectionHandler = ({
 
     remainingBudget = remainingBudget - player.value;
     totalChosenPlayers = totalChosenPlayers + 1;
-
-    setPlayersDataInitial(
-      updatePlayersDataAfterSelectionOrDeselection(
-        playersDataInitial,
-        player,
-        true
-      )
-    );
   }
 
-  // Updates squad info
   const updatedSquadInfo = {
-    ...squadInfo,
+    ...teamInfo.squadInfo,
     squad: { ...squad },
     clubsCount: getClubCount(flattenSquad(squad)),
     remainingBudget,
     totalChosenPlayers,
   };
-  setSquadInfo(updatedSquadInfo);
+
+  updatedPlayersInitial = updatePlayersDataAfterSelectionOrDeselection({
+    playersInitial,
+    player,
+    value: true,
+    squadInfo: updatedSquadInfo,
+  });
+
+  setTeamInfo({
+    ...teamInfo,
+    squadInfo: updatedSquadInfo,
+    playersInitial: updatedPlayersInitial,
+  });
 };
 
 export const playerDeselectionHandler = ({
-  // Position
   position,
   i,
-  // Squad Info
-  squadInfo,
-  setSquadInfo,
-  // Players-Data-Initial
-  playersDataInitial,
-  setPlayersDataInitial,
+  teamInfo,
+  setTeamInfo,
 }) => {
+  const { squadInfo, playersInitial } = teamInfo;
   const squad = { ...squadInfo.squad };
 
   let { remainingBudget, totalChosenPlayers } = squadInfo;
+
+  let updatedPlayersInitial = [];
 
   const player = squad[position][i];
 
@@ -253,29 +264,30 @@ export const playerDeselectionHandler = ({
 
   squad[position][i] = false;
 
-  // Updates squad info
   const updatedSquadInfo = {
-    ...squadInfo,
+    ...teamInfo.squadInfo,
     squad: { ...squad },
     clubsCount: getClubCount(flattenSquad(squad)),
     remainingBudget,
     totalChosenPlayers,
   };
 
-  setSquadInfo(updatedSquadInfo);
+  updatedPlayersInitial = updatePlayersDataAfterSelectionOrDeselection({
+    playersInitial,
+    player,
+    value: false,
+    squadInfo: updatedSquadInfo,
+  });
 
-  // Update players initial data
-  setPlayersDataInitial(
-    updatePlayersDataAfterSelectionOrDeselection(
-      playersDataInitial,
-      player,
-      false
-    )
-  );
+  setTeamInfo({
+    ...teamInfo,
+    squadInfo: updatedSquadInfo,
+    playersInitial: updatedPlayersInitial,
+  });
 };
 
-export const sortingHandler = ({ playersData, selectedSortingOption }) => {
-  let playersDataI = [...playersData];
+export const sortingHandler = ({ players, selectedSortingOption }) => {
+  let playersDataI = [...players];
 
   if (selectedSortingOption.value === PRICE_FROM_HIGH_TO_LOW) {
     playersDataI = playersDataI.sort((a, b) => (a.value < b.value ? 1 : -1));

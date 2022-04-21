@@ -37,93 +37,81 @@ export default function BuildTeamPlayers({ players, clubs }) {
   const totalBudget = useSelector(({ fantasyTeam }) => fantasyTeam.totalBudget);
   const teamAlreadyExists = user.fantasyTeamId;
 
-  /**** Squad Info ****/
   const squadInfoInitialState = {
     squad: clone(SELECTED_PLAYERS),
     clubsCount: {},
     remainingBudget: totalBudget,
     totalChosenPlayers: 0,
   };
-  const [squadInfo, setSquadInfo] = useState(squadInfoInitialState);
+
+  const transferInfoInitialState = {
+    noOfFreeTransfersLeft: null,
+    isOneFreeTransferWindow: false,
+    additionalTransferredPlayers: 0,
+    latestToBeTransferOut: {},
+    transferResetDisabled: true,
+    transferConfirmDisabled: true,
+    transferredPlayers: [],
+  };
 
   /*****
    * playersData: It can be more or less when filters get applied
    * playersDataInitial: It will always contain all players
    * *****/
-  const [playersData, setPlayersData] = useState([]);
-  const [playersDataInitial, setPlayersDataInitial] = useState([]);
-
-  /**** Transfer Info ****/
-  const transferInfoInitialState = {
-    noOfFreeTransfersLeft: null,
-    isOneFreeTransferWindow: false,
-    transferInProgress: false,
-    additionalTransferredPlayers: 0,
-    currentTransferredToBePlayer: {},
-    transferResetDisabled: true,
-    transferConfirmDisabled: true,
-    transferredPlayers: [],
-  };
-  const [transferInfo, setTransferInfo] = useState(transferInfoInitialState);
+  const [teamInfo, setTeamInfo] = useState({
+    squadInfo: squadInfoInitialState,
+    players: [],
+    playersInitial: [],
+    transferInfo: transferInfoInitialState,
+  });
 
   const [showTransferWindowModal, setShowTransferWindowModal] = useState(false);
 
   // Player-Selection
   const handlePlayerSelection = (player) => {
     return playerSelectionHandler({
-      // Player
       player,
-      // Squad info
-      squadInfo,
-      setSquadInfo,
-      // Players data initial
-      playersDataInitial,
-      setPlayersDataInitial,
+      teamInfo,
+      setTeamInfo,
     });
   };
 
-  // Player-Deselection
+  // Player deselection
   const handlePlayerDeselection = (position, i) => {
     return playerDeselectionHandler({
-      // Position
       position,
       i,
-      // Squad info
-      squadInfo,
-      setSquadInfo,
-      // Players data initial
-      playersDataInitial,
-      setPlayersDataInitial,
-    });
-  };
-
-  // Player-Transfer-Player-Deselection
-  const executeTransferPlayerDeselect = () => {
-    setTransferInfo({ ...transferInfo, transferInProgress: true });
-    return playerTransferDeselectHandler({
-      transferInfo,
-      squadInfo,
-      setSquadInfo,
-      playersDataInitial,
-      setPlayersDataInitial,
+      teamInfo,
+      setTeamInfo,
     });
   };
 
   useEffect(() => {
-    const { currentTransferredToBePlayer, transferInProgress } = transferInfo;
-    if (
-      isEmpty(currentTransferredToBePlayer) ||
-      currentTransferredToBePlayer.position === null ||
-      transferInProgress
-    )
-      return;
-    executeTransferPlayerDeselect();
-  }, [transferInfo.currentTransferredToBePlayer]);
+    const { latestToBeTransferOut } = teamInfo.transferInfo;
 
-  const handleTransferPlayerDeselect = (position, i) => {
-    setTransferInfo({
-      ...transferInfo,
-      currentTransferredToBePlayer: { position: position, index: i },
+    if (isEmpty(latestToBeTransferOut)) return;
+
+    return playerTransferDeselectHandler({
+      teamInfo,
+      setTeamInfo,
+    });
+  }, [teamInfo.transferInfo.latestToBeTransferOut]);
+
+  const handleTransferPlayerDeselect = (position, index) => {
+    const { latestToBeTransferOut } = teamInfo.transferInfo;
+
+    if (!isEmpty(latestToBeTransferOut)) return;
+
+    const updatedTransferInfo = {
+      ...teamInfo.transferInfo,
+      latestToBeTransferOut: {
+        position,
+        index,
+      },
+    };
+    setTeamInfo({
+      ...teamInfo,
+      transferInfo: updatedTransferInfo,
     });
   };
 
@@ -131,15 +119,8 @@ export default function BuildTeamPlayers({ players, clubs }) {
   const handleTransferPlayerSelection = (player) => {
     playerTransferSelectionHandler({
       player,
-      // Transfer Info
-      transferInfo,
-      setTransferInfo,
-      // Players-Data
-      playersDataInitial,
-      setPlayersDataInitial,
-      // Squad info
-      squadInfo,
-      setSquadInfo,
+      teamInfo,
+      setTeamInfo,
     });
   };
 
@@ -162,31 +143,21 @@ export default function BuildTeamPlayers({ players, clubs }) {
     );
     if (success) {
       initialSettingsForTransferWindows({
-        // Team Data
+        players,
         squad: data,
-        // Squad info
-        setSquadInfo,
-        // Budget
+        teamInfo,
+        setTeamInfo,
         remainingBudget: totalBudget - user.fantasyTeamValue,
-        // Players-Data
-        setPlayersData,
-        playersDataInitial: players,
-        setPlayersDataInitial,
-        // Transfer Window
         freeTransfers: user.freeTransfers,
-        // Transfer Info
-        transferInfo,
-        setTransferInfo,
       });
     }
   };
 
   const runInitialSettingsForBuildYourTeam = () => {
     initialSettingsForBuildYourTeam({
-      squadInfo,
       players,
-      setPlayersData,
-      setPlayersDataInitial,
+      teamInfo,
+      setTeamInfo,
     });
   };
 
@@ -197,21 +168,7 @@ export default function BuildTeamPlayers({ players, clubs }) {
     runInitialSettingsForBuildYourTeam();
   }, [players]);
 
-  useEffect(() => {
-    console.log({
-      squadInfo,
-      transferInfo,
-    });
-  }, [squadInfo, transferInfo]);
-
-  const {
-    isOneFreeTransferWindow,
-    noOfFreeTransfersLeft,
-    transferResetDisabled,
-    transferConfirmDisabled,
-    additionalTransferredPlayers,
-    transferredPlayers,
-  } = transferInfo;
+  const { isOneFreeTransferWindow } = teamInfo.transferInfo;
 
   return (
     <Layout title="Build Team All Player" showToast={true}>
@@ -220,7 +177,7 @@ export default function BuildTeamPlayers({ players, clubs }) {
         <div className="w-[57%]">
           <BuildTeamLeftSection
             isOneFreeTransferWindow={isOneFreeTransferWindow}
-            squadInfo={squadInfo}
+            teamInfo={teamInfo}
             onDeselectPlayer={
               isOneFreeTransferWindow
                 ? handleTransferPlayerDeselect
@@ -231,13 +188,9 @@ export default function BuildTeamPlayers({ players, clubs }) {
         {/*Right-Section*/}
         <div className="w-[43%] flex justify-center" style={{ minHeight: R() }}>
           <BuildTeamRightSection
-            // Players Data
-            playersData={playersData}
-            setPlayersData={setPlayersData}
-            playersDataInitial={playersDataInitial}
-            // Clubs
+            teamInfo={teamInfo}
+            setTeamInfo={setTeamInfo}
             clubs={clubs}
-            // Player Selection
             handlePlayerSelection={
               isOneFreeTransferWindow
                 ? handleTransferPlayerSelection
@@ -247,29 +200,18 @@ export default function BuildTeamPlayers({ players, clubs }) {
         </div>
 
         <FooterBar
-          // Players
           players={players}
-          squadInfo={squadInfo}
-          setSquadInfo={setSquadInfo}
+          teamInfo={teamInfo}
+          setTeamInfo={setTeamInfo}
           squadInfoInitialState={squadInfoInitialState}
-          setPlayersDataInitial={setPlayersDataInitial}
-          // Transfer-Window
-          isOneFreeTransferWindow={isOneFreeTransferWindow}
-          noOfFreeTransfersLeft={noOfFreeTransfersLeft}
-          transferResetDisabled={transferResetDisabled}
-          transferConfirmDisabled={transferConfirmDisabled}
           onTransferResetClick={onTransferResetClick}
           onTransferConfirmClick={onTransferConfirmClick}
-          additionalTransferredPlayers={additionalTransferredPlayers}
         />
 
         <TransferWindowModal
           showTransferWindowModal={showTransferWindowModal}
           setShowTransferWindowModal={setShowTransferWindowModal}
-          transferredPlayers={transferredPlayers}
-          // Additional Data
-          squadInfo={squadInfo}
-          additionalTransferredPlayers={additionalTransferredPlayers}
+          teamInfo={teamInfo}
         />
       </div>
     </Layout>

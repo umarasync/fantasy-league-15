@@ -48,11 +48,13 @@ const getStyles = (R) => {
   };
 };
 export default function BuildTeamLeftSection({
-  squadInfo,
+  teamInfo,
   onDeselectPlayer,
   isOneFreeTransferWindow,
 }) {
   const router = useRouter();
+
+  const { squadInfo } = teamInfo;
 
   // TODO:DUMMY
   const removeTeamDataFromLocalStorage = () => {

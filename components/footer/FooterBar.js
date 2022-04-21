@@ -14,6 +14,7 @@ import Image from "components/html/Image";
 import R from "utils/getResponsiveValue";
 import { nFormatter } from "utils/helpers";
 import {
+  disablePlayersIfClubsLimitReached,
   flattenSquad,
   getClubCount,
   handleAutoPick,
@@ -78,25 +79,27 @@ const getStyles = (R) => {
 };
 
 export default function FooterBar({
-  // Players
   players,
-  squadInfo,
-  setSquadInfo,
-  setPlayersDataInitial,
+  teamInfo,
+  setTeamInfo,
   squadInfoInitialState,
-  // Transfer-Window
-  isOneFreeTransferWindow,
-  noOfFreeTransfersLeft,
-  transferResetDisabled,
-  transferConfirmDisabled,
   onTransferResetClick,
   onTransferConfirmClick,
-  additionalTransferredPlayers,
 }) {
   const STYLES = { ...getStyles(R) };
 
   const dispatch = useDispatch();
   const router = useRouter();
+
+  const { squadInfo, transferInfo } = teamInfo;
+
+  const {
+    isOneFreeTransferWindow,
+    noOfFreeTransfersLeft,
+    transferResetDisabled,
+    transferConfirmDisabled,
+    additionalTransferredPlayers,
+  } = transferInfo;
 
   // Global states
   const totalBudget = useSelector(({ fantasyTeam }) => fantasyTeam.totalBudget);
@@ -113,15 +116,25 @@ export default function FooterBar({
       totalBudget,
     });
 
-    setSquadInfo({
-      ...squadInfo,
+    const updatedSquadInfo = {
+      ...teamInfo.squadInfo,
       squad: res.squad,
       clubsCount: getClubCount(flattenSquad(res.squad)),
       remainingBudget: res.remainingBudget,
       totalChosenPlayers: res.totalChosenPlayers,
+    };
+
+    const updatedPlayersInitial = disablePlayersIfClubsLimitReached({
+      players: res.players,
+      clubsCount: updatedSquadInfo.clubsCount,
     });
 
-    setPlayersDataInitial(res.players);
+    setTeamInfo({
+      ...teamInfo,
+      squadInfo: updatedSquadInfo,
+      playersInitial: updatedPlayersInitial,
+    });
+
     setAutoPickDisabled(true);
     setResetDisabled(false);
   };
@@ -139,11 +152,15 @@ export default function FooterBar({
   }, [totalChosenPlayers]);
 
   const handleResetClick = () => {
-    setSquadInfo(clone(squadInfoInitialState));
+    setTeamInfo({
+      ...teamInfo,
+      squadInfo: clone(squadInfoInitialState),
+      playersInitial: clone(players),
+    });
+
     setAutoPickDisabled(false);
     setResetDisabled(true);
     setContinueDisabled(true);
-    setPlayersDataInitial(clone(players));
   };
 
   const persistDataToReduxStore = () => {
