@@ -239,6 +239,7 @@ export const playerTransferSelectionHandler = ({
   const updatedTransferInfo = {
     ...transferInfo,
     ...obj,
+    latestToBeTransferOut: {},
     transferredPlayers: updatedTransferredPlayers,
     transferInProgress: false,
     transferResetDisabled: false,
