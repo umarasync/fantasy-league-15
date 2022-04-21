@@ -56,13 +56,9 @@ export const initialSettingsForTransferWindows = ({
     ...teamInfo.transferInfo,
     transferredPlayers: [],
     isOneFreeTransferWindow: true,
-    currentTransferredToBePlayer: {
-      position: null,
-      index: null,
-    },
+    latestToBeTransferOut: {},
     additionalTransferredPlayers: 0,
     noOfFreeTransfersLeft: freeTransfers,
-    transferInProgress: false,
     transferResetDisabled: true,
     transferConfirmDisabled: true,
   };
@@ -113,11 +109,12 @@ const updatePlayersDataAfterDeselectionClicked = ({
 // Player transfer deselection
 export const playerTransferDeselectHandler = ({ teamInfo, setTeamInfo }) => {
   const { squadInfo, transferInfo, playersInitial } = teamInfo;
+  const { latestToBeTransferOut } = transferInfo;
   const squad = { ...squadInfo.squad };
   let { remainingBudget } = squadInfo;
 
-  const position = transferInfo.currentTransferredToBePlayer.position;
-  const i = transferInfo.currentTransferredToBePlayer.index;
+  const position = latestToBeTransferOut.position;
+  const i = latestToBeTransferOut.index;
 
   const player = squad[position][i];
   const $player = squad[position][i];
@@ -144,6 +141,10 @@ export const playerTransferDeselectHandler = ({ teamInfo, setTeamInfo }) => {
     ...teamInfo,
     squadInfo: updatedSquadInfo,
     playersInitial: updatedPlayersInitial,
+    transferInfo: {
+      ...teamInfo.transferInfo,
+      transferResetDisabled: false,
+    },
   });
 };
 
@@ -154,12 +155,12 @@ export const playerTransferSelectionHandler = ({
   setTeamInfo,
 }) => {
   const { squadInfo, transferInfo, playersInitial } = teamInfo;
-  const squad = { ...squadInfo.squad };
-
   const { clubsCount } = squadInfo;
+  const { latestToBeTransferOut } = transferInfo;
 
   if (clubsCount[player.team.name] === 3) return;
 
+  const squad = { ...squadInfo.squad };
   const position = player.position;
   let { remainingBudget } = squadInfo;
   let {

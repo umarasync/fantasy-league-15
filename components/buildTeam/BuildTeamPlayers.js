@@ -47,9 +47,8 @@ export default function BuildTeamPlayers({ players, clubs }) {
   const transferInfoInitialState = {
     noOfFreeTransfersLeft: null,
     isOneFreeTransferWindow: false,
-    transferInProgress: false,
     additionalTransferredPlayers: 0,
-    currentTransferredToBePlayer: {},
+    latestToBeTransferOut: {},
     transferResetDisabled: true,
     transferConfirmDisabled: true,
     transferredPlayers: [],
@@ -87,46 +86,28 @@ export default function BuildTeamPlayers({ players, clubs }) {
     });
   };
 
-  // Player transfer deselection
-  const executeTransferPlayerDeselect = () => {
-    const updatedTransferInfo = {
-      ...teamInfo.transferInfo,
-      transferInProgress: true,
-    };
+  useEffect(() => {
+    const { latestToBeTransferOut } = teamInfo.transferInfo;
 
-    setTeamInfo({
-      ...teamInfo,
-      transferInfo: updatedTransferInfo,
-    });
+    if (isEmpty(latestToBeTransferOut)) return;
 
     return playerTransferDeselectHandler({
       teamInfo,
       setTeamInfo,
     });
-  };
+  }, [teamInfo.transferInfo.latestToBeTransferOut]);
 
-  useEffect(() => {
-    console.log("1=========", teamInfo.transferInfo.transferInProgress);
-  }, [teamInfo.transferInfo.transferInProgress]);
+  const handleTransferPlayerDeselect = (position, index) => {
+    const { latestToBeTransferOut } = teamInfo.transferInfo;
 
-  useEffect(() => {
-    const { currentTransferredToBePlayer } = teamInfo.transferInfo;
-    if (
-      isEmpty(currentTransferredToBePlayer) ||
-      currentTransferredToBePlayer.position === null
-    )
-      return;
-    executeTransferPlayerDeselect();
-  }, [teamInfo.transferInfo.currentTransferredToBePlayer]);
-
-  const handleTransferPlayerDeselect = (position, i) => {
-    const { transferInProgress } = teamInfo.transferInfo;
-
-    if (transferInProgress) return;
+    if (!isEmpty(latestToBeTransferOut)) return;
 
     const updatedTransferInfo = {
       ...teamInfo.transferInfo,
-      currentTransferredToBePlayer: { position: position, index: i },
+      latestToBeTransferOut: {
+        position,
+        index,
+      },
     };
     setTeamInfo({
       ...teamInfo,
