@@ -148,6 +148,31 @@ export const playerTransferDeselectHandler = ({ teamInfo, setTeamInfo }) => {
   });
 };
 
+const latestToBeTransferOutHasMaxClubLimit = ({
+  player,
+  squadInfo,
+  transferInfo,
+}) => {
+  const { clubsCount, squad } = squadInfo;
+  const { latestToBeTransferOut } = transferInfo;
+
+  const position = latestToBeTransferOut.position;
+  const i = latestToBeTransferOut.index;
+
+  const p = squad[position][i];
+
+  if (clubsCount[player.team.name] === 3 && p.team.name === player.team.name) {
+    return false;
+  }
+
+  return true;
+};
+
+const reachedClubsMaxLimit = ({ squadInfo, player }) => {
+  const { clubsCount } = squadInfo;
+  return clubsCount[player.team.name] === 3;
+};
+
 // Player-Transfer Selection
 export const playerTransferSelectionHandler = ({
   player,
@@ -155,10 +180,19 @@ export const playerTransferSelectionHandler = ({
   setTeamInfo,
 }) => {
   const { squadInfo, transferInfo, playersInitial } = teamInfo;
-  const { clubsCount } = squadInfo;
-  const { latestToBeTransferOut } = transferInfo;
 
-  if (clubsCount[player.team.name] === 3) return;
+  if (
+    reachedClubsMaxLimit({
+      player,
+      squadInfo,
+    }) &&
+    latestToBeTransferOutHasMaxClubLimit({
+      player,
+      squadInfo,
+      transferInfo,
+    })
+  )
+    return;
 
   const squad = { ...squadInfo.squad };
   const position = player.position;
@@ -171,7 +205,6 @@ export const playerTransferSelectionHandler = ({
 
   // readyToBeTransferOut Player
   const toIndex = squad[position].findIndex((p) => p.readyToBeTransferOut);
-
   remainingBudget = remainingBudget - player.value;
 
   // Logic regarding noOfFreeTransfersLeft / additionalTransferredPlayers
