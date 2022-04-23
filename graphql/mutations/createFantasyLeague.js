@@ -1,23 +1,18 @@
-import {gql} from '@apollo/client'
+import { gql } from "@apollo/client";
 
 export default gql`
-  mutation createFantasyLeague($input: FantasyLeagueInput) {
+  mutation CreateFantasyLeague($input: FantasyLeagueInput) {
     createFantasyLeague(input: $input) {
       id
-      name
-      type
-      createdAt
       joinToken
-      owner {
-        id
-        firstName
-        lastName
-      }
+      name
       members {
-        id
-        firstName
-        lastName
+        fullName
       }
+      owner {
+        fullName
+      }
+      type
     }
   }
-`
+`;
