@@ -50,15 +50,14 @@ export default function BuildYourTeamPlayersPagination({
     dispatch(changeCurrentPageNumber(totalPages - 1));
   };
 
-  const changePage = async () => {
-    await dispatch(
-      getPlayers(
-        playersPerPage,
-        playersPerPage * currentPage,
-        { teamId: { eq: "" } },
-        { ...selectedSortingOption.value }
-      )
-    );
+  const changePage = async (offset) => {
+    const getPlayersInput = {
+      first: playersPerPage,
+      offset,
+      where: { teamId: { eq: "" } },
+      sortBy: { ...selectedSortingOption.value },
+    };
+    await dispatch(getPlayers(getPlayersInput));
   };
 
   const getOpacity = (v) => (v ? 0.2 : 1);
@@ -67,12 +66,12 @@ export default function BuildYourTeamPlayersPagination({
     if (currentPage === -1 || currentPage === totalPages) {
       return dispatch(getPlayersLoadingOff());
     }
-    changePage();
+    changePage(playersPerPage * currentPage);
   }, [currentPage]);
 
   useEffect(() => {
     onFirstPage();
-    console.log("1----------", selectedSortingOption);
+    changePage(0);
   }, [selectedSortingOption]);
 
   return (

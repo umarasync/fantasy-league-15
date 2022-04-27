@@ -40,14 +40,16 @@ export default function ({ makeTransfer }) {
     }
 
     setFromMakeTransfer(false);
-    dispatch(
-      getPlayers(
-        playersPerPage,
-        initialOffsetShouldBeZero,
-        { teamId: { eq: "" } },
-        { ...SORTING_OPTIONS[0].value }
-      )
-    );
+
+    const getPlayersInput = {
+      first: playersPerPage,
+      offset: initialOffsetShouldBeZero,
+      where: { teamId: { eq: "" } },
+      sortBy: { ...SORTING_OPTIONS[0].value },
+    };
+
+    dispatch(getPlayers(getPlayersInput));
+
     const { success, data } = await dispatch(getAllTeams());
     if (!success) return;
     setClubs(buildClubs(data));
