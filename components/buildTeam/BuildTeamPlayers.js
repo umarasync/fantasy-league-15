@@ -63,7 +63,6 @@ export default function BuildTeamPlayers({ players, clubs }) {
     transferResetDisabled: true,
     transferConfirmDisabled: true,
     transferredPlayers: [],
-    squadInitial: clone(SELECTED_PLAYERS),
     initialRendered: false,
   };
 
@@ -137,22 +136,6 @@ export default function BuildTeamPlayers({ players, clubs }) {
     });
   };
 
-  // Player-Transfer-Reset
-  const onTransferResetClick = () => {
-    const { squadInfo } = teamInfo;
-    const updatedSquadInfo = {
-      ...squadInfo,
-      squad: { ...squadInfo.squadInitial },
-      remainingBudget,
-    };
-
-    setTeamInfo({
-      ...teamInfo,
-      squadInfo: updatedSquadInfo,
-      transferInfo: { ...transferInfoInitialState },
-    });
-  };
-
   // Player-Transfer-Confirm
   const onTransferConfirmClick = () => {
     setShowTransferWindowModal(true);
@@ -172,6 +155,8 @@ export default function BuildTeamPlayers({ players, clubs }) {
         squad: putSquadUnderPositions(data),
         teamInfo,
         setTeamInfo,
+        transferInfoInitialState,
+        remainingBudget,
       });
     }
   };
@@ -241,7 +226,7 @@ export default function BuildTeamPlayers({ players, clubs }) {
           teamInfo={teamInfo}
           setTeamInfo={setTeamInfo}
           squadInfoInitialState={squadInfoInitialState}
-          onTransferResetClick={onTransferResetClick}
+          onTransferResetClick={runInitialSettingsForTransferWindows}
           onTransferConfirmClick={onTransferConfirmClick}
         />
 

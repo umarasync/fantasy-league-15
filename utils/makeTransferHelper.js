@@ -28,6 +28,8 @@ export const initialSettingsForTransferWindows = ({
   squad,
   teamInfo,
   setTeamInfo,
+  transferInfoInitialState,
+  remainingBudget,
 }) => {
   const $squad = clone(squad);
   const allPlayerIds = getAllSelectedPlayersIDs(flattenSquad($squad));
@@ -45,11 +47,11 @@ export const initialSettingsForTransferWindows = ({
     ...teamInfo.squadInfo,
     squad: { ...$squad },
     clubsCount: getClubCount($squad),
+    remainingBudget,
   };
 
   const updatedTransferInfo = {
-    ...teamInfo.transferInfo,
-    squadInitial: { ...$squad },
+    ...transferInfoInitialState,
     initialRendered: true,
   };
 
@@ -130,7 +132,7 @@ const updatePlayersDataAfterDeselectionClicked = ({
        *  Or If clubs are less than 3
        *  or If clubs is equal to 3 but club is deselected one
        */
-      (isEmpty(clubsCount[p.team.name]) ||
+      (clubsCount[p.team.name] === undefined ||
         clubsCount[p.team.name] < 3 ||
         (clubsCount[p.team.name] === 3 && p.team.name === player.team.name))
     ) {
