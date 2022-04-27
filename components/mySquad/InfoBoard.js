@@ -29,7 +29,7 @@ import { SHADOW_DARK_INDIGO, SHADOW_WHITE_SMOKE } from "constants/boxShadow";
 
 // Actions
 import { createFantasyLeague } from "redux/FantasyLeagues/api";
-import { fantasyLeagueCreationStart } from "../../redux/FantasyLeagues/actionCreators";
+import { fantasyLeagueCreationStart } from "redux/FantasyLeagues/actionCreators";
 
 // Styles
 const getStyles = (R) => {
@@ -78,6 +78,7 @@ export default function InfoBoard({
   };
 
   const handleCreateLeague = async (leagueName) => {
+    return;
     dispatch(fantasyLeagueCreationStart());
     const { success, msg, data } = await dispatch(
       createFantasyLeague({ name: leagueName })

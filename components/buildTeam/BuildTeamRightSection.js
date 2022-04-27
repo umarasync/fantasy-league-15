@@ -14,10 +14,7 @@ import Div from "components/html/Div";
 
 // utils
 import R from "utils/getResponsiveValue";
-import {
-  handleMultiSelectionDropDowns,
-  sortingHandler,
-} from "utils/buildYourTeamHelper";
+import { handleMultiSelectionDropDowns } from "utils/buildYourTeamHelper";
 import { clone, isEmpty } from "utils/helpers";
 
 // Animations
@@ -96,7 +93,7 @@ export default function BuildTeamRightSection({
   const [selectedRecommendation, setSelectedRecommendation] = useState();
   // Sorting States
   const [sortingOptions, setSortingOptions] = useState([]);
-  const [selectedSortingOption, setSelectedSortingOption] = useState();
+  const [selectedSortingOption, setSelectedSortingOption] = useState(null);
   // Filters State
   const [showAllFilters, setShowAllFilters] = useState(false);
 
@@ -134,11 +131,6 @@ export default function BuildTeamRightSection({
       });
     });
 
-    updatedPlayers = sortingHandler({
-      players: updatedPlayers,
-      selectedSortingOption,
-    });
-
     setTeamInfo({
       ...teamInfo,
       players: [...updatedPlayers],
@@ -162,6 +154,7 @@ export default function BuildTeamRightSection({
 
   useEffect(() => {
     if (!areAllInitialStatesCompleted()) return;
+
     runFiltersOnPlayersData();
   }, [
     clubs,
@@ -192,6 +185,10 @@ export default function BuildTeamRightSection({
     } else {
       return "full";
     }
+  };
+
+  const showPlayersSection = () => {
+    return !isEmpty(players) && !isEmpty(selectedSortingOption);
   };
 
   useEffect(() => {
@@ -310,7 +307,7 @@ export default function BuildTeamRightSection({
           </Div>
 
           <Div h={"100%"} overFlowScroll>
-            {!isEmpty(players) &&
+            {showPlayersSection() &&
               players.map((player) => (
                 <PlayerCard
                   key={player.id}
@@ -319,9 +316,11 @@ export default function BuildTeamRightSection({
                 />
               ))}
           </Div>
-          {!isEmpty(players) && (
+          {showPlayersSection() && (
             <Div mt={40}>
-              <BuildYourTeamPlayersPagination />
+              <BuildYourTeamPlayersPagination
+                selectedSortingOption={selectedSortingOption}
+              />
             </Div>
           )}
         </motion.div>

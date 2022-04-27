@@ -17,7 +17,9 @@ import {
   getPlayersStart,
 } from "redux/Players/actionsCreators";
 
-export default function BuildYourTeamPlayersPagination() {
+export default function BuildYourTeamPlayersPagination({
+  selectedSortingOption,
+}) {
   const dispatch = useDispatch();
   const playersPerPage = useSelector(({ players }) => players.playersPerPage);
   const currentPage = useSelector(({ players }) => players.currentPage);
@@ -54,7 +56,7 @@ export default function BuildYourTeamPlayersPagination() {
         playersPerPage,
         playersPerPage * currentPage,
         { teamId: { eq: "" } },
-        { value: "DESC" }
+        { ...selectedSortingOption.value }
       )
     );
   };
@@ -67,6 +69,11 @@ export default function BuildYourTeamPlayersPagination() {
     }
     changePage();
   }, [currentPage]);
+
+  useEffect(() => {
+    onFirstPage();
+    console.log("1----------", selectedSortingOption);
+  }, [selectedSortingOption]);
 
   return (
     <Div center mb={20}>
