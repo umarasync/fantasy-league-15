@@ -205,7 +205,7 @@ export const SORTING_OPTIONS = [
   {
     id: 1,
     label: "Total points",
-    value: { score: "ASC" },
+    value: { score: "DESC" },
   },
   {
     id: 2,

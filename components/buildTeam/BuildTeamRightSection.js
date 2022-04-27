@@ -1,4 +1,6 @@
 // Packages
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { AnimatePresence, motion } from "framer-motion";
 
 // Components
@@ -16,6 +18,7 @@ import Div from "components/html/Div";
 import R from "utils/getResponsiveValue";
 import { handleMultiSelectionDropDowns } from "utils/buildYourTeamHelper";
 import { clone, isEmpty } from "utils/helpers";
+import filtersHandler from "utils/buildYourTeamFiltersHelper";
 
 // Animations
 import ShowAllFiltersAnimation from "Animations/buildYourTeam/ShowAllFiltersAnimation";
@@ -37,9 +40,6 @@ import {
   STATUSES,
 } from "constants/data/filters";
 import BuildYourTeamPlayersPagination from "./BuildYourTeamPlayersPagination";
-import filtersHandler from "../../utils/buildYourTeamFiltersHelper";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 // Styles
 const getStyles = (R) => {
