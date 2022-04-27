@@ -15,7 +15,6 @@ import R from "utils/getResponsiveValue";
 import { nFormatter } from "utils/helpers";
 import {
   disablePlayersIfClubsLimitReached,
-  flattenSquad,
   getClubCount,
   handleAutoPick,
 } from "utils/buildYourTeamHelper";

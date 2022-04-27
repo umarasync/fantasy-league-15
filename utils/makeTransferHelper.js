@@ -53,7 +53,6 @@ export const initialSettingsForTransferWindows = ({
   const updatedTransferInfo = {
     ...transferInfoInitialState,
     initialRendered: true,
-    isOneFreeTransferWindow: true,
   };
 
   setTeamInfo({
