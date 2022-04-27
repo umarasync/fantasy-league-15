@@ -57,7 +57,7 @@ export default function BuildTeamPlayers({ players, clubs }) {
 
   const transferInfoInitialState = {
     noOfFreeTransfersLeft,
-    isOneFreeTransferWindow: true,
+    isOneFreeTransferWindow: false,
     additionalTransferredPlayers: 0,
     latestToBeTransferOut: {},
     transferResetDisabled: true,

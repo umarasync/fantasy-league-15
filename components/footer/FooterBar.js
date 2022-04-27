@@ -119,7 +119,7 @@ export default function FooterBar({
     const updatedSquadInfo = {
       ...teamInfo.squadInfo,
       squad: res.squad,
-      clubsCount: getClubCount(flattenSquad(res.squad)),
+      clubsCount: getClubCount(res.squad),
       remainingBudget: res.remainingBudget,
       totalChosenPlayers: res.totalChosenPlayers,
     };
