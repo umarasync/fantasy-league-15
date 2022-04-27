@@ -233,7 +233,18 @@ export default function FooterBar({
 
         {/*Right Section*/}
         <Div center>
-          {!isOneFreeTransferWindow && (
+          {isOneFreeTransferWindow ? (
+            <Button
+              title={"back"}
+              color={colors.black_rock}
+              mr={16}
+              h={50}
+              w={190}
+              bs={"unset"}
+              bg={colors.white}
+              onClick={() => router.push("/my_squad_game_week")}
+            />
+          ) : (
             <Button
               title={"auto pick"}
               color={colors.black_rock}
