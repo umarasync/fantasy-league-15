@@ -316,7 +316,7 @@ export default function BuildTeamRightSection({
                 />
               ))}
           </Div>
-          {showPlayersSection() && (
+          {!isEmpty(selectedSortingOption) && (
             <Div mt={40}>
               <BuildYourTeamPlayersPagination
                 selectedSortingOption={selectedSortingOption}

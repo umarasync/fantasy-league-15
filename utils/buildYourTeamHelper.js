@@ -119,7 +119,7 @@ export const flattenSquad = ($squad) => {
 
 // Group By club names and then count clubs
 export const getClubCount = (squad) => {
-  const clubs = groupBy(squad, "team.name");
+  const clubs = groupBy(flattenSquad(squad), "team.name");
   let $clubsCount = {};
   for (let key in clubs) {
     if (clubs.hasOwnProperty(key)) {
@@ -221,7 +221,7 @@ export const playerSelectionHandler = ({ player, teamInfo, setTeamInfo }) => {
   const updatedSquadInfo = {
     ...teamInfo.squadInfo,
     squad: { ...squad },
-    clubsCount: getClubCount(flattenSquad(squad)),
+    clubsCount: getClubCount(squad),
     remainingBudget,
     totalChosenPlayers,
   };
@@ -263,7 +263,7 @@ export const playerDeselectionHandler = ({
   const updatedSquadInfo = {
     ...teamInfo.squadInfo,
     squad: { ...squad },
-    clubsCount: getClubCount(flattenSquad(squad)),
+    clubsCount: getClubCount(squad),
     remainingBudget,
     totalChosenPlayers,
   };
