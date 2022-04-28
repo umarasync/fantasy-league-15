@@ -3,15 +3,11 @@ import { groupBy } from "lodash/collection";
 
 // Constants
 import {
-  MOST_TRANSFERRED,
   POSITION_ALL,
   POSITION_DEF,
   POSITION_FWD,
   POSITION_GK,
   POSITION_MID,
-  PRICE_FROM_HIGH_TO_LOW,
-  PRICE_FROM_LOW_TO_HIGH,
-  TOTAL_POINTS,
 } from "constants/data/filters";
 import { SELECTED_PLAYERS } from "constants/data/players";
 
@@ -123,7 +119,7 @@ export const flattenSquad = ($squad) => {
 
 // Group By club names and then count clubs
 export const getClubCount = (squad) => {
-  const clubs = groupBy(squad, "team.name");
+  const clubs = groupBy(flattenSquad(squad), "team.name");
   let $clubsCount = {};
   for (let key in clubs) {
     if (clubs.hasOwnProperty(key)) {
@@ -225,7 +221,7 @@ export const playerSelectionHandler = ({ player, teamInfo, setTeamInfo }) => {
   const updatedSquadInfo = {
     ...teamInfo.squadInfo,
     squad: { ...squad },
-    clubsCount: getClubCount(flattenSquad(squad)),
+    clubsCount: getClubCount(squad),
     remainingBudget,
     totalChosenPlayers,
   };
@@ -267,7 +263,7 @@ export const playerDeselectionHandler = ({
   const updatedSquadInfo = {
     ...teamInfo.squadInfo,
     squad: { ...squad },
-    clubsCount: getClubCount(flattenSquad(squad)),
+    clubsCount: getClubCount(squad),
     remainingBudget,
     totalChosenPlayers,
   };
@@ -284,26 +280,6 @@ export const playerDeselectionHandler = ({
     squadInfo: updatedSquadInfo,
     playersInitial: updatedPlayersInitial,
   });
-};
-
-export const sortingHandler = ({ players, selectedSortingOption }) => {
-  let playersDataI = [...players];
-
-  if (selectedSortingOption.value === PRICE_FROM_HIGH_TO_LOW) {
-    playersDataI = playersDataI.sort((a, b) => (a.value < b.value ? 1 : -1));
-  } else if (selectedSortingOption.value === PRICE_FROM_LOW_TO_HIGH) {
-    playersDataI = playersDataI.sort((a, b) => (a.value > b.value ? 1 : -1));
-  } else if (selectedSortingOption.value === TOTAL_POINTS) {
-    playersDataI = playersDataI.sort((a, b) =>
-      a.totalPoints < b.totalPoints ? 1 : -1
-    );
-  } else if (selectedSortingOption.value === MOST_TRANSFERRED) {
-    playersDataI = playersDataI.sort((a, b) =>
-      a.most_transferred < b.most_transferred ? 1 : -1
-    );
-  }
-
-  return playersDataI;
 };
 
 export const getAllSelectedPlayersIDs = (squad) => squad.map((p) => p.id);

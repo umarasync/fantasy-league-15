@@ -1,4 +1,6 @@
 // Packages
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { AnimatePresence, motion } from "framer-motion";
 
 // Components
@@ -14,11 +16,9 @@ import Div from "components/html/Div";
 
 // utils
 import R from "utils/getResponsiveValue";
-import {
-  handleMultiSelectionDropDowns,
-  sortingHandler,
-} from "utils/buildYourTeamHelper";
+import { handleMultiSelectionDropDowns } from "utils/buildYourTeamHelper";
 import { clone, isEmpty } from "utils/helpers";
+import filtersHandler from "utils/buildYourTeamFiltersHelper";
 
 // Animations
 import ShowAllFiltersAnimation from "Animations/buildYourTeam/ShowAllFiltersAnimation";
@@ -40,9 +40,6 @@ import {
   STATUSES,
 } from "constants/data/filters";
 import BuildYourTeamPlayersPagination from "./BuildYourTeamPlayersPagination";
-import filtersHandler from "../../utils/buildYourTeamFiltersHelper";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 // Styles
 const getStyles = (R) => {
@@ -96,7 +93,7 @@ export default function BuildTeamRightSection({
   const [selectedRecommendation, setSelectedRecommendation] = useState();
   // Sorting States
   const [sortingOptions, setSortingOptions] = useState([]);
-  const [selectedSortingOption, setSelectedSortingOption] = useState();
+  const [selectedSortingOption, setSelectedSortingOption] = useState(null);
   // Filters State
   const [showAllFilters, setShowAllFilters] = useState(false);
 
@@ -134,11 +131,6 @@ export default function BuildTeamRightSection({
       });
     });
 
-    updatedPlayers = sortingHandler({
-      players: updatedPlayers,
-      selectedSortingOption,
-    });
-
     setTeamInfo({
       ...teamInfo,
       players: [...updatedPlayers],
@@ -162,6 +154,7 @@ export default function BuildTeamRightSection({
 
   useEffect(() => {
     if (!areAllInitialStatesCompleted()) return;
+
     runFiltersOnPlayersData();
   }, [
     clubs,
@@ -192,6 +185,10 @@ export default function BuildTeamRightSection({
     } else {
       return "full";
     }
+  };
+
+  const showPlayersSection = () => {
+    return !isEmpty(players) && !isEmpty(selectedSortingOption);
   };
 
   useEffect(() => {
@@ -310,7 +307,7 @@ export default function BuildTeamRightSection({
           </Div>
 
           <Div h={"100%"} overFlowScroll>
-            {!isEmpty(players) &&
+            {showPlayersSection() &&
               players.map((player) => (
                 <PlayerCard
                   key={player.id}
@@ -319,9 +316,11 @@ export default function BuildTeamRightSection({
                 />
               ))}
           </Div>
-          {!isEmpty(players) && (
+          {!isEmpty(selectedSortingOption) && (
             <Div mt={40}>
-              <BuildYourTeamPlayersPagination />
+              <BuildYourTeamPlayersPagination
+                selectedSortingOption={selectedSortingOption}
+              />
             </Div>
           )}
         </motion.div>

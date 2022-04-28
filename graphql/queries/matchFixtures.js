@@ -1,4 +1,4 @@
-import {gql} from '@apollo/client'
+import { gql } from "@apollo/client";
 
 export default gql`
   query MatchFixtures($gameweek: Int!) {
@@ -63,7 +63,7 @@ export default gql`
                 name
               }
             }
-  
+
             totalMatchPlayed
             home {
               away
@@ -71,7 +71,7 @@ export default gql`
               totalWins
               team {
                 logo
-              id
+                id
                 name
               }
             }
@@ -95,6 +95,16 @@ export default gql`
           fantasyPlayers {
             id
             name
+            photo
+            value
+            captain
+            viceCaptain
+            matchName
+            team {
+              id
+              logo
+              name
+            }
           }
           team {
             id
@@ -127,4 +137,4 @@ export default gql`
       }
     }
   }
-`
+`;

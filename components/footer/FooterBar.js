@@ -15,7 +15,6 @@ import R from "utils/getResponsiveValue";
 import { nFormatter } from "utils/helpers";
 import {
   disablePlayersIfClubsLimitReached,
-  flattenSquad,
   getClubCount,
   handleAutoPick,
 } from "utils/buildYourTeamHelper";
@@ -119,7 +118,7 @@ export default function FooterBar({
     const updatedSquadInfo = {
       ...teamInfo.squadInfo,
       squad: res.squad,
-      clubsCount: getClubCount(flattenSquad(res.squad)),
+      clubsCount: getClubCount(res.squad),
       remainingBudget: res.remainingBudget,
       totalChosenPlayers: res.totalChosenPlayers,
     };
@@ -234,7 +233,18 @@ export default function FooterBar({
 
         {/*Right Section*/}
         <Div center>
-          {!isOneFreeTransferWindow && (
+          {isOneFreeTransferWindow ? (
+            <Button
+              title={"back"}
+              color={colors.black_rock}
+              mr={16}
+              h={50}
+              w={190}
+              bs={"unset"}
+              bg={colors.white}
+              onClick={() => router.push("/my_squad_game_week")}
+            />
+          ) : (
             <Button
               title={"auto pick"}
               color={colors.black_rock}

@@ -2,10 +2,7 @@
 import { createApolloClient } from "graphql/apollo";
 
 // Actions
-import {
-  getPlayersSuccess,
-  getPlayersFailed
-} from "./actionsCreators";
+import { getPlayersSuccess, getPlayersFailed } from "./actionsCreators";
 
 // GraphQL
 import QUERY_PLAYERS from "graphql/queries/players";
@@ -13,13 +10,14 @@ import QUERY_PLAYER from "graphql/queries/player";
 import SET_FANTASY_TEAM_ROLE from "graphql/mutations/setFantasyTeamRole";
 
 // Utils
-import {buildPlayers} from "utils/playersHelper";
-import {isEmpty, responseFailed, responseSuccess} from "utils/helpers";
+import { buildPlayers } from "utils/playersHelper";
+import { isEmpty, responseFailed, responseSuccess } from "utils/helpers";
 
 // Constants
-import {ERROR_MSG} from "constants/universalConstants";
+import { ERROR_MSG } from "constants/universalConstants";
 
-export const getPlayers = (first, offset, where, sortBy) => {
+export const getPlayers = (data) => {
+  const { first, offset, where, sortBy } = data;
   return async (dispatch) => {
     try {
       const apolloClient = createApolloClient();
@@ -29,20 +27,22 @@ export const getPlayers = (first, offset, where, sortBy) => {
       });
 
       if (result && !isEmpty(result.data.players)) {
-        const playersData = buildPlayers(result.data.players.data)
-       return dispatch(getPlayersSuccess({
-         totalPlayers: result.data.players.totalCount,
-         players: [...playersData]
-       }))
+        const playersData = buildPlayers(result.data.players.data);
+        return dispatch(
+          getPlayersSuccess({
+            totalPlayers: result.data.players.totalCount,
+            players: [...playersData],
+          })
+        );
       }
-      dispatch(getPlayersFailed(result.data.errors[0].message))
+      dispatch(getPlayersFailed(result.data.errors[0].message));
     } catch (e) {
-      dispatch(getPlayersFailed(e.message))
+      dispatch(getPlayersFailed(e.message));
     }
   };
 };
 
-export const getPlayer = ({playerId}) => {
+export const getPlayer = ({ playerId }) => {
   return async (dispatch) => {
     try {
       const apolloClient = createApolloClient();
@@ -51,17 +51,17 @@ export const getPlayer = ({playerId}) => {
         variables: { id: playerId },
       });
       if (result && !isEmpty(result.data.playerById)) {
-        const playerData = buildPlayers([{...result.data.playerById}])
-        return responseSuccess('', playerData[0])
+        const playerData = buildPlayers([{ ...result.data.playerById }]);
+        return responseSuccess("", playerData[0]);
       }
-      return responseFailed(ERROR_MSG)
+      return responseFailed(ERROR_MSG);
     } catch (e) {
-      return responseFailed(ERROR_MSG)
+      return responseFailed(ERROR_MSG);
     }
   };
 };
 
-export const setFantasyTeamRole = ({fantasyTeamId, captain, viceCaptain}) => {
+export const setFantasyTeamRole = ({ fantasyTeamId, captain, viceCaptain }) => {
   return async (dispatch) => {
     try {
       const apolloClient = createApolloClient();
@@ -70,15 +70,18 @@ export const setFantasyTeamRole = ({fantasyTeamId, captain, viceCaptain}) => {
         variables: {
           fantasyTeamId,
           captain,
-          viceCaptain
+          viceCaptain,
         },
       });
       if (result && !isEmpty(result.data.setFantasyTeamRoles)) {
-        return responseSuccess('Role has been changed successfully !!!', result.data.setFantasyTeamRoles)
+        return responseSuccess(
+          "Role has been changed successfully !!!",
+          result.data.setFantasyTeamRoles
+        );
       }
-      return responseFailed(ERROR_MSG)
+      return responseFailed(ERROR_MSG);
     } catch (e) {
-      return responseFailed(ERROR_MSG)
+      return responseFailed(ERROR_MSG);
     }
   };
 };

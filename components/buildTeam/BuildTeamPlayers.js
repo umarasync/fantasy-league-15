@@ -18,9 +18,11 @@ import {
   initialSettingsForBuildYourTeam,
 } from "utils/buildYourTeamHelper";
 import {
+  handleTransferWindowOnPlayerDataUpdate,
   initialSettingsForTransferWindows,
   playerTransferDeselectHandler,
   playerTransferSelectionHandler,
+  putSquadUnderPositions,
 } from "utils/makeTransferHelper";
 
 // Constants
@@ -37,21 +39,31 @@ export default function BuildTeamPlayers({ players, clubs }) {
   const totalBudget = useSelector(({ fantasyTeam }) => fantasyTeam.totalBudget);
   const teamAlreadyExists = user.fantasyTeamId;
 
+  // Squad Info
+  const remainingBudget = teamAlreadyExists
+    ? totalBudget - user.fantasyTeamValue
+    : totalBudget;
+  const totalChosenPlayers = teamAlreadyExists ? 15 : 0;
+
   const squadInfoInitialState = {
     squad: clone(SELECTED_PLAYERS),
     clubsCount: {},
-    remainingBudget: totalBudget,
-    totalChosenPlayers: 0,
+    remainingBudget,
+    totalChosenPlayers,
   };
 
+  // Transfer Info
+  const noOfFreeTransfersLeft = user.freeTransfers;
+
   const transferInfoInitialState = {
-    noOfFreeTransfersLeft: null,
-    isOneFreeTransferWindow: false,
+    noOfFreeTransfersLeft,
+    isOneFreeTransferWindow: teamAlreadyExists,
     additionalTransferredPlayers: 0,
     latestToBeTransferOut: {},
     transferResetDisabled: true,
     transferConfirmDisabled: true,
     transferredPlayers: [],
+    initialRendered: false,
   };
 
   /*****
@@ -124,11 +136,6 @@ export default function BuildTeamPlayers({ players, clubs }) {
     });
   };
 
-  // Player-Transfer-Reset
-  const onTransferResetClick = () => {
-    runInitialSettingsForTransferWindows();
-  };
-
   // Player-Transfer-Confirm
   const onTransferConfirmClick = () => {
     setShowTransferWindowModal(true);
@@ -141,16 +148,25 @@ export default function BuildTeamPlayers({ players, clubs }) {
         fantasyTeamId: user.fantasyTeamId,
       })
     );
+
     if (success) {
       initialSettingsForTransferWindows({
         players,
-        squad: data,
+        squad: putSquadUnderPositions(data),
         teamInfo,
         setTeamInfo,
-        remainingBudget: totalBudget - user.fantasyTeamValue,
-        freeTransfers: user.freeTransfers,
+        transferInfoInitialState,
+        remainingBudget,
       });
     }
+  };
+  const runTransferWindowOnPlayersDataUpdate = () => {
+    handleTransferWindowOnPlayerDataUpdate({
+      players,
+      squad: { ...teamInfo.squadInfo.squad },
+      teamInfo,
+      setTeamInfo,
+    });
   };
 
   const runInitialSettingsForBuildYourTeam = () => {
@@ -163,8 +179,14 @@ export default function BuildTeamPlayers({ players, clubs }) {
 
   useEffect(() => {
     if (teamAlreadyExists) {
+      if (teamInfo.transferInfo.initialRendered) {
+        // Will run every time players data change
+        return runTransferWindowOnPlayersDataUpdate();
+      }
+      // Will only run initially
       return runInitialSettingsForTransferWindows();
     }
+    // Will run every time players data change
     runInitialSettingsForBuildYourTeam();
   }, [players]);
 
@@ -204,7 +226,7 @@ export default function BuildTeamPlayers({ players, clubs }) {
           teamInfo={teamInfo}
           setTeamInfo={setTeamInfo}
           squadInfoInitialState={squadInfoInitialState}
-          onTransferResetClick={onTransferResetClick}
+          onTransferResetClick={runInitialSettingsForTransferWindows}
           onTransferConfirmClick={onTransferConfirmClick}
         />
 

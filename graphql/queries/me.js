@@ -1,4 +1,4 @@
-import {gql} from '@apollo/client'
+import { gql } from "@apollo/client";
 
 export default gql`
   query me {
@@ -10,9 +10,12 @@ export default gql`
       fantasyTeamId
       totalScore
       currentSeason
+      fantasyTeamValue
       fullName
       freeTransfers
-      fantasyTeamValue
+      dob
+      mobileNumber
+      gender
       favouriteTeam {
         id
         name
@@ -21,6 +24,18 @@ export default gql`
         id
         username
       }
+      fantasyLeagues {
+        id
+        name
+        type
+        joinToken
+        members {
+          firstName
+        }
+        owner {
+          firstName
+        }
+      }
     }
   }
-`
+`;

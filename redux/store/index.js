@@ -5,18 +5,23 @@ import thunk from "redux-thunk";
 import { combineReducers } from "redux";
 
 // Reducers
-import authReducer from "../Auth/reducers";
-import playersReducer from "../Players/reducers";
-import fantasyTeamReducer from "../FantasyTeams/reducers";
+import authReducer from "redux/Auth/reducers";
+import playersReducer from "redux/Players/reducers";
+import fantasyTeamReducer from "redux/FantasyTeams/reducers";
 import sideDrawerReducer from "redux/SideDrawer/reducers";
+import fantasyLeagueReducer from "redux/FantasyLeagues/reducers";
 
 let rootReducer = combineReducers({
   auth: authReducer,
   players: playersReducer,
   fantasyTeam: fantasyTeamReducer,
-  sideDrawer:sideDrawerReducer
+  fantasyLeague: fantasyLeagueReducer,
+  sideDrawer: sideDrawerReducer,
 });
 
-let store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
+let store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(thunk))
+);
 
 export default store;
