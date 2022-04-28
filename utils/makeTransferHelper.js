@@ -155,12 +155,14 @@ const updatePlayersDataAfterDeselectionClicked = ({
 // Player transfer deselection
 export const playerTransferDeselectHandler = ({ teamInfo, setTeamInfo }) => {
   const { squadInfo, transferInfo, playersInitial } = teamInfo;
-  const { latestToBeTransferOut } = transferInfo;
+  const { toBeTransferredOutPlayers } = transferInfo;
+  const lastPlayerIndex = toBeTransferredOutPlayers.length - 1;
+
   const squad = { ...squadInfo.squad };
   let { remainingBudget } = squadInfo;
 
-  const position = latestToBeTransferOut.position;
-  const i = latestToBeTransferOut.index;
+  const position = toBeTransferredOutPlayers[lastPlayerIndex].position;
+  const i = toBeTransferredOutPlayers[lastPlayerIndex].index;
 
   const player = squad[position][i];
   const $player = squad[position][i];
@@ -194,16 +196,16 @@ export const playerTransferDeselectHandler = ({ teamInfo, setTeamInfo }) => {
   });
 };
 
-const latestToBeTransferOutHasMaxClubLimit = ({
+const toBeTransferredOutPlayersHasMaxClubLimit = ({
   player,
   squadInfo,
   transferInfo,
 }) => {
   const { clubsCount, squad } = squadInfo;
-  const { latestToBeTransferOut } = transferInfo;
+  const { toBeTransferredOutPlayers } = transferInfo;
 
-  const position = latestToBeTransferOut.position;
-  const i = latestToBeTransferOut.index;
+  const position = toBeTransferredOutPlayers.position;
+  const i = toBeTransferredOutPlayers.index;
 
   const p = squad[position][i];
 
@@ -232,7 +234,7 @@ export const playerTransferSelectionHandler = ({
       player,
       squadInfo,
     }) &&
-    latestToBeTransferOutHasMaxClubLimit({
+    toBeTransferredOutPlayersHasMaxClubLimit({
       player,
       squadInfo,
       transferInfo,
@@ -285,7 +287,7 @@ export const playerTransferSelectionHandler = ({
   const updatedTransferInfo = {
     ...transferInfo,
     ...obj,
-    latestToBeTransferOut: {},
+    toBeTransferredOutPlayers: {},
     transferredPlayers: updatedTransferredPlayers,
     transferInProgress: false,
     transferResetDisabled: false,

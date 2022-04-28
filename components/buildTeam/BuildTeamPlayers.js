@@ -59,7 +59,7 @@ export default function BuildTeamPlayers({ players, clubs }) {
     noOfFreeTransfersLeft,
     isOneFreeTransferWindow: teamAlreadyExists,
     additionalTransferredPlayers: 0,
-    latestToBeTransferOut: {},
+    toBeTransferredOutPlayers: [],
     transferResetDisabled: true,
     transferConfirmDisabled: true,
     transferredPlayers: [],
@@ -99,27 +99,28 @@ export default function BuildTeamPlayers({ players, clubs }) {
   };
 
   useEffect(() => {
-    const { latestToBeTransferOut } = teamInfo.transferInfo;
-
-    if (isEmpty(latestToBeTransferOut)) return;
-
+    const { toBeTransferredOutPlayers } = teamInfo.transferInfo;
+    if (isEmpty(toBeTransferredOutPlayers)) return;
     return playerTransferDeselectHandler({
       teamInfo,
       setTeamInfo,
     });
-  }, [teamInfo.transferInfo.latestToBeTransferOut]);
+  }, [teamInfo.transferInfo.toBeTransferredOutPlayers]);
 
   const handleTransferPlayerDeselect = (position, index) => {
-    const { latestToBeTransferOut } = teamInfo.transferInfo;
-
-    if (!isEmpty(latestToBeTransferOut)) return;
+    const { transferInfo } = teamInfo;
+    const { toBeTransferredOutPlayers } = transferInfo;
+    const newPlayerToBeTransferOut = {
+      position,
+      index,
+    };
 
     const updatedTransferInfo = {
-      ...teamInfo.transferInfo,
-      latestToBeTransferOut: {
-        position,
-        index,
-      },
+      ...transferInfo,
+      toBeTransferredOutPlayers: [
+        ...toBeTransferredOutPlayers,
+        newPlayerToBeTransferOut,
+      ],
     };
     setTeamInfo({
       ...teamInfo,
@@ -136,11 +137,12 @@ export default function BuildTeamPlayers({ players, clubs }) {
     });
   };
 
-  // Player-Transfer-Confirm
+  // Player transfer confirm
   const onTransferConfirmClick = () => {
     setShowTransferWindowModal(true);
   };
 
+  // Player transfer settings
   const runInitialSettingsForTransferWindows = async () => {
     const { success, data } = await dispatch(
       getFantasyTeamById({
@@ -169,6 +171,7 @@ export default function BuildTeamPlayers({ players, clubs }) {
     });
   };
 
+  // Build team settings
   const runInitialSettingsForBuildYourTeam = () => {
     initialSettingsForBuildYourTeam({
       players,
@@ -189,6 +192,13 @@ export default function BuildTeamPlayers({ players, clubs }) {
     // Will run every time players data change
     runInitialSettingsForBuildYourTeam();
   }, [players]);
+
+  useEffect(() => {
+    console.log(
+      "1-------------",
+      teamInfo.transferInfo.toBeTransferredOutPlayers
+    );
+  }, [teamInfo]);
 
   const { isOneFreeTransferWindow } = teamInfo.transferInfo;
 
