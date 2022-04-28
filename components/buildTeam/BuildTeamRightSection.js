@@ -191,6 +191,10 @@ export default function BuildTeamRightSection({
     return !isEmpty(players) && !isEmpty(selectedSortingOption);
   };
 
+  const noResultTextVisible = () => {
+    return areFiltersApplied() && !players.length;
+  };
+
   useEffect(() => {
     initialSettings();
   }, []);
@@ -274,7 +278,7 @@ export default function BuildTeamRightSection({
         <AnimatePresence />
       )}
 
-      {areFiltersApplied() && !players.length && (
+      {noResultTextVisible() && (
         <div className={"absolute w-full"} style={STYLES.noResultFound}>
           <NoResultFound />
         </div>
@@ -290,7 +294,7 @@ export default function BuildTeamRightSection({
           style={STYLES.playerPanel}
         >
           <Div mb={16}>
-            {areFiltersApplied() && !players.length ? null : (
+            {noResultTextVisible() ? null : (
               <Div>
                 <SelectInput
                   options={sortingOptions}
@@ -317,7 +321,7 @@ export default function BuildTeamRightSection({
               ))}
           </Div>
           {!isEmpty(selectedSortingOption) && (
-            <Div mt={40}>
+            <Div mt={noResultTextVisible() ? 320 : 40}>
               <BuildYourTeamPlayersPagination
                 selectedSortingOption={selectedSortingOption}
               />
