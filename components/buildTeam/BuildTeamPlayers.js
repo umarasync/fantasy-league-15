@@ -59,7 +59,6 @@ export default function BuildTeamPlayers({ players, clubs }) {
     noOfFreeTransfersLeft,
     isOneFreeTransferWindow: teamAlreadyExists,
     additionalTransferredPlayers: 0,
-    toBeTransferredOutPlayers: [],
     transferResetDisabled: true,
     transferConfirmDisabled: true,
     transferredPlayers: [],
@@ -79,7 +78,7 @@ export default function BuildTeamPlayers({ players, clubs }) {
 
   const [showTransferWindowModal, setShowTransferWindowModal] = useState(false);
 
-  // Player-Selection
+  // Build your team: Player selection
   const handlePlayerSelection = (player) => {
     return playerSelectionHandler({
       player,
@@ -88,7 +87,7 @@ export default function BuildTeamPlayers({ players, clubs }) {
     });
   };
 
-  // Player deselection
+  // Build your team: Player deselection
   const handlePlayerDeselection = (position, i) => {
     return playerDeselectionHandler({
       position,
@@ -98,37 +97,19 @@ export default function BuildTeamPlayers({ players, clubs }) {
     });
   };
 
-  useEffect(() => {
-    const { toBeTransferredOutPlayers } = teamInfo.transferInfo;
-    if (isEmpty(toBeTransferredOutPlayers)) return;
+  // Transfer window: Player deselection
+  const handleTransferPlayerDeselect = (position, index) => {
     return playerTransferDeselectHandler({
       teamInfo,
       setTeamInfo,
-    });
-  }, [teamInfo.transferInfo.toBeTransferredOutPlayers]);
-
-  const handleTransferPlayerDeselect = (position, index) => {
-    const { transferInfo } = teamInfo;
-    const { toBeTransferredOutPlayers } = transferInfo;
-    const newPlayerToBeTransferOut = {
-      position,
-      index,
-    };
-
-    const updatedTransferInfo = {
-      ...transferInfo,
-      toBeTransferredOutPlayers: [
-        ...toBeTransferredOutPlayers,
-        newPlayerToBeTransferOut,
-      ],
-    };
-    setTeamInfo({
-      ...teamInfo,
-      transferInfo: updatedTransferInfo,
+      player: {
+        position,
+        index,
+      },
     });
   };
 
-  // Player-Transfer-Player-Selection
+  // Transfer window: Player selection
   const handleTransferPlayerSelection = (player) => {
     playerTransferSelectionHandler({
       player,
@@ -192,13 +173,6 @@ export default function BuildTeamPlayers({ players, clubs }) {
     // Will run every time players data change
     runInitialSettingsForBuildYourTeam();
   }, [players]);
-
-  useEffect(() => {
-    console.log(
-      "1-------------",
-      teamInfo.transferInfo.toBeTransferredOutPlayers
-    );
-  }, [teamInfo]);
 
   const { isOneFreeTransferWindow } = teamInfo.transferInfo;
 
