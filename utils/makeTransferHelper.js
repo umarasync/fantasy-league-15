@@ -156,8 +156,6 @@ const updatePlayersDataAfterDeselectionClicked = ({
         (clubsCount[p.team.name] === 3 && p.team.name === player.team.name))
     ) {
       p.disablePlayerCard = false;
-    } else {
-      p.disablePlayerCard = true;
     }
 
     return p;
@@ -305,12 +303,6 @@ export const playerTransferSelectionHandler = ({
     transferConfirmDisabled: false,
   };
 
-  // const updatedPlayersInitial = updatePlayersDataAfterDeselectionClicked({
-  //   playersInitial,
-  //   player,
-  //   updatedSquadInfo,
-  // });
-
   const updatedPlayersInitial = updatePlayersDataAfterSelectionDone({
     playersInitial,
     player,
@@ -332,15 +324,17 @@ const updatePlayersDataAfterSelectionDone = ({
 }) => {
   const { squad } = updatedSquadInfo;
 
-  const allReadyToBeTransferredTeamNames = flattenSquad(squad)
+  const readyToBeTransferredPlayersTeamNames = flattenSquad(squad)
     .map((p) => p.readyToBeTransferOut && p.team.name)
     .filter((p) => !isEmpty(p));
+
+  console.log("1---------", readyToBeTransferredPlayersTeamNames);
 
   return playersInitial.map((p) => {
     if (p.id === player.id) {
       p.chosen = true;
     }
-    p.disablePlayerCard = !allReadyToBeTransferredTeamNames.includes(
+    p.disablePlayerCard = !readyToBeTransferredPlayersTeamNames.includes(
       p.team.name
     );
 
