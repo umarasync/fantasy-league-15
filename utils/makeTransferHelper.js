@@ -2,7 +2,7 @@
 import { groupBy } from "lodash/collection";
 
 // Utils
-import { clone, isEmpty, flattenObj } from "utils/helpers";
+import { clone, flattenObj } from "utils/helpers";
 import { getAllSelectedPlayersIDs } from "utils/buildYourTeamHelper";
 
 // Constants
@@ -78,11 +78,8 @@ export const handleTransferWindowOnPlayerDataUpdate = ({
     p.chosen = !!allPlayerIds.includes(p.id);
     p.readyToBeTransferOut = false;
     p.toggleAnimation = false;
-    p.disablePlayerCard = p.id !== readyToBeTransferOutPlayer;
     return p;
   });
-
-  let updatedPlayersInitial = [...updatedPlayers];
 
   // Updated squad info
   const updatedSquadInfo = {
@@ -91,21 +88,10 @@ export const handleTransferWindowOnPlayerDataUpdate = ({
     clubsCount: getClubCount($squad),
   };
 
-  /****
-   * Check if any player is already selected to be transferred
-   * then enable or disable players card according to that
-   *****/
-  const readyToBeTransferOutPlayer = flatteredSquad.find(
-    (p) => p.readyToBeTransferOut
-  );
-
-  if (!isEmpty(readyToBeTransferOutPlayer)) {
-    updatedPlayersInitial = updatePlayersInitialData({
-      playersInitial: updatedPlayers,
-      player: readyToBeTransferOutPlayer,
-      updatedSquadInfo,
-    });
-  }
+  let updatedPlayersInitial = updatePlayersInitialData({
+    playersInitial: updatedPlayers,
+    updatedSquadInfo,
+  });
 
   setTeamInfo({
     ...teamInfo,
@@ -275,17 +261,49 @@ export const playerTransferSelectionHandler = ({
   });
 };
 
-const updatePlayersInitialData = ({ playersInitial, updatedSquadInfo }) => {
-  const { remainingBudget, clubsCount, squad } = updatedSquadInfo;
-  const flatteredSquad = flattenObj(squad);
-  const playerIds = flattenObj(squad).map((p) => p.id);
+const shouldDisablePlayerCard = ({
+  toBeTransferredOutPlayers: players,
+  p,
+  updatedSquadInfo,
+}) => {
+  const { remainingBudget, clubsCount } = updatedSquadInfo;
+  const $clubsCount = clubsCount[p.team.name];
 
-  const toBeTransferredOutPlayers = {
-    positions: [],
-    teamNames: [],
-    ids: [],
+  if (
+    players.positions.includes(p.position) &&
+    !players.ids.includes(p.id) &&
+    p.value <= remainingBudget &&
+    /* If club is not in the team = undefined
+     * Or If clubs are less than MAX_PLAYERS_PER_CLUB
+     * or If clubs is equal to MAX_PLAYERS_PER_CLUB but club is deselected one
+     */
+    ($clubsCount === undefined ||
+      $clubsCount < MAX_PLAYERS_PER_CLUB ||
+      ($clubsCount === MAX_PLAYERS_PER_CLUB &&
+        players.teamNames.includes(p.team.name)))
+  ) {
+    return false;
+  }
+
+  return true;
+};
+
+/****
+ * 1. Provides all player ids that are chosen
+ * 2. Provides required information about players that are ready to be transferred
+ * *****/
+const getRelevantPlayersData = (squad) => {
+  const playersData = {
+    allPlayersIds: [],
+    toBeTransferredOutPlayers: {
+      positions: [],
+      teamNames: [],
+      ids: [],
+    },
   };
-  flatteredSquad.forEach((p) => {
+  const { allPlayersIds, toBeTransferredOutPlayers } = playersData;
+  flattenObj(squad).forEach((p) => {
+    allPlayersIds.push(p.id);
     if (p.readyToBeTransferOut) {
       toBeTransferredOutPlayers.positions.push(p.position);
       toBeTransferredOutPlayers.teamNames.push(p.team.name);
@@ -293,42 +311,21 @@ const updatePlayersInitialData = ({ playersInitial, updatedSquadInfo }) => {
     }
   });
 
-  const players = playersInitial.map((p) => {
-    // Only enable card if these conditions met
-    if (
-      toBeTransferredOutPlayers.positions.includes(p.position) &&
-      !toBeTransferredOutPlayers.ids.includes(p.id) &&
-      p.value <= remainingBudget &&
-      /***** If club is not in the team = undefined
-       *  Or If clubs are less than 3
-       *  or If clubs is equal to 3 but club is deselected one
-       */
-      (clubsCount[p.team.name] === undefined ||
-        clubsCount[p.team.name] < MAX_PLAYERS_PER_CLUB ||
-        (clubsCount[p.team.name] === MAX_PLAYERS_PER_CLUB &&
-          toBeTransferredOutPlayers.teamNames.includes(p.team.name)))
-    ) {
-      p.disablePlayerCard = false;
-    } else {
-      p.disablePlayerCard = true;
-    }
+  return playersData;
+};
 
-    if (playerIds.includes(p.id)) {
-      p.chosen = true;
-    } else {
-      p.chosen = false;
-    }
+const updatePlayersInitialData = ({ playersInitial, updatedSquadInfo }) => {
+  const { allPlayersIds, toBeTransferredOutPlayers } = getRelevantPlayersData(
+    updatedSquadInfo.squad
+  );
 
+  return playersInitial.map((p) => {
+    p.chosen = allPlayersIds.includes(p.id);
+    p.disablePlayerCard = shouldDisablePlayerCard({
+      toBeTransferredOutPlayers,
+      p,
+      updatedSquadInfo,
+    });
     return p;
   });
-
-  // // Make currently deselected player also disable in list
-  // const playerIndex = players.findIndex((p) => p.id === player.id);
-  // if (playerIndex !== -1) {
-  //   const $player = players[playerIndex];
-  //   $player.chosen = false;
-  //   $player.disablePlayerCard = true;
-  // }
-
-  return players;
 };
