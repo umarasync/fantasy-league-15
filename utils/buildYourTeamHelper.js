@@ -115,15 +115,15 @@ export const getClubCount = (squad) => {
 };
 
 export const handleAutoPick = ({
-  players: playersProp,
+  players,
   totalBudget,
   teamInfo,
   setTeamInfo,
 }) => {
   let remainingBudget = totalBudget;
-  let players = clone(playersProp);
+  let $players = clone(players);
 
-  const max3PlayersPerClub = maxThreePlayersPerClub(players);
+  const max3PlayersPerClub = maxThreePlayersPerClub($players);
 
   const max3PlayersPerClubIds = cutPlayersAccordingToPositionsCount(
     max3PlayersPerClub
@@ -131,9 +131,8 @@ export const handleAutoPick = ({
 
   let totalChosenPlayers = 0;
   let chosenPlayersWithinBudget = clone(SELECTED_PLAYERS);
-  const $players = players.map((p) => {
+  $players = $players.map((p) => {
     if (max3PlayersPerClubIds.includes(p.id) && p.value < remainingBudget) {
-      p.chosen = true;
       chosenPlayersWithinBudget[p.position].push(p);
       remainingBudget = remainingBudget - p.value;
       totalChosenPlayers += 1;
@@ -174,40 +173,46 @@ const isPositionEmpty = ({ player, squad }) => {
   return false;
 };
 
-// Make player card disable
-const shouldPlayerCardBeDisabled = ({ player, squadInfo }) => {
+const isPlayerAlreadySelected = ({ player, squad }) =>
+  flattenObj(squad).some((p) => p.id === player.id);
+
+const makeCardDisable = ({ squadInfo, player }) =>
+  shouldReturnBack({ squadInfo, player });
+
+const updatePlayersInitialData = ({ playersInitial, squadInfo }) => {
+  const players = clone(playersInitial);
+  let allPlayersIds = flattenObj(squadInfo.squad).map((p) => p.id);
+  let isClubCountEmpty = isEmpty(squadInfo.clubsCount);
+
+  return players.map((p) => {
+    p.chosen = allPlayersIds.includes(p.id);
+    p.disablePlayerCard = isClubCountEmpty
+      ? false
+      : makeCardDisable({ squadInfo, player: p });
+    return p;
+  });
+};
+
+const shouldReturnBack = ({ squadInfo, player }) => {
+  let { totalChosenPlayers, clubsCount, squad } = squadInfo;
   if (
-    squadInfo.clubsCount[player.team.name] === MAX_PLAYERS_PER_CLUB ||
-    !isPositionEmpty({ player, squad: squadInfo.squad })
+    totalChosenPlayers === TOTAL_PLAYER_IN_TEAM ||
+    clubsCount[player.team.name] === MAX_PLAYERS_PER_CLUB ||
+    !isPositionEmpty({ player, squad }) ||
+    isPlayerAlreadySelected({ player, squad })
   ) {
     return true;
   }
   return false;
 };
 
-const updatePlayersInitialData = ({ playersInitial, squadInfo }) => {
-  let allPlayersIds = flattenObj(squadInfo.squad).map((p) => p.id);
-  let isClubCountEmpty = isEmpty(squadInfo.clubsCount);
-
-  return playersInitial.map((p) => {
-    p.chosen = allPlayersIds.includes(p.id);
-    p.disablePlayerCard = isClubCountEmpty
-      ? false
-      : shouldPlayerCardBeDisabled({ player: p, squadInfo });
-    return p;
-  });
-};
-
+// Player Selection
 export const playerSelectionHandler = ({ player, teamInfo, setTeamInfo }) => {
+  if (shouldReturnBack({ squadInfo: teamInfo.squadInfo, player })) return;
+
   const { squadInfo, playersInitial } = teamInfo;
-  let { remainingBudget, totalChosenPlayers, clubsCount } = squadInfo;
+  let { remainingBudget, totalChosenPlayers } = squadInfo;
   const squad = { ...squadInfo.squad };
-  if (
-    totalChosenPlayers === TOTAL_PLAYER_IN_TEAM ||
-    clubsCount[player.team.name] === MAX_PLAYERS_PER_CLUB ||
-    !isPositionEmpty({ player, squad })
-  )
-    return;
 
   // Starts adding player
   const sp = squad[player.position];
@@ -241,6 +246,7 @@ export const playerSelectionHandler = ({ player, teamInfo, setTeamInfo }) => {
   });
 };
 
+// Player Deselection
 export const playerDeselectionHandler = ({
   position,
   i,

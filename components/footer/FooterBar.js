@@ -132,7 +132,6 @@ export default function FooterBar({
     setTeamInfo({
       ...teamInfo,
       squadInfo: clone(squadInfoInitialState),
-      players: clone(players),
       playersInitial: clone(players),
     });
 
