@@ -161,32 +161,9 @@ export const playerTransferDeselectHandler = ({
   });
 };
 
-// const toBeTransferredOutPlayersHasMaxClubLimit = ({ player, squadInfo }) => {
-//   const { clubsCount, squad } = squadInfo;
-//
-//   const position = toBeTransferredOutPlayers.position;
-//   const i = toBeTransferredOutPlayers.index;
-//
-//   const p = squad[position][i];
-//
-//   if (clubsCount[player.team.name] === 3 && p.team.name === player.team.name) {
-//     return false;
-//   }
-//
-//   return true;
-// };
+const returnBack = (squadInfo, player) =>
+  squadInfo.clubsCount[player.team.name] === MAX_PLAYERS_PER_CLUB;
 
-const returnBack = (squadInfo, player) => {
-  const { clubsCount } = squadInfo;
-  return (
-    clubsCount[player.team.name] === MAX_PLAYERS_PER_CLUB
-    // &&
-    // toBeTransferredOutPlayersHasMaxClubLimit({
-    //   player,
-    //   squadInfo,
-    // })
-  );
-};
 // Player Transfer Selection
 export const playerTransferSelectionHandler = ({
   player,
@@ -262,7 +239,7 @@ export const playerTransferSelectionHandler = ({
 };
 
 const shouldDisablePlayerCard = ({
-  toBeTransferredOutPlayers: players,
+  toBeTransferredOutPlayers,
   p,
   updatedSquadInfo,
 }) => {
@@ -270,17 +247,10 @@ const shouldDisablePlayerCard = ({
   const $clubsCount = clubsCount[p.team.name];
 
   if (
-    players.positions.includes(p.position) &&
-    !players.ids.includes(p.id) &&
+    toBeTransferredOutPlayers.positions.includes(p.position) &&
+    !toBeTransferredOutPlayers.ids.includes(p.id) &&
     p.value <= remainingBudget &&
-    /* If club is not in the team = undefined
-     * Or If clubs are less than MAX_PLAYERS_PER_CLUB
-     * or If clubs is equal to MAX_PLAYERS_PER_CLUB but club is deselected one
-     */
-    ($clubsCount === undefined ||
-      $clubsCount < MAX_PLAYERS_PER_CLUB ||
-      ($clubsCount === MAX_PLAYERS_PER_CLUB &&
-        players.teamNames.includes(p.team.name)))
+    ($clubsCount === undefined || $clubsCount < MAX_PLAYERS_PER_CLUB)
   ) {
     return false;
   }
