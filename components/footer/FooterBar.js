@@ -13,11 +13,7 @@ import Image from "components/html/Image";
 // Utils
 import R from "utils/getResponsiveValue";
 import { nFormatter } from "utils/helpers";
-import {
-  disablePlayersIfClubsLimitReached,
-  getClubCount,
-  handleAutoPick,
-} from "utils/buildYourTeamHelper";
+import { handleAutoPick } from "utils/buildYourTeamHelper";
 import { clone } from "utils/helpers";
 
 // Constants
@@ -110,30 +106,12 @@ export default function FooterBar({
   const continueDisabled1 = totalChosenPlayers < FIFTEEN;
 
   const onAutoPick = () => {
-    const res = handleAutoPick({
+    handleAutoPick({
       players,
       totalBudget,
+      teamInfo,
+      setTeamInfo,
     });
-
-    const updatedSquadInfo = {
-      ...teamInfo.squadInfo,
-      squad: res.squad,
-      clubsCount: getClubCount(res.squad),
-      remainingBudget: res.remainingBudget,
-      totalChosenPlayers: res.totalChosenPlayers,
-    };
-
-    const updatedPlayersInitial = disablePlayersIfClubsLimitReached({
-      players: res.players,
-      clubsCount: updatedSquadInfo.clubsCount,
-    });
-
-    setTeamInfo({
-      ...teamInfo,
-      squadInfo: updatedSquadInfo,
-      playersInitial: updatedPlayersInitial,
-    });
-
     setAutoPickDisabled(true);
     setResetDisabled(false);
   };

@@ -75,6 +75,13 @@ export const responseFailed = (msg) => {
   };
 };
 
-export const getClubCount = (clubs, clubName) => {
-  return countBy(clubs)[clubName];
+// Flatten object of arrays into single array with all objects
+export const flattenObj = ($squad) => {
+  let squad = [];
+  for (let key in $squad) {
+    if ($squad.hasOwnProperty(key)) {
+      squad.push(...$squad[key]);
+    }
+  }
+  return squad.filter((p) => !isEmpty(p));
 };

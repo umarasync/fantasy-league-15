@@ -59,7 +59,6 @@ export default function BuildTeamPlayers({ players, clubs }) {
     noOfFreeTransfersLeft,
     isOneFreeTransferWindow: teamAlreadyExists,
     additionalTransferredPlayers: 0,
-    latestToBeTransferOut: {},
     transferResetDisabled: true,
     transferConfirmDisabled: true,
     transferredPlayers: [],
@@ -79,7 +78,7 @@ export default function BuildTeamPlayers({ players, clubs }) {
 
   const [showTransferWindowModal, setShowTransferWindowModal] = useState(false);
 
-  // Player-Selection
+  // Build your team: Player selection
   const handlePlayerSelection = (player) => {
     return playerSelectionHandler({
       player,
@@ -88,7 +87,7 @@ export default function BuildTeamPlayers({ players, clubs }) {
     });
   };
 
-  // Player deselection
+  // Build your team: Player deselection
   const handlePlayerDeselection = (position, i) => {
     return playerDeselectionHandler({
       position,
@@ -98,36 +97,19 @@ export default function BuildTeamPlayers({ players, clubs }) {
     });
   };
 
-  useEffect(() => {
-    const { latestToBeTransferOut } = teamInfo.transferInfo;
-
-    if (isEmpty(latestToBeTransferOut)) return;
-
+  // Transfer window: Player deselection
+  const handleTransferPlayerDeselect = (position, index) => {
     return playerTransferDeselectHandler({
       teamInfo,
       setTeamInfo,
-    });
-  }, [teamInfo.transferInfo.latestToBeTransferOut]);
-
-  const handleTransferPlayerDeselect = (position, index) => {
-    const { latestToBeTransferOut } = teamInfo.transferInfo;
-
-    if (!isEmpty(latestToBeTransferOut)) return;
-
-    const updatedTransferInfo = {
-      ...teamInfo.transferInfo,
-      latestToBeTransferOut: {
+      player: {
         position,
         index,
       },
-    };
-    setTeamInfo({
-      ...teamInfo,
-      transferInfo: updatedTransferInfo,
     });
   };
 
-  // Player-Transfer-Player-Selection
+  // Transfer window: Player selection
   const handleTransferPlayerSelection = (player) => {
     playerTransferSelectionHandler({
       player,
@@ -136,11 +118,12 @@ export default function BuildTeamPlayers({ players, clubs }) {
     });
   };
 
-  // Player-Transfer-Confirm
+  // Player transfer confirm
   const onTransferConfirmClick = () => {
     setShowTransferWindowModal(true);
   };
 
+  // Player transfer settings
   const runInitialSettingsForTransferWindows = async () => {
     const { success, data } = await dispatch(
       getFantasyTeamById({
@@ -169,6 +152,7 @@ export default function BuildTeamPlayers({ players, clubs }) {
     });
   };
 
+  // Build team settings
   const runInitialSettingsForBuildYourTeam = () => {
     initialSettingsForBuildYourTeam({
       players,

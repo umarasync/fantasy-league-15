@@ -3,36 +3,29 @@ import { groupBy } from "lodash/collection";
 
 // Constants
 import {
-  POSITION_ALL,
   POSITION_DEF,
   POSITION_FWD,
   POSITION_GK,
   POSITION_MID,
 } from "constants/data/filters";
 import { SELECTED_PLAYERS } from "constants/data/players";
+import {
+  MAX_PLAYERS_PER_CLUB,
+  PLAYERS_COUNT_IN_TEAM,
+  TOTAL_PLAYER_IN_TEAM,
+} from "constants/universalConstants";
 
 // Utils
-import { clone, isEmpty, shuffle } from "utils/helpers";
+import { clone, isEmpty, shuffle, flattenObj } from "utils/helpers";
 
 export const initialSettingsForBuildYourTeam = ({
   players,
   teamInfo,
   setTeamInfo,
 }) => {
-  const { squadInfo } = teamInfo;
-  const { squad, clubsCount } = squadInfo;
-
-  const allPlayerIds = getAllSelectedPlayersIDs(flattenSquad(squad));
-
-  let playersData = players.map((p) => {
-    p.chosen = !!allPlayerIds.includes(p.id);
-    p.disablePlayerCard = false;
-    return p;
-  });
-
-  playersData = disablePlayersIfClubsLimitReached({
-    players: playersData,
-    clubsCount,
+  let playersData = updatePlayersInitialData({
+    playersInitial: players,
+    squadInfo: teamInfo.squadInfo,
   });
 
   setTeamInfo({
@@ -90,7 +83,9 @@ const maxThreePlayersPerClub = (players) => {
 
   for (let key in groupByClub) {
     if (groupByClub.hasOwnProperty(key)) {
-      $players.push(...shuffle(groupByClub[key]).slice(0, 3));
+      $players.push(
+        ...shuffle(groupByClub[key]).slice(0, MAX_PLAYERS_PER_CLUB)
+      );
     }
   }
   return $players;
@@ -106,20 +101,9 @@ const cutPlayersAccordingToPositionsCount = (players) => {
   ];
 };
 
-// Flatten squad into single array
-export const flattenSquad = ($squad) => {
-  let squad = [];
-  for (let key in $squad) {
-    if ($squad.hasOwnProperty(key)) {
-      squad.push(...$squad[key]);
-    }
-  }
-  return squad.filter((p) => !isEmpty(p));
-};
-
 // Group By club names and then count clubs
 export const getClubCount = (squad) => {
-  const clubs = groupBy(flattenSquad(squad), "team.name");
+  const clubs = groupBy(flattenObj(squad), "team.name");
   let $clubsCount = {};
   for (let key in clubs) {
     if (clubs.hasOwnProperty(key)) {
@@ -130,7 +114,12 @@ export const getClubCount = (squad) => {
   return $clubsCount;
 };
 
-export const handleAutoPick = ({ players, totalBudget }) => {
+export const handleAutoPick = ({
+  players,
+  totalBudget,
+  teamInfo,
+  setTeamInfo,
+}) => {
   let remainingBudget = totalBudget;
   let $players = clone(players);
 
@@ -142,9 +131,8 @@ export const handleAutoPick = ({ players, totalBudget }) => {
 
   let totalChosenPlayers = 0;
   let chosenPlayersWithinBudget = clone(SELECTED_PLAYERS);
-  const $$players = $players.map((p) => {
+  $players = $players.map((p) => {
     if (max3PlayersPerClubIds.includes(p.id) && p.value < remainingBudget) {
-      p.chosen = true;
       chosenPlayersWithinBudget[p.position].push(p);
       remainingBudget = remainingBudget - p.value;
       totalChosenPlayers += 1;
@@ -153,70 +141,90 @@ export const handleAutoPick = ({ players, totalBudget }) => {
     return p;
   });
 
-  return {
+  const updatedSquadInfo = {
+    ...teamInfo.squadInfo,
     squad: chosenPlayersWithinBudget,
-    remainingBudget,
-    totalChosenPlayers,
-    players: $$players,
+    clubsCount: getClubCount(chosenPlayersWithinBudget),
+    remainingBudget: remainingBudget,
+    totalChosenPlayers: totalChosenPlayers,
   };
+
+  let playersData = updatePlayersInitialData({
+    playersInitial: $players,
+    squadInfo: updatedSquadInfo,
+  });
+
+  setTeamInfo({
+    ...teamInfo,
+    squadInfo: updatedSquadInfo,
+    playersInitial: [...playersData],
+  });
 };
 
-export const disablePlayersIfClubsLimitReached = ({ players, clubsCount }) => {
-  if (isEmpty(clubsCount)) return [...players];
+// Check if any player position is still empty.
+const isPositionEmpty = ({ player, squad }) => {
+  const filledPositionsCount = flattenObj(squad).filter(
+    (p) => p.position === player.position
+  ).length;
+
+  if (PLAYERS_COUNT_IN_TEAM[player.position] > filledPositionsCount) {
+    return true;
+  }
+  return false;
+};
+
+const isPlayerAlreadySelected = ({ player, squad }) =>
+  flattenObj(squad).some((p) => p.id === player.id);
+
+const makeCardDisable = ({ squadInfo, player }) =>
+  shouldReturnBack({ squadInfo, player });
+
+const updatePlayersInitialData = ({ playersInitial, squadInfo }) => {
+  const players = clone(playersInitial);
+  let allPlayersIds = flattenObj(squadInfo.squad).map((p) => p.id);
+  let isClubCountEmpty = isEmpty(squadInfo.clubsCount);
+
   return players.map((p) => {
-    p.disablePlayerCard = clubsCount[p.team.name] === 3;
+    p.chosen = allPlayersIds.includes(p.id);
+    p.disablePlayerCard = isClubCountEmpty
+      ? false
+      : makeCardDisable({ squadInfo, player: p });
     return p;
   });
 };
 
-const updatePlayersDataAfterSelectionOrDeselection = ({
-  playersInitial,
-  player,
-  value,
-  squadInfo,
-}) => {
-  let players = clone(playersInitial);
-  const { clubsCount } = squadInfo;
-  const playerIndex = players.findIndex((p) => p.id === player.id);
-  if (playerIndex !== -1) {
-    players[playerIndex].chosen = value;
+const shouldReturnBack = ({ squadInfo, player }) => {
+  let { totalChosenPlayers, clubsCount, squad } = squadInfo;
+  if (
+    totalChosenPlayers === TOTAL_PLAYER_IN_TEAM ||
+    clubsCount[player.team.name] === MAX_PLAYERS_PER_CLUB ||
+    !isPositionEmpty({ player, squad }) ||
+    isPlayerAlreadySelected({ player, squad })
+  ) {
+    return true;
   }
-
-  players = disablePlayersIfClubsLimitReached({ players, clubsCount });
-
-  return players;
+  return false;
 };
 
+// Player Selection
 export const playerSelectionHandler = ({ player, teamInfo, setTeamInfo }) => {
+  if (shouldReturnBack({ squadInfo: teamInfo.squadInfo, player })) return;
+
   const { squadInfo, playersInitial } = teamInfo;
-  let { remainingBudget, totalChosenPlayers, clubsCount } = squadInfo;
-  if (totalChosenPlayers === 15 || clubsCount[player.team.name] === 3) return;
-
-  let updatedPlayersInitial = [];
-
-  const pos = player.position;
+  let { remainingBudget, totalChosenPlayers } = squadInfo;
   const squad = { ...squadInfo.squad };
-  const sp = squad[pos];
 
-  if (
-    (pos === POSITION_GK && squad[POSITION_GK].length < 2) ||
-    (pos === POSITION_FWD && squad[POSITION_FWD].length < 3) ||
-    (pos === POSITION_MID && squad[POSITION_MID].length < 5) ||
-    (pos === POSITION_DEF && squad[POSITION_DEF].length < 5)
-  ) {
-    if (!sp.length || (sp.length > 0 && !sp.some((p) => p.id === player.id))) {
-      remainingBudget = remainingBudget - player.value;
-      totalChosenPlayers = totalChosenPlayers + 1;
-      sp.push(player);
-    }
-  } else if (!sp.some((p) => p.id === player.id)) {
-    const indexOfEmptyPosition = sp.findIndex((x) => x === false);
-    if (indexOfEmptyPosition === -1) return;
+  // Starts adding player
+  const sp = squad[player.position];
+
+  const indexOfEmptyPosition = sp.findIndex((x) => x === false);
+  if (indexOfEmptyPosition === -1) {
+    sp.push(player);
+  } else {
     sp[indexOfEmptyPosition] = player;
-
-    remainingBudget = remainingBudget - player.value;
-    totalChosenPlayers = totalChosenPlayers + 1;
   }
+  remainingBudget = remainingBudget - player.value;
+  totalChosenPlayers = totalChosenPlayers + 1;
 
   const updatedSquadInfo = {
     ...teamInfo.squadInfo,
@@ -226,10 +234,8 @@ export const playerSelectionHandler = ({ player, teamInfo, setTeamInfo }) => {
     totalChosenPlayers,
   };
 
-  updatedPlayersInitial = updatePlayersDataAfterSelectionOrDeselection({
+  let updatedPlayersInitial = updatePlayersInitialData({
     playersInitial,
-    player,
-    value: true,
     squadInfo: updatedSquadInfo,
   });
 
@@ -240,6 +246,7 @@ export const playerSelectionHandler = ({ player, teamInfo, setTeamInfo }) => {
   });
 };
 
+// Player Deselection
 export const playerDeselectionHandler = ({
   position,
   i,
@@ -250,8 +257,6 @@ export const playerDeselectionHandler = ({
   const squad = { ...squadInfo.squad };
 
   let { remainingBudget, totalChosenPlayers } = squadInfo;
-
-  let updatedPlayersInitial = [];
 
   const player = squad[position][i];
 
@@ -268,10 +273,8 @@ export const playerDeselectionHandler = ({
     totalChosenPlayers,
   };
 
-  updatedPlayersInitial = updatePlayersDataAfterSelectionOrDeselection({
+  let updatedPlayersInitial = updatePlayersInitialData({
     playersInitial,
-    player,
-    value: false,
     squadInfo: updatedSquadInfo,
   });
 

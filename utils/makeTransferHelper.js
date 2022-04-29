@@ -1,10 +1,9 @@
+// Packages
+import { groupBy } from "lodash/collection";
+
 // Utils
-import { clone, isEmpty, shuffle } from "utils/helpers";
-import {
-  flattenSquad,
-  getAllSelectedPlayersIDs,
-  getClubCount,
-} from "utils/buildYourTeamHelper";
+import { clone, flattenObj } from "utils/helpers";
+import { getAllSelectedPlayersIDs } from "utils/buildYourTeamHelper";
 
 // Constants
 import {
@@ -13,6 +12,7 @@ import {
   POSITION_GK,
   POSITION_MID,
 } from "constants/data/filters";
+import { MAX_PLAYERS_PER_CLUB } from "constants/universalConstants";
 
 export const putSquadUnderPositions = (squad) => {
   return {
@@ -32,7 +32,7 @@ export const initialSettingsForTransferWindows = ({
   remainingBudget,
 }) => {
   const $squad = clone(squad);
-  const allPlayerIds = getAllSelectedPlayersIDs(flattenSquad($squad));
+  const allPlayerIds = getAllSelectedPlayersIDs(flattenObj($squad));
 
   const updatedPlayers = players.map((p) => {
     p.chosen = !!allPlayerIds.includes(p.id);
@@ -70,100 +70,59 @@ export const handleTransferWindowOnPlayerDataUpdate = ({
   teamInfo,
   setTeamInfo,
 }) => {
-  const $squad = clone(squad);
-  const flatteredSquad = flattenSquad($squad);
-  const allPlayerIds = getAllSelectedPlayersIDs(flatteredSquad);
-
-  const updatedPlayers = players.map((p) => {
-    p.chosen = !!allPlayerIds.includes(p.id);
-    p.readyToBeTransferOut = false;
-    p.toggleAnimation = false;
-    p.disablePlayerCard = p.id !== readyToBeTransferOutPlayer;
-    return p;
-  });
-
-  let updatedPlayersInitial = [...updatedPlayers];
-
   // Updated squad info
   const updatedSquadInfo = {
     ...teamInfo.squadInfo,
-    squad: { ...$squad },
-    clubsCount: getClubCount($squad),
+    squad: { ...squad },
+    clubsCount: getClubCount(squad),
   };
 
-  /****
-   * Check if any player is already selected to be transferred
-   * then enable or disable players card according to that
-   *****/
-  const readyToBeTransferOutPlayer = flatteredSquad.find(
-    (p) => p.readyToBeTransferOut
-  );
+  // Updated players
+  let updatedPlayers = updatePlayersInitialData({
+    playersInitial: players,
+    updatedSquadInfo,
+  });
 
-  if (!isEmpty(readyToBeTransferOutPlayer)) {
-    updatedPlayersInitial = updatePlayersDataAfterDeselectionClicked({
-      playersInitial: updatedPlayers,
-      player: readyToBeTransferOutPlayer,
-      updatedSquadInfo,
-    });
-  }
-
+  // Updated team info
   setTeamInfo({
     ...teamInfo,
     squadInfo: updatedSquadInfo,
     players: [...updatedPlayers],
-    playersInitial: [...updatedPlayersInitial],
+    playersInitial: [...updatedPlayers],
   });
 };
 
-const updatePlayersDataAfterDeselectionClicked = ({
-  playersInitial,
-  player,
-  updatedSquadInfo,
-}) => {
-  const { remainingBudget, clubsCount } = updatedSquadInfo;
+// Group By club names and then count clubs
+const getClubCount = (squad) => {
+  const flatteredSquad = flattenObj(squad).filter(
+    (p) => !p.readyToBeTransferOut
+  );
 
-  const players = playersInitial.map((p) => {
-    // Only enable card if these conditions met
-    if (
-      p.position === player.position &&
-      p.value <= remainingBudget &&
-      !p.chosen &&
-      /***** If club is not in the team = undefined
-       *  Or If clubs are less than 3
-       *  or If clubs is equal to 3 but club is deselected one
-       */
-      (clubsCount[p.team.name] === undefined ||
-        clubsCount[p.team.name] < 3 ||
-        (clubsCount[p.team.name] === 3 && p.team.name === player.team.name))
-    ) {
-      p.disablePlayerCard = false;
+  const clubs = groupBy(flatteredSquad, "team.name");
+  let $clubsCount = {};
+  for (let key in clubs) {
+    if (clubs.hasOwnProperty(key)) {
+      $clubsCount[key] = clubs[key].length;
     }
-    return p;
-  });
-
-  // Make currently deselected player also disable in list
-  const playerIndex = players.findIndex((p) => p.id === player.id);
-  if (playerIndex !== -1) {
-    const $player = players[playerIndex];
-    $player.chosen = false;
-    $player.disablePlayerCard = true;
   }
 
-  return players;
+  return $clubsCount;
 };
 
 // Player transfer deselection
-export const playerTransferDeselectHandler = ({ teamInfo, setTeamInfo }) => {
-  const { squadInfo, transferInfo, playersInitial } = teamInfo;
-  const { latestToBeTransferOut } = transferInfo;
+export const playerTransferDeselectHandler = ({
+  teamInfo,
+  setTeamInfo,
+  player: playerProp,
+}) => {
+  const { squadInfo, playersInitial } = teamInfo;
+  const { position, index } = playerProp;
+
   const squad = { ...squadInfo.squad };
   let { remainingBudget } = squadInfo;
 
-  const position = latestToBeTransferOut.position;
-  const i = latestToBeTransferOut.index;
-
-  const player = squad[position][i];
-  const $player = squad[position][i];
+  const player = squad[position][index];
+  const $player = squad[position][index];
 
   $player.toggleAnimation = !$player.toggleAnimation;
   $player.readyToBeTransferOut = true;
@@ -177,9 +136,8 @@ export const playerTransferDeselectHandler = ({ teamInfo, setTeamInfo }) => {
     remainingBudget: remainingBudget,
   };
 
-  const updatedPlayersInitial = updatePlayersDataAfterDeselectionClicked({
+  const updatedPlayersInitial = updatePlayersInitialData({
     playersInitial,
-    player,
     updatedSquadInfo,
   });
 
@@ -194,51 +152,18 @@ export const playerTransferDeselectHandler = ({ teamInfo, setTeamInfo }) => {
   });
 };
 
-const latestToBeTransferOutHasMaxClubLimit = ({
-  player,
-  squadInfo,
-  transferInfo,
-}) => {
-  const { clubsCount, squad } = squadInfo;
-  const { latestToBeTransferOut } = transferInfo;
+const returnBack = (squadInfo, player) =>
+  squadInfo.clubsCount[player.team.name] === MAX_PLAYERS_PER_CLUB;
 
-  const position = latestToBeTransferOut.position;
-  const i = latestToBeTransferOut.index;
-
-  const p = squad[position][i];
-
-  if (clubsCount[player.team.name] === 3 && p.team.name === player.team.name) {
-    return false;
-  }
-
-  return true;
-};
-
-const reachedClubsMaxLimit = ({ squadInfo, player }) => {
-  const { clubsCount } = squadInfo;
-  return clubsCount[player.team.name] === 3;
-};
-
-// Player-Transfer Selection
+// Player Transfer Selection
 export const playerTransferSelectionHandler = ({
   player,
   teamInfo,
   setTeamInfo,
 }) => {
-  const { squadInfo, transferInfo, playersInitial } = teamInfo;
+  if (returnBack(teamInfo.squadInfo, player)) return;
 
-  if (
-    reachedClubsMaxLimit({
-      player,
-      squadInfo,
-    }) &&
-    latestToBeTransferOutHasMaxClubLimit({
-      player,
-      squadInfo,
-      transferInfo,
-    })
-  )
-    return;
+  const { squadInfo, transferInfo, playersInitial } = teamInfo;
 
   const squad = { ...squadInfo.squad };
   const position = player.position;
@@ -273,6 +198,7 @@ export const playerTransferSelectionHandler = ({
     ...player,
     toggleAnimation: false,
     chosen: true,
+    readyToBeTransferOut: false,
   };
 
   const updatedSquadInfo = {
@@ -285,16 +211,14 @@ export const playerTransferSelectionHandler = ({
   const updatedTransferInfo = {
     ...transferInfo,
     ...obj,
-    latestToBeTransferOut: {},
     transferredPlayers: updatedTransferredPlayers,
-    transferInProgress: false,
     transferResetDisabled: false,
     transferConfirmDisabled: false,
   };
 
-  const updatedPlayersInitial = updatePlayersDataAfterSelectionDone({
+  const updatedPlayersInitial = updatePlayersInitialData({
     playersInitial,
-    player,
+    updatedSquadInfo,
   });
 
   setTeamInfo({
@@ -305,12 +229,65 @@ export const playerTransferSelectionHandler = ({
   });
 };
 
-const updatePlayersDataAfterSelectionDone = ({ playersInitial, player }) => {
-  return playersInitial.map((p) => {
-    if (p.id === player.id) {
-      p.chosen = true;
+const shouldPlayerCardBeDisabled = ({
+  toBeTransferredOutPlayers,
+  p,
+  updatedSquadInfo,
+}) => {
+  const { remainingBudget, clubsCount } = updatedSquadInfo;
+  const $clubsCount = clubsCount[p.team.name];
+
+  if (
+    toBeTransferredOutPlayers.positions.includes(p.position) &&
+    !toBeTransferredOutPlayers.ids.includes(p.id) &&
+    p.value <= remainingBudget &&
+    ($clubsCount === undefined || $clubsCount < MAX_PLAYERS_PER_CLUB)
+  ) {
+    return false;
+  }
+
+  return true;
+};
+
+/****
+ * 1. Provides all player ids that are chosen
+ * 2. Provides required information about players that are ready to be transferred
+ * *****/
+const getRelevantPlayersData = (squad) => {
+  const playersData = {
+    allPlayersIds: [],
+    toBeTransferredOutPlayers: {
+      positions: [],
+      teamNames: [],
+      ids: [],
+    },
+  };
+  const { allPlayersIds, toBeTransferredOutPlayers } = playersData;
+  flattenObj(squad).forEach((p) => {
+    allPlayersIds.push(p.id);
+    if (p.readyToBeTransferOut) {
+      toBeTransferredOutPlayers.positions.push(p.position);
+      toBeTransferredOutPlayers.teamNames.push(p.team.name);
+      toBeTransferredOutPlayers.ids.push(p.id);
     }
-    p.disablePlayerCard = true;
+  });
+
+  return playersData;
+};
+
+const updatePlayersInitialData = ({ playersInitial, updatedSquadInfo }) => {
+  const { allPlayersIds, toBeTransferredOutPlayers } = getRelevantPlayersData(
+    updatedSquadInfo.squad
+  );
+
+  return playersInitial.map((p) => {
+    p.chosen = allPlayersIds.includes(p.id);
+    p.toggleAnimation = false;
+    p.disablePlayerCard = shouldPlayerCardBeDisabled({
+      toBeTransferredOutPlayers,
+      p,
+      updatedSquadInfo,
+    });
     return p;
   });
 };
