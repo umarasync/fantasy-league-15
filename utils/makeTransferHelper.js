@@ -77,11 +77,13 @@ export const handleTransferWindowOnPlayerDataUpdate = ({
     clubsCount: getClubCount(squad),
   };
 
+  // Updated players
   let updatedPlayers = updatePlayersInitialData({
     playersInitial: players,
     updatedSquadInfo,
   });
 
+  // Updated team info
   setTeamInfo({
     ...teamInfo,
     squadInfo: updatedSquadInfo,
