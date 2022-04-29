@@ -134,43 +134,43 @@ const getClubCount = (squad) => {
   return $clubsCount;
 };
 
-const updatePlayersDataAfterDeselectionClicked = ({
-  playersInitial,
-  player,
-  updatedSquadInfo,
-}) => {
-  const { remainingBudget, clubsCount } = updatedSquadInfo;
-
-  const players = playersInitial.map((p) => {
-    // Only enable card if these conditions met
-    if (
-      p.position === player.position &&
-      p.value <= remainingBudget &&
-      !p.chosen &&
-      /***** If club is not in the team = undefined
-       *  Or If clubs are less than 3
-       *  or If clubs is equal to 3 but club is deselected one
-       */
-      (clubsCount[p.team.name] === undefined ||
-        clubsCount[p.team.name] < 3 ||
-        (clubsCount[p.team.name] === 3 && p.team.name === player.team.name))
-    ) {
-      p.disablePlayerCard = false;
-    }
-
-    return p;
-  });
-
-  // Make currently deselected player also disable in list
-  const playerIndex = players.findIndex((p) => p.id === player.id);
-  if (playerIndex !== -1) {
-    const $player = players[playerIndex];
-    $player.chosen = false;
-    $player.disablePlayerCard = true;
-  }
-
-  return players;
-};
+// const updatePlayersDataAfterDeselectionClicked = ({
+//   playersInitial,
+//   player,
+//   updatedSquadInfo,
+// }) => {
+//   const { remainingBudget, clubsCount } = updatedSquadInfo;
+//
+//   const players = playersInitial.map((p) => {
+//     // Only enable card if these conditions met
+//     if (
+//       p.position === player.position &&
+//       p.value <= remainingBudget &&
+//       !p.chosen &&
+//       /***** If club is not in the team = undefined
+//        *  Or If clubs are less than 3
+//        *  or If clubs is equal to 3 but club is deselected one
+//        */
+//       (clubsCount[p.team.name] === undefined ||
+//         clubsCount[p.team.name] < 3 ||
+//         (clubsCount[p.team.name] === 3 && p.team.name === player.team.name))
+//     ) {
+//       p.disablePlayerCard = false;
+//     }
+//
+//     return p;
+//   });
+//
+//   // Make currently deselected player also disable in list
+//   const playerIndex = players.findIndex((p) => p.id === player.id);
+//   if (playerIndex !== -1) {
+//     const $player = players[playerIndex];
+//     $player.chosen = false;
+//     $player.disablePlayerCard = true;
+//   }
+//
+//   return players;
+// };
 
 // Player transfer deselection
 export const playerTransferDeselectHandler = ({
@@ -303,7 +303,13 @@ export const playerTransferSelectionHandler = ({
     transferConfirmDisabled: false,
   };
 
-  const updatedPlayersInitial = updatePlayersDataAfterSelectionDone({
+  // const updatedPlayersInitial = updatePlayersDataAfterSelectionDone({
+  //   playersInitial,
+  //   player,
+  //   updatedSquadInfo,
+  // });
+
+  const updatedPlayersInitial = updatePlayersDataAfterDeselectionClicked({
     playersInitial,
     player,
     updatedSquadInfo,
@@ -317,6 +323,42 @@ export const playerTransferSelectionHandler = ({
   });
 };
 
+const updatePlayersDataAfterDeselectionClicked = ({
+  playersInitial,
+  player,
+  updatedSquadInfo,
+}) => {
+  const { remainingBudget, clubsCount, squad } = updatedSquadInfo;
+
+  // // Make currently deselected player also disable in list
+  // const playerIndex = players.findIndex((p) => p.id === player.id);
+  // if (playerIndex !== -1) {
+  //   const $player = players[playerIndex];
+  //   $player.chosen = false;
+  //   $player.disablePlayerCard = true;
+  // }
+
+  return playersInitial.map((p) => {
+    // Only enable card if these conditions met
+    if (
+      p.position === player.position &&
+      p.value <= remainingBudget &&
+      !p.chosen &&
+      /***** If club is not in the team = undefined
+       *  Or If clubs are less than 3
+       *  or If clubs is equal to 3 but club is deselected one
+       */
+      (clubsCount[p.team.name] === undefined ||
+        clubsCount[p.team.name] < 3 ||
+        (clubsCount[p.team.name] === 3 && p.team.name === player.team.name))
+    ) {
+      p.disablePlayerCard = false;
+    }
+
+    return p;
+  });
+};
+
 const updatePlayersDataAfterSelectionDone = ({
   playersInitial,
   player,
@@ -327,8 +369,6 @@ const updatePlayersDataAfterSelectionDone = ({
   const readyToBeTransferredPlayersTeamNames = flattenSquad(squad)
     .map((p) => p.readyToBeTransferOut && p.team.name)
     .filter((p) => !isEmpty(p));
-
-  console.log("1---------", readyToBeTransferredPlayersTeamNames);
 
   return playersInitial.map((p) => {
     if (p.id === player.id) {
