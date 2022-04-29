@@ -70,26 +70,15 @@ export const handleTransferWindowOnPlayerDataUpdate = ({
   teamInfo,
   setTeamInfo,
 }) => {
-  const $squad = clone(squad);
-  const flatteredSquad = flattenObj($squad);
-  const allPlayerIds = getAllSelectedPlayersIDs(flatteredSquad);
-
-  const updatedPlayers = players.map((p) => {
-    p.chosen = !!allPlayerIds.includes(p.id);
-    p.readyToBeTransferOut = false;
-    p.toggleAnimation = false;
-    return p;
-  });
-
   // Updated squad info
   const updatedSquadInfo = {
     ...teamInfo.squadInfo,
-    squad: { ...$squad },
-    clubsCount: getClubCount($squad),
+    squad: { ...squad },
+    clubsCount: getClubCount(squad),
   };
 
-  let updatedPlayersInitial = updatePlayersInitialData({
-    playersInitial: updatedPlayers,
+  let updatedPlayers = updatePlayersInitialData({
+    playersInitial: players,
     updatedSquadInfo,
   });
 
@@ -97,7 +86,7 @@ export const handleTransferWindowOnPlayerDataUpdate = ({
     ...teamInfo,
     squadInfo: updatedSquadInfo,
     players: [...updatedPlayers],
-    playersInitial: [...updatedPlayersInitial],
+    playersInitial: [...updatedPlayers],
   });
 };
 
@@ -291,6 +280,7 @@ const updatePlayersInitialData = ({ playersInitial, updatedSquadInfo }) => {
 
   return playersInitial.map((p) => {
     p.chosen = allPlayersIds.includes(p.id);
+    p.toggleAnimation = false;
     p.disablePlayerCard = shouldDisablePlayerCard({
       toBeTransferredOutPlayers,
       p,
