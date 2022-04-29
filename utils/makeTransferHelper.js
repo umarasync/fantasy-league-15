@@ -229,7 +229,7 @@ export const playerTransferSelectionHandler = ({
   });
 };
 
-const shouldDisablePlayerCard = ({
+const shouldPlayerCardBeDisabled = ({
   toBeTransferredOutPlayers,
   p,
   updatedSquadInfo,
@@ -283,7 +283,7 @@ const updatePlayersInitialData = ({ playersInitial, updatedSquadInfo }) => {
   return playersInitial.map((p) => {
     p.chosen = allPlayersIds.includes(p.id);
     p.toggleAnimation = false;
-    p.disablePlayerCard = shouldDisablePlayerCard({
+    p.disablePlayerCard = shouldPlayerCardBeDisabled({
       toBeTransferredOutPlayers,
       p,
       updatedSquadInfo,

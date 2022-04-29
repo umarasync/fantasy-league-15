@@ -18,4 +18,10 @@ export const formations = {
 
 export const BOOST_TYPE_BENCH = "BENCH";
 export const BOOST_TYPE_TRIPLE_CAPTAIN = "TRIPLE_CAPTAIN";
+
+// PLAYERS
 export const MAX_PLAYERS_PER_CLUB = 3;
+export const TOTAL_GOALKEEPERS = 2;
+export const TOTAL_DEFENDERS = 5;
+export const TOTAL_MIDFIELDERS = 5;
+export const TOTAL_FORWARDS = 3;
