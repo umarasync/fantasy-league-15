@@ -3,7 +3,6 @@ import { groupBy } from "lodash/collection";
 
 // Constants
 import {
-  POSITION_ALL,
   POSITION_DEF,
   POSITION_FWD,
   POSITION_GK,
@@ -12,10 +11,8 @@ import {
 import { SELECTED_PLAYERS } from "constants/data/players";
 import {
   MAX_PLAYERS_PER_CLUB,
-  TOTAL_DEFENDERS,
-  TOTAL_FORWARDS,
-  TOTAL_GOALKEEPERS,
-  TOTAL_MIDFIELDERS,
+  PLAYERS_COUNT_IN_TEAM,
+  TOTAL_PLAYER_IN_TEAM,
 } from "constants/universalConstants";
 
 // Utils
@@ -117,11 +114,16 @@ export const getClubCount = (squad) => {
   return $clubsCount;
 };
 
-export const handleAutoPick = ({ players, totalBudget }) => {
+export const handleAutoPick = ({
+  players: playersProp,
+  totalBudget,
+  teamInfo,
+  setTeamInfo,
+}) => {
   let remainingBudget = totalBudget;
-  let $players = clone(players);
+  let players = clone(playersProp);
 
-  const max3PlayersPerClub = maxThreePlayersPerClub($players);
+  const max3PlayersPerClub = maxThreePlayersPerClub(players);
 
   const max3PlayersPerClubIds = cutPlayersAccordingToPositionsCount(
     max3PlayersPerClub
@@ -129,7 +131,7 @@ export const handleAutoPick = ({ players, totalBudget }) => {
 
   let totalChosenPlayers = 0;
   let chosenPlayersWithinBudget = clone(SELECTED_PLAYERS);
-  const $$players = $players.map((p) => {
+  const $players = players.map((p) => {
     if (max3PlayersPerClubIds.includes(p.id) && p.value < remainingBudget) {
       p.chosen = true;
       chosenPlayersWithinBudget[p.position].push(p);
@@ -140,26 +142,39 @@ export const handleAutoPick = ({ players, totalBudget }) => {
     return p;
   });
 
-  return {
+  const updatedSquadInfo = {
+    ...teamInfo.squadInfo,
     squad: chosenPlayersWithinBudget,
-    remainingBudget,
-    totalChosenPlayers,
-    players: $$players,
+    clubsCount: getClubCount(chosenPlayersWithinBudget),
+    remainingBudget: remainingBudget,
+    totalChosenPlayers: totalChosenPlayers,
   };
+
+  let playersData = updatePlayersInitialData({
+    playersInitial: $players,
+    squadInfo: updatedSquadInfo,
+  });
+
+  setTeamInfo({
+    ...teamInfo,
+    squadInfo: updatedSquadInfo,
+    playersInitial: [...playersData],
+  });
 };
 
+// Check if any player position is still empty.
 const isPositionEmpty = ({ player, squad }) => {
-  const pos = player.position;
-  if (
-    (pos === POSITION_GK && squad[POSITION_GK].length < TOTAL_GOALKEEPERS) ||
-    (pos === POSITION_DEF && squad[POSITION_DEF].length < TOTAL_DEFENDERS) ||
-    (pos === POSITION_MID && squad[POSITION_MID].length < TOTAL_MIDFIELDERS) ||
-    (pos === POSITION_FWD && squad[POSITION_FWD].length < TOTAL_FORWARDS)
-  ) {
+  const filledPositionsCount = flattenObj(squad).filter(
+    (p) => p.position === player.position
+  ).length;
+
+  if (PLAYERS_COUNT_IN_TEAM[player.position] > filledPositionsCount) {
     return true;
   }
   return false;
 };
+
+// Make player card disable
 const shouldPlayerCardBeDisabled = ({ player, squadInfo }) => {
   if (
     squadInfo.clubsCount[player.team.name] === MAX_PLAYERS_PER_CLUB ||
@@ -171,13 +186,14 @@ const shouldPlayerCardBeDisabled = ({ player, squadInfo }) => {
 };
 
 const updatePlayersInitialData = ({ playersInitial, squadInfo }) => {
-  if (isEmpty(squadInfo.clubsCount)) return [...playersInitial];
-
   let allPlayersIds = flattenObj(squadInfo.squad).map((p) => p.id);
+  let isClubCountEmpty = isEmpty(squadInfo.clubsCount);
 
   return playersInitial.map((p) => {
     p.chosen = allPlayersIds.includes(p.id);
-    p.disablePlayerCard = shouldPlayerCardBeDisabled({ player: p, squadInfo });
+    p.disablePlayerCard = isClubCountEmpty
+      ? false
+      : shouldPlayerCardBeDisabled({ player: p, squadInfo });
     return p;
   });
 };
@@ -185,29 +201,25 @@ const updatePlayersInitialData = ({ playersInitial, squadInfo }) => {
 export const playerSelectionHandler = ({ player, teamInfo, setTeamInfo }) => {
   const { squadInfo, playersInitial } = teamInfo;
   let { remainingBudget, totalChosenPlayers, clubsCount } = squadInfo;
+  const squad = { ...squadInfo.squad };
   if (
-    totalChosenPlayers === 15 ||
-    clubsCount[player.team.name] === MAX_PLAYERS_PER_CLUB
+    totalChosenPlayers === TOTAL_PLAYER_IN_TEAM ||
+    clubsCount[player.team.name] === MAX_PLAYERS_PER_CLUB ||
+    !isPositionEmpty({ player, squad })
   )
     return;
 
-  const squad = { ...squadInfo.squad };
-  const sp = squad[player.position]; // Squad position
+  // Starts adding player
+  const sp = squad[player.position];
 
-  if (isPositionEmpty({ player, squad })) {
-    if (!sp.length || (sp.length > 0 && !sp.some((p) => p.id === player.id))) {
-      remainingBudget = remainingBudget - player.value;
-      totalChosenPlayers = totalChosenPlayers + 1;
-      sp.push(player);
-    }
-  } else if (!sp.some((p) => p.id === player.id)) {
-    const indexOfEmptyPosition = sp.findIndex((x) => x === false);
-    if (indexOfEmptyPosition === -1) return;
+  const indexOfEmptyPosition = sp.findIndex((x) => x === false);
+  if (indexOfEmptyPosition === -1) {
+    sp.push(player);
+  } else {
     sp[indexOfEmptyPosition] = player;
-
-    remainingBudget = remainingBudget - player.value;
-    totalChosenPlayers = totalChosenPlayers + 1;
   }
+  remainingBudget = remainingBudget - player.value;
+  totalChosenPlayers = totalChosenPlayers + 1;
 
   const updatedSquadInfo = {
     ...teamInfo.squadInfo,
