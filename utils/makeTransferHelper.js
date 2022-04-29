@@ -2,11 +2,8 @@
 import { groupBy } from "lodash/collection";
 
 // Utils
-import { clone, isEmpty } from "utils/helpers";
-import {
-  flattenSquad,
-  getAllSelectedPlayersIDs,
-} from "utils/buildYourTeamHelper";
+import { clone, isEmpty, flattenObj } from "utils/helpers";
+import { getAllSelectedPlayersIDs } from "utils/buildYourTeamHelper";
 
 // Constants
 import {
@@ -15,6 +12,7 @@ import {
   POSITION_GK,
   POSITION_MID,
 } from "constants/data/filters";
+import { MAX_PLAYERS_PER_CLUB } from "constants/universalConstants";
 
 export const putSquadUnderPositions = (squad) => {
   return {
@@ -34,7 +32,7 @@ export const initialSettingsForTransferWindows = ({
   remainingBudget,
 }) => {
   const $squad = clone(squad);
-  const allPlayerIds = getAllSelectedPlayersIDs(flattenSquad($squad));
+  const allPlayerIds = getAllSelectedPlayersIDs(flattenObj($squad));
 
   const updatedPlayers = players.map((p) => {
     p.chosen = !!allPlayerIds.includes(p.id);
@@ -73,7 +71,7 @@ export const handleTransferWindowOnPlayerDataUpdate = ({
   setTeamInfo,
 }) => {
   const $squad = clone(squad);
-  const flatteredSquad = flattenSquad($squad);
+  const flatteredSquad = flattenObj($squad);
   const allPlayerIds = getAllSelectedPlayersIDs(flatteredSquad);
 
   const updatedPlayers = players.map((p) => {
@@ -102,7 +100,7 @@ export const handleTransferWindowOnPlayerDataUpdate = ({
   );
 
   if (!isEmpty(readyToBeTransferOutPlayer)) {
-    updatedPlayersInitial = updatePlayersDataAfterDeselectionClicked({
+    updatedPlayersInitial = updatePlayersInitialData({
       playersInitial: updatedPlayers,
       player: readyToBeTransferOutPlayer,
       updatedSquadInfo,
@@ -119,7 +117,7 @@ export const handleTransferWindowOnPlayerDataUpdate = ({
 
 // Group By club names and then count clubs
 const getClubCount = (squad) => {
-  const flatteredSquad = flattenSquad(squad).filter(
+  const flatteredSquad = flattenObj(squad).filter(
     (p) => !p.readyToBeTransferOut
   );
 
@@ -133,44 +131,6 @@ const getClubCount = (squad) => {
 
   return $clubsCount;
 };
-
-// const updatePlayersDataAfterDeselectionClicked = ({
-//   playersInitial,
-//   player,
-//   updatedSquadInfo,
-// }) => {
-//   const { remainingBudget, clubsCount } = updatedSquadInfo;
-//
-//   const players = playersInitial.map((p) => {
-//     // Only enable card if these conditions met
-//     if (
-//       p.position === player.position &&
-//       p.value <= remainingBudget &&
-//       !p.chosen &&
-//       /***** If club is not in the team = undefined
-//        *  Or If clubs are less than 3
-//        *  or If clubs is equal to 3 but club is deselected one
-//        */
-//       (clubsCount[p.team.name] === undefined ||
-//         clubsCount[p.team.name] < 3 ||
-//         (clubsCount[p.team.name] === 3 && p.team.name === player.team.name))
-//     ) {
-//       p.disablePlayerCard = false;
-//     }
-//
-//     return p;
-//   });
-//
-//   // Make currently deselected player also disable in list
-//   const playerIndex = players.findIndex((p) => p.id === player.id);
-//   if (playerIndex !== -1) {
-//     const $player = players[playerIndex];
-//     $player.chosen = false;
-//     $player.disablePlayerCard = true;
-//   }
-//
-//   return players;
-// };
 
 // Player transfer deselection
 export const playerTransferDeselectHandler = ({
@@ -199,9 +159,8 @@ export const playerTransferDeselectHandler = ({
     remainingBudget: remainingBudget,
   };
 
-  const updatedPlayersInitial = updatePlayersDataAfterDeselectionClicked({
+  const updatedPlayersInitial = updatePlayersInitialData({
     playersInitial,
-    player,
     updatedSquadInfo,
   });
 
@@ -234,7 +193,7 @@ export const playerTransferDeselectHandler = ({
 const returnBack = (squadInfo, player) => {
   const { clubsCount } = squadInfo;
   return (
-    clubsCount[player.team.name] === 3
+    clubsCount[player.team.name] === MAX_PLAYERS_PER_CLUB
     // &&
     // toBeTransferredOutPlayersHasMaxClubLimit({
     //   player,
@@ -303,15 +262,8 @@ export const playerTransferSelectionHandler = ({
     transferConfirmDisabled: false,
   };
 
-  // const updatedPlayersInitial = updatePlayersDataAfterSelectionDone({
-  //   playersInitial,
-  //   player,
-  //   updatedSquadInfo,
-  // });
-
-  const updatedPlayersInitial = updatePlayersDataAfterDeselectionClicked({
+  const updatedPlayersInitial = updatePlayersInitialData({
     playersInitial,
-    player,
     updatedSquadInfo,
   });
 
@@ -323,12 +275,52 @@ export const playerTransferSelectionHandler = ({
   });
 };
 
-const updatePlayersDataAfterDeselectionClicked = ({
-  playersInitial,
-  player,
-  updatedSquadInfo,
-}) => {
+const updatePlayersInitialData = ({ playersInitial, updatedSquadInfo }) => {
   const { remainingBudget, clubsCount, squad } = updatedSquadInfo;
+  const flatteredSquad = flattenObj(squad);
+  const playerIds = flattenObj(squad).map((p) => p.id);
+
+  const toBeTransferredOutPlayers = {
+    positions: [],
+    teamNames: [],
+    ids: [],
+  };
+  flatteredSquad.forEach((p) => {
+    if (p.readyToBeTransferOut) {
+      toBeTransferredOutPlayers.positions.push(p.position);
+      toBeTransferredOutPlayers.teamNames.push(p.team.name);
+      toBeTransferredOutPlayers.ids.push(p.id);
+    }
+  });
+
+  const players = playersInitial.map((p) => {
+    // Only enable card if these conditions met
+    if (
+      toBeTransferredOutPlayers.positions.includes(p.position) &&
+      !toBeTransferredOutPlayers.ids.includes(p.id) &&
+      p.value <= remainingBudget &&
+      /***** If club is not in the team = undefined
+       *  Or If clubs are less than 3
+       *  or If clubs is equal to 3 but club is deselected one
+       */
+      (clubsCount[p.team.name] === undefined ||
+        clubsCount[p.team.name] < MAX_PLAYERS_PER_CLUB ||
+        (clubsCount[p.team.name] === MAX_PLAYERS_PER_CLUB &&
+          toBeTransferredOutPlayers.teamNames.includes(p.team.name)))
+    ) {
+      p.disablePlayerCard = false;
+    } else {
+      p.disablePlayerCard = true;
+    }
+
+    if (playerIds.includes(p.id)) {
+      p.chosen = true;
+    } else {
+      p.chosen = false;
+    }
+
+    return p;
+  });
 
   // // Make currently deselected player also disable in list
   // const playerIndex = players.findIndex((p) => p.id === player.id);
@@ -338,46 +330,5 @@ const updatePlayersDataAfterDeselectionClicked = ({
   //   $player.disablePlayerCard = true;
   // }
 
-  return playersInitial.map((p) => {
-    // Only enable card if these conditions met
-    if (
-      p.position === player.position &&
-      p.value <= remainingBudget &&
-      !p.chosen &&
-      /***** If club is not in the team = undefined
-       *  Or If clubs are less than 3
-       *  or If clubs is equal to 3 but club is deselected one
-       */
-      (clubsCount[p.team.name] === undefined ||
-        clubsCount[p.team.name] < 3 ||
-        (clubsCount[p.team.name] === 3 && p.team.name === player.team.name))
-    ) {
-      p.disablePlayerCard = false;
-    }
-
-    return p;
-  });
-};
-
-const updatePlayersDataAfterSelectionDone = ({
-  playersInitial,
-  player,
-  updatedSquadInfo,
-}) => {
-  const { squad } = updatedSquadInfo;
-
-  const readyToBeTransferredPlayersTeamNames = flattenSquad(squad)
-    .map((p) => p.readyToBeTransferOut && p.team.name)
-    .filter((p) => !isEmpty(p));
-
-  return playersInitial.map((p) => {
-    if (p.id === player.id) {
-      p.chosen = true;
-    }
-    p.disablePlayerCard = !readyToBeTransferredPlayersTeamNames.includes(
-      p.team.name
-    );
-
-    return p;
-  });
+  return players;
 };

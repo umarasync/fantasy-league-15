@@ -10,9 +10,10 @@ import {
   POSITION_MID,
 } from "constants/data/filters";
 import { SELECTED_PLAYERS } from "constants/data/players";
+import { MAX_PLAYERS_PER_CLUB } from "constants/universalConstants";
 
 // Utils
-import { clone, isEmpty, shuffle } from "utils/helpers";
+import { clone, isEmpty, shuffle, flattenObj } from "utils/helpers";
 
 export const initialSettingsForBuildYourTeam = ({
   players,
@@ -22,7 +23,7 @@ export const initialSettingsForBuildYourTeam = ({
   const { squadInfo } = teamInfo;
   const { squad, clubsCount } = squadInfo;
 
-  const allPlayerIds = getAllSelectedPlayersIDs(flattenSquad(squad));
+  const allPlayerIds = getAllSelectedPlayersIDs(flattenObj(squad));
 
   let playersData = players.map((p) => {
     p.chosen = !!allPlayerIds.includes(p.id);
@@ -90,7 +91,9 @@ const maxThreePlayersPerClub = (players) => {
 
   for (let key in groupByClub) {
     if (groupByClub.hasOwnProperty(key)) {
-      $players.push(...shuffle(groupByClub[key]).slice(0, 3));
+      $players.push(
+        ...shuffle(groupByClub[key]).slice(0, MAX_PLAYERS_PER_CLUB)
+      );
     }
   }
   return $players;
@@ -106,20 +109,9 @@ const cutPlayersAccordingToPositionsCount = (players) => {
   ];
 };
 
-// Flatten squad into single array
-export const flattenSquad = ($squad) => {
-  let squad = [];
-  for (let key in $squad) {
-    if ($squad.hasOwnProperty(key)) {
-      squad.push(...$squad[key]);
-    }
-  }
-  return squad.filter((p) => !isEmpty(p));
-};
-
 // Group By club names and then count clubs
 export const getClubCount = (squad) => {
-  const clubs = groupBy(flattenSquad(squad), "team.name");
+  const clubs = groupBy(flattenObj(squad), "team.name");
   let $clubsCount = {};
   for (let key in clubs) {
     if (clubs.hasOwnProperty(key)) {
@@ -164,7 +156,7 @@ export const handleAutoPick = ({ players, totalBudget }) => {
 export const disablePlayersIfClubsLimitReached = ({ players, clubsCount }) => {
   if (isEmpty(clubsCount)) return [...players];
   return players.map((p) => {
-    p.disablePlayerCard = clubsCount[p.team.name] === 3;
+    p.disablePlayerCard = clubsCount[p.team.name] === MAX_PLAYERS_PER_CLUB;
     return p;
   });
 };
@@ -190,7 +182,11 @@ const updatePlayersDataAfterSelectionOrDeselection = ({
 export const playerSelectionHandler = ({ player, teamInfo, setTeamInfo }) => {
   const { squadInfo, playersInitial } = teamInfo;
   let { remainingBudget, totalChosenPlayers, clubsCount } = squadInfo;
-  if (totalChosenPlayers === 15 || clubsCount[player.team.name] === 3) return;
+  if (
+    totalChosenPlayers === 15 ||
+    clubsCount[player.team.name] === MAX_PLAYERS_PER_CLUB
+  )
+    return;
 
   let updatedPlayersInitial = [];
 
