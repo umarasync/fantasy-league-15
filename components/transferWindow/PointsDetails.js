@@ -36,13 +36,13 @@ export default function PointsDetails({ player1, player2 }) {
           color={colors.regent_grey}
           mb={10}
         />
-        <Text
-          text={"Next match"}
-          fs={14}
-          lh={18}
-          color={colors.regent_grey}
-          mb={10}
-        />
+        {/*<Text*/}
+        {/*  text={"Next match"}*/}
+        {/*  fs={14}*/}
+        {/*  lh={18}*/}
+        {/*  color={colors.regent_grey}*/}
+        {/*  mb={10}*/}
+        {/*/>*/}
         <Text
           text={"Price"}
           fs={14}

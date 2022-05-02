@@ -135,7 +135,7 @@ export default function BuildTeamPlayers({ players, clubs }) {
     if (success) {
       initialSettingsForTransferWindows({
         players,
-        squad: putSquadUnderPositions(data),
+        squad: putSquadUnderPositions(data.squad),
         teamInfo,
         setTeamInfo,
         transferInfoInitialState,

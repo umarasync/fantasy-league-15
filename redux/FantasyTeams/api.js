@@ -7,11 +7,11 @@ import SWAP_FANTASY_TEAM_PLAYERS from "graphql/mutations/swapFantasyTeamPlayers"
 import SET_FANTASY_TEAM_BOOSTER from "graphql/mutations/setFantasyTeamBooster";
 
 // Constants
-import {BOOST_TYPE_BENCH, ERROR_MSG} from "constants/universalConstants";
+import { BOOST_TYPE_BENCH, ERROR_MSG } from "constants/universalConstants";
 
 // Utils
-import {isEmpty, responseFailed, responseSuccess} from "utils/helpers";
-import {buildPlayers} from "utils/playersHelper";
+import { isEmpty, responseFailed, responseSuccess } from "utils/helpers";
+import { buildPlayers } from "utils/playersHelper";
 
 // Actions
 import {
@@ -20,20 +20,20 @@ import {
   fantasyTeamCreationStart,
   fantasyTeamSwapFailed,
   fantasyTeamSwapSuccess,
-  fantasyTeamTransferStart
+  fantasyTeamTransferStart,
 } from "./actionCreators";
-
 
 import {
   benchBoostAppliedFailed,
-  benchBoostAppliedSuccess, tripleCaptainBoostAppliedFailed,
-  tripleCaptainBoostAppliedSuccess
+  benchBoostAppliedSuccess,
+  tripleCaptainBoostAppliedFailed,
+  tripleCaptainBoostAppliedSuccess,
 } from "../Auth/actionCreators";
 
 export const createFantasyTeam = (data) => {
   return async (dispatch) => {
     try {
-      dispatch(fantasyTeamCreationStart())
+      dispatch(fantasyTeamCreationStart());
       const apolloClient = createApolloClient();
       const result = await apolloClient.mutate({
         mutation: CREATE_FANTASY_TEAM,
@@ -46,12 +46,15 @@ export const createFantasyTeam = (data) => {
         },
       });
 
-      if (result && result.data.createFantasyTeam !== null) {
-        return responseSuccess('Fantasy Team Created Successfully!', result.data.createFantasyTeam)
+      if (result && !isEmpty(result.data.createFantasyTeam)) {
+        return responseSuccess(
+          "Fantasy Team Created Successfully!",
+          result.data.createFantasyTeam
+        );
       }
-      return responseFailed(ERROR_MSG)
+      return responseFailed(ERROR_MSG);
     } catch (e) {
-      return responseFailed(ERROR_MSG)
+      return responseFailed(ERROR_MSG);
     }
   };
 };
@@ -63,48 +66,55 @@ export const getFantasyTeamById = (data) => {
       const result = await apolloClient.mutate({
         mutation: GET_FANTASY_TEAM,
         variables: {
-          "gameweek": data.gameWeek,
-          "fantasyTeamId": data.fantasyTeamId,
+          gameweek: data.gameWeek,
+          fantasyTeamId: data.fantasyTeamId,
         },
       });
 
-      if (result && result.data.fantasyTeamById !== null) {
-        return responseSuccess('Success !!!', buildPlayers(result.data.fantasyTeamById.squad))
+      if (result && !isEmpty(result.data.fantasyTeamById)) {
+        return responseSuccess("Success !!!", result.data.fantasyTeamById);
       }
-      return responseFailed(ERROR_MSG)
+      return responseFailed(ERROR_MSG);
     } catch (e) {
-      return responseFailed(ERROR_MSG)
+      return responseFailed(ERROR_MSG);
     }
   };
 };
 
 export const doFantasyTeamTransfers = (data) => {
-  const { fantasyTeamId, transfers } = data
+  const { fantasyTeamId, transfers } = data;
 
   return async (dispatch) => {
     try {
-      dispatch(fantasyTeamTransferStart())
+      dispatch(fantasyTeamTransferStart());
       const apolloClient = createApolloClient();
       const result = await apolloClient.mutate({
         mutation: DO_FANTASY_TEAM_TRANSFER,
         variables: {
           fantasyTeamId,
-          transfers
+          transfers,
         },
       });
 
       if (result && !isEmpty(result.data.transferPlayers)) {
-        return responseSuccess('Transfer Successful Redirecting!!!', result.data.transferPlayers)
+        return responseSuccess(
+          "Transfer Successful Redirecting!!!",
+          result.data.transferPlayers
+        );
       }
-      return responseFailed(ERROR_MSG)
+      return responseFailed(ERROR_MSG);
     } catch (e) {
-      return responseFailed(ERROR_MSG)
+      return responseFailed(ERROR_MSG);
     }
   };
 };
 
-
-export const swapFantasyTeamPlayers = ({fantasyTeamId, captain, viceCaptain, substitutes}) => {
+export const swapFantasyTeamPlayers = ({
+  fantasyTeamId,
+  captain,
+  viceCaptain,
+  substitutes,
+}) => {
   return async (dispatch) => {
     try {
       const apolloClient = createApolloClient();
@@ -118,21 +128,24 @@ export const swapFantasyTeamPlayers = ({fantasyTeamId, captain, viceCaptain, sub
         },
       });
       if (result && !isEmpty(result.data.swapFantasyTeamPlayers)) {
-        dispatch(fantasyTeamSwapSuccess())
-        return responseSuccess('Players have been successfully swapped !!!', result.data.swapFantasyTeamPlayers)
+        dispatch(fantasyTeamSwapSuccess());
+        return responseSuccess(
+          "Players have been successfully swapped !!!",
+          result.data.swapFantasyTeamPlayers
+        );
       }
-      dispatch(fantasyTeamSwapFailed())
-      return responseFailed(ERROR_MSG)
+      dispatch(fantasyTeamSwapFailed());
+      return responseFailed(ERROR_MSG);
     } catch (e) {
-      dispatch(fantasyTeamSwapFailed())
-      return responseFailed(ERROR_MSG)
+      dispatch(fantasyTeamSwapFailed());
+      return responseFailed(ERROR_MSG);
     }
   };
 };
 
 export const setFantasyTeamBooster = (data) => {
-  const { fantasyTeamId, gameweek, type } = data
-  const isTypeBenchBoost = type === BOOST_TYPE_BENCH
+  const { fantasyTeamId, gameweek, type } = data;
+  const isTypeBenchBoost = type === BOOST_TYPE_BENCH;
 
   return async (dispatch) => {
     try {
@@ -142,40 +155,42 @@ export const setFantasyTeamBooster = (data) => {
         variables: {
           fantasyTeamId,
           gameweek,
-          type
+          type,
         },
       });
 
       // Success
       if (result && !isEmpty(result.data.setFantasyTeamBooster)) {
-        dispatch(fantasyTeamBoosterSuccess())
-        if(isTypeBenchBoost) {
-          dispatch(benchBoostAppliedSuccess())
-        }else {
-          dispatch(tripleCaptainBoostAppliedSuccess())
+        dispatch(fantasyTeamBoosterSuccess());
+        if (isTypeBenchBoost) {
+          dispatch(benchBoostAppliedSuccess());
+        } else {
+          dispatch(tripleCaptainBoostAppliedSuccess());
         }
-        return responseSuccess(`${isTypeBenchBoost ? 'Bench' : 'Triple Captain'} Boost Applied Successfully!!!`)
+        return responseSuccess(
+          `${
+            isTypeBenchBoost ? "Bench" : "Triple Captain"
+          } Boost Applied Successfully!!!`
+        );
       }
 
       // Failed
-      dispatch(fantasyTeamBoosterFailed())
-      if(isTypeBenchBoost) {
-        dispatch(benchBoostAppliedFailed())
-      }else {
-        dispatch(tripleCaptainBoostAppliedFailed())
+      dispatch(fantasyTeamBoosterFailed());
+      if (isTypeBenchBoost) {
+        dispatch(benchBoostAppliedFailed());
+      } else {
+        dispatch(tripleCaptainBoostAppliedFailed());
       }
-      return responseFailed(ERROR_MSG)
-
+      return responseFailed(ERROR_MSG);
     } catch (e) {
-
       // Failed
-      dispatch(fantasyTeamBoosterFailed())
-      if(isTypeBenchBoost) {
-        dispatch(benchBoostAppliedFailed())
-      }else {
-        dispatch(tripleCaptainBoostAppliedFailed())
+      dispatch(fantasyTeamBoosterFailed());
+      if (isTypeBenchBoost) {
+        dispatch(benchBoostAppliedFailed());
+      } else {
+        dispatch(tripleCaptainBoostAppliedFailed());
       }
-      return responseFailed(ERROR_MSG)
+      return responseFailed(ERROR_MSG);
     }
   };
 };

@@ -67,9 +67,6 @@ export default function MySquadGameWeek() {
   const [showBenchBoostModal, setShowBenchBoostModal] = useState(false);
   const [benchBoostPlayers, setBenchBoostPlayers] = useState([]);
 
-  // Info-Board
-  const [currentGameWeekInfo, setCurrentGameWeekInfo] = useState({});
-
   //Player-Transfer`
   const handlePlayerSwap = (player, arrayIndex) => {
     if (player.clickedIcon === DIAMOND_UP_GREEN) return;
@@ -122,8 +119,6 @@ export default function MySquadGameWeek() {
       // Modals
       setShowPlayerInfoModal,
       setShowTripleCaptainModal,
-      // Current game info
-      setCurrentGameWeekInfo,
       // dispatch
       dispatch,
     });
@@ -149,9 +144,7 @@ export default function MySquadGameWeek() {
           </Div>
           {/*Right-Section*/}
           <Div className="w-[38%] flex justify-center">
-            {!isEmpty(currentGameWeekInfo) && (
-              <InfoBoard gameWeekInfo={currentGameWeekInfo} />
-            )}
+            {!isEmpty(squadInfo) && <InfoBoard squadInfo={squadInfo} />}
             <ProfileSettingsSideDrawer
               containerStyle={STYLES.sideDrawerContainer}
             />
