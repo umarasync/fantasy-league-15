@@ -43,7 +43,7 @@ const getStyles = (R) => {
 };
 
 export default function InfoBoard({
-  gameWeekInfo,
+  squadInfo,
   hideInfoBoardHead,
   hideInfoBoardFooter,
   disableClick,
@@ -58,6 +58,8 @@ export default function InfoBoard({
   const LEAGUE_TYPE_USER_CREATED = "USER_CREATED";
   const LEAGUE_TYPE_SYSTEM_CREATED = "SYSTEM_CREATED";
 
+  // Props
+  const { gameweekPoints, overallPoints } = squadInfo;
   const [leaguesInfo, setLeaguesInfo] = useState({
     publicLeagues: [],
     privateLeagues: [],
@@ -132,8 +134,8 @@ export default function InfoBoard({
       </div>
       {!hideInfoBoardHead && <InfoBoardHead />}
       <InfoBoardPoints
-        weeklyPoints={80}
-        totalPoints={1013}
+        weeklyPoints={gameweekPoints}
+        totalPoints={overallPoints}
         toggleAnimation={toggleAnimation}
       />
       {/*Leagues-And-Rankings*/}

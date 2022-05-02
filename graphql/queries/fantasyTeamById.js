@@ -1,9 +1,18 @@
-import {gql} from '@apollo/client'
+import { gql } from "@apollo/client";
 
 export default gql`
   query FantasyTeamById($gameweek: Int!, $fantasyTeamId: String!) {
     fantasyTeamById(gameweek: $gameweek, id: $fantasyTeamId) {
       id
+      overallPoints
+      name
+      gameweekPoints
+      boosters {
+        type
+        id
+        gameweek
+        createdAt
+      }
       squad {
         id
         name
@@ -25,4 +34,4 @@ export default gql`
       }
     }
   }
-`
+`;
