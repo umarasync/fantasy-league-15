@@ -112,7 +112,7 @@ export default function SelectClub() {
       showToast
       bg={{
         url: `bg-[url('/images/green_grunge_border_with_halftone_background_2.png')]`,
-        cls: "relative sm:pt-[3.4rem]",
+        cls: "relative pt-[3.4rem]",
       }}
     >
       <div>

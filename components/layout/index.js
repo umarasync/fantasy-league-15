@@ -41,9 +41,10 @@ const Layout = ({
     let elStyle = el[0].style;
 
     // Smaller screen
-    if (wWidth <= 375) {
-      return (elStyle.fontSize = `${(wWidth / screenSizes.sm) * 10}px`);
-    }
+    // TODO: Enable it when to make mobile responsive
+    // if (wWidth <= 375) {
+    //   return (elStyle.fontSize = `${(wWidth / screenSizes.sm) * 10}px`);
+    // }
     return (elStyle.fontSize = `${(wWidth / screenSizes.lg) * 10}px`);
   };
 
