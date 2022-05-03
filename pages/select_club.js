@@ -10,7 +10,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Layout from "components/layout";
 import CardSection from "components/selectClub/CardSection";
 import ClubControls from "components/selectClub/ClubControls";
-import Div from "components/html/Div";
 import Image from "components/html/Image";
 import Text from "components/html/Text";
 import Loader from "components/loaders/Loader";
@@ -20,7 +19,6 @@ import { getAllTeams, addFavouriteTeam } from "redux/Teams/api";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import { buildClubs1 } from "utils/playersHelper";
 import { isEmpty } from "utils/helpers";
 
 // Constants
@@ -30,7 +28,7 @@ import colors from "constants/colors";
 const getStyles = (R) => {
   return {
     container: {
-      minHeight: R(),
+      // minHeight: R(),
     },
     gradient: {
       width: R(299),
@@ -49,6 +47,7 @@ export default function SelectClub() {
 
   const dispatch = useDispatch();
   const router = useRouter();
+
   const { query } = router;
   let { fromSettings } = query;
 
@@ -105,14 +104,18 @@ export default function SelectClub() {
 
   if (isEmpty(cardsInfo)) return <Loader />;
 
+  const bgImage = `bg-[url('/images/green_grunge_border_with_halftone_background_2.png')]
+                            bg-[length:100%_100%] bg-no-repeat w-full relative sm:pt-[3.4rem]`;
   return (
-    <Layout title="Select Club" showToast>
-      <Div
-        className="bg-[url('/images/green_grunge_border_with_halftone_background_2.png')]
-                bg-[length:100%_100%] bg-no-repeat w-full relative"
-        style={{ ...STYLES.container }}
-        pt={34}
-      >
+    <Layout
+      title="Select Club"
+      showToast
+      bg={{
+        url: `bg-[url('/images/green_grunge_border_with_halftone_background_2.png')]`,
+        cls: "relative sm:pt-[3.4rem]",
+      }}
+    >
+      <div>
         <div className="absolute" style={STYLES.image}>
           <Image src={`/images/logo_white.png`} alt={""} w={164} h={40} />
         </div>
@@ -174,7 +177,7 @@ export default function SelectClub() {
           className="bg-[url('/images/gradient_blue_right.png')] absolute bg-[length:100%_100%] bg-no-repeat  top-[0] right-[0] "
           style={STYLES.gradient}
         />
-      </Div>
+      </div>
     </Layout>
   );
 }

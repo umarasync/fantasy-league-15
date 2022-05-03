@@ -11,28 +11,50 @@ import { fadeInAndOutAnimation1 } from "Animations/universal/FadeInOutAnimation1
 // Hooks
 import useWindowSize from "hooks/useWindowSize";
 
-const Layout = ({ children, title, showToast, autoClose = 3000 }) => {
-  const [width, height] = useWindowSize();
+const Layout = ({
+  children,
+  title,
+  showToast,
+  autoClose = 3000,
+  bg = { url: "", cls: "" },
+}) => {
+  const [wWidth, wHeight] = useWindowSize();
 
+  // Background Image
+  const { url, cls } = bg;
+  const mainBg = url
+    ? `${url} bg-[length:100%_100%] bg-no-repeat w-full ${cls}`
+    : "";
+
+  // Screen sizes
   const screenSizes = {
     lg: 1440,
     sm: 375,
   };
 
+  /*****
+   * Set font size for html tag and all the dom elements
+   * will change accordingly using rem
+   ***/
   const setHTMLTagFontSize = () => {
     let el = document.getElementsByTagName("html");
     let elStyle = el[0].style;
 
     // Smaller screen
-    if (width <= 375) {
-      return (elStyle.fontSize = `${(width / screenSizes.sm) * 10}px`);
+    if (wWidth <= 375) {
+      return (elStyle.fontSize = `${(wWidth / screenSizes.sm) * 10}px`);
     }
-    return (elStyle.fontSize = `${(width / screenSizes.lg) * 10}px`);
+    return (elStyle.fontSize = `${(wWidth / screenSizes.lg) * 10}px`);
+  };
+
+  // Main tag style object
+  const mainStyleObj = () => {
+    return { minHeight: wHeight };
   };
 
   useEffect(() => {
     setHTMLTagFontSize();
-  }, [width]);
+  }, [wWidth]);
 
   return (
     <motion.div
@@ -44,7 +66,7 @@ const Layout = ({ children, title, showToast, autoClose = 3000 }) => {
       <Head>
         <title>{`Fantasy League ${title}`}</title>
       </Head>
-      <main>
+      <main style={mainStyleObj()} className={`${mainBg}`}>
         {showToast && (
           <ToastContainer
             position="top-center"
