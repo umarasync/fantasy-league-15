@@ -10,8 +10,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Layout from "components/layout";
 import CardSection from "components/selectClub/CardSection";
 import ClubControls from "components/selectClub/ClubControls";
-import Image from "components/html/Image";
-import Text from "components/html/Text";
+import Image from "components/html/Image1";
+import Text from "components/html/Text1";
 import Loader from "components/loaders/Loader";
 
 // Actions
@@ -21,9 +21,6 @@ import { getAllTeams, addFavouriteTeam } from "redux/Teams/api";
 import R from "utils/getResponsiveValue";
 import { isEmpty } from "utils/helpers";
 
-// Constants
-import colors from "constants/colors";
-
 // Styles
 const getStyles = (R) => {
   return {
@@ -32,7 +29,6 @@ const getStyles = (R) => {
     },
     gradient: {
       width: R(299),
-      height: "100%",
     },
     image: {
       top: R(34),
@@ -104,8 +100,6 @@ export default function SelectClub() {
 
   if (isEmpty(cardsInfo)) return <Loader />;
 
-  const bgImage = `bg-[url('/images/green_grunge_border_with_halftone_background_2.png')]
-                            bg-[length:100%_100%] bg-no-repeat w-full relative sm:pt-[3.4rem]`;
   return (
     <Layout
       title="Select Club"
@@ -116,28 +110,24 @@ export default function SelectClub() {
       }}
     >
       <div>
-        <div className="absolute" style={STYLES.image}>
-          <Image src={`/images/logo_white.png`} alt={""} w={164} h={40} />
-        </div>
+        <Image
+          src={`/images/logo_white.png`}
+          className={`w-[16.4rem] h-[4rem] absolute left-[8rem] top-[3.4rem] z-[1]`}
+          alt={""}
+        />
         <div className="flex flex-col items-center">
           <Text
-            text={
+            title={
               <span>
                 select your <br />
                 favorite club
               </span>
             }
-            fs={50}
-            fst={"italic"}
-            tt={"uppercase"}
-            textAlign={"center"}
-            fw={800}
-            lh={54}
-            mt={50}
-            color={colors.white}
+            className={`text-white italic uppercase center text-[5rem] leading-[5.4rem] mt-[5rem] text-center font-[800]`}
           />
+
           <Text
-            text={
+            title={
               <span>
                 {" "}
                 Based on this choice, players will be prioritized when creating{" "}
@@ -145,12 +135,7 @@ export default function SelectClub() {
                 club
               </span>
             }
-            fs={18}
-            textAlign={"center"}
-            lh={26}
-            color={colors.white}
-            mt={24}
-            opacity={0.7}
+            className={`text-white center text-[1.8rem] leading-[2.6rem] mt-[2.4rem] text-center opacity-[0.7]`}
           />
         </div>
 
@@ -168,15 +153,9 @@ export default function SelectClub() {
         )}
 
         {/*left gradient*/}
-        <div
-          className="bg-[url('/images/gradient_blue_left.png')] absolute bg-[length:100%_100%] bg-no-repeat  top-[0] left-[0] "
-          style={STYLES.gradient}
-        />
+        <div className="bg-[url('/images/gradient_blue_left.png')] absolute bg-[length:100%_100%] bg-no-repeat  top-[0] left-[0] h-full w-[29.9rem]" />
         {/*right gradient*/}
-        <div
-          className="bg-[url('/images/gradient_blue_right.png')] absolute bg-[length:100%_100%] bg-no-repeat  top-[0] right-[0] "
-          style={STYLES.gradient}
-        />
+        <div className="bg-[url('/images/gradient_blue_right.png')] absolute bg-[length:100%_100%] bg-no-repeat  top-[0] right-[0] h-full w-[29.9rem]" />
       </div>
     </Layout>
   );

@@ -1,4 +1,4 @@
 export default function Text(props) {
-  const { title, cls } = props;
-  return <p className={cls}>{title}</p>;
+  const { title, className } = props;
+  return <p className={className}>{title}</p>;
 }

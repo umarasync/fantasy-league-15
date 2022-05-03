@@ -11,21 +11,21 @@ export default function SelectClubCard({ cardsInfo }) {
       <div className={`flex absolute w-full flex-col items-center`}>
         {/*Logo*/}
         <Animated toggleAnimation={toggleAnimation}>
-          <Image src={logo} cls={imageCls} />
+          <Image src={logo} className={imageCls} alt={""} />
         </Animated>
         {/*Name*/}
         <Animated
           toggleAnimation={toggleAnimation}
           containerCls={"sm:text-center"}
         >
-          <Text title={name} cls={headingCls} />
+          <Text title={name} className={headingCls} />
         </Animated>
         {/*Venue*/}
         <Animated
           toggleAnimation={toggleAnimation}
           containerCls={"sm:text-center"}
         >
-          <Text title={venue} cls={subHeadingCls} />
+          <Text title={venue} className={subHeadingCls} />
         </Animated>
       </div>
     </div>

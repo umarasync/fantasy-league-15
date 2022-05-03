@@ -20,9 +20,10 @@ export default function CardSection({ cardsInfo }) {
       toggleAnimation,
       classNames: {
         imageCls: "w-[5.9rem] h-[5.9rem]",
-        headingCls: "text-white text-[1.4rem] pt-[1rem] leading-[1.8rem]",
+        headingCls:
+          "text-white text-[1.4rem] pt-[1rem] leading-[1.8rem] font-[800] uppercase italic",
         subHeadingCls:
-          "text-lavender_grey text-[1.2rem] mt-[0.4rem] leading-[1.6rem]",
+          "text-lavender_grey text-[1.2rem] mt-[0.4rem] leading-[1.6rem] font-[400]",
         containerCls: `flex relative items-center w-[16.1rem] h-[14.7rem] ${bgImage1}`,
       },
     };
@@ -34,9 +35,10 @@ export default function CardSection({ cardsInfo }) {
       toggleAnimation,
       classNames: {
         imageCls: "w-[8.1rem] h-[8.1rem]",
-        headingCls: "text-white text-[2rem] pt-[2rem] leading-[2.4rem]",
+        headingCls:
+          "text-white text-[2rem] pt-[2rem] leading-[2.4rem] font-[800] uppercase italic",
         subHeadingCls:
-          "text-lavender_grey text-[1.4rem] mt-[0.4rem] leading-[2.2rem]",
+          "text-lavender_grey text-[1.4rem] mt-[0.4rem] leading-[2.2rem] font-[400]",
         containerCls: `flex relative items-center w-[29.9rem] h-[23.1rem] ${bgImage2}`,
       },
     };
@@ -48,9 +50,10 @@ export default function CardSection({ cardsInfo }) {
       toggleAnimation,
       classNames: {
         imageCls: "w-[15rem] h-[15rem] mt-[2rem]",
-        headingCls: "text-black_rock text-[3.2rem] pt-[2rem] leading-[4.4rem]",
+        headingCls:
+          "text-black_rock text-[3.2rem] pt-[2rem] leading-[4.4rem] font-[800] uppercase italic",
         subHeadingCls:
-          "text-regent_grey text-[1.8rem] mt-[0.4rem] leading-[2.6rem]",
+          "text-regent_grey text-[1.8rem] mt-[0.4rem] leading-[2.6rem] font-[400]",
         containerCls: `flex relative items-start w-[40.8rem] h-[35.9rem] ${bgImage3}`,
       },
     };
