@@ -24,10 +24,10 @@ const Layout = ({ children, title, showToast, autoClose = 3000 }) => {
     let elStyle = el[0].style;
 
     // Smaller screen
-    if (!width || width <= 375) {
+    if (width <= 375) {
       return (elStyle.fontSize = `${(width / screenSizes.sm) * 10}px`);
     }
-    elStyle.fontSize = `${(width / screenSizes.lg) * 10}px`;
+    return (elStyle.fontSize = `${(width / screenSizes.lg) * 10}px`);
   };
 
   useEffect(() => {
