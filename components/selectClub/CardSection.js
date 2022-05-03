@@ -16,7 +16,7 @@ export default function CardSection({
     <>
       <SelectClubCard
         image={{
-          ...cardsStyle[0].image,
+          classes: `md:w-[5.9rem] md:h-[5.9rem] md:-mt-[3rem]`,
           name: firstCard.image.name,
         }}
         heading={{
@@ -35,9 +35,10 @@ export default function CardSection({
       />
       <SelectClubCard
         image={{
-          ...cardsStyle[1].image,
+          classes: `md:w-[8.1rem] md:h-[8.1rem] md:-mt-[7rem]`,
           name: secondCard.image.name,
         }}
+        imageClasses={"md:w[8.1rem] md:h[8.1rem] md:-mt-[7rem]"}
         heading={{
           ...cardsStyle[1].heading,
           title: secondCard.heading.title,
@@ -54,9 +55,10 @@ export default function CardSection({
       />
       <SelectClubCard
         image={{
-          ...cardsStyle[2].image,
+          classes: `md:w-[15rem] md:h-[15rem] md:mt-[1rem]`,
           name: thirdCard.image.name,
         }}
+        imageClasses={"md:w[15rem] md:h[15rem] md:mt-[1rem]"}
         heading={{
           ...cardsStyle[2].heading,
           title: thirdCard.heading.title,
@@ -74,9 +76,10 @@ export default function CardSection({
       />
       <SelectClubCard
         image={{
-          ...cardsStyle[3].image,
+          classes: `md:w-[8.1rem] md:h-[8.1rem] md:-mt-[7rem]`,
           name: fourthCard.image.name,
         }}
+        imageClasses={"md:w[8.1rem] md:h[8.1rem] md:-mt-[7rem]"}
         heading={{
           ...cardsStyle[3].heading,
           title: fourthCard.heading.title,
@@ -93,7 +96,7 @@ export default function CardSection({
       />
       <SelectClubCard
         image={{
-          ...cardsStyle[4].image,
+          classes: `md:w-[5.9rem] md:h-[5.9rem] md:-mt-[3rem]`,
           name: fifthCard.image.name,
         }}
         heading={{

@@ -82,12 +82,6 @@ export default function SelectClub() {
     }
   };
 
-  const firstCard = cardsData ? cardsData[0] : "";
-  const secondCard = cardsData ? cardsData[1] : "";
-  const thirdCard = cardsData ? cardsData[2] : "";
-  const fourthCard = cardsData ? cardsData[3] : "";
-  const fifthCard = cardsData ? cardsData[4] : "";
-
   const runDidMount = async () => {
     const { success, data } = await dispatch(getAllTeams());
 
@@ -102,6 +96,12 @@ export default function SelectClub() {
   }, []);
 
   if (isEmpty(cardsData)) return <Loader />;
+
+  const firstCard = cardsData ? cardsData[0] : "";
+  const secondCard = cardsData ? cardsData[1] : "";
+  const thirdCard = cardsData ? cardsData[2] : "";
+  const fourthCard = cardsData ? cardsData[3] : "";
+  const fifthCard = cardsData ? cardsData[4] : "";
 
   return (
     <Layout title="Select Club">

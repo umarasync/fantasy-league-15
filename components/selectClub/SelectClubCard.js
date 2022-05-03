@@ -6,6 +6,9 @@ import CardImage from "components/selectClub/CardImage";
 // Utils
 import R from "utils/getResponsiveValue";
 import { useEffect, useState } from "react";
+import Animated from "../animation/Animated";
+import Image from "../html/Image1";
+import { clone } from "../../utils/helpers";
 
 export default function SelectClubCard({
   image,
@@ -57,14 +60,10 @@ export default function SelectClubCard({
           paddingTop: boxPaddingTop ? R(boxPaddingTop) : 0,
         }}
       >
-        <CardImage
-          changeCard={changeCard}
-          fadeInOutAnimation={fadeInOutAnimation}
-          image={image}
-          containerStyle={{
-            marginTop: R(image.mt),
-          }}
-        />
+        <Animated toggleAnimation={changeCard}>
+          <Image src={image.name} classes={image.classes} />
+        </Animated>
+
         <CardTitle
           changeCard={changeCard}
           fadeInOutAnimation={fadeInOutAnimation}
