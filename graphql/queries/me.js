@@ -8,7 +8,6 @@ export default gql`
       lastName
       currentGameweek
       fantasyTeamId
-      totalScore
       currentSeason
       fantasyTeamValue
       fullName

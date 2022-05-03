@@ -20,8 +20,8 @@ import { getAllTeams, addFavouriteTeam } from "redux/Teams/api";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import {buildClubs1} from "utils/playersHelper";
-import {isEmpty} from "utils/helpers";
+import { buildClubs1 } from "utils/playersHelper";
+import { isEmpty } from "utils/helpers";
 
 // Constants
 import colors from "constants/colors";
@@ -30,7 +30,7 @@ import colors from "constants/colors";
 const getStyles = (R) => {
   return {
     container: {
-      minHeight: R()
+      minHeight: R(),
     },
     gradient: {
       width: R(299),
@@ -45,12 +45,11 @@ const getStyles = (R) => {
 };
 
 export default function SelectClub() {
-
   const STYLES = { ...getStyles(R) };
 
   const router = useRouter();
-  const {query} = router
-  let {fromSettings} = query
+  const { query } = router;
+  let { fromSettings } = query;
 
   const dispatch = useDispatch();
   const [cardsData, setCardsData] = useState();
@@ -79,9 +78,9 @@ export default function SelectClub() {
         accountId: user.id,
         favouriteTeamId: cardsData[2].id,
       };
-      const {success} = await dispatch(addFavouriteTeam(inputData));
+      const { success } = await dispatch(addFavouriteTeam(inputData));
       // if(!success) return
-      router.push('/build_team_all_players')
+      router.push("/build_team_all_players");
     }
   };
 
@@ -97,22 +96,21 @@ export default function SelectClub() {
   const nextFourthCard = cardsNextData ? cardsNextData[3] : "";
   const nextFifthCard = cardsNextData ? cardsNextData[4] : "";
 
-
   const runDidMount = async () => {
     const { success, data } = await dispatch(getAllTeams());
 
-    if(!success) return
-    const $clubs = buildClubs1(data)
+    if (!success) return;
+    const $clubs = buildClubs1(data);
 
     setCardsData([...$clubs]);
     setCardsNextData([...$clubs]);
-  }
+  };
 
   useEffect(() => {
-      runDidMount()
+    runDidMount();
   }, []);
 
-  if(isEmpty(cardsData) || isEmpty(cardsNextData)) return <Loader/>
+  if (isEmpty(cardsData) || isEmpty(cardsNextData)) return <Loader />;
 
   return (
     <Layout title="Select Club">
@@ -130,16 +128,11 @@ export default function SelectClub() {
       <Div
         className="bg-[url('/images/green_grunge_border_with_halftone_background_2.png')]
                 bg-[length:100%_100%] bg-no-repeat w-full relative"
-        style={{...STYLES.container}}
+        style={{ ...STYLES.container }}
         pt={34}
       >
         <div className="absolute" style={STYLES.image}>
-          <Image
-              src={`/images/logo_white.png`}
-              alt={""}
-              w={164}
-              h={40}
-          />
+          <Image src={`/images/logo_white.png`} alt={""} w={164} h={40} />
         </div>
         <div className="flex flex-col items-center">
           <Text
