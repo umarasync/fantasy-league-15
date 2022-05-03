@@ -62,8 +62,6 @@ export default function SelectClubCard({
           fadeInOutAnimation={fadeInOutAnimation}
           image={image}
           containerStyle={{
-            width: R(image.width),
-            height: R(image.height),
             marginTop: R(image.mt),
           }}
         />

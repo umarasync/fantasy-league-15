@@ -53,7 +53,6 @@ export default function SelectClub() {
 
   const dispatch = useDispatch();
   const [cardsData, setCardsData] = useState();
-  const [cardsNextData, setCardsNextData] = useState();
   const [changeCard, setChangeCard] = useState(true);
 
   const user = useSelector(({ auth }) => auth.user);
@@ -66,9 +65,8 @@ export default function SelectClub() {
       dataI = arrayMoveImmutable(cardsData, 0, -1);
     }
 
-    setCardsNextData(dataI);
-    setChangeCard(!changeCard);
     setCardsData(dataI);
+    setChangeCard(!changeCard);
   };
 
   const onNextClick = async () => {
@@ -90,12 +88,6 @@ export default function SelectClub() {
   const fourthCard = cardsData ? cardsData[3] : "";
   const fifthCard = cardsData ? cardsData[4] : "";
 
-  const nextFirstCard = cardsNextData ? cardsNextData[0] : "";
-  const nextSecondCard = cardsNextData ? cardsNextData[1] : "";
-  const nextThirdCard = cardsNextData ? cardsNextData[2] : "";
-  const nextFourthCard = cardsNextData ? cardsNextData[3] : "";
-  const nextFifthCard = cardsNextData ? cardsNextData[4] : "";
-
   const runDidMount = async () => {
     const { success, data } = await dispatch(getAllTeams());
 
@@ -103,14 +95,13 @@ export default function SelectClub() {
     const $clubs = buildClubs1(data);
 
     setCardsData([...$clubs]);
-    setCardsNextData([...$clubs]);
   };
 
   useEffect(() => {
     runDidMount();
   }, []);
 
-  if (isEmpty(cardsData) || isEmpty(cardsNextData)) return <Loader />;
+  if (isEmpty(cardsData)) return <Loader />;
 
   return (
     <Layout title="Select Club">
@@ -178,11 +169,6 @@ export default function SelectClub() {
                 thirdCard={thirdCard}
                 fourthCard={fourthCard}
                 fifthCard={fifthCard}
-                nextFirstCard={nextFirstCard}
-                nextSecondCard={nextSecondCard}
-                nextThirdCard={nextThirdCard}
-                nextFourthCard={nextFourthCard}
-                nextFifthCard={nextFifthCard}
                 changeCard={changeCard}
               />
             </div>
