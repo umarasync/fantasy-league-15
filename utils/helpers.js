@@ -68,7 +68,7 @@ export const responseSuccess = (msg, data = null) => {
   };
 };
 
-export const responseFailed = (msg) => {
+export const responseFailed = (msg = "") => {
   return {
     success: false,
     msg: msg,

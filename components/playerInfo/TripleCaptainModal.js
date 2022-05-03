@@ -21,7 +21,6 @@ export default function TripleCaptainModal({
   const user = useSelector(({ auth }) => auth.user);
 
   const handleTripleCaptainConfirmed = async () => {
-    return;
     await handleBenchBoost({
       boostType: BOOST_TYPE_TRIPLE_CAPTAIN,
       dispatch,

@@ -35,6 +35,10 @@ export default gql`
           firstName
         }
       }
+      boosters {
+        benchBoostApplied
+        tripleCaptainApplied
+      }
     }
   }
 `;
