@@ -68,8 +68,6 @@ export default function SelectClub() {
       cards = arrayMoveImmutable([...cardsInfo.cards], 0, -1);
     }
 
-    console.log("3-------", cards);
-
     setCardsInfo({
       ...cardsInfo,
       cards,
@@ -82,7 +80,7 @@ export default function SelectClub() {
       let inputData = {
         profileId: user.id,
         accountId: user.id,
-        favouriteTeamId: cardsInfo[2].id,
+        favouriteTeamId: cardsInfo.cards[2].id,
       };
       const { success } = await dispatch(addFavouriteTeam(inputData));
       // if(!success) return
@@ -107,21 +105,8 @@ export default function SelectClub() {
 
   if (isEmpty(cardsInfo)) return <Loader />;
 
-  console.log("card info =====", cardsInfo);
-
   return (
-    <Layout title="Select Club">
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+    <Layout title="Select Club" showToast>
       <Div
         className="bg-[url('/images/green_grunge_border_with_halftone_background_2.png')]
                 bg-[length:100%_100%] bg-no-repeat w-full relative"
