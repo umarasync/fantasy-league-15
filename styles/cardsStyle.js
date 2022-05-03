@@ -21,6 +21,7 @@ const cardsStyle = [
     itemsCenter: true,
     boxPaddingTop: false,
   },
+  // 2nd
   {
     image: {
       width: 81,
@@ -43,6 +44,7 @@ const cardsStyle = [
     itemsCenter: true,
     boxPaddingTop: false,
   },
+  //3rd
   {
     image: {
       width: 150,
@@ -65,6 +67,7 @@ const cardsStyle = [
     itemsCenter: false,
     boxPaddingTop: 17.5,
   },
+  //4th
   {
     image: {
       width: 81,
@@ -87,6 +90,7 @@ const cardsStyle = [
     itemsCenter: true,
     boxPaddingTop: false,
   },
+  //5th
   {
     image: {
       width: 59,

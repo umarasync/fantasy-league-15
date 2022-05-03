@@ -47,26 +47,34 @@ const getStyles = (R) => {
 export default function SelectClub() {
   const STYLES = { ...getStyles(R) };
 
+  const dispatch = useDispatch();
   const router = useRouter();
   const { query } = router;
   let { fromSettings } = query;
 
-  const dispatch = useDispatch();
-  const [cardsData, setCardsData] = useState();
-  const [changeCard, setChangeCard] = useState(true);
-
+  // Global States
   const user = useSelector(({ auth }) => auth.user);
 
+  const [cardsInfo, setCardsInfo] = useState({
+    cards: [],
+    toggleAnimation: false,
+  });
+
   const onControlsClick = (isLeftPressed = false) => {
-    let dataI = [];
+    let cards = [];
     if (isLeftPressed) {
-      dataI = arrayMoveImmutable(cardsData, -1, 0);
+      cards = arrayMoveImmutable([...cardsInfo.cards], -1, 0);
     } else {
-      dataI = arrayMoveImmutable(cardsData, 0, -1);
+      cards = arrayMoveImmutable([...cardsInfo.cards], 0, -1);
     }
 
-    setCardsData(dataI);
-    setChangeCard(!changeCard);
+    console.log("3-------", cards);
+
+    setCardsInfo({
+      ...cardsInfo,
+      cards,
+      toggleAnimation: !cardsInfo.toggleAnimation,
+    });
   };
 
   const onNextClick = async () => {
@@ -74,7 +82,7 @@ export default function SelectClub() {
       let inputData = {
         profileId: user.id,
         accountId: user.id,
-        favouriteTeamId: cardsData[2].id,
+        favouriteTeamId: cardsInfo[2].id,
       };
       const { success } = await dispatch(addFavouriteTeam(inputData));
       // if(!success) return
@@ -82,26 +90,24 @@ export default function SelectClub() {
     }
   };
 
-  const runDidMount = async () => {
+  const fetchCards = async () => {
     const { success, data } = await dispatch(getAllTeams());
 
     if (!success) return;
-    const $clubs = buildClubs1(data);
 
-    setCardsData([...$clubs]);
+    setCardsInfo({
+      ...cardsInfo,
+      cards: data,
+    });
   };
 
   useEffect(() => {
-    runDidMount();
+    fetchCards();
   }, []);
 
-  if (isEmpty(cardsData)) return <Loader />;
+  if (isEmpty(cardsInfo)) return <Loader />;
 
-  const firstCard = cardsData ? cardsData[0] : "";
-  const secondCard = cardsData ? cardsData[1] : "";
-  const thirdCard = cardsData ? cardsData[2] : "";
-  const fourthCard = cardsData ? cardsData[3] : "";
-  const fifthCard = cardsData ? cardsData[4] : "";
+  console.log("card info =====", cardsInfo);
 
   return (
     <Layout title="Select Club">
@@ -160,17 +166,10 @@ export default function SelectClub() {
           />
         </div>
 
-        {cardsData && (
+        {cardsInfo && (
           <div>
             <div className="flex justify-between items-center mt-[6rem] w-full">
-              <CardSection
-                firstCard={firstCard}
-                secondCard={secondCard}
-                thirdCard={thirdCard}
-                fourthCard={fourthCard}
-                fifthCard={fifthCard}
-                changeCard={changeCard}
-              />
+              <CardSection cardsInfo={cardsInfo} />
             </div>
             {/*Controls*/}
             <ClubControls

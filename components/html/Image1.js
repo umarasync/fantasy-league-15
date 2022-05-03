@@ -1,9 +1,9 @@
 export default function Image(props) {
-  const { src, alt, onClick, disabled, classes } = props;
+  const { src, alt, onClick, disabled, cls } = props;
   return (
     <div
       onClick={() => (disabled || !onClick ? false : onClick())}
-      className={`${classes} ${(!disabled || onClick) && "cursor-pointer"}`}
+      className={`${cls} ${(!disabled || onClick) && "cursor-pointer"}`}
     >
       <img
         src={`${src}`}

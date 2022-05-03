@@ -1,118 +1,71 @@
 // Components
 import SelectClubCard from "components/selectClub/SelectClubCard";
 
-// Constants
-import cardsStyle from "styles/cardsStyle";
+export default function CardSection({ cardsInfo }) {
+  const { cards, toggleAnimation } = cardsInfo;
 
-export default function CardSection({
-  firstCard,
-  secondCard,
-  thirdCard,
-  fourthCard,
-  fifthCard,
-  changeCard,
-}) {
+  // Background card images
+  const bgImage1 = `bg-[url('/images/card_blue_small_left.png')]
+          bg-[length:100%_100%] bg-no-repeat w-full`;
+
+  const bgImage2 = `bg-[url('/images/card_blue.png')]
+          bg-[length:100%_100%] bg-no-repeat w-full`;
+
+  const bgImage3 = `bg-[url('/images/card_white.png')]
+          bg-[length:100%_100%] bg-no-repeat w-full`;
+
+  const buildCardType1 = (card) => {
+    return {
+      ...card,
+      toggleAnimation,
+      classNames: {
+        imageCls: "sm:w-[5.9rem] sm:h-[5.9rem]",
+        headingCls:
+          "text-white sm:text-[1.4rem] sm:pt-[1rem] sm:leading-[1.8rem]",
+        subHeadingCls:
+          "text-lavender_grey sm:text-[1.2rem] sm:mt-[0.4rem] sm:leading-[1.6rem]",
+        containerCls: `sm:flex sm:relative sm:items-center sm:w-[16.1rem] sm:h-[14.7rem] ${bgImage1}`,
+      },
+    };
+  };
+
+  const buildCardType2 = (card) => {
+    return {
+      ...card,
+      toggleAnimation,
+      classNames: {
+        imageCls: "sm:w-[8.1rem] sm:h-[8.1rem]",
+        headingCls:
+          "text-white sm:text-[2rem] sm:pt-[2rem] sm:leading-[2.4rem]",
+        subHeadingCls:
+          "text-lavender_grey sm:text-[1.4rem] sm:mt-[0.4rem] sm:leading-[2.2rem]",
+        containerCls: `sm:flex sm:relative sm:items-center sm:w-[29.9rem] sm:h-[23.1rem] ${bgImage2}`,
+      },
+    };
+  };
+
+  const buildCardType3 = (card) => {
+    return {
+      ...card,
+      toggleAnimation,
+      classNames: {
+        imageCls: "sm:w-[15rem] sm:h-[15rem] sm:mt-[2rem]",
+        headingCls:
+          "text-black_rock sm:text-[3.2rem] sm:pt-[2rem] sm:leading-[4.4rem]",
+        subHeadingCls:
+          "text-regent_grey sm:text-[1.8rem] sm:mt-[0.4rem] sm:leading-[2.6rem]",
+        containerCls: `sm:flex sm:relative items-start sm:w-[40.8rem] sm:h-[35.9rem] ${bgImage3}`,
+      },
+    };
+  };
+
   return (
     <>
-      <SelectClubCard
-        image={{
-          classes: `md:w-[5.9rem] md:h-[5.9rem] md:-mt-[3rem]`,
-          name: firstCard.image.name,
-        }}
-        heading={{
-          ...cardsStyle[0].heading,
-          title: firstCard.heading.title,
-        }}
-        subHeading={{
-          ...cardsStyle[0].subHeading,
-          title: firstCard.subHeading.title,
-        }}
-        containerClasses={"md:w-[16.1rem] md:h-[14.7rem]"}
-        bgImage={cardsStyle[0].bgImage}
-        itemsCenter={cardsStyle[0].itemsCenter}
-        boxPaddingTop={cardsStyle[0].boxPaddingTop}
-        changeCard={changeCard}
-      />
-      <SelectClubCard
-        image={{
-          classes: `md:w-[8.1rem] md:h-[8.1rem] md:-mt-[7rem]`,
-          name: secondCard.image.name,
-        }}
-        imageClasses={"md:w[8.1rem] md:h[8.1rem] md:-mt-[7rem]"}
-        heading={{
-          ...cardsStyle[1].heading,
-          title: secondCard.heading.title,
-        }}
-        subHeading={{
-          ...cardsStyle[1].subHeading,
-          title: secondCard.subHeading.title,
-        }}
-        containerClasses={"md:w-[29.9rem] md:h-[23.1rem]"}
-        bgImage={cardsStyle[1].bgImage}
-        itemsCenter={cardsStyle[1].itemsCenter}
-        boxPaddingTop={cardsStyle[1].boxPaddingTop}
-        changeCard={changeCard}
-      />
-      <SelectClubCard
-        image={{
-          classes: `md:w-[15rem] md:h-[15rem] md:mt-[1rem]`,
-          name: thirdCard.image.name,
-        }}
-        imageClasses={"md:w[15rem] md:h[15rem] md:mt-[1rem]"}
-        heading={{
-          ...cardsStyle[2].heading,
-          title: thirdCard.heading.title,
-        }}
-        subHeading={{
-          ...cardsStyle[2].subHeading,
-          title: thirdCard.subHeading.title,
-        }}
-        // containerClasses={cardsStyle[2].containerClasses}
-        containerClasses={"items-start md:w-[40.8rem] md:h-[35.9rem]"}
-        bgImage={cardsStyle[2].bgImage}
-        itemsCenter={cardsStyle[2].itemsCenter}
-        boxPaddingTop={cardsStyle[2].boxPaddingTop}
-        changeCard={changeCard}
-      />
-      <SelectClubCard
-        image={{
-          classes: `md:w-[8.1rem] md:h-[8.1rem] md:-mt-[7rem]`,
-          name: fourthCard.image.name,
-        }}
-        imageClasses={"md:w[8.1rem] md:h[8.1rem] md:-mt-[7rem]"}
-        heading={{
-          ...cardsStyle[3].heading,
-          title: fourthCard.heading.title,
-        }}
-        subHeading={{
-          ...cardsStyle[3].subHeading,
-          title: fourthCard.subHeading.title,
-        }}
-        containerClasses={"md:w-[29.9rem] md:h-[23.1rem]"}
-        bgImage={cardsStyle[3].bgImage}
-        itemsCenter={cardsStyle[3].itemsCenter}
-        boxPaddingTop={cardsStyle[3].boxPaddingTop}
-        changeCard={changeCard}
-      />
-      <SelectClubCard
-        image={{
-          classes: `md:w-[5.9rem] md:h-[5.9rem] md:-mt-[3rem]`,
-          name: fifthCard.image.name,
-        }}
-        heading={{
-          ...cardsStyle[4].heading,
-          title: fifthCard.heading.title,
-        }}
-        subHeading={{
-          ...cardsStyle[4].subHeading,
-          title: fifthCard.subHeading.title,
-        }}
-        containerClasses={"md:w-[16.1rem] md:h-[14.7rem]"}
-        bgImage={cardsStyle[4].bgImage}
-        itemsCenter={cardsStyle[4].itemsCenter}
-        boxPaddingTop={cardsStyle[4].boxPaddingTop}
-        changeCard={changeCard}
-      />
+      <SelectClubCard cardsInfo={buildCardType1(cards[0])} />
+      <SelectClubCard cardsInfo={buildCardType2(cards[1])} />
+      <SelectClubCard cardsInfo={buildCardType3(cards[2])} />
+      <SelectClubCard cardsInfo={buildCardType2(cards[3])} />
+      <SelectClubCard cardsInfo={buildCardType1(cards[4])} />
     </>
   );
 }
