@@ -85,8 +85,6 @@ export default function BuildYourTeamPlayersPagination({
     changePage(0);
   }, [selectedSortingOption, activePosition, selectedClubs, selectedPrice]);
 
-  console.log("1----------", selectedPrice);
-
   if (isEmpty(players)) return null;
   return (
     <Div center mb={20}>
