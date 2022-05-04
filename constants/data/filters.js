@@ -1,4 +1,6 @@
 // POSITIONS
+import { lowerCase } from "lodash/string";
+
 export const POSITION_ALL = "All";
 export const POSITION_GK = "GOALKEEPER";
 export const POSITION_DEF = "DEFENDER";
@@ -9,27 +11,27 @@ export const PLAYERS_POSITIONS = [
   {
     id: 1,
     label: POSITION_ALL,
-    value: POSITION_ALL,
+    value: "",
   },
   {
     id: 2,
     label: POSITION_GK,
-    value: POSITION_GK,
+    value: lowerCase(POSITION_GK),
   },
   {
     id: 3,
     label: POSITION_DEF,
-    value: POSITION_DEF,
+    value: lowerCase(POSITION_DEF),
   },
   {
     id: 4,
     label: POSITION_MID,
-    value: POSITION_MID,
+    value: lowerCase(POSITION_MID),
   },
   {
     id: 5,
     label: POSITION_FWD,
-    value: POSITION_FWD,
+    value: lowerCase(POSITION_FWD),
   },
 ];
 

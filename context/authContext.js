@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 
 // Actions
 import { me } from "redux/Auth/api";
-import { meFailed, meSuccess } from "redux/Auth/actionCreators";
 
 // Constants
 import {

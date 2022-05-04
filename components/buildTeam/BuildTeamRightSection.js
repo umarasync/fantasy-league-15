@@ -32,7 +32,7 @@ import {
   ALL_PRICES,
   ALL_STATUSES,
   ALL_TEAMS,
-  POSITION_ALL,
+  PLAYERS_POSITIONS,
   PRICES,
   RECOMMENDATIONS,
   RECOMMENDED_PLAYERS,
@@ -76,9 +76,10 @@ export default function BuildTeamRightSection({
   const recommendationsInitial = clone(RECOMMENDATIONS);
   const sortingOptionsInitial = clone(SORTING_OPTIONS);
   const statusesInitial = clone(STATUSES);
+  const positionsInitial = clone(PLAYERS_POSITIONS);
 
   // Positions States
-  const [activePosition, setActivePosition] = useState("");
+  const [activePosition, setActivePosition] = useState({});
   // Clubs States
   const [clubs, setClubs] = useState([]);
   const [selectedClubs, setSelectedClubs] = useState([]);
@@ -98,7 +99,7 @@ export default function BuildTeamRightSection({
   const [showAllFilters, setShowAllFilters] = useState(false);
 
   const initialSettings = () => {
-    setActivePosition(POSITION_ALL);
+    setActivePosition({ ...positionsInitial[0] });
 
     setClubs([...clubsInitial]);
     setSelectedClubs([clubsInitial[0]]);
@@ -123,7 +124,6 @@ export default function BuildTeamRightSection({
     updatedPlayers = updatedPlayers.filter((player) => {
       return filtersHandler({
         player,
-        activePosition,
         selectedClubs,
         selectedPrice,
         selectedStatuses,
@@ -154,14 +154,12 @@ export default function BuildTeamRightSection({
 
   useEffect(() => {
     if (!areAllInitialStatesCompleted()) return;
-
     runFiltersOnPlayersData();
   }, [
     clubs,
     statuses,
     selectedRecommendation,
     selectedPrice,
-    activePosition,
     selectedSortingOption,
     playersInitial,
   ]);
@@ -324,6 +322,7 @@ export default function BuildTeamRightSection({
             <Div mt={noResultTextVisible() ? 320 : 40}>
               <BuildYourTeamPlayersPagination
                 selectedSortingOption={selectedSortingOption}
+                activePosition={activePosition}
               />
             </Div>
           )}
