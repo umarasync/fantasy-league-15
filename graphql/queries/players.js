@@ -1,4 +1,4 @@
-import {gql} from '@apollo/client'
+import { gql } from "@apollo/client";
 
 export default gql`
   query players(
@@ -8,13 +8,12 @@ export default gql`
     $sortBy: PlayersSortByInput!
   ) {
     players(_first: $first, _offset: $offset, where: $where, sortBy: $sortBy) {
-      data  {
+      data {
         id
         name
         matchName
         position
         photo
-        score
         value
         totalPoints
         captain
@@ -33,4 +32,4 @@ export default gql`
       totalCount
     }
   }
-`
+`;

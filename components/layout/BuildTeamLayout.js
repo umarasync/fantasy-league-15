@@ -44,7 +44,10 @@ export default function ({ makeTransfer }) {
     const getPlayersInput = {
       first: playersPerPage,
       offset: initialOffsetShouldBeZero,
-      where: { position: { eq: POSITION_ALL[0].value } },
+      where: {
+        position: { eq: POSITION_ALL[0].value },
+        // teamId: { eq: "" },
+      },
       sortBy: { ...SORTING_OPTIONS[0].value },
     };
 

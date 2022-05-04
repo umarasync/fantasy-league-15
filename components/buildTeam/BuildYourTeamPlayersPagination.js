@@ -55,7 +55,10 @@ export default function BuildYourTeamPlayersPagination({
     const getPlayersInput = {
       first: playersPerPage,
       offset,
-      where: { position: { eq: activePosition.value } },
+      where: {
+        position: { eq: activePosition.value },
+        // teamId: { eq: "" },
+      },
       sortBy: { ...selectedSortingOption.value },
     };
     await dispatch(getPlayers(getPlayersInput));
