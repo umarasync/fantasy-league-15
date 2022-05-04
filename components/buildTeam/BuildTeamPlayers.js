@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 // Components
 import Layout from "components/layout";
-import FooterBar from "components/footer/FooterBar";
+import BuildTeamFooterBar from "components/buildTeam/BuildTeamFooterBar";
 import BuildTeamLeftSection from "components/buildTeam/BuildTeamLeftSection";
 import BuildTeamRightSection from "components/buildTeam/BuildTeamRightSection";
 import TransferWindowModal from "components/transferWindow/TransferWindowModal";
@@ -72,7 +72,6 @@ export default function BuildTeamPlayers({ players, clubs }) {
   const [teamInfo, setTeamInfo] = useState({
     squadInfo: squadInfoInitialState,
     players: [],
-    playersInitial: [],
     transferInfo: transferInfoInitialState,
   });
 
@@ -205,7 +204,7 @@ export default function BuildTeamPlayers({ players, clubs }) {
           />
         </div>
 
-        <FooterBar
+        <BuildTeamFooterBar
           players={players}
           teamInfo={teamInfo}
           setTeamInfo={setTeamInfo}

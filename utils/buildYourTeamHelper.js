@@ -23,15 +23,14 @@ export const initialSettingsForBuildYourTeam = ({
   teamInfo,
   setTeamInfo,
 }) => {
-  let playersData = updatePlayersInitialData({
-    playersInitial: players,
+  let playersData = updatePlayersData({
+    players: players,
     squadInfo: teamInfo.squadInfo,
   });
 
   setTeamInfo({
     ...teamInfo,
     players: [...playersData],
-    playersInitial: [...playersData],
   });
 };
 
@@ -149,15 +148,15 @@ export const handleAutoPick = ({
     totalChosenPlayers: totalChosenPlayers,
   };
 
-  let playersData = updatePlayersInitialData({
-    playersInitial: $players,
+  let playersData = updatePlayersData({
+    players: $players,
     squadInfo: updatedSquadInfo,
   });
 
   setTeamInfo({
     ...teamInfo,
     squadInfo: updatedSquadInfo,
-    playersInitial: [...playersData],
+    players: [...playersData],
   });
 };
 
@@ -179,13 +178,13 @@ const isPlayerAlreadySelected = ({ player, squad }) =>
 const makeCardDisable = ({ squadInfo, player }) =>
   shouldReturnBack({ squadInfo, player });
 
-const updatePlayersInitialData = ({ playersInitial, squadInfo }) => {
-  if (isEmpty(playersInitial)) return [];
-  const players = clone(playersInitial);
+const updatePlayersData = ({ players, squadInfo }) => {
+  if (isEmpty(players)) return [];
+  const $players = clone(players);
   let allPlayersIds = flattenObj(squadInfo.squad).map((p) => p.id);
   let isClubCountEmpty = isEmpty(squadInfo.clubsCount);
 
-  return players.map((p) => {
+  return $players.map((p) => {
     p.chosen = allPlayersIds.includes(p.id);
     p.disablePlayerCard = isClubCountEmpty
       ? false
@@ -211,7 +210,7 @@ const shouldReturnBack = ({ squadInfo, player }) => {
 export const playerSelectionHandler = ({ player, teamInfo, setTeamInfo }) => {
   if (shouldReturnBack({ squadInfo: teamInfo.squadInfo, player })) return;
 
-  const { squadInfo, playersInitial } = teamInfo;
+  const { squadInfo, players } = teamInfo;
   let { remainingBudget, totalChosenPlayers } = squadInfo;
   const squad = { ...squadInfo.squad };
 
@@ -235,15 +234,15 @@ export const playerSelectionHandler = ({ player, teamInfo, setTeamInfo }) => {
     totalChosenPlayers,
   };
 
-  let updatedPlayersInitial = updatePlayersInitialData({
-    playersInitial,
+  let updatedPlayers = updatePlayersData({
+    players,
     squadInfo: updatedSquadInfo,
   });
 
   setTeamInfo({
     ...teamInfo,
     squadInfo: updatedSquadInfo,
-    playersInitial: updatedPlayersInitial,
+    players: updatedPlayers,
   });
 };
 
@@ -254,7 +253,7 @@ export const playerDeselectionHandler = ({
   teamInfo,
   setTeamInfo,
 }) => {
-  const { squadInfo, playersInitial } = teamInfo;
+  const { squadInfo, players } = teamInfo;
   const squad = { ...squadInfo.squad };
 
   let { remainingBudget, totalChosenPlayers } = squadInfo;
@@ -274,15 +273,15 @@ export const playerDeselectionHandler = ({
     totalChosenPlayers,
   };
 
-  let updatedPlayersInitial = updatePlayersInitialData({
-    playersInitial,
+  let updatedPlayers = updatePlayersData({
+    players,
     squadInfo: updatedSquadInfo,
   });
 
   setTeamInfo({
     ...teamInfo,
     squadInfo: updatedSquadInfo,
-    playersInitial: updatedPlayersInitial,
+    players: updatedPlayers,
   });
 };
 

@@ -64,7 +64,6 @@ export const initialSettingsForTransferWindows = ({
     squadInfo: updatedSquadInfo,
     transferInfo: updatedTransferInfo,
     players: [...updatedPlayers],
-    playersInitial: [...updatedPlayers],
   });
 };
 
@@ -82,8 +81,8 @@ export const handleTransferWindowOnPlayerDataUpdate = ({
   };
 
   // Updated players
-  let updatedPlayers = updatePlayersInitialData({
-    playersInitial: players,
+  let updatedPlayers = updatePlayersData({
+    players: players,
     updatedSquadInfo,
   });
 
@@ -92,7 +91,6 @@ export const handleTransferWindowOnPlayerDataUpdate = ({
     ...teamInfo,
     squadInfo: updatedSquadInfo,
     players: [...updatedPlayers],
-    playersInitial: [...updatedPlayers],
   });
 };
 
@@ -119,7 +117,7 @@ export const playerTransferDeselectHandler = ({
   setTeamInfo,
   player: playerProp,
 }) => {
-  const { squadInfo, playersInitial } = teamInfo;
+  const { squadInfo, players } = teamInfo;
   const { position, index } = playerProp;
 
   const squad = { ...squadInfo.squad };
@@ -140,15 +138,15 @@ export const playerTransferDeselectHandler = ({
     remainingBudget: remainingBudget,
   };
 
-  const updatedPlayersInitial = updatePlayersInitialData({
-    playersInitial,
+  const updatedPlayers = updatePlayersData({
+    players,
     updatedSquadInfo,
   });
 
   setTeamInfo({
     ...teamInfo,
     squadInfo: updatedSquadInfo,
-    playersInitial: updatedPlayersInitial,
+    players: updatedPlayers,
     transferInfo: {
       ...teamInfo.transferInfo,
       transferResetDisabled: false,
@@ -167,7 +165,7 @@ export const playerTransferSelectionHandler = ({
 }) => {
   if (returnBack(teamInfo.squadInfo, player)) return;
 
-  const { squadInfo, transferInfo, playersInitial } = teamInfo;
+  const { squadInfo, transferInfo, players } = teamInfo;
 
   const squad = { ...squadInfo.squad };
   const position = player.position;
@@ -220,8 +218,8 @@ export const playerTransferSelectionHandler = ({
     transferConfirmDisabled: false,
   };
 
-  const updatedPlayersInitial = updatePlayersInitialData({
-    playersInitial,
+  const updatedPlayers = updatePlayersData({
+    players,
     updatedSquadInfo,
   });
 
@@ -229,7 +227,7 @@ export const playerTransferSelectionHandler = ({
     ...teamInfo,
     squadInfo: updatedSquadInfo,
     transferInfo: updatedTransferInfo,
-    playersInitial: updatedPlayersInitial,
+    players: updatedPlayers,
   });
 };
 
@@ -279,13 +277,13 @@ const getRelevantPlayersData = (squad) => {
   return playersData;
 };
 
-const updatePlayersInitialData = ({ playersInitial, updatedSquadInfo }) => {
-  if (isEmpty(playersInitial)) return [];
+const updatePlayersData = ({ players, updatedSquadInfo }) => {
+  if (isEmpty(players)) return [];
   const { allPlayersIds, toBeTransferredOutPlayers } = getRelevantPlayersData(
     updatedSquadInfo.squad
   );
 
-  return playersInitial.map((p) => {
+  return players.map((p) => {
     p.chosen = allPlayersIds.includes(p.id);
     p.toggleAnimation = false;
     p.disablePlayerCard = shouldPlayerCardBeDisabled({

@@ -19,7 +19,6 @@ export default gql`
         matchName
         position
         photo
-        score
         value
         totalPoints
         captain
