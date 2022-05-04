@@ -180,6 +180,7 @@ const makeCardDisable = ({ squadInfo, player }) =>
   shouldReturnBack({ squadInfo, player });
 
 const updatePlayersInitialData = ({ playersInitial, squadInfo }) => {
+  if (isEmpty(playersInitial)) return [];
   const players = clone(playersInitial);
   let allPlayersIds = flattenObj(squadInfo.squad).map((p) => p.id);
   let isClubCountEmpty = isEmpty(squadInfo.clubsCount);

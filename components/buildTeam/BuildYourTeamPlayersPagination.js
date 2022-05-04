@@ -61,9 +61,7 @@ export default function BuildYourTeamPlayersPagination({
       offset,
       where: {
         position: { eq: activePosition.value },
-        teamId: {
-          in: getSelectedClubsIds(selectedClubs),
-        },
+        teamId: getSelectedClubsIds(selectedClubs),
       },
       sortBy: { ...selectedSortingOption.value },
     };

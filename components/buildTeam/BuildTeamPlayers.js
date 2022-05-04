@@ -162,8 +162,6 @@ export default function BuildTeamPlayers({ players, clubs }) {
   };
 
   useEffect(() => {
-    if (isEmpty(players)) return;
-
     if (teamAlreadyExists) {
       if (teamInfo.transferInfo.initialRendered) {
         // Will run every time players data change

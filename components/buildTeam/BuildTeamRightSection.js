@@ -188,6 +188,10 @@ export default function BuildTeamRightSection({
     return !isEmpty(players) && !isEmpty(selectedSortingOption);
   };
 
+  const showPaginationSection = () => {
+    return !isEmpty(selectedSortingOption) && !isEmpty(activePosition);
+  };
+
   const noResultTextVisible = () => {
     return areFiltersApplied() && !players.length;
   };
@@ -196,7 +200,6 @@ export default function BuildTeamRightSection({
     initialSettings();
   }, []);
 
-  console.log("sele", selectedClubs);
   return (
     <Div position={"relative"} w={488} pt={35} pb={100}>
       {/*username*/}
@@ -318,7 +321,7 @@ export default function BuildTeamRightSection({
                 />
               ))}
           </Div>
-          {!isEmpty(selectedSortingOption) && (
+          {showPaginationSection() && (
             <Div mt={noResultTextVisible() ? 320 : 40}>
               <BuildYourTeamPlayersPagination
                 selectedSortingOption={selectedSortingOption}

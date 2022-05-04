@@ -89,12 +89,18 @@ export const flattenObj = ($squad) => {
 
 export const getSelectedClubsIds = (selectedClubs) => {
   // Unselect all teams
-  if (isEmpty(selectedClubs)) return [];
+  if (isEmpty(selectedClubs))
+    return {
+      in: [],
+    };
 
   // Get all teams
   if (selectedClubs[0].value === ALL_TEAMS) {
     return {};
   }
   // Get players with these club/teams ids
-  return selectedClubs.map((club) => club.id);
+
+  return {
+    in: selectedClubs.map((club) => club.id),
+  };
 };
