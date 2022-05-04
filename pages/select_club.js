@@ -10,9 +10,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Layout from "components/layout";
 import CardSection from "components/selectClub/CardSection";
 import ClubControls from "components/selectClub/ClubControls";
-import Div from "components/html/Div";
-import Image from "components/html/Image";
-import Text from "components/html/Text";
+import Image from "components/html/Image1";
+import Text from "components/html/Text1";
 import Loader from "components/loaders/Loader";
 
 // Actions
@@ -20,21 +19,16 @@ import { getAllTeams, addFavouriteTeam } from "redux/Teams/api";
 
 // Utils
 import R from "utils/getResponsiveValue";
-import {buildClubs1} from "utils/playersHelper";
-import {isEmpty} from "utils/helpers";
-
-// Constants
-import colors from "constants/colors";
+import { isEmpty } from "utils/helpers";
 
 // Styles
 const getStyles = (R) => {
   return {
     container: {
-      minHeight: R()
+      // minHeight: R(),
     },
     gradient: {
       width: R(299),
-      height: "100%",
     },
     image: {
       top: R(34),
@@ -45,31 +39,35 @@ const getStyles = (R) => {
 };
 
 export default function SelectClub() {
-
   const STYLES = { ...getStyles(R) };
 
-  const router = useRouter();
-  const {query} = router
-  let {fromSettings} = query
-
   const dispatch = useDispatch();
-  const [cardsData, setCardsData] = useState();
-  const [cardsNextData, setCardsNextData] = useState();
-  const [changeCard, setChangeCard] = useState(true);
+  const router = useRouter();
 
+  const { query } = router;
+  let { fromSettings } = query;
+
+  // Global States
   const user = useSelector(({ auth }) => auth.user);
 
+  const [cardsInfo, setCardsInfo] = useState({
+    cards: [],
+    toggleAnimation: false,
+  });
+
   const onControlsClick = (isLeftPressed = false) => {
-    let dataI = [];
+    let cards = [];
     if (isLeftPressed) {
-      dataI = arrayMoveImmutable(cardsData, -1, 0);
+      cards = arrayMoveImmutable([...cardsInfo.cards], -1, 0);
     } else {
-      dataI = arrayMoveImmutable(cardsData, 0, -1);
+      cards = arrayMoveImmutable([...cardsInfo.cards], 0, -1);
     }
 
-    setCardsNextData(dataI);
-    setChangeCard(!changeCard);
-    setCardsData(dataI);
+    setCardsInfo({
+      ...cardsInfo,
+      cards,
+      toggleAnimation: !cardsInfo.toggleAnimation,
+    });
   };
 
   const onNextClick = async () => {
@@ -77,89 +75,59 @@ export default function SelectClub() {
       let inputData = {
         profileId: user.id,
         accountId: user.id,
-        favouriteTeamId: cardsData[2].id,
+        favouriteTeamId: cardsInfo.cards[2].id,
       };
-      const {success} = await dispatch(addFavouriteTeam(inputData));
+      const { success } = await dispatch(addFavouriteTeam(inputData));
       // if(!success) return
-      router.push('/build_team_all_players')
+      router.push("/build_team_all_players");
     }
   };
 
-  const firstCard = cardsData ? cardsData[0] : "";
-  const secondCard = cardsData ? cardsData[1] : "";
-  const thirdCard = cardsData ? cardsData[2] : "";
-  const fourthCard = cardsData ? cardsData[3] : "";
-  const fifthCard = cardsData ? cardsData[4] : "";
-
-  const nextFirstCard = cardsNextData ? cardsNextData[0] : "";
-  const nextSecondCard = cardsNextData ? cardsNextData[1] : "";
-  const nextThirdCard = cardsNextData ? cardsNextData[2] : "";
-  const nextFourthCard = cardsNextData ? cardsNextData[3] : "";
-  const nextFifthCard = cardsNextData ? cardsNextData[4] : "";
-
-
-  const runDidMount = async () => {
+  const fetchCards = async () => {
     const { success, data } = await dispatch(getAllTeams());
 
-    if(!success) return
-    const $clubs = buildClubs1(data)
+    if (!success) return;
 
-    setCardsData([...$clubs]);
-    setCardsNextData([...$clubs]);
-  }
+    setCardsInfo({
+      ...cardsInfo,
+      cards: data,
+    });
+  };
 
   useEffect(() => {
-      runDidMount()
+    fetchCards();
   }, []);
 
-  if(isEmpty(cardsData) || isEmpty(cardsNextData)) return <Loader/>
+  if (isEmpty(cardsInfo)) return <Loader />;
 
   return (
-    <Layout title="Select Club">
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-      <Div
-        className="bg-[url('/images/green_grunge_border_with_halftone_background_2.png')]
-                bg-[length:100%_100%] bg-no-repeat w-full relative"
-        style={{...STYLES.container}}
-        pt={34}
-      >
-        <div className="absolute" style={STYLES.image}>
-          <Image
-              src={`/images/logo_white.png`}
-              alt={""}
-              w={164}
-              h={40}
-          />
-        </div>
+    <Layout
+      title="Select Club"
+      showToast
+      bg={{
+        url: `bg-[url('/images/green_grunge_border_with_halftone_background_2.png')]`,
+        cls: "relative pt-[3.4rem]",
+      }}
+    >
+      <div>
+        <Image
+          src={`/images/logo_white.png`}
+          className={`w-[16.4rem] h-[4rem] absolute left-[8rem] top-[3.4rem] z-[1]`}
+          alt={""}
+        />
         <div className="flex flex-col items-center">
           <Text
-            text={
+            title={
               <span>
                 select your <br />
                 favorite club
               </span>
             }
-            fs={50}
-            fst={"italic"}
-            tt={"uppercase"}
-            textAlign={"center"}
-            fw={800}
-            lh={54}
-            mt={50}
-            color={colors.white}
+            className={`text-white italic uppercase center text-[5rem] leading-[5.4rem] mt-[5rem] text-center font-[800]`}
           />
+
           <Text
-            text={
+            title={
               <span>
                 {" "}
                 Based on this choice, players will be prioritized when creating{" "}
@@ -167,31 +135,14 @@ export default function SelectClub() {
                 club
               </span>
             }
-            fs={18}
-            textAlign={"center"}
-            lh={26}
-            color={colors.white}
-            mt={24}
-            opacity={0.7}
+            className={`text-white center text-[1.8rem] leading-[2.6rem] mt-[2.4rem] text-center opacity-[0.7]`}
           />
         </div>
 
-        {cardsData && (
+        {cardsInfo && (
           <div>
             <div className="flex justify-between items-center mt-[6rem] w-full">
-              <CardSection
-                firstCard={firstCard}
-                secondCard={secondCard}
-                thirdCard={thirdCard}
-                fourthCard={fourthCard}
-                fifthCard={fifthCard}
-                nextFirstCard={nextFirstCard}
-                nextSecondCard={nextSecondCard}
-                nextThirdCard={nextThirdCard}
-                nextFourthCard={nextFourthCard}
-                nextFifthCard={nextFifthCard}
-                changeCard={changeCard}
-              />
+              <CardSection cardsInfo={cardsInfo} />
             </div>
             {/*Controls*/}
             <ClubControls
@@ -202,16 +153,10 @@ export default function SelectClub() {
         )}
 
         {/*left gradient*/}
-        <div
-          className="bg-[url('/images/gradient_blue_left.png')] absolute bg-[length:100%_100%] bg-no-repeat  top-[0] left-[0] "
-          style={STYLES.gradient}
-        />
+        <div className="bg-[url('/images/gradient_blue_left.png')] absolute bg-[length:100%_100%] bg-no-repeat  top-[0] left-[0] h-full w-[29.9rem]" />
         {/*right gradient*/}
-        <div
-          className="bg-[url('/images/gradient_blue_right.png')] absolute bg-[length:100%_100%] bg-no-repeat  top-[0] right-[0] "
-          style={STYLES.gradient}
-        />
-      </Div>
+        <div className="bg-[url('/images/gradient_blue_right.png')] absolute bg-[length:100%_100%] bg-no-repeat  top-[0] right-[0] h-full w-[29.9rem]" />
+      </div>
     </Layout>
   );
 }

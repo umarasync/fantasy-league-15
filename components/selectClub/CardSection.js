@@ -1,93 +1,71 @@
-
 // Components
 import SelectClubCard from "components/selectClub/SelectClubCard";
 
-// Constants
-import cardsStyle from "styles/cardsStyle";
+export default function CardSection({ cardsInfo }) {
+  const { cards, toggleAnimation } = cardsInfo;
 
-export default function CardSection({
-    firstCard,
-    secondCard,
-    thirdCard,
-    fourthCard,
-    fifthCard,
+  // Background card images
+  const bgImage1 = `bg-[url('/images/card_blue_small_left.png')]
+          bg-[length:100%_100%] bg-no-repeat w-full`;
 
-    nextFirstCard,
-    nextSecondCard,
-    nextThirdCard,
-    nextFourthCard,
-    nextFifthCard,
+  const bgImage2 = `bg-[url('/images/card_blue.png')]
+          bg-[length:100%_100%] bg-no-repeat w-full`;
 
-    changeCard,
-}){
-    return (
-        <>
-            <SelectClubCard
-                image = {
-                    {
-                        ...cardsStyle[0].image,
-                        name: firstCard.image.name,
-                        nextName: nextFirstCard.image.name}
-                }
-                heading = {{...cardsStyle[0].heading, title: firstCard.heading.title, nextTitle: nextFirstCard.heading.title}}
-                subHeading = {{...cardsStyle[0].subHeading, title: firstCard.subHeading.title, nextTitle: nextFirstCard.subHeading.title}}
-                containerClasses={cardsStyle[0].containerClasses}
-                containerStyle={cardsStyle[0].containerStyle}
-                bgImage={cardsStyle[0].bgImage}
-                itemsCenter={cardsStyle[0].itemsCenter}
-                boxPaddingTop={cardsStyle[0].boxPaddingTop}
+  const bgImage3 = `bg-[url('/images/card_white.png')]
+          bg-[length:100%_100%] bg-no-repeat w-full`;
 
-                changeCard={changeCard}
-            />
-            <SelectClubCard
-                image = {{...cardsStyle[1].image, name: secondCard.image.name, nextName: nextSecondCard.image.name}}
-                heading = {{...cardsStyle[1].heading, title: secondCard.heading.title, nextTitle: nextSecondCard.heading.title}}
-                subHeading = {{...cardsStyle[1].subHeading, title: secondCard.subHeading.title, nextTitle: nextSecondCard.subHeading.title}}
-                containerClasses={cardsStyle[1].containerClasses}
-                containerStyle={cardsStyle[1].containerStyle}
-                bgImage={cardsStyle[1].bgImage}
-                itemsCenter={cardsStyle[1].itemsCenter}
-                boxPaddingTop={cardsStyle[1].boxPaddingTop}
+  const buildCardType1 = (card) => {
+    return {
+      ...card,
+      toggleAnimation,
+      classNames: {
+        imageCls: "w-[5.9rem] h-[5.9rem]",
+        headingCls:
+          "text-white text-[1.4rem] pt-[1rem] leading-[1.8rem] font-[800] uppercase italic",
+        subHeadingCls:
+          "text-lavender_grey text-[1.2rem] mt-[0.4rem] leading-[1.6rem] font-[400]",
+        containerCls: `flex relative items-center w-[16.1rem] h-[14.7rem] ${bgImage1}`,
+      },
+    };
+  };
 
-                changeCard={changeCard}
-            />
-            <SelectClubCard
-                image = {{...cardsStyle[2].image, name: thirdCard.image.name, nextName: nextThirdCard.image.name}}
-                heading = {{...cardsStyle[2].heading, title: thirdCard.heading.title, nextTitle: nextThirdCard.heading.title}}
-                subHeading = {{...cardsStyle[2].subHeading, title: thirdCard.subHeading.title, nextTitle: nextThirdCard.subHeading.title}}
-                containerClasses={cardsStyle[2].containerClasses}
-                containerStyle={cardsStyle[2].containerStyle}
-                bgImage={cardsStyle[2].bgImage}
-                itemsCenter={cardsStyle[2].itemsCenter}
-                boxPaddingTop={cardsStyle[2].boxPaddingTop}
+  const buildCardType2 = (card) => {
+    return {
+      ...card,
+      toggleAnimation,
+      classNames: {
+        imageCls: "w-[8.1rem] h-[8.1rem]",
+        headingCls:
+          "text-white text-[2rem] pt-[2rem] leading-[2.4rem] font-[800] uppercase italic",
+        subHeadingCls:
+          "text-lavender_grey text-[1.4rem] mt-[0.4rem] leading-[2.2rem] font-[400]",
+        containerCls: `flex relative items-center w-[29.9rem] h-[23.1rem] ${bgImage2}`,
+      },
+    };
+  };
 
-                changeCard={changeCard}
-            />
-            <SelectClubCard
-                image = {{...cardsStyle[3].image, name: fourthCard.image.name, nextName: nextFourthCard.image.name}}
-                heading = {{...cardsStyle[3].heading, title: fourthCard.heading.title, nextTitle: nextFourthCard.heading.title}}
-                subHeading = {{...cardsStyle[3].subHeading, title: fourthCard.subHeading.title, nextTitle: nextFourthCard.subHeading.title}}
-                containerClasses={cardsStyle[3].containerClasses}
-                containerStyle={cardsStyle[3].containerStyle}
-                bgImage={cardsStyle[3].bgImage}
-                itemsCenter={cardsStyle[3].itemsCenter}
-                boxPaddingTop={cardsStyle[3].boxPaddingTop}
+  const buildCardType3 = (card) => {
+    return {
+      ...card,
+      toggleAnimation,
+      classNames: {
+        imageCls: "w-[15rem] h-[15rem] mt-[2rem]",
+        headingCls:
+          "text-black_rock text-[3.2rem] pt-[2rem] leading-[4.4rem] font-[800] uppercase italic",
+        subHeadingCls:
+          "text-regent_grey text-[1.8rem] mt-[0.4rem] leading-[2.6rem] font-[400]",
+        containerCls: `flex relative items-start w-[40.8rem] h-[35.9rem] ${bgImage3}`,
+      },
+    };
+  };
 
-                changeCard={changeCard}
-            />
-            <SelectClubCard
-                image = {{...cardsStyle[4].image, name: fifthCard.image.name, nextName: nextFifthCard.image.name}}
-                heading = {{...cardsStyle[4].heading, title: fifthCard.heading.title, nextTitle: nextFifthCard.heading.title}}
-                subHeading = {{...cardsStyle[4].subHeading, title: fifthCard.subHeading.title, nextTitle: nextFifthCard.subHeading.title}}
-                containerClasses={cardsStyle[4].containerClasses}
-                containerStyle={cardsStyle[4].containerStyle}
-                bgImage={cardsStyle[4].bgImage}
-                itemsCenter={cardsStyle[4].itemsCenter}
-                boxPaddingTop={cardsStyle[4].boxPaddingTop}
-
-                changeCard={changeCard}
-            />
-        </>
-    )
-
+  return (
+    <>
+      <SelectClubCard cardsInfo={buildCardType1(cards[0])} />
+      <SelectClubCard cardsInfo={buildCardType2(cards[1])} />
+      <SelectClubCard cardsInfo={buildCardType3(cards[2])} />
+      <SelectClubCard cardsInfo={buildCardType2(cards[3])} />
+      <SelectClubCard cardsInfo={buildCardType1(cards[4])} />
+    </>
+  );
 }

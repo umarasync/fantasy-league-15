@@ -7,6 +7,8 @@ import {
   CONFIRMATION_SUCCESS,
   loginFailed,
   loginSuccess,
+  meFailed,
+  meSuccess,
   RESET_PASSWORD_FAILED,
   RESET_PASSWORD_REQUEST_FAILED,
   RESET_PASSWORD_REQUEST_SUCCESS,
@@ -207,11 +209,15 @@ export const me = () => {
       });
 
       if (res && res.data.me) {
-        return res.data.me;
+        const user = res.data.me;
+        dispatch(meSuccess(user));
+        return responseSuccess("", user);
       }
-      return false;
+      dispatch(meFailed());
+      return responseFailed();
     } catch (e) {
-      return false;
+      dispatch(meFailed());
+      return responseFailed();
     }
   };
 };

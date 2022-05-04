@@ -24,76 +24,43 @@ export const RESET_PASSWORD_FAILED = "RESET_PASSWORD_FAILED";
 export const RESET_PAGE = "RESET_PAGE";
 
 export const signupSuccess = (payload) => {
-    return {
-        type: SIGNUP_SUCCESS,
-        payload
-    }
-}
+  return {
+    type: SIGNUP_SUCCESS,
+    payload,
+  };
+};
 
 export const signupFailed = (payload) => {
-    return {
-        type: SIGNUP_FAILED,
-        payload
-    }
-}
+  return {
+    type: SIGNUP_FAILED,
+    payload,
+  };
+};
 
 export const loginSuccess = (payload) => {
-    return {
-        type: LOGIN_SUCCESS,
-        payload
-    }
-}
+  return {
+    type: LOGIN_SUCCESS,
+    payload,
+  };
+};
 
 export const loginFailed = (payload) => {
-    return {
-        type: LOGIN_FAILED,
-        payload
-    }
-}
+  return {
+    type: LOGIN_FAILED,
+    payload,
+  };
+};
 
 export const meSuccess = (payload) => {
-    return {
-        type: ME_SUCCESS,
-        payload
-    }
-}
+  return {
+    type: ME_SUCCESS,
+    payload,
+  };
+};
 
 export const meFailed = (payload) => {
-    return {
-        type: ME_FAILED,
-        payload
-    }
-}
-
-// TODO:Remove when we get from api
-
-export const BENCH_BOOST_APPLIED_SUCCESS = "BENCH_BOOST_APPLIED_SUCCESS";
-export const BENCH_BOOST_APPLIED_FAILED = "BENCH_BOOST_APPLIED_FAILED";
-export const TRIPLE_CAPTAIN_BOOST_APPLIED_SUCCESS = "TRIPLE_CAPTAIN_BOOST_APPLIED_SUCCESS";
-export const TRIPLE_CAPTAIN_BOOST_APPLIED_FAILED = "TRIPLE_CAPTAIN_BOOST_APPLIED_FAILED";
-
-export const benchBoostAppliedSuccess = (payload) => {
-    return {
-        type: BENCH_BOOST_APPLIED_SUCCESS,
-        payload
-    }
-}
-export const benchBoostAppliedFailed = (payload) => {
-    return {
-        type: BENCH_BOOST_APPLIED_FAILED,
-        payload
-    }
-}
-
-export const tripleCaptainBoostAppliedSuccess = (payload) => {
-    return {
-        type: TRIPLE_CAPTAIN_BOOST_APPLIED_SUCCESS,
-        payload
-    }
-}
-export const tripleCaptainBoostAppliedFailed = (payload) => {
-    return {
-        type: TRIPLE_CAPTAIN_BOOST_APPLIED_FAILED,
-        payload
-    }
-}
+  return {
+    type: ME_FAILED,
+    payload,
+  };
+};

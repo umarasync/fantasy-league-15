@@ -21,7 +21,6 @@ export default function BenchBoostModal({
   const user = useSelector(({ auth }) => auth.user);
 
   const handleBenchBoostConfirmed = async () => {
-    return;
     await handleBenchBoost({
       boostType: BOOST_TYPE_BENCH,
       dispatch,

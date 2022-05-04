@@ -23,12 +23,7 @@ import {
   fantasyTeamTransferStart,
 } from "./actionCreators";
 
-import {
-  benchBoostAppliedFailed,
-  benchBoostAppliedSuccess,
-  tripleCaptainBoostAppliedFailed,
-  tripleCaptainBoostAppliedSuccess,
-} from "../Auth/actionCreators";
+import { me } from "redux/Auth/api";
 
 export const createFantasyTeam = (data) => {
   return async (dispatch) => {
@@ -162,11 +157,7 @@ export const setFantasyTeamBooster = (data) => {
       // Success
       if (result && !isEmpty(result.data.setFantasyTeamBooster)) {
         dispatch(fantasyTeamBoosterSuccess());
-        if (isTypeBenchBoost) {
-          dispatch(benchBoostAppliedSuccess());
-        } else {
-          dispatch(tripleCaptainBoostAppliedSuccess());
-        }
+        dispatch(me());
         return responseSuccess(
           `${
             isTypeBenchBoost ? "Bench" : "Triple Captain"
@@ -176,20 +167,10 @@ export const setFantasyTeamBooster = (data) => {
 
       // Failed
       dispatch(fantasyTeamBoosterFailed());
-      if (isTypeBenchBoost) {
-        dispatch(benchBoostAppliedFailed());
-      } else {
-        dispatch(tripleCaptainBoostAppliedFailed());
-      }
       return responseFailed(ERROR_MSG);
     } catch (e) {
       // Failed
       dispatch(fantasyTeamBoosterFailed());
-      if (isTypeBenchBoost) {
-        dispatch(benchBoostAppliedFailed());
-      } else {
-        dispatch(tripleCaptainBoostAppliedFailed());
-      }
       return responseFailed(ERROR_MSG);
     }
   };

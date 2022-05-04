@@ -8,7 +8,6 @@ export default gql`
       lastName
       currentGameweek
       fantasyTeamId
-      totalScore
       currentSeason
       fantasyTeamValue
       fullName
@@ -35,6 +34,10 @@ export default gql`
         owner {
           firstName
         }
+      }
+      boosters {
+        benchBoostApplied
+        tripleCaptainApplied
       }
     }
   }

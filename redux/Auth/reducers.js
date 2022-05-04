@@ -11,61 +11,50 @@ import {
   RESET_PASSWORD_REQUEST_SUCCESS,
   RESET_PASSWORD_FAILED,
   RESET_PASSWORD_SUCCESS,
-  RESET_PAGE,
-  BENCH_BOOST_APPLIED_SUCCESS,
-  BENCH_BOOST_APPLIED_FAILED,
-  TRIPLE_CAPTAIN_BOOST_APPLIED_SUCCESS,
-  TRIPLE_CAPTAIN_BOOST_APPLIED_FAILED,
 } from "./actionCreators";
 
-
-// Chip Booster States
-const benchBoosterState = (state, action) => {
-
-  switch (action.type) {
-      // Chip Booster
-    case BENCH_BOOST_APPLIED_SUCCESS:
-      return {
-        ...state,
-        user: { ...state.user, benchBoostApplied: true, ...action.payload },
-      };
-    case BENCH_BOOST_APPLIED_FAILED:
-      return {
-        ...state,
-        user: { ...state.user, benchBoostApplied: false, ...action.payload },
-      };
-    case TRIPLE_CAPTAIN_BOOST_APPLIED_SUCCESS:
-      return {
-        ...state,
-        user: { ...state.user, tripleCaptainApplied: true, ...action.payload },
-      };
-    case TRIPLE_CAPTAIN_BOOST_APPLIED_FAILED:
-      return {
-        ...state,
-        user: { ...state.user, tripleCaptainApplied: false, ...action.payload, },
-      };
-  }
-}
+// // Chip Booster States
+// const benchBoosterState = (state, action) => {
+//   switch (action.type) {
+//     // Chip Booster
+//     case BENCH_BOOST_APPLIED_SUCCESS:
+//       return {
+//         ...state,
+//         user: { ...state.user, benchBoostApplied: true, ...action.payload },
+//       };
+//     case BENCH_BOOST_APPLIED_FAILED:
+//       return {
+//         ...state,
+//         user: { ...state.user, benchBoostApplied: false, ...action.payload },
+//       };
+//     case TRIPLE_CAPTAIN_BOOST_APPLIED_SUCCESS:
+//       return {
+//         ...state,
+//         user: { ...state.user, tripleCaptainApplied: true, ...action.payload },
+//       };
+//     case TRIPLE_CAPTAIN_BOOST_APPLIED_FAILED:
+//       return {
+//         ...state,
+//         user: { ...state.user, tripleCaptainApplied: false, ...action.payload },
+//       };
+//   }
+// };
 
 function authReducer(
   state = {
     loginError: "",
     signUpSuccess: "",
     signUpError: "",
-    confirmationError:"",
-    confirmationSuccess:"",
-    resetRequestSuccess:"",
-    resetRequestError:"",
-    resetPasswordSuccess:"",
-    resetPasswordError:"",
-    user: {
-      benchBoostApplied: false,
-      tripleCaptainApplied: false,
-    },
+    confirmationError: "",
+    confirmationSuccess: "",
+    resetRequestSuccess: "",
+    resetRequestError: "",
+    resetPasswordSuccess: "",
+    resetPasswordError: "",
+    user: {},
   },
   action
 ) {
-
   switch (action.type) {
     // login
     case LOGIN_SUCCESS:
@@ -79,7 +68,7 @@ function authReducer(
         user: { ...state.user, ...action.payload },
       };
 
-      // ME
+    // ME
     case ME_SUCCESS:
       return {
         ...state,
@@ -91,7 +80,7 @@ function authReducer(
         user: { ...state.user, ...action.payload },
       };
 
-      // signup
+    // signup
     case SIGNUP_SUCCESS:
       return {
         ...state,
@@ -103,7 +92,7 @@ function authReducer(
         signUpError: action.payload,
       };
 
-      //email confirmation
+    //email confirmation
     case CONFIRMATION_SUCCESS:
       return {
         ...state,
@@ -115,7 +104,7 @@ function authReducer(
         confirmationError: action.payload,
       };
 
-      // reset password
+    // reset password
     case RESET_PASSWORD_REQUEST_SUCCESS:
       return {
         ...state,
@@ -136,13 +125,6 @@ function authReducer(
         ...state,
         resetPasswordError: action.payload,
       };
-
-    // Chip Booster States
-    case BENCH_BOOST_APPLIED_SUCCESS:
-    case BENCH_BOOST_APPLIED_FAILED:
-    case TRIPLE_CAPTAIN_BOOST_APPLIED_SUCCESS:
-    case TRIPLE_CAPTAIN_BOOST_APPLIED_FAILED:
-      return benchBoosterState(state, action)
 
     default:
       return state;
