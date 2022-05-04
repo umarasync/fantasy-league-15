@@ -1,5 +1,5 @@
 // Packages
-import {ceil} from "lodash/math";
+import { ceil } from "lodash/math";
 
 import {
   GET_PLAYERS_SUCCESS,

@@ -1,8 +1,14 @@
 // Packages
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 // Constants
-import {POSITION_ALL, POSITION_DEF, POSITION_FWD, POSITION_GK, POSITION_MID} from "constants/data/filters";
+import {
+  POSITION_ALL,
+  POSITION_DEF,
+  POSITION_FWD,
+  POSITION_GK,
+  POSITION_MID,
+} from "constants/data/filters";
 
 // Players
 export const positionAbbr = (position) => {
@@ -21,66 +27,66 @@ export const positionAbbr = (position) => {
       p = "GK";
       break;
     case POSITION_ALL:
-        p = "ALL";
-        break;
+      p = "ALL";
+      break;
   }
   return p;
 };
 
 export const buildPlayers = (playersData) => {
-  return playersData.map(p => {
-            return {
-                  ...p,
-                  nextMatch: {
-                    club: 'GRO',
-                    vs: "BEN",
-                    matchType: "H",
-                  },
-                  most_transferred: 2,
-                  picked: 12,
-                  pickedAsCaptain: 6,
-                  recommended: true,
-                  penaltyTaker: false,
-            };
-          })
-}
+  return playersData.map((p) => {
+    return {
+      ...p,
+      nextMatch: {
+        club: "GRO",
+        vs: "BEN",
+        matchType: "H",
+      },
+      most_transferred: 2,
+      picked: 12,
+      pickedAsCaptain: 6,
+      recommended: true,
+      penaltyTaker: false,
+    };
+  });
+};
 
 // Teams
-export const ALL_TEAMS = 'All Teams'
+export const ALL_TEAMS = "All Teams";
 export const buildClubs = (teams) => {
-    const $teams = teams.map(team => {
-        return {
-            id: team.id,
-            label: team.name,
-            value: team.name,
-            image: team.logo,
-            checked: false
-        }
-    })
+  const $teams = teams.map((team) => {
+    return {
+      id: team.id,
+      label: team.name,
+      value: team.name,
+      image: team.logo,
+      checked: false,
+    };
+  });
 
-    $teams.unshift({
-        id: uuidv4(),
-        label: ALL_TEAMS,
-        value: ALL_TEAMS,
-        checked: true
-    })
+  $teams.unshift({
+    id: uuidv4(),
+    label: ALL_TEAMS,
+    value: ALL_TEAMS,
+    checked: true,
+  });
 
-    return $teams
-}
+  return $teams;
+};
 
 export const buildClubs1 = (teams) => {
-    return teams.map((t) => {
-        return {
-          id: t.id,
-          image: {
-            name: t.logo,
-          },
-          heading: {
-            title: t.name,
-          },
-          subHeading: {
-            title: t.venue,
-          },
-        };
-    })
-}
+  return teams.map((t) => {
+    return {
+      id: t.id,
+      image: {
+        name: t.logo,
+      },
+      heading: {
+        title: t.name,
+      },
+      subHeading: {
+        title: t.venue,
+      },
+    };
+  });
+};

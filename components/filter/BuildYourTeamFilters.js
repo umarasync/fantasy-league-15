@@ -90,27 +90,27 @@ export default function BuildYourTeamFilters({
           style={{ ...STYLES.container }}
           parentContainerStyle={{
             zIndex: 3,
-            marginRight: R(8),
+            // marginRight: R(8),
           }}
           textStyle={STYLES.textStyle}
           hideLabel
           openedBorderColor={""}
         />
 
-        <SelectSearchInput
-          label={"Statuses"}
-          options={statuses}
-          selectedOptions={selectedStatuses}
-          firstOptionName={ALL_STATUSES}
-          style={STYLES.container}
-          textStyle={STYLES.textStyle}
-          parentContainerStyle={{ marginLeft: R(8) }}
-          onOptionClicked={onStatusSelected}
-          hideSearchBox
-          optionImageStyle={STYLES.optionImageStyle}
-          tagImagesStyle={STYLES.optionImageStyle}
-          arrowImageStyle={{ width: R(33) }}
-        />
+        {/*<SelectSearchInput*/}
+        {/*  label={"Statuses"}*/}
+        {/*  options={statuses}*/}
+        {/*  selectedOptions={selectedStatuses}*/}
+        {/*  firstOptionName={ALL_STATUSES}*/}
+        {/*  style={STYLES.container}*/}
+        {/*  textStyle={STYLES.textStyle}*/}
+        {/*  parentContainerStyle={{ marginLeft: R(8) }}*/}
+        {/*  onOptionClicked={onStatusSelected}*/}
+        {/*  hideSearchBox*/}
+        {/*  optionImageStyle={STYLES.optionImageStyle}*/}
+        {/*  tagImagesStyle={STYLES.optionImageStyle}*/}
+        {/*  arrowImageStyle={{ width: R(33) }}*/}
+        {/*/>*/}
       </div>
 
       {/*<SelectInput*/}

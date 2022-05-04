@@ -28,11 +28,7 @@ export default function ({ makeTransfer }) {
   const [fromMakeTransfer, setFromMakeTransfer] = useState(true);
   const playersData = useSelector(({ players }) => players.playersData);
   const teamAlreadyExists = useSelector(({ auth }) => auth.user.fantasyTeamId);
-  const playersPerPage = useSelector(({ players }) => players.playersPerPage);
-  const currentPage = useSelector(({ players }) => players.currentPage);
   const redirectToMySquadPage = teamAlreadyExists && !makeTransfer;
-
-  const initialOffsetShouldBeZero = playersPerPage * currentPage;
 
   const runDidMount = async () => {
     if (redirectToMySquadPage) {
@@ -40,18 +36,6 @@ export default function ({ makeTransfer }) {
     }
 
     setFromMakeTransfer(false);
-
-    const getPlayersInput = {
-      first: playersPerPage,
-      offset: initialOffsetShouldBeZero,
-      where: {
-        position: { eq: POSITION_ALL[0].value },
-        // teamId: { eq: "" },
-      },
-      sortBy: { ...SORTING_OPTIONS[0].value },
-    };
-
-    dispatch(getPlayers(getPlayersInput));
 
     const { success, data } = await dispatch(getAllTeams());
     if (!success) return;
@@ -61,8 +45,8 @@ export default function ({ makeTransfer }) {
     runDidMount();
   }, []);
 
-  if (isEmpty(playersData) || isEmpty(clubs) || fromMakeTransfer)
-    return <Loader />;
+  // if (isEmpty(playersData) || isEmpty(clubs) || fromMakeTransfer)
+  if (isEmpty(clubs) || fromMakeTransfer) return <Loader />;
 
   return <BuildTeamPlayers players={playersData} clubs={clubs} />;
 }

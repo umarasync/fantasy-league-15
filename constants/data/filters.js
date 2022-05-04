@@ -36,43 +36,40 @@ export const PLAYERS_POSITIONS = [
 ];
 
 // PRICES
-export const ALL_PRICES = "All prices";
 export const PRICES = [
   {
     id: 1,
-    label: ALL_PRICES,
-    value: ALL_PRICES,
+    label: "All prices",
+    value: {},
   },
   {
     id: 2,
     label: "< €1m",
     value: {
-      from: 0,
-      to: 1000000,
+      lt: 1000000,
     },
   },
   {
     id: 3,
     label: "€1m – €5m",
     value: {
-      from: 1000000,
-      to: 5000000,
+      gte: 1000000,
+      lte: 5000000,
     },
   },
   {
     id: 4,
     label: "€10m – €20m",
     value: {
-      from: 10000000,
-      to: 20000000,
+      gte: 10000000,
+      lte: 20000000,
     },
   },
   {
     id: 5,
     label: "€10m <",
     value: {
-      from: 10000000,
-      to: null,
+      gt: 10000000,
     },
   },
 ];

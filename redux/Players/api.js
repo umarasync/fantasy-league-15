@@ -26,7 +26,7 @@ export const getPlayers = (data) => {
         variables: { first, offset, where, sortBy },
       });
 
-      if (result && !isEmpty(result.data.players)) {
+      if (result && result.data.players !== null) {
         const playersData = buildPlayers(result.data.players.data);
         return dispatch(
           getPlayersSuccess({

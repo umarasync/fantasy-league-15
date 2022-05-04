@@ -73,7 +73,7 @@ const getStyles = (R) => {
   };
 };
 
-export default function FooterBar({
+export default function BuildTeamFooterBar({
   players,
   teamInfo,
   setTeamInfo,
@@ -132,7 +132,7 @@ export default function FooterBar({
     setTeamInfo({
       ...teamInfo,
       squadInfo: clone(squadInfoInitialState),
-      playersInitial: clone(players),
+      players: clone(players),
     });
 
     setAutoPickDisabled(false);
