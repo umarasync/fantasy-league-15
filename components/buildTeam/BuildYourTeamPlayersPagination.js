@@ -17,9 +17,13 @@ import {
   getPlayersStart,
 } from "redux/Players/actionsCreators";
 
+// Utils
+import { getSelectedClubsIds } from "utils/helpers";
+
 export default function BuildYourTeamPlayersPagination({
   selectedSortingOption,
   activePosition,
+  selectedClubs,
 }) {
   const dispatch = useDispatch();
   const playersPerPage = useSelector(({ players }) => players.playersPerPage);
@@ -57,7 +61,9 @@ export default function BuildYourTeamPlayersPagination({
       offset,
       where: {
         position: { eq: activePosition.value },
-        // teamId: { eq: "" },
+        teamId: {
+          in: getSelectedClubsIds(selectedClubs),
+        },
       },
       sortBy: { ...selectedSortingOption.value },
     };
@@ -76,7 +82,7 @@ export default function BuildYourTeamPlayersPagination({
   useEffect(() => {
     onFirstPage();
     changePage(0);
-  }, [selectedSortingOption, activePosition]);
+  }, [selectedSortingOption, activePosition, selectedClubs]);
 
   return (
     <Div center mb={20}>

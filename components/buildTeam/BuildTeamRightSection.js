@@ -124,7 +124,6 @@ export default function BuildTeamRightSection({
     updatedPlayers = updatedPlayers.filter((player) => {
       return filtersHandler({
         player,
-        selectedClubs,
         selectedPrice,
         selectedStatuses,
         selectedRecommendation,
@@ -156,11 +155,10 @@ export default function BuildTeamRightSection({
     if (!areAllInitialStatesCompleted()) return;
     runFiltersOnPlayersData();
   }, [
-    clubs,
-    statuses,
-    selectedRecommendation,
+    // clubs,
+    // statuses,
+    // selectedRecommendation,
     selectedPrice,
-    selectedSortingOption,
     playersInitial,
   ]);
 
@@ -168,10 +166,11 @@ export default function BuildTeamRightSection({
     return (
       selectedClubs.length === 0 ||
       selectedClubs[0].value !== ALL_TEAMS ||
-      selectedStatuses.length === 0 ||
-      selectedStatuses[0].value !== ALL_STATUSES ||
-      selectedPrice.value !== ALL_PRICES ||
-      selectedRecommendation.value !== RECOMMENDED_PLAYERS
+      // selectedStatuses.length === 0 ||
+      // selectedStatuses[0].value !== ALL_STATUSES ||
+      selectedPrice.value !== ALL_PRICES
+      // ||
+      // selectedRecommendation.value !== RECOMMENDED_PLAYERS
     );
   };
 
@@ -197,6 +196,7 @@ export default function BuildTeamRightSection({
     initialSettings();
   }, []);
 
+  console.log("sele", selectedClubs);
   return (
     <Div position={"relative"} w={488} pt={35} pb={100}>
       {/*username*/}
@@ -323,6 +323,7 @@ export default function BuildTeamRightSection({
               <BuildYourTeamPlayersPagination
                 selectedSortingOption={selectedSortingOption}
                 activePosition={activePosition}
+                selectedClubs={selectedClubs}
               />
             </Div>
           )}

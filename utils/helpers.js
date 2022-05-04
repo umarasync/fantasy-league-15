@@ -5,6 +5,7 @@ import { shuffle as shuffleLodash } from "lodash/collection";
 
 // Constants
 import { currencySymbol } from "constants/universalConstants";
+import { ALL_TEAMS } from "./playersHelper";
 
 export const searchInArray = (searchQuery, array, objectKey = null) => {
   return array.filter((d) => {
@@ -84,4 +85,16 @@ export const flattenObj = ($squad) => {
     }
   }
   return squad.filter((p) => !isEmpty(p));
+};
+
+export const getSelectedClubsIds = (selectedClubs) => {
+  // Unselect all teams
+  if (isEmpty(selectedClubs)) return [];
+
+  // Get all teams
+  if (selectedClubs[0].value === ALL_TEAMS) {
+    return {};
+  }
+  // Get players with these club/teams ids
+  return selectedClubs.map((club) => club.id);
 };

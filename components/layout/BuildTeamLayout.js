@@ -46,7 +46,7 @@ export default function ({ makeTransfer }) {
       offset: initialOffsetShouldBeZero,
       where: {
         position: { eq: POSITION_ALL[0].value },
-        // teamId: { eq: "" },
+        teamId: {},
       },
       sortBy: { ...SORTING_OPTIONS[0].value },
     };
@@ -61,8 +61,8 @@ export default function ({ makeTransfer }) {
     runDidMount();
   }, []);
 
-  if (isEmpty(playersData) || isEmpty(clubs) || fromMakeTransfer)
-    return <Loader />;
+  // if (isEmpty(playersData) || isEmpty(clubs) || fromMakeTransfer)
+  if (isEmpty(clubs) || fromMakeTransfer) return <Loader />;
 
   return <BuildTeamPlayers players={playersData} clubs={clubs} />;
 }
