@@ -24,6 +24,7 @@ export default function BuildYourTeamPlayersPagination({
   selectedSortingOption,
   activePosition,
   selectedClubs,
+  selectedPrice,
   players,
 }) {
   const dispatch = useDispatch();
@@ -63,6 +64,7 @@ export default function BuildYourTeamPlayersPagination({
       where: {
         position: { eq: activePosition.value },
         teamId: getSelectedClubsIds(selectedClubs),
+        value: { ...selectedPrice.value },
       },
       sortBy: { ...selectedSortingOption.value },
     };
@@ -81,7 +83,9 @@ export default function BuildYourTeamPlayersPagination({
   useEffect(() => {
     onFirstPage();
     changePage(0);
-  }, [selectedSortingOption, activePosition, selectedClubs]);
+  }, [selectedSortingOption, activePosition, selectedClubs, selectedPrice]);
+
+  console.log("1----------", selectedPrice);
 
   if (isEmpty(players)) return null;
   return (

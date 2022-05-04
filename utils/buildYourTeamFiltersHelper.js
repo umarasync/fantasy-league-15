@@ -12,37 +12,27 @@ import {
 
 const filtersHandler = ({
   player,
-  selectedPrice,
   selectedStatuses,
   selectedRecommendation,
 }) => {
-  // Price-FILTER
+  // STATUS-FILTER
   if (
-    selectedPrice.value === ALL_PRICES ||
-    (selectedPrice.value.to === null &&
-      player.value > selectedPrice.value.from) ||
-    (player.value > selectedPrice.value.from &&
-      player.value < selectedPrice.value.to)
+    selectedStatuses.length > 0 &&
+    (selectedStatuses[0].value === ALL_STATUSES ||
+      selectedStatuses.some((status) => status.value === player.state))
   ) {
-    // STATUS-FILTER
+    // Recommendation-FILTER
     if (
-      selectedStatuses.length > 0 &&
-      (selectedStatuses[0].value === ALL_STATUSES ||
-        selectedStatuses.some((status) => status.value === player.state))
+      (selectedRecommendation.value === RECOMMENDED_PLAYERS &&
+        player.recommended) ||
+      (selectedRecommendation.value === POTENTIAL_PENALTY_TAKERS &&
+        player.penaltyTaker) ||
+      (selectedRecommendation.value === MOST_PICKED_PLAYERS &&
+        player.picked > 0) ||
+      (selectedRecommendation.value === MOST_PICKED_AS_CAPTAIN &&
+        player.pickedAsCaptain > 0)
     ) {
-      // Recommendation-FILTER
-      if (
-        (selectedRecommendation.value === RECOMMENDED_PLAYERS &&
-          player.recommended) ||
-        (selectedRecommendation.value === POTENTIAL_PENALTY_TAKERS &&
-          player.penaltyTaker) ||
-        (selectedRecommendation.value === MOST_PICKED_PLAYERS &&
-          player.picked > 0) ||
-        (selectedRecommendation.value === MOST_PICKED_AS_CAPTAIN &&
-          player.pickedAsCaptain > 0)
-      ) {
-        return true;
-      }
+      return true;
     }
   }
 };

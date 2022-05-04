@@ -18,7 +18,6 @@ import Div from "components/html/Div";
 import R from "utils/getResponsiveValue";
 import { handleMultiSelectionDropDowns } from "utils/buildYourTeamHelper";
 import { clone, isEmpty } from "utils/helpers";
-import filtersHandler from "utils/buildYourTeamFiltersHelper";
 
 // Animations
 import ShowAllFiltersAnimation from "Animations/buildYourTeam/ShowAllFiltersAnimation";
@@ -29,7 +28,6 @@ import {
 
 // Constants
 import {
-  ALL_PRICES,
   ALL_STATUSES,
   ALL_TEAMS,
   PLAYERS_POSITIONS,
@@ -59,13 +57,12 @@ const getStyles = (R) => {
 
 export default function BuildTeamRightSection({
   teamInfo,
-  setTeamInfo,
   clubs: clubsProp,
   handlePlayerSelection,
 }) {
   const STYLES = { ...getStyles(R) };
 
-  const { players, playersInitial } = teamInfo;
+  const { players } = teamInfo;
 
   // Global States
   const user = useSelector(({ auth }) => auth.user);
@@ -117,58 +114,13 @@ export default function BuildTeamRightSection({
     setSelectedSortingOption(sortingOptionsInitial[0]);
   };
 
-  // Filter & Sorting
-  const runFiltersOnPlayersData = () => {
-    let updatedPlayers = [...playersInitial];
-
-    updatedPlayers = updatedPlayers.filter((player) => {
-      return filtersHandler({
-        player,
-        selectedPrice,
-        selectedStatuses,
-        selectedRecommendation,
-      });
-    });
-
-    setTeamInfo({
-      ...teamInfo,
-      players: [...updatedPlayers],
-    });
-  };
-
-  const areAllInitialStatesCompleted = () => {
-    if (
-      isEmpty(clubs) ||
-      isEmpty(statuses) ||
-      isEmpty(selectedRecommendation) ||
-      isEmpty(selectedPrice) ||
-      isEmpty(activePosition) ||
-      isEmpty(selectedSortingOption) ||
-      isEmpty(playersInitial)
-    ) {
-      return false;
-    }
-    return true;
-  };
-
-  useEffect(() => {
-    if (!areAllInitialStatesCompleted()) return;
-    runFiltersOnPlayersData();
-  }, [
-    // clubs,
-    // statuses,
-    // selectedRecommendation,
-    selectedPrice,
-    playersInitial,
-  ]);
-
   const areFiltersApplied = () => {
     return (
       selectedClubs.length === 0 ||
       selectedClubs[0].value !== ALL_TEAMS ||
       // selectedStatuses.length === 0 ||
       // selectedStatuses[0].value !== ALL_STATUSES ||
-      selectedPrice.value !== ALL_PRICES
+      !isEmpty(selectedPrice.value)
       // ||
       // selectedRecommendation.value !== RECOMMENDED_PLAYERS
     );
@@ -189,7 +141,11 @@ export default function BuildTeamRightSection({
   };
 
   const showPaginationSection = () => {
-    return !isEmpty(selectedSortingOption) && !isEmpty(activePosition);
+    return (
+      !isEmpty(selectedSortingOption) &&
+      !isEmpty(activePosition) &&
+      !isEmpty(selectedPrice)
+    );
   };
 
   const noResultTextVisible = () => {
@@ -327,6 +283,7 @@ export default function BuildTeamRightSection({
                 selectedSortingOption={selectedSortingOption}
                 activePosition={activePosition}
                 selectedClubs={selectedClubs}
+                selectedPrice={selectedPrice}
                 players={players}
               />
             </Div>
