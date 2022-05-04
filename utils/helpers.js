@@ -1,14 +1,14 @@
 // Packages
 import cloneDeep from "lodash/cloneDeep";
 import { isEmpty as isEmptyLodash } from "lodash";
-import { countBy, shuffle as shuffleLodash } from "lodash/collection";
+import { shuffle as shuffleLodash } from "lodash/collection";
 
 // Constants
 import { currencySymbol } from "constants/universalConstants";
 
 export const searchInArray = (searchQuery, array, objectKey = null) => {
   return array.filter((d) => {
-    let data = objectKey ? d[objectKey] : d; //Incase If It's Array Of Objects.
+    let data = objectKey ? d[objectKey] : d; //In case If It's Array Of Objects.
     let dataWords =
       typeof data == "string" &&
       data

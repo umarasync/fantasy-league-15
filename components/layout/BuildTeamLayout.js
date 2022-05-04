@@ -18,7 +18,7 @@ import { isEmpty } from "utils/helpers";
 import { buildClubs } from "utils/playersHelper";
 
 // Filters
-import { SORTING_OPTIONS } from "constants/data/filters";
+import { POSITION_ALL, SORTING_OPTIONS } from "constants/data/filters";
 
 export default function ({ makeTransfer }) {
   // States
@@ -44,7 +44,7 @@ export default function ({ makeTransfer }) {
     const getPlayersInput = {
       first: playersPerPage,
       offset: initialOffsetShouldBeZero,
-      where: { teamId: { eq: "" } },
+      where: { position: { eq: POSITION_ALL[0].value } },
       sortBy: { ...SORTING_OPTIONS[0].value },
     };
 

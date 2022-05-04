@@ -19,6 +19,7 @@ import {
 
 export default function BuildYourTeamPlayersPagination({
   selectedSortingOption,
+  activePosition,
 }) {
   const dispatch = useDispatch();
   const playersPerPage = useSelector(({ players }) => players.playersPerPage);
@@ -54,7 +55,7 @@ export default function BuildYourTeamPlayersPagination({
     const getPlayersInput = {
       first: playersPerPage,
       offset,
-      where: { teamId: { eq: "" } },
+      where: { position: { eq: activePosition.value } },
       sortBy: { ...selectedSortingOption.value },
     };
     await dispatch(getPlayers(getPlayersInput));
@@ -72,7 +73,7 @@ export default function BuildYourTeamPlayersPagination({
   useEffect(() => {
     onFirstPage();
     changePage(0);
-  }, [selectedSortingOption]);
+  }, [selectedSortingOption, activePosition]);
 
   return (
     <Div center mb={20}>
