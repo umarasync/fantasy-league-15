@@ -2,7 +2,7 @@
 import { groupBy } from "lodash/collection";
 
 // Utils
-import { clone, flattenObj } from "utils/helpers";
+import { clone, flattenObj, isEmpty } from "utils/helpers";
 import { getAllSelectedPlayersIDs } from "utils/buildYourTeamHelper";
 
 // Constants
@@ -34,13 +34,17 @@ export const initialSettingsForTransferWindows = ({
   const $squad = clone(squad);
   const allPlayerIds = getAllSelectedPlayersIDs(flattenObj($squad));
 
-  const updatedPlayers = players.map((p) => {
-    p.chosen = !!allPlayerIds.includes(p.id);
-    p.readyToBeTransferOut = false;
-    p.toggleAnimation = false;
-    p.disablePlayerCard = true;
-    return p;
-  });
+  let updatedPlayers = [];
+
+  if (!isEmpty(players)) {
+    updatedPlayers = players.map((p) => {
+      p.chosen = !!allPlayerIds.includes(p.id);
+      p.readyToBeTransferOut = false;
+      p.toggleAnimation = false;
+      p.disablePlayerCard = true;
+      return p;
+    });
+  }
 
   // Updated squad info
   const updatedSquadInfo = {
@@ -276,6 +280,7 @@ const getRelevantPlayersData = (squad) => {
 };
 
 const updatePlayersInitialData = ({ playersInitial, updatedSquadInfo }) => {
+  if (isEmpty(playersInitial)) return [];
   const { allPlayersIds, toBeTransferredOutPlayers } = getRelevantPlayersData(
     updatedSquadInfo.squad
   );

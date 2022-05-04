@@ -327,6 +327,7 @@ export default function BuildTeamRightSection({
                 selectedSortingOption={selectedSortingOption}
                 activePosition={activePosition}
                 selectedClubs={selectedClubs}
+                players={players}
               />
             </Div>
           )}

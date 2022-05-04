@@ -18,12 +18,13 @@ import {
 } from "redux/Players/actionsCreators";
 
 // Utils
-import { getSelectedClubsIds } from "utils/helpers";
+import { getSelectedClubsIds, isEmpty } from "utils/helpers";
 
 export default function BuildYourTeamPlayersPagination({
   selectedSortingOption,
   activePosition,
   selectedClubs,
+  players,
 }) {
   const dispatch = useDispatch();
   const playersPerPage = useSelector(({ players }) => players.playersPerPage);
@@ -82,6 +83,7 @@ export default function BuildYourTeamPlayersPagination({
     changePage(0);
   }, [selectedSortingOption, activePosition, selectedClubs]);
 
+  if (isEmpty(players)) return null;
   return (
     <Div center mb={20}>
       <Div center>
