@@ -21,7 +21,6 @@ import Loader from "components/loaders/Loader";
 
 // Redux
 import { signup, login } from "redux/Auth/api";
-import { RESET_PAGE } from "redux/Auth/actionCreators";
 
 // Utils
 import R from "utils/getResponsiveValue";
@@ -130,12 +129,6 @@ export default function SignUp(props) {
       });
     } else {
       setError(msg);
-      toast.error(msg, {
-        onClose: () =>
-          dispatch({
-            type: RESET_PAGE,
-          }),
-      });
     }
   };
 

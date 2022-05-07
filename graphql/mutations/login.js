@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export default gql`
-  mutation login($loginPassword2: String!, $loginUsername2: String!) {
-    login(password: $loginPassword2, username: $loginUsername2) {
+  mutation login($password: String!, $username: String!) {
+    login(password: $password, username: $username) {
       id
       username
       profile {

@@ -42,7 +42,6 @@ import {
 
 function authReducer(
   state = {
-    loginError: "",
     signUpSuccess: "",
     signUpError: "",
     confirmationError: "",
@@ -56,18 +55,6 @@ function authReducer(
   action
 ) {
   switch (action.type) {
-    // login
-    case LOGIN_SUCCESS:
-      return {
-        ...state,
-      };
-    case LOGIN_FAILED:
-      return {
-        ...state,
-        loginError: action.payload,
-        user: { ...state.user, ...action.payload },
-      };
-
     // ME
     case ME_SUCCESS:
       return {

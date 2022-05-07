@@ -2,10 +2,6 @@
 export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
 export const SIGNUP_FAILED = "SIGNUP_FAILED";
 
-// Login
-export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
-export const LOGIN_FAILED = "LOGIN_FAILED";
-
 // Me
 export const ME_SUCCESS = "ME_FAILED";
 export const ME_FAILED = "ME_FAILED";
@@ -33,20 +29,6 @@ export const signupSuccess = (payload) => {
 export const signupFailed = (payload) => {
   return {
     type: SIGNUP_FAILED,
-    payload,
-  };
-};
-
-export const loginSuccess = (payload) => {
-  return {
-    type: LOGIN_SUCCESS,
-    payload,
-  };
-};
-
-export const loginFailed = (payload) => {
-  return {
-    type: LOGIN_FAILED,
     payload,
   };
 };

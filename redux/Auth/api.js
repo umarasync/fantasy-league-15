@@ -27,6 +27,7 @@ import ME from "graphql/queries/me";
 
 // Helpers
 import { isEmpty, responseFailed, responseSuccess } from "utils/helpers";
+import { ERROR_MSG } from "../../constants/universalConstants";
 
 // Login
 export const login = (data) => {
@@ -38,18 +39,19 @@ export const login = (data) => {
         variables: { username: data.email, password: data.password },
       });
 
+      console.log("1------", result);
+
       if (result && !isEmpty(result.data.login)) {
-        const loginData = result.data.login;
-        dispatch(loginSuccess(loginData));
-        return responseSuccess("Login successfully! Redirecting...", loginData);
+        return responseSuccess(
+          "Login successfully! Redirecting...",
+          result.data.login
+        );
       }
 
-      let errorMsg = result.data.errors[0].message;
-      dispatch(loginFailed(errorMsg));
-      return responseFailed(errorMsg);
+      return responseFailed(ERROR_MSG);
     } catch (e) {
-      // dispatch(loginFailed(e.message));
-      return responseFailed(e.message);
+      console.log("2------", e);
+      return responseFailed(ERROR_MSG);
     }
   };
 };
