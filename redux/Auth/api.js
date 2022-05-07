@@ -26,7 +26,7 @@ import UPDATE_PASSWORD from "graphql/mutations/updatePassword";
 import ME from "graphql/queries/me";
 
 // Helpers
-import { responseFailed, responseSuccess } from "utils/helpers";
+import { isEmpty, responseFailed, responseSuccess } from "utils/helpers";
 
 // Login
 export const login = (data) => {
@@ -38,16 +38,17 @@ export const login = (data) => {
         variables: { username: data.email, password: data.password },
       });
 
-      if (result && result.data.login !== null) {
-        dispatch(loginSuccess(result.data.login));
-        return responseSuccess("Login successfully! Redirecting...");
+      if (result && !isEmpty(result.data.login)) {
+        const loginData = result.data.login;
+        dispatch(loginSuccess(loginData));
+        return responseSuccess("Login successfully! Redirecting...", loginData);
       }
 
       let errorMsg = result.data.errors[0].message;
       dispatch(loginFailed(errorMsg));
       return responseFailed(errorMsg);
     } catch (e) {
-      dispatch(loginFailed(e.message));
+      // dispatch(loginFailed(e.message));
       return responseFailed(e.message);
     }
   };

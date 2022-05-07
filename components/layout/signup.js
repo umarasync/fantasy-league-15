@@ -10,13 +10,14 @@ import Layout from "components/layout";
 import Button from "components/html/Button";
 import { useRouter } from "next/router";
 import Input from "components/inputs/input";
-import Text from "components/html/Text"
-import Div from "components/html/Div"
+import Text from "components/html/Text";
+import Div from "components/html/Div";
 import Image from "components/html/Image";
 import ResetPasswordModal from "components/modals/ResetPasswordModal";
 import MyDatepicker from "components/datePicker/MyDatePicker";
 import GenderDropDown from "components/signUp/GenderDropDown";
 import Animated from "components/animation/Animated";
+import Loader from "components/loaders/Loader";
 
 // Redux
 import { signup, login } from "redux/Auth/api";
@@ -27,11 +28,13 @@ import R from "utils/getResponsiveValue";
 
 // Constants
 import colors from "constants/colors";
+import { routesNames } from "constants/universalConstants";
 
 // Animation
-import {signupHeadingAnimation} from "Animations/signUp/SignupAnimation";
-import Loader from "components/loaders/Loader";
-import {useAuth} from "../../context/authContext";
+import { signupHeadingAnimation } from "Animations/signUp/SignupAnimation";
+
+// Hooks
+import { useAuth } from "context/authContext";
 
 export default function SignUp(props) {
   const router = useRouter();
@@ -53,11 +56,11 @@ export default function SignUp(props) {
   const [dateOfBirth, setDateOfBirth] = useState("");
 
   const [showModal, setShowModal] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
   const [signUpError, setSignUpError] = useState(false);
 
   // Gender States
-  const [selectedGender, setSelectedGender] = useState({value: ''});
+  const [selectedGender, setSelectedGender] = useState({ value: "" });
 
   const { isAuthenticated } = useAuth();
 
@@ -86,7 +89,7 @@ export default function SignUp(props) {
       dob: dateOfBirth,
       password: password,
     };
-    let {success, msg}  = await dispatch(signup(userObj));
+    let { success, msg } = await dispatch(signup(userObj));
 
     if (success) {
       setSignUpError(false);
@@ -99,7 +102,6 @@ export default function SignUp(props) {
       setSignUpError(msg);
       toast.error(msg);
     }
-
   };
 
   /*** Sign In Flow:Starts ****/
@@ -116,11 +118,16 @@ export default function SignUp(props) {
       email: loginEmail,
       password: loginPassword,
     };
-    let {success, msg} = await dispatch(login(loginObj));
+    let { success, msg, data } = await dispatch(login(loginObj));
 
     if (success) {
-      setError(false);
-      toast.success( msg, {onClose: () => router.push("/select_club"),});
+      setError("");
+      const routeToRedirect = data.profile.fantasyTeamId
+        ? routesNames.MY_SQUAD_GAME_WEEK
+        : routesNames.BUILD_TEAM_ALL_PLAYERS;
+      toast.success(msg, {
+        onClose: () => router.push(routeToRedirect),
+      });
     } else {
       setError(msg);
       toast.error(msg, {
@@ -161,49 +168,99 @@ export default function SignUp(props) {
     loginPassword,
   ]);
 
-  // if(isAuthenticated) { return <Loader/> }
+  if (isAuthenticated) {
+    return <Loader />;
+  }
 
   return (
     <Layout title="Sign Up" showToast>
       <div className="mx-auto bg-white">
         <div className="grid grid-cols-2 flex">
           {/*Left Section*/}
-          <div className={`bg-[url('/images/bg-blue.png')] bg-[length:100%_100%] bg-no-repeat sm:block relative`}
-            style={{ minHeight: R()}}
+          <div
+            className={`bg-[url('/images/bg-blue.png')] bg-[length:100%_100%] bg-no-repeat sm:block relative`}
+            style={{ minHeight: R() }}
           >
-            <div className={'flex flex-col justify-between h-full'}>
+            <div className={"flex flex-col justify-between h-full"}>
               <Div pl={80} pr={80} className="flex flex-col">
-                <Text text={<span>explore Eredivisie <br/> fantasy league</span>} fs={50} fw={900} lh={54} mt={90}
-                      fst={'italic'} tt={'uppercase'} color={colors.white} mb={24}/>
+                <Text
+                  text={
+                    <span>
+                      explore Eredivisie <br /> fantasy league
+                    </span>
+                  }
+                  fs={50}
+                  fw={900}
+                  lh={54}
+                  mt={90}
+                  fst={"italic"}
+                  tt={"uppercase"}
+                  color={colors.white}
+                  mb={24}
+                />
 
-                <Text text={<span> Be in the role of a Fantasy manager and lead dream team! <br/> Absolutely free, absolutely immersive experience.</span>}
-                      fs={18} lh={26}
-                      color={colors.white} className={'opacity-70'} mb={100}/>
+                <Text
+                  text={
+                    <span>
+                      {" "}
+                      Be in the role of a Fantasy manager and lead dream team!{" "}
+                      <br /> Absolutely free, absolutely immersive experience.
+                    </span>
+                  }
+                  fs={18}
+                  lh={26}
+                  color={colors.white}
+                  className={"opacity-70"}
+                  mb={100}
+                />
               </Div>
 
-              <Image src={'/images/players.png'} al={'players'} w={'100%'} h={'100%'}/>
+              <Image
+                src={"/images/players.png"}
+                al={"players"}
+                w={"100%"}
+                h={"100%"}
+              />
             </div>
           </div>
 
-
           {/*Right-Section*/}
-          <Div className={`flex flex-col items-center`} style={{minHeight: R()}} pb={30} pt={62}>
-            <Image src={'/images/fantasy_15.png'} alt={''} w={107} h={26} mb={40}/>
+          <Div
+            className={`flex flex-col items-center`}
+            style={{ minHeight: R() }}
+            pb={30}
+            pt={62}
+          >
+            <Image
+              src={"/images/fantasy_15.png"}
+              alt={""}
+              w={107}
+              h={26}
+              mb={40}
+            />
 
             <Div className="flex justify-center relative" mb={20}>
-              <Text fs={32}  lh={40} text={'sign'} tt={'uppercase'} fst={'italic'} fw={800} color={colors.black_rock}/>
+              <Text
+                fs={32}
+                lh={40}
+                text={"sign"}
+                tt={"uppercase"}
+                fst={"italic"}
+                fw={800}
+                color={colors.black_rock}
+              />
               <Animated toggleAnimation={isLoginPage} animationSpeed={0.2}>
-                  <Text
-                      w={50}
-                      fs={32}
-                      lh={40}
-                      text={`${isLoginPage ? 'IN': 'UP'}`}
-                      tt={'uppercase'}
-                      fst={'italic'}
-                      fw={800}
-                      color={colors.black_rock}
-                      ml={7}
-                  />
+                <Text
+                  w={50}
+                  fs={32}
+                  lh={40}
+                  text={`${isLoginPage ? "IN" : "UP"}`}
+                  tt={"uppercase"}
+                  fst={"italic"}
+                  fw={800}
+                  color={colors.black_rock}
+                  ml={7}
+                />
               </Animated>
             </Div>
 
@@ -218,8 +275,12 @@ export default function SignUp(props) {
                     exit="exit"
                     key={1} // This key thing is important for simultaneous fadein & fadeout
                   >
-                    <Text fs={18} lh={26} text={'Please enter your email and password to sign in'}
-                          color={colors.regent_grey}/>
+                    <Text
+                      fs={18}
+                      lh={26}
+                      text={"Please enter your email and password to sign in"}
+                      color={colors.regent_grey}
+                    />
                   </motion.p>
                 </AnimatePresence>
               ) : (
@@ -232,8 +293,12 @@ export default function SignUp(props) {
                     exit="exit"
                     key={2}
                   >
-                    <Text fs={18} lh={26} text={`Complete a simple form below and click "Next"`}
-                          color={colors.regent_grey}/>
+                    <Text
+                      fs={18}
+                      lh={26}
+                      text={`Complete a simple form below and click "Next"`}
+                      color={colors.regent_grey}
+                    />
                   </motion.p>
                 </AnimatePresence>
               )}
@@ -264,12 +329,12 @@ export default function SignUp(props) {
                   />
                   <Div mb={error ? 32 : 105}>
                     <Text
-                        text={'Forget password?'}
-                        color={colors.mandy}
-                        fs={14}
-                        fw={600}
-                        cursor={'pointer'}
-                        onClick={() => setShowModal(true)}
+                      text={"Forget password?"}
+                      color={colors.mandy}
+                      fs={14}
+                      fw={600}
+                      cursor={"pointer"}
+                      onClick={() => setShowModal(true)}
                     />
                     <ResetPasswordModal
                       show={showModal}
@@ -277,18 +342,20 @@ export default function SignUp(props) {
                     />
                   </Div>
                   {error && (
-                      <Text
-                          text={<>
-                             Your email or password is incorrect. <br/>
+                    <Text
+                      text={
+                        <>
+                          Your email or password is incorrect. <br />
                           Please enter valid credentials to sign in
-                          </>}
-                          textAlign={'center'}
-                          fs={14}
-                          lh={20}
-                          color={colors.bean_red}
-                          mb={32}
-                          fw={600}
-                      />
+                        </>
+                      }
+                      textAlign={"center"}
+                      fs={14}
+                      lh={20}
+                      color={colors.bean_red}
+                      mb={32}
+                      fw={600}
+                    />
                   )}
                 </div>
               )}
@@ -324,17 +391,16 @@ export default function SignUp(props) {
                     autoCompleteOff
                   />
                   <Div className="flex items-center justify-center" mb={32}>
-                    <Div w={'50%'} mr={12}>
-
+                    <Div w={"50%"} mr={12}>
                       <GenderDropDown
-                          selectedGender={selectedGender}
-                          setSelectedGender={setSelectedGender}
+                        selectedGender={selectedGender}
+                        setSelectedGender={setSelectedGender}
                       />
                     </Div>
-                    <Div w={'50%'} ml={12}>
+                    <Div w={"50%"} ml={12}>
                       <MyDatepicker
-                          dateOfBirth={dateOfBirth}
-                          setDateOfBirth={(dob) => setDateOfBirth(dob)}
+                        dateOfBirth={dateOfBirth}
+                        setDateOfBirth={(dob) => setDateOfBirth(dob)}
                       />
                     </Div>
                   </Div>
@@ -353,15 +419,15 @@ export default function SignUp(props) {
                 </Div>
               )}
               {signUpError && (
-                  <Text
-                      text={signUpError}
-                      textAlign={'center'}
-                      fs={14}
-                      lh={20}
-                      color={colors.bean_red}
-                      mb={32}
-                      fw={600}
-                  />
+                <Text
+                  text={signUpError}
+                  textAlign={"center"}
+                  fs={14}
+                  lh={20}
+                  color={colors.bean_red}
+                  mb={32}
+                  fw={600}
+                />
               )}
 
               <Button
@@ -371,10 +437,28 @@ export default function SignUp(props) {
                 mb={40}
               />
               <Div center mb={60}>
-                <Text fs={16} lh={20} fw={400} text={isLoginPage ? 'Don’t have an account?' : 'Already have an account?'} color={colors.regent_grey}/>
-                <Text fs={16} lh={20} fw={800} ml={5}
-                      text={isLoginPage ? 'Sign Up' : 'Sign In'} color={colors.mandy} cursor={'pointer'}
-                      onClick={() => { setIsLoginPage(!isLoginPage)}}
+                <Text
+                  fs={16}
+                  lh={20}
+                  fw={400}
+                  text={
+                    isLoginPage
+                      ? "Don’t have an account?"
+                      : "Already have an account?"
+                  }
+                  color={colors.regent_grey}
+                />
+                <Text
+                  fs={16}
+                  lh={20}
+                  fw={800}
+                  ml={5}
+                  text={isLoginPage ? "Sign Up" : "Sign In"}
+                  color={colors.mandy}
+                  cursor={"pointer"}
+                  onClick={() => {
+                    setIsLoginPage(!isLoginPage);
+                  }}
                 />
               </Div>
             </Div>

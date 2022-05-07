@@ -35,3 +35,9 @@ export const PLAYERS_COUNT_IN_TEAM = {
   [POSITION_FWD]: 3,
 };
 export const TOTAL_PLAYER_IN_TEAM = 15;
+
+// Routes Names
+export const routesNames = {
+  MY_SQUAD_GAME_WEEK: "/my_squad_game_week",
+  BUILD_TEAM_ALL_PLAYERS: "/build_team_all_players",
+};
