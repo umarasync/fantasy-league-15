@@ -57,6 +57,11 @@ export default function BuildYourTeamFilters({
   selectedPrice,
   onPriceSelected,
 
+  // Active statues
+  activeStatuses,
+  selectedActiveStatus,
+  onActiveStatusSelected,
+
   // Recommendations
   recommendations,
   selectedRecommendation,
@@ -90,7 +95,20 @@ export default function BuildYourTeamFilters({
           style={{ ...STYLES.container }}
           parentContainerStyle={{
             zIndex: 3,
-            // marginRight: R(8),
+            marginRight: R(8),
+          }}
+          textStyle={STYLES.textStyle}
+          hideLabel
+          openedBorderColor={""}
+        />
+
+        <SelectInput
+          options={activeStatuses}
+          selectedOption={selectedActiveStatus}
+          onOptionChange={onActiveStatusSelected}
+          style={{ ...STYLES.container }}
+          parentContainerStyle={{
+            zIndex: 3,
           }}
           textStyle={STYLES.textStyle}
           hideLabel
@@ -102,9 +120,9 @@ export default function BuildYourTeamFilters({
         {/*  options={statuses}*/}
         {/*  selectedOptions={selectedStatuses}*/}
         {/*  firstOptionName={ALL_STATUSES}*/}
-        {/*  style={STYLES.container}*/}
+        {/*  style={{...STYLES.container, marginBottom: 0}}*/}
         {/*  textStyle={STYLES.textStyle}*/}
-        {/*  parentContainerStyle={{ marginLeft: R(8) }}*/}
+        {/*  parentContainerStyle={{ marginLeft: R(8)}}*/}
         {/*  onOptionClicked={onStatusSelected}*/}
         {/*  hideSearchBox*/}
         {/*  optionImageStyle={STYLES.optionImageStyle}*/}

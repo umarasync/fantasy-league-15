@@ -28,6 +28,7 @@ import {
 
 // Constants
 import {
+  ACTIVE_STATUS,
   ALL_STATUSES,
   ALL_TEAMS,
   PLAYERS_POSITIONS,
@@ -70,23 +71,27 @@ export default function BuildTeamRightSection({
   // Initial States
   const clubsInitial = clone(clubsProp);
   const pricesInitial = clone(PRICES);
+  const activeStatusInitial = clone(ACTIVE_STATUS);
   const recommendationsInitial = clone(RECOMMENDATIONS);
   const sortingOptionsInitial = clone(SORTING_OPTIONS);
   const statusesInitial = clone(STATUSES);
   const positionsInitial = clone(PLAYERS_POSITIONS);
 
-  // Positions States
+  // Position States
   const [activePosition, setActivePosition] = useState({});
-  // Clubs States
+  // Club States
   const [clubs, setClubs] = useState([]);
   const [selectedClubs, setSelectedClubs] = useState([]);
-  // Statuses Statuses
+  // Statuses
   const [statuses, setStatuses] = useState([]);
   const [selectedStatuses, setSelectedStatuses] = useState([]);
-  // Prices States
+  // Price States
   const [prices, setPrices] = useState([]);
   const [selectedPrice, setSelectedPrice] = useState();
-  // Recommendations States
+  // Active Status States
+  const [activeStatuses, setActiveStatuses] = useState([]);
+  const [selectedActiveStatus, setSelectedActiveStatus] = useState({});
+  // Recommendation States
   const [recommendations, setRecommendations] = useState([]);
   const [selectedRecommendation, setSelectedRecommendation] = useState();
   // Sorting States
@@ -106,6 +111,9 @@ export default function BuildTeamRightSection({
 
     setPrices([...pricesInitial]);
     setSelectedPrice(pricesInitial[0]);
+
+    setActiveStatuses([...activeStatusInitial]);
+    setSelectedActiveStatus(activeStatusInitial[0]);
 
     setRecommendations([...recommendationsInitial]);
     setSelectedRecommendation(recommendationsInitial[0]);
@@ -144,7 +152,8 @@ export default function BuildTeamRightSection({
     return (
       !isEmpty(selectedSortingOption) &&
       !isEmpty(activePosition) &&
-      !isEmpty(selectedPrice)
+      !isEmpty(selectedPrice) &&
+          !isEmpty(selectedActiveStatus)
     );
   };
 
@@ -222,6 +231,10 @@ export default function BuildTeamRightSection({
               prices={prices}
               selectedPrice={selectedPrice}
               onPriceSelected={(price) => setSelectedPrice(price)}
+                // activeStatus Filter
+              activeStatuses={activeStatuses}
+              selectedActiveStatus={selectedActiveStatus}
+              onActiveStatusSelected={(as) => setSelectedActiveStatus(as)}
               // Recommendation Filter
               recommendations={recommendations}
               selectedRecommendation={selectedRecommendation}
@@ -284,6 +297,7 @@ export default function BuildTeamRightSection({
                 activePosition={activePosition}
                 selectedClubs={selectedClubs}
                 selectedPrice={selectedPrice}
+                selectedActiveStatus={selectedActiveStatus}
                 players={players}
               />
             </Div>
