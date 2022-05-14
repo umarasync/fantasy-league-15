@@ -74,6 +74,20 @@ export const PRICES = [
   },
 ];
 
+// ACTIVE_STATUS
+export const ACTIVE_STATUS = [
+  {
+    id: 1,
+    label: "Active",
+    value: true,
+  },
+  {
+    id: 2,
+    label: "Inactive",
+    value: false,
+  },
+];
+
 // CLUBS/TEAMS
 export const ALL_TEAMS = "All Teams";
 export const CLUB_AJAX = "Ajax";

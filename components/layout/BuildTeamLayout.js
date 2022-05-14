@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 import BuildTeamPlayers from "components/buildTeam/BuildTeamPlayers";
 
 // Actions
-import { getPlayers } from "redux/Players/api";
 import { getAllTeams } from "redux/Teams/api";
 
 // Loaders
@@ -16,9 +15,6 @@ import Loader from "components/loaders/Loader";
 // Utils
 import { isEmpty } from "utils/helpers";
 import { buildClubs } from "utils/playersHelper";
-
-// Filters
-import { POSITION_ALL, SORTING_OPTIONS } from "constants/data/filters";
 
 export default function ({ makeTransfer }) {
   // States
